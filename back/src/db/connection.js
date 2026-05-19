@@ -1,11 +1,18 @@
 import mysql from 'mysql2/promise';
+import dotenv from 'dotenv'
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+
 
 // Create the connection pool. The pool-specific settings are the defaults
 const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  database: 'trader_tracker',
-  password: '1234',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASSWORD,
   waitForConnections: true,
   connectionLimit: 10,
   maxIdle: 10, // max idle connections, the default value is the same as `connectionLimit`
@@ -25,7 +32,6 @@ try {
 } catch (err) {
   console.log(err);
 }
-
 
 // Close the connection
 await pool.end();
