@@ -6,7 +6,6 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
-
 // Create the connection pool. The pool-specific settings are the defaults
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
