@@ -6,8 +6,8 @@ import routes from "./src/routes/index.js"
 
 dotenv.config()
 
-const app = express();
-const PORT  = process.env.APP_PORT || 3000;
+const app = express()
+const PORT  = process.env.APP_PORT || 3000
 
 app.use(cors())
 
@@ -26,7 +26,7 @@ async function startServer() {
         console.log("Connexion database OK")
 
         app.listen(PORT, () => {
-        console.log(`En écoute sur le port ${process.env.APP_PORT}`)
+        console.log(`En écoute sur le port ${PORT}`)
         })
     } catch (error) {
         console.error("Erreur de connexion à la base de données:", error.message)
