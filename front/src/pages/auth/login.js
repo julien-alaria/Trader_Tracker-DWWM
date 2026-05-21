@@ -1,4 +1,5 @@
 const login = `  
+        <h1>Log In</h1>
         <form>
             <label for="name">Nom:</label>
             <input type="text" id="name" name="name" autocomplete="on">
@@ -25,7 +26,7 @@ const login = `
             console.log(data.get("email"))
             console.log(data.get("password"))
 
-            fetch("http://localhost:3000/auth/register", 
+            fetch("http://localhost:3000/auth/login", 
                 {
                 method: "POST",
                 headers: {
@@ -39,6 +40,9 @@ const login = `
                 }),
                                     
             })
+            .then((response) => response.text())
+            .then((result) => console.log(result))
+            .catch((error) => console.error(error));
         })
     }
 
