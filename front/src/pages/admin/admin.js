@@ -1,0 +1,1 @@
+const admin = `<h1>Admin</h1>`
