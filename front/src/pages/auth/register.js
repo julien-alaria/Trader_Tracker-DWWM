@@ -2,15 +2,18 @@ const register = `
         <h1>Register</h1>
         <form>
             <label for="name">Nom:</label>
-            <input type="text" id="name" name="name" autocomplete="on">
+            <input type="text" id="name" name="name" required minlength="2" maxlength="50" autocomplete="on">
 
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" autocomplete="on">
 
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" autocomplete="off">
+            <input type="password" id="password" name="password" required minlength="6" maxlength="20" autocomplete="on">
 
             <input type="submit" value="submit">
+        </form>
+        <form action="/#/analystregister">
+            <input type="submit" value="Register as Analyst" />
         </form>
         `;
 
@@ -39,10 +42,7 @@ const register = `
                     password: data.get("password"),
                 }),                       
             })
-            if (res.status === 200) {
-                localStorage.setItem("token", result.token)
-                console.log(result.token)
-            }
+          
         })
     }
 

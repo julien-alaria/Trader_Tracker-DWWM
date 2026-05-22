@@ -1,8 +1,8 @@
-import Home from "./src/pages/public/home.js";
+import home from "./src/pages/public/home.js";
 import about from "./src/pages/public/about.js";
 import register, { initRegister } from "./src/pages/auth/register.js";
+import analystRegister, { initAnalystRegister } from "./src/pages/auth/analystRegister.js";
 import login, { initLogin } from "./src/pages/auth/login.js";
-import home from "./src/pages/public/home.js";
 import notfound from "./src/pages/public/notfound.js";
 
 function router() {
@@ -20,6 +20,9 @@ function router() {
     case "/register":
       content = register;
       break;
+    case "/analystregister":
+      content = analystRegister;
+      break;
     case "/login":
       content = login;
       break;
@@ -33,7 +36,15 @@ function router() {
 
   if (hash === "/login") {
     initLogin();
-  }
+}
+
+if (hash === "/register") {
+    initRegister();
+}
+
+if (hash === "/analystregister") {
+    initAnalystRegister();
+}
 }
 
 window.addEventListener("hashchange", router);
