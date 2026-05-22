@@ -6,4 +6,4 @@ const about = `<div>
                     ${navLinks("Company")}
                 </div>`;
 
-export default about;
+export default about

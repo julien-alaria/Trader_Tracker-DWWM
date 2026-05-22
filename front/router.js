@@ -1,4 +1,4 @@
-import home from "./src/pages/public/home.js";
+import home, { initHome } from "./src/pages/public/home.js";
 import about from "./src/pages/public/about.js";
 import register, { initRegister } from "./src/pages/auth/register.js";
 import analystRegister, { initAnalystRegister } from "./src/pages/auth/analystRegister.js";
@@ -9,41 +9,41 @@ function router() {
   const hash = window.location.hash.slice(1) || "/";
 
   let content = "";
+  let init = null;
 
   switch (hash) {
     case "/":
       content = home;
+      init = initHome;
       break;
+
     case "/about":
       content = about;
       break;
+
     case "/register":
       content = register;
+      init = initRegister;
       break;
+
     case "/analystregister":
       content = analystRegister;
+      init = initAnalystRegister;
       break;
+
     case "/login":
       content = login;
+      init = initLogin;
       break;
-    case "/admin":
-      content = admin;
-      break;
+
     default:
       content = notfound;
   }
+
   document.getElementById("root").innerHTML = content;
 
-  if (hash === "/login") {
-    initLogin();
-  }
-
-  if (hash === "/register") {
-    initRegister();
-  }
-
-  if (hash === "/analystregister") {
-    initAnalystRegister();
+  if (init) {
+    init();
   }
 }
 
