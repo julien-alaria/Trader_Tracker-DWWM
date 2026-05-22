@@ -17,7 +17,7 @@ const login = `
     export function initLogin() {
         const form = document.querySelector("form")
 
-        form.addEventListener("submit", function(e){
+        form.addEventListener("submit", async function(e){
             e.preventDefault()
             
             const data = new FormData(form)
@@ -26,7 +26,7 @@ const login = `
             console.log(data.get("email"))
             console.log(data.get("password"))
 
-            fetch("http://localhost:3000/auth/login", 
+            const response = await fetch("http://localhost:3000/auth/login", 
                 {
                 method: "POST",
                 headers: {
@@ -40,9 +40,13 @@ const login = `
                 }),
                                     
             })
-            .then((response) => response.text())
-            .then((result) => console.log(result))
-            .catch((error) => console.error(error));
+
+            const result = await response.json()
+
+            if (response.status === 200) {
+                localStorage.setItem("token", result.token);
+                console.log(result.token);
+            }
         })
     }
 

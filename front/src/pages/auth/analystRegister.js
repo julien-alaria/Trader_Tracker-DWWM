@@ -35,22 +35,22 @@ const analystRegister = `
                 `;
 
 export function initAnalystRegister() {
-  const form = document.getElementById("analyst-form");
+  const form = document.getElementById("analyst-form")
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault()
 
     const data = new FormData(form);
 
-    console.log(data.get("name"));
-    console.log(data.get("email"));
-    console.log(data.get("password"));
-    console.log(data.get("company"));
-    console.log(data.get("bio"));
-    console.log(data.get("role"));
-    console.log(data.get("analyst_type_id"));
+    console.log(data.get("name"))
+    console.log(data.get("email"))
+    console.log(data.get("password"))
+    console.log(data.get("company"))
+    console.log(data.get("bio"))
+    console.log(data.get("role"))
+    console.log(data.get("analyst_type_id"))
 
-    fetch("http://localhost:3000/auth/register", {
+    const response = await fetch("http://localhost:3000/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -64,8 +64,16 @@ export function initAnalystRegister() {
         role: data.get("role"),
         analyst_type_id: Number(data.get("analyst_type_id")),
       }),
-    });
-  });
+    })
+
+    const result = await response.json()
+
+    if (response.status === 200) {
+      localStorage.setItem("token", result.token);
+      console.log(result.token)
+    }
+
+  })
 }
 
 export default analystRegister;

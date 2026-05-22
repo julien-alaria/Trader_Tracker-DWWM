@@ -18,32 +18,36 @@ const register = `
         `;
 
     export function initRegister() {
-        const form = document.querySelector("form")
+        const form = document.querySelector("form");
 
-        form.addEventListener("submit", function(e){
-            e.preventDefault()
-            
-            const data = new FormData(form)
-            
-            console.log(data.get("name"))
-            console.log(data.get("email"))
-            console.log(data.get("password"))
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
 
-            fetch("http://localhost:3000/auth/register", 
-                {
+            const data = new FormData(form);
+
+            console.log(data.get("name"));
+            console.log(data.get("email"));
+            console.log(data.get("password"));
+
+            const response = await fetch("http://localhost:3000/auth/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body:
-                    JSON.stringify({
+                body: JSON.stringify({
                     name: data.get("name"),
                     email: data.get("email"),
                     password: data.get("password"),
-                }),                       
-            })
-          
-        })
-    }
+                }),
+            });
+
+            const result = await response.json()
+
+            if (response.status === 200) {
+                localStorage.setItem("token", result.token);
+                console.log(result.token)
+            }
+        });
+}
 
 export default register

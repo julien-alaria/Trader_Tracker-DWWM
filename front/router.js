@@ -36,15 +36,15 @@ function router() {
 
   if (hash === "/login") {
     initLogin();
-}
+  }
 
-if (hash === "/register") {
+  if (hash === "/register") {
     initRegister();
-}
+  }
 
-if (hash === "/analystregister") {
+  if (hash === "/analystregister") {
     initAnalystRegister();
-}
+  }
 }
 
 window.addEventListener("hashchange", router);
