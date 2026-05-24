@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../../config/api.js"
 import cards from "../../components/cards.js"
 
 const home = `
@@ -7,7 +8,7 @@ const home = `
 `
 async function getStock() {
 
-    const url = "http://localhost:3000/stock"
+    const url = `${API_BASE_URL}/stock`
 
     try {
         const response = await fetch(url)
