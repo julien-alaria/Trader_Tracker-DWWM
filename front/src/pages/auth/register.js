@@ -43,8 +43,9 @@ const register = `
 
             const result = await response.json()
 
-            if (response.status === 200) {
-                localStorage.setItem("token", result.token);
+            if (response.ok) {
+                localStorage.setItem("token", result.token)
+
                 console.log(result.token)
             }
         });

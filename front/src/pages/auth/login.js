@@ -1,9 +1,6 @@
 const login = `  
         <h1>Log In</h1>
-        <form>
-            <label for="name">Nom:</label>
-            <input type="text" id="name" name="name" autocomplete="on">
-
+        <form id="login-form">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" autocomplete="on">
 
@@ -15,14 +12,13 @@ const login = `
         `;
 
     export function initLogin() {
-        const form = document.querySelector("form")
+        const form = document.querySelector("#login-form")
 
         form.addEventListener("submit", async function(e){
             e.preventDefault()
             
             const data = new FormData(form)
             
-            console.log(data.get("name"))
             console.log(data.get("email"))
             console.log(data.get("password"))
 
@@ -34,7 +30,6 @@ const login = `
                 },
                 body:
                     JSON.stringify({
-                    name: data.get("name"),
                     email: data.get("email"),
                     password: data.get("password"),
                 }),
@@ -43,9 +38,10 @@ const login = `
 
             const result = await response.json()
 
-            if (response.status === 200) {
-                localStorage.setItem("token", result.token);
-                console.log(result.token);
+            if (response.ok) {
+                localStorage.setItem("token", result.token)
+
+                console.log(result.token)
             }
         })
     }
