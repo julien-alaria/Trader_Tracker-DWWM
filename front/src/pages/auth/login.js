@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "../../config/api.js"
+
 const login = `  
         <h1>Log In</h1>
         <form id="login-form">
@@ -22,7 +24,7 @@ const login = `
             console.log(data.get("email"))
             console.log(data.get("password"))
 
-            const response = await fetch("http://localhost:3000/auth/login", 
+            const response = await fetch(`${API_BASE_URL}/auth/login`, 
                 {
                 method: "POST",
                 headers: {

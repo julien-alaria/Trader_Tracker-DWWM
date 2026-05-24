@@ -1,6 +1,8 @@
+import { API_BASE_URL } from "../../config/api.js"
+
 const register = ` 
         <h1>Register</h1>
-        <form>
+        <form id="register-form">
             <label for="name">Nom:</label>
             <input type="text" id="name" name="name" required minlength="2" maxlength="50" autocomplete="on">
 
@@ -18,7 +20,7 @@ const register = `
         `;
 
     export function initRegister() {
-        const form = document.querySelector("form");
+        const form = document.querySelector("#register-form");
 
         form.addEventListener("submit", async function (e) {
             e.preventDefault();
@@ -29,7 +31,7 @@ const register = `
             console.log(data.get("email"));
             console.log(data.get("password"));
 
-            const response = await fetch("http://localhost:3000/auth/register", {
+            const response = await fetch(`${API_BASE_URL}/auth/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
