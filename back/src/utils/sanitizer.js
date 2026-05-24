@@ -1,4 +1,4 @@
-import { validateName, validateEmail, validatePassword } from "../utils/validators.js"
+import { validateName, validateEmail, validatePassword, validateBio, validateCompany, safeRole, validateAnalystType } from "../utils/validators.js"
 
 export function sanitizeUser(data) {
     const { name, email, password, role, analyst_type_id, company, bio } = data
@@ -7,42 +7,22 @@ export function sanitizeUser(data) {
         throw new Error("Missing required fields")
     }
 
-    const cleanBio = bio ? bio.trim() : null
-    if (cleanBio && cleanBio.length > 1000) {
-        throw new Error("Bio trop longue")
-    }
-
-    const cleanCompany = company ? company.trim() : null
-    if (cleanCompany && cleanCompany.length > 100) {
-        throw new Error("Nom de société trop long")
-    }
-
-    const safeRole = role === "analyst" ? "analyst" : "user"
-
-    let analystId = null
-
-    if (safeRole === "analyst") {
-        if (analyst_type_id === undefined || analyst_type_id === null) {
-            throw new Error("Type analyst requis")
-        }
-
-        const id = Number(analyst_type_id)
-
-        if (!Number.isInteger(id) || id <= 0) {
-            throw new Error("Type d'actif invalide")
-        }
-
-        analystId = id
-    }
+    const cleanName = validateName(name)
+    const cleanEmail = validateEmail(email)
+    const cleanPassword = validatePassword(password)
+    const cleanBioValue = validateBio(bio)
+    const cleanCompanyValue = validateCompany(company)
+    const safeRoleValue = safeRole(role)
+    const analystId = validateAnalystType(safeRoleValue, analyst_type_id)
 
     return {
-        name: validateName(name),
-        email: validateEmail(email),
-        password: validatePassword(password),
-        role: safeRole,
+        name: cleanName,
+        email: cleanEmail,
+        password: cleanPassword,
+        role: safeRoleValue,
         analyst_type_id: analystId,
-        company: cleanCompany,
-        bio: cleanBio
+        company: cleanCompanyValue,
+        bio: cleanBioValue
     }
 }
 
@@ -64,35 +44,22 @@ export function sanitizeUpdateUser(data) {
     }
 
     if (role !== undefined) {
-        if (!["user", "analyst"].includes(role)) {
-            throw new Error("Invalid role")
-        }
-        sanitized.role = role
+        sanitized.role = safeRole(role)
     }
 
     if (analyst_type_id !== undefined) {
-        if (!Number.isInteger(Number(analyst_type_id))) {
-            throw new Error("Invalid analyst_type_id")
-        }
-        sanitized.analyst_type_id = Number(analyst_type_id)
+        sanitized.analyst_type_id = validateAnalystType(
+            sanitized.role ?? role,
+            analyst_type_id
+        )
     }
 
     if (company !== undefined) {
-        const clean = company.trim()
-
-        if (clean.length > 100) {
-            throw new Error("Nom de société trop long")
-        }
-        sanitized.company = clean
+        sanitized.company = validateCompany(company)
     }
 
     if (bio !== undefined) {
-        const clean = bio.trim()
-
-        if (clean.length > 1000) {
-            throw new Error("Bio trop longue")
-        }
-        sanitized.bio = clean
+        sanitized.bio = validateBio(bio)
     }
 
     return sanitized
