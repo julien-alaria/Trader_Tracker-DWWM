@@ -7,26 +7,32 @@ export function sanitizeUser(data) {
         throw new Error("Missing required fields")
     }
 
-    const cleanBio = bio?.trim() ?? null
+    const cleanBio = bio ? bio.trim() : null
     if (cleanBio && cleanBio.length > 1000) {
         throw new Error("Bio trop longue")
     }
 
-    const cleanCompany = company?.trim() ?? null
+    const cleanCompany = company ? company.trim() : null
     if (cleanCompany && cleanCompany.length > 100) {
         throw new Error("Nom de société trop long")
     }
 
     const safeRole = role === "analyst" ? "analyst" : "user"
 
+    let analystId = null
+
     if (safeRole === "analyst") {
-        if (!analyst_type_id) {
+        if (analyst_type_id === undefined || analyst_type_id === null) {
             throw new Error("Type analyst requis")
         }
 
-        if (!Number.isInteger(Number(analyst_type_id))) {
+        const id = Number(analyst_type_id)
+
+        if (!Number.isInteger(id) || id <= 0) {
             throw new Error("Type d'actif invalide")
         }
+
+        analystId = id
     }
 
     return {
@@ -34,7 +40,7 @@ export function sanitizeUser(data) {
         email: validateEmail(email),
         password: validatePassword(password),
         role: safeRole,
-        analyst_type_id: safeRole === "analyst" ? Number(analyst_type_id) : null,
+        analyst_type_id: analystId,
         company: cleanCompany,
         bio: cleanBio
     }
