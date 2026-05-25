@@ -1,4 +1,4 @@
-export default function stockCard({ticker = 'N/A', name = 'Unknown company', marketCap = 0, high = 'N/A', low = 'N/A', image = 'https://placehold.co/10x10', price = "N/A"} = {}) {
+export default function stockCard({ticker = 'N/A', name = 'Unknown company', marketCap = 0, high = 'N/A', low = 'N/A', image = 'https://placehold.co/300x180', price = "N/A"} = {}) {
 
   const formattedMarketCap =
     new Intl.NumberFormat('en-US', {
@@ -20,7 +20,7 @@ export default function stockCard({ticker = 'N/A', name = 'Unknown company', mar
         <p class="card-description">${ticker}</p>
 
          <p class="card-text">
-          Price: ${marketCap}
+          Market Cap: ${marketCap}
         </p>
 
         <p class="card-text">

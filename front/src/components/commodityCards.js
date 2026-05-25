@@ -1,4 +1,4 @@
-export default function forexCard({ ticker, name, high, low, close, image = 'https://placehold.co/300x180'} = {}) {
+export default function commodityCard({ name, ticker, price, high, low, image = 'https://placehold.co/300x180'} = {}) {
 
   return `
     <div class="card">
@@ -16,7 +16,7 @@ export default function forexCard({ ticker, name, high, low, close, image = 'htt
         </p>
 
         <p class="card-text">
-          Price: ${close}
+          Price: ${price}
         </p>
 
         <p class="card-text">
@@ -28,6 +28,5 @@ export default function forexCard({ ticker, name, high, low, close, image = 'htt
         </p>
 
     </div>
-
   `
 }
