@@ -2,6 +2,7 @@ import { API_BASE_URL } from "../../config/api.js"
 import stockCard from "../../components/stockCards.js"
 import forexCard from "../../components/forexCards.js"
 import commodityCard from "../../components/commodityCards.js"
+import formatForexName from "../../utils/format.js"
 
 const home = `
     <main>
@@ -43,12 +44,6 @@ async function getStock() {
 async function getForex() {
 
     const url = `${API_BASE_URL}/assets/forex`
-
-    function formatForexName(ticker) {
-        return ticker
-            .replace("C:", "")
-            .replace(/(.{3})(.{3})/, "$1 / $2")
-    }
 
     try {
         const response = await fetch(url)
