@@ -14,7 +14,7 @@ const home = `
 
 async function getStock() {
 
-    const url = `${API_BASE_URL}/stock/stocks`
+    const url = `${API_BASE_URL}/assets/stocks`
 
     try {
         const response = await fetch(url)
@@ -42,7 +42,7 @@ async function getStock() {
 
 async function getForex() {
 
-    const url = `${API_BASE_URL}/stock/forex`
+    const url = `${API_BASE_URL}/assets/forex`
 
     function formatForexName(ticker) {
         return ticker
@@ -75,7 +75,7 @@ async function getForex() {
 
 async function getCommodites() {
 
-    const url = `${API_BASE_URL}/stock/commodities`
+    const url = `${API_BASE_URL}/assets/commodities`
 
     try {
         const response = await fetch(url)
