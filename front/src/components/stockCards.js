@@ -1,4 +1,4 @@
-export default function Card({ticker = 'N/A', name = 'Unknown company', marketCap = 0, high = 'N/A', low = 'N/A', image = 'https://placehold.co/300x180', price = "N/A"} = {}) {
+export default function stockCard({ticker = 'N/A', name = 'Unknown company', marketCap = 0, high = 'N/A', low = 'N/A', image = 'https://placehold.co/10x10', price = "N/A"} = {}) {
 
   const formattedMarketCap =
     new Intl.NumberFormat('en-US', {
@@ -7,7 +7,6 @@ export default function Card({ticker = 'N/A', name = 'Unknown company', marketCa
     }).format(marketCap)
 
   return `
-
     <div class="card">
 
         <img
@@ -19,6 +18,10 @@ export default function Card({ticker = 'N/A', name = 'Unknown company', marketCa
         <h2 class="card-title">${name}</h2>
 
         <p class="card-description">${ticker}</p>
+
+         <p class="card-text">
+          Price: ${marketCap}
+        </p>
 
         <p class="card-text">
           Price: ${price}
@@ -33,6 +36,5 @@ export default function Card({ticker = 'N/A', name = 'Unknown company', marketCa
         </p>
 
     </div>
-
   `
 }

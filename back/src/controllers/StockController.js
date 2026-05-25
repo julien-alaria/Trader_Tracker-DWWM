@@ -24,5 +24,16 @@ async function getAllStocks(req, res) {
     }
 }
 
+async function getForex(req, res) {
+    try {
+        const response = await stockService.aggregateForex()
+        console.log(response)
+        res.status(200).json({ message: response })
+    } catch (error) {
+        console.error("Erreur:", error)
 
-export default { getStock, getAllStocks }
+        res.status(500).json({ error: "Failed to fetch forex data" })
+    }
+}
+
+export default { getStock, getAllStocks, getForex }

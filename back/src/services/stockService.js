@@ -55,4 +55,44 @@ async function getMultipleAggregates() {
   return results
 }
 
-export default { getAAPLStock,  getMultipleAggregates }
+async function aggregateForex() {
+
+  const tickers = ["C:EURUSD", "C:EURJPY", "C:EURCHF"]
+
+  const results = []
+
+  for (const ticker of tickers) {
+
+    const url =
+      `https://api.massive.com/v2/aggs/ticker/${ticker}/prev` +
+      `?adjusted=true` +
+      `&apiKey=${process.env.POLY_API_KEY}`
+
+    const response = await fetch(url)
+    const data = await response.json()
+
+    const agg = data.results?.[0]
+
+    results.push({
+      ticker,
+
+      open: agg?.o,
+
+      high: agg?.h,
+
+      low: agg?.l,
+
+      close: agg?.c,
+
+      volume: agg?.v,
+
+      timestamp: agg?.t
+    })
+
+    // anti 429
+    await new Promise(r => setTimeout(r, 300))
+  }
+  return results
+}
+
+export default { getAAPLStock,  getMultipleAggregates, aggregateForex }

@@ -6,6 +6,17 @@ h1 {
 #stocks {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
+  gap: 24px;
   align-items: start;
+  width: 100%;
+  padding: 10px;
+}
+
+#forex {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  align-items: start;
+  width: 100%;
+  padding: 10px;
 }
