@@ -1,11 +1,11 @@
 import { API_BASE_URL } from "../../config/api.js"
-import cards from "../../components/cards.js"
+import card from "../../components/cards.js"
 
 const home = `
     <h1>Home</h1>
-
     <div id="stocks"></div>
 `
+
 async function getStock() {
 
     const url = `${API_BASE_URL}/stock`
@@ -19,12 +19,13 @@ async function getStock() {
 
         const results = await response.json()
 
-        const ticker = results.message.ticker
-
-        return results.message.results.map(({ h, l }) => ({
-            ticker,
-            h,
-            l
+        return results.message.map(stock => ({
+            ticker: stock.ticker,
+            name: stock.name,
+            marketCap: stock.market_cap,
+            price: stock.price,
+            high: stock.high,
+            low: stock.low
         }))
 
     } catch (error) {
@@ -37,7 +38,8 @@ export async function initHome() {
 
     const stocks = await getStock()
 
-    document.getElementById("stocks").innerHTML = stocks.map(stock => cards(stock)).join("")
+    document.getElementById("stocks").innerHTML =
+        stocks.map(stock => card(stock)).join("")
 }
 
 export default home

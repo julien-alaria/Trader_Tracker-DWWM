@@ -3,6 +3,6 @@ import StockController from "../controllers/StockController.js"
 
 const stockRouter = express.Router()
 
-stockRouter.get("/", StockController.getStock)
+stockRouter.get("/", StockController.getAllStocks)
 
 export default stockRouter

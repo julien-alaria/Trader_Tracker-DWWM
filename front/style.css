@@ -1,5 +1,16 @@
+@import "./src/styles/home.css";
+@import "./src/styles/cards.css";
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 body {
+    display: flex;
+    flex-direction: column;
     box-sizing: border-box;
+    min-height: 100vh;
     margin: 0;
     padding: 0;
     font-size: 16px;
@@ -23,10 +34,16 @@ a {
 }
 
 main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
+    flex: 1;
+    padding: 20px;
+    display: block;
+}
+
+#stocks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    align-items: start;
 }
 
 footer {
@@ -34,11 +51,3 @@ footer {
     border: 2px solid black;
 }
 
-.card {
-    display: flex;
-    flex-direction: row;
-    border: 2px solid black;
-    padding: 10px;
-    margin: 10px;
-    border-radius: 20px;
-}
