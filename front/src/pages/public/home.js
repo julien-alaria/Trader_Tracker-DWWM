@@ -3,7 +3,7 @@ import stockCard from "../../components/home/cards/stockCards.js"
 import forexCard from "../../components/home/cards/forexCards.js"
 import commodityCard from "../../components/home/cards/commodityCards.js"
 import renderResults from "../../components/renderResults.js"
-import createSearchBar from "../../components/searchBar.js"
+import createSearchBar from "../utils/createSearchBar.js"
 
 const home = `
     <main>
@@ -13,7 +13,6 @@ const home = `
         <div id="commodities"></div>
     </main>
 `
-
 export async function initHome() {
 
     const stocks = await getStock()
@@ -22,16 +21,15 @@ export async function initHome() {
 
     const allData = [...stocks, ...forex, ...commodities]
 
-  const searchBar = createSearchBar((value, container) => {
+    const searchBar = createSearchBar((value, container) => {
 
     const filtered = allData.filter(item =>
         item.ticker.toLowerCase().includes(value) ||
         item.name?.toLowerCase().includes(value)
     )
 
-    if (!value) {
-    container.innerHTML = ""
-    return
+    if (!value) { container.innerHTML = ""
+        return
     }
 
     renderResults(filtered, container)
