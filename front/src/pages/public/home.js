@@ -24,8 +24,6 @@ export async function initHome() {
 
   const searchBar = createSearchBar((value, container) => {
 
-    console.log("SEARCH VALUE:", value)
-
     const filtered = allData.filter(item =>
         item.ticker.toLowerCase().includes(value) ||
         item.name?.toLowerCase().includes(value)
@@ -34,9 +32,7 @@ export async function initHome() {
     if (!value) {
     container.innerHTML = ""
     return
-}
-
-    console.log("FILTERED:", filtered)
+    }
 
     renderResults(filtered, container)
 
