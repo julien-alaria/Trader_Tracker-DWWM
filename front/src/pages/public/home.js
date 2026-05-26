@@ -1,8 +1,9 @@
-import { API_BASE_URL } from "../../config/api.js"
-import stockCard from "../../components/stockCards.js"
-import forexCard from "../../components/forexCards.js"
-import commodityCard from "../../components/commodityCards.js"
-import formatForexName from "../../utils/format.js"
+import { getStock, getForex, getCommodities} from "../utils/assetsUtils.js"
+import stockCard from "../../components/home/cards/stockCards.js"
+import forexCard from "../../components/home/cards/forexCards.js"
+import commodityCard from "../../components/home/cards/commodityCards.js"
+import renderResults from "../../components/renderResults.js"
+import createSearchBar from "../../components/searchBar.js"
 
 const home = `
     <main>
@@ -13,95 +14,35 @@ const home = `
     </main>
 `
 
-async function getStock() {
-
-    const url = `${API_BASE_URL}/assets/stocks`
-
-    try {
-        const response = await fetch(url)
-
-        if (!response.ok) {
-            throw new Error(`Response Status : ${response.status}`)
-        }
-
-        const results = await response.json()
-
-        return results.message.map(stock => ({
-            ticker: stock.ticker,
-            name: stock.name,
-            marketCap: stock.marketCap,
-            price: stock.price,
-            high: stock.high,
-            low: stock.low
-        }))
-
-    } catch (error) {
-        console.error(error.message)
-        return []
-    }
-}
-
-async function getForex() {
-
-    const url = `${API_BASE_URL}/assets/forex`
-
-    try {
-        const response = await fetch(url)
-
-        if (!response.ok) {
-            throw new Error(`Response Status : ${response.status}`)
-        }
-
-        const results = await response.json()
-
-        return results.message.map(forex => ({
-            ticker: forex.ticker,
-            name: formatForexName(forex.ticker),
-            high: forex.high,
-            low: forex.low,
-            close: forex.close,
-        }))
-
-    } catch (error) {
-        console.error(error.message)
-        return []
-    }
-}
-
-async function getCommodites() {
-
-    const url = `${API_BASE_URL}/assets/commodities`
-
-    try {
-        const response = await fetch(url)
-
-        if (!response.ok) {
-            throw new Error(`Response Status : ${response.status}`)
-        }
-
-        const results = await response.json()
-
-        console.group("Results Commodities", results)
-
-        return results.message.map(commodity => ({
-            ticker: commodity.ticker,
-            name: commodity.name,
-            price: commodity.price,
-            high: commodity.high,
-            low: commodity.low
-        }))
-
-    } catch (error) {
-        console.error(error.message)
-        return []
-    }
-}
-
 export async function initHome() {
 
     const stocks = await getStock()
     const forex = await getForex()
-    const commodities = await getCommodites()
+    const commodities = await getCommodities()
+
+    const allData = [...stocks, ...forex, ...commodities]
+
+  const searchBar = createSearchBar((value, container) => {
+
+    console.log("SEARCH VALUE:", value)
+
+    const filtered = allData.filter(item =>
+        item.ticker.toLowerCase().includes(value) ||
+        item.name?.toLowerCase().includes(value)
+    )
+
+    if (!value) {
+    container.innerHTML = ""
+    return
+}
+
+    console.log("FILTERED:", filtered)
+
+    renderResults(filtered, container)
+
+    })
+
+    document.querySelector("main").prepend(searchBar)
 
     document.getElementById("stocks").innerHTML =
         stocks.map(stock => stockCard(stock)).join("")

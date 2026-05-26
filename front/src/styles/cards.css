@@ -29,3 +29,14 @@
 .card-text {
   margin-top: 0.5rem;
 }
+
+.result-item  {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+  padding: 1rem;
+  border-radius: 12px;
+  background: #1e1e1e;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}

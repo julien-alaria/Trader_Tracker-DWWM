@@ -1,9 +1,13 @@
 import home, { initHome } from "./src/pages/public/home.js";
 import about from "./src/pages/public/about.js";
 import register, { initRegister } from "./src/pages/auth/register.js";
-import analystRegister, { initAnalystRegister } from "./src/pages/auth/analystRegister.js";
+import analystRegister, {
+  initAnalystRegister,
+} from "./src/pages/auth/analystRegister.js";
 import login, { initLogin } from "./src/pages/auth/login.js";
 import notfound from "./src/pages/public/notfound.js";
+import navbar from "./src/components/navbar/navbar.js";
+import footer from "./src/components/footer/footer.js";
 
 function router() {
   const hash = window.location.hash.slice(1) || "/";
@@ -46,6 +50,9 @@ function router() {
     init();
   }
 }
+
+document.getElementById("nav").innerHTML = navbar();
+document.getElementById("foot").innerHTML = footer();
 
 window.addEventListener("hashchange", router);
 window.addEventListener("load", router);
