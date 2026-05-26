@@ -1,17 +1,21 @@
-export default function stockCard({ticker = 'N/A', name = 'Unknown company', marketCap = 0, high = 'N/A', low = 'N/A', image = 'https://placehold.co/300x180', price = "N/A"} = {}) {
+import { formatMarketCap } from "../../../utils/format.js"
 
-  const formattedMarketCap =
-    new Intl.NumberFormat('en-US', {
-      notation: 'compact',
-      maximumFractionDigits: 2
-    }).format(marketCap)
+const DEFAULT_IMAGE = "/assets/nasdaq_logo.svg.png"
+
+export default function stockCard({ticker = 'N/A', name = 'Unknown company', marketCap = 0, high = 'N/A', low = 'N/A', image, price = "N/A"} = {}) {
+
+  const formattedMarketCap = formatMarketCap(marketCap)
+
+  const finalImage = image || DEFAULT_IMAGE
 
   return `
-    <div class="card">
+    <div class="card stock">
+
+        <div class="chart" id="tv-${ticker}"></div>
 
         <img
           class="card-image"
-          src="${image}"
+          src="${finalImage}"
           alt="${ticker}"
         >
 

@@ -1,11 +1,21 @@
-export default function commodityCard({ name, ticker, price, high, low, image = 'https://placehold.co/300x180'} = {}) {
+const commodityImages = {
+  "C:XAUUSD": "/assets/gold.png",
+  "C:XAGUSD": "/assets/silver.png"
+}
+
+export default function commodityCard({ name, ticker, price, high, low, image } = {}) {
+
+  const finalImage =
+    image ||
+    commodityImages[ticker] ||
+    "/assets/default.png"
 
   return `
-    <div class="card">
+    <div class="card commodity">
 
         <img
           class="card-image"
-          src="${image}"
+          src="${finalImage}"
           alt="${ticker}"
         >
 

@@ -3,15 +3,9 @@ import http from "../../config/instanceHttp.js"
 async function getStock() {
 
     try {
-        const response = await http.get("/assets/stocks")
+        const data = await http.get("/assets/stocks")
 
-        if (!response.ok) {
-            throw new Error(`Response Status : ${response.status}`)
-        }
-
-        const results = await response.json()
-
-        return results.message.map(stock => ({
+        return data.message.map(stock => ({
             ticker: stock.ticker,
             name: stock.name,
             marketCap: stock.marketCap,
@@ -35,15 +29,9 @@ async function getForex() {
     }
 
     try {
-        const response = await http.get("/assets/forex")
+        const data = await http.get("/assets/forex")
 
-        if (!response.ok) {
-            throw new Error(`Response Status : ${response.status}`)
-        }
-
-        const results = await response.json()
-
-        return results.message.map(forex => ({
+        return data.message.map(forex => ({
             ticker: forex.ticker,
             name: formatForexName(forex.ticker),
             high: forex.high,
@@ -60,17 +48,9 @@ async function getForex() {
 async function getCommodities() {
 
     try {
-        const response = await http.get("/assets/commodities")
+        const data = await http.get("/assets/commodities")
 
-        if (!response.ok) {
-            throw new Error(`Response Status : ${response.status}`)
-        }
-
-        const results = await response.json()
-
-        console.log("Results Commodities", results)
-
-        return results.message.map(commodity => ({
+        return data.message.map(commodity => ({
             ticker: commodity.ticker,
             name: commodity.name,
             price: commodity.price,

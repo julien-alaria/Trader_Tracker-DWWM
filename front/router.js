@@ -1,9 +1,9 @@
 import home, { initHome } from "./src/pages/public/home.js";
 import about from "./src/pages/public/about.js";
-import register, { initRegister } from "./src/pages/auth/register.js";
+import register, { initRegister } from "./src/pages/auth/register/register.js";
 import analystRegister, {
   initAnalystRegister,
-} from "./src/pages/auth/analystRegister.js";
+} from "./src/pages/auth/register/analystRegister.js";
 import login, { initLogin } from "./src/pages/auth/login.js";
 import notfound from "./src/pages/public/notfound.js";
 import navbar from "./src/components/navbar/navbar.js";

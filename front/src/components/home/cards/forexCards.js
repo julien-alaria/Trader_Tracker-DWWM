@@ -1,7 +1,7 @@
 export default function forexCard({ ticker, name, high, low, close, image = 'https://placehold.co/300x180'} = {}) {
 
   return `
-    <div class="card">
+    <div class="card forex">
 
         <img
           class="card-image"

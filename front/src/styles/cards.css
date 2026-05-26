@@ -9,12 +9,27 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-.card-image {
-    width: 90%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 8px;
-    display: block;
+.card.stock {
+  background: #b5aeae;
+  color: black;
+}
+
+.card.stock .card-image {
+  width: 90%;
+  height: 15px;
+  object-fit: contain;
+}
+
+.card.forex .card-image {
+  width: 90%;
+  height: 85px;
+  object-fit: cover;
+}
+
+.card.commodity .card-image {
+  width: 90%;
+  height: 150px;
+  object-fit: cover;
 }
 
 .card-title {

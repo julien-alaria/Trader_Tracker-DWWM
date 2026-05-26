@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../../config/api.js"
+import { API_BASE_URL } from "../../../config/api.js"
 
 const register = ` 
         <h1>Register</h1>

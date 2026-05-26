@@ -3,6 +3,7 @@ import stockCard from "../../components/home/cards/stockCards.js"
 import forexCard from "../../components/home/cards/forexCards.js"
 import commodityCard from "../../components/home/cards/commodityCards.js"
 import { createSearchBar, renderResults} from "../utils/searchBarUtils.js"
+import { loadTradingViewChart } from "../../utils/tradingChart.js"
 
 const home = `
     <main>
@@ -41,6 +42,10 @@ export async function initHome() {
 
     document.getElementById("stocks").innerHTML =
         stocks.map(stock => stockCard(stock)).join("")
+
+    stocks.forEach(stock => {
+        loadTradingViewChart(stock.ticker)
+    })
 
     document.getElementById("forex").innerHTML =
         forex.map(pair => forexCard(pair)).join("")

@@ -1,5 +1,6 @@
 import { restClient } from '@massive.com/client-js'
 import dotenv from 'dotenv'
+
 dotenv.config()
 
 const rest = restClient(process.env.POLY_API_KEY)
@@ -37,9 +38,10 @@ async function getMultipleAggregates() {
       const last = aggRes.results?.at(-1) 
       
       return { 
+        type: "nasdaq",
         ticker: meta.ticker, 
         name: meta.name, 
-        marketCap: meta.market_cap, 
+        marketCap: meta.market_cap,
         price: last?.c ?? null, 
         high: last?.h ?? null, 
         low: last?.l ?? null 
@@ -71,6 +73,7 @@ async function aggregateForex() {
     const agg = data.results?.[0]
 
     results.push({
+      type: "forex",
       ticker,
       open: agg?.o,
       high: agg?.h,
@@ -88,7 +91,7 @@ async function aggregateForex() {
 
 async function aggregateMetals() {
 
-  const tickers = ["C:XAUUSD", "C:XAGUSD", "C:XPTUSD", "C:XCUUSD"]
+  const tickers = ["C:XAUUSD", "C:XAGUSD"]
 
   const results = []
 
@@ -107,11 +110,10 @@ async function aggregateMetals() {
     results.push({
       type: "commodity",
       ticker,
+
       name:
         ticker === "C:XAUUSD" ? "Gold" :
-        ticker === "C:XAGUSD" ? "Silver" :
-        ticker === "C:XPTUSD" ? "Platinum" :
-        "Copper",
+        "Silver",
 
       price: agg?.c ?? null,
       high: agg?.h ?? null,
@@ -120,7 +122,8 @@ async function aggregateMetals() {
       close: agg?.c ?? null
     })
 
-    await new Promise(r => setTimeout(r, 500)) // anti 429
+    // anti 429
+    await new Promise(r => setTimeout(r, 500))
   }
 
   return results
