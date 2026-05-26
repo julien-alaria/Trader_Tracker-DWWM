@@ -84,8 +84,4 @@ async function getCommodities() {
     }
 }
 
-export {
-    getStock,
-    getForex,
-    getCommodities
-}
+export { getStock, getForex, getCommodities }
