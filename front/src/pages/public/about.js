@@ -1,9 +1,9 @@
-import navLinks from "../../components/navLinks.js";
+import navLink from "../../components/navLinks/navLink.js";
 
 const about = `<div>
-                    ${navLinks("Products")}
-                    ${navLinks("About")}
-                    ${navLinks("Company")}
+                    ${navLink("/", "Home")}
+                    ${navLink("/register", "Register")}
+                    ${navLink("/login", "Login")}
                 </div>`;
 
-export default about
+export default about;
