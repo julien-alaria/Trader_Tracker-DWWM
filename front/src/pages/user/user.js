@@ -3,12 +3,10 @@ import { decodeToken } from "../../middlewares/roleGuard.js";
 
 const userPage = `
     <main>
-        <h1 id="user_name">USER PAGE</h1>
+        <h1>USER PAGE</h1>
+        <div  id="user_name"></div>
         <div id="user_id"></div>
         <div id="user_email"></div>
-        <div id="user_analystTypeId"></div>
-        <div id="user_company"></div>
-        <div id="user_bio"></div>
     </main>
 `
 
@@ -31,9 +29,9 @@ export async function initUser() {
         
         document.getElementById("root").innerHTML = userPage
 
-        document.getElementById("user_id").innerHTML = user.id
-        document.getElementById("user_name").innerHTML = user.name
-        document.getElementById("user_email").innerHTML = user.email
+        document.getElementById("user_id").innerHTML = "User ID: " + user.id
+        document.getElementById("user_name").innerHTML = "User Name: " + user.name
+        document.getElementById("user_email").innerHTML = "Email: " + user.email
 
     } catch (error) {
         console.error(error.message)
