@@ -1,4 +1,5 @@
 import { API_BASE_URL } from "../../config/api.js"
+import { getRoleFromToken } from "../../middlewares/roleGuard.js";
 
 const login = `  
         <h1>Log In</h1>
@@ -41,9 +42,30 @@ const login = `
             const result = await response.json()
 
             if (response.ok) {
-                localStorage.setItem("token", result.token)
+                localStorage.setItem("token", result.token);
 
-                console.log(result.token)
+                const role = getRoleFromToken();
+
+                console.log("TOKEN :", result.token);
+                console.log("ROLE :", role);
+
+                if (!role) {
+                    window.location.hash = "/login";
+                    return;
+                }
+
+                switch (role) {
+                    case "admin":
+                        window.location.hash = "/admin";
+                        break;
+                    case "analyst":
+                        window.location.hash = "/analyst";
+                        break;
+                    default:
+                        window.location.hash = "/user";
+                }
+            } else {
+                console.error("Login failed :", result);
             }
         })
     }
