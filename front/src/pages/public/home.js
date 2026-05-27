@@ -1,4 +1,4 @@
-import { getStock, getForex, getCommodities} from "../utils/assetsUtils.js"
+import { getStock, getForex, getCommodities, getStockFromJson, getForexFromJson, getCommoditiesFromJson} from "../utils/assetsUtils.js"
 import stockCard from "../../components/home/cards/stockCards.js"
 import forexCard from "../../components/home/cards/forexCards.js"
 import commodityCard from "../../components/home/cards/commodityCards.js"
@@ -6,20 +6,32 @@ import { createSearchBar, renderResults} from "../utils/searchBarUtils.js"
 import { loadTradingViewChart } from "../../utils/tradingChart.js"
 
 const home = `
-    <main>
-        <h1>Home</h1>
-        <div id="stocks"></div>
-        <div id="forex"></div>
-        <div id="commodities"></div>
-    </main>
+  <main>
+    <h1>Home</h1>
+
+    <div id="stocks"></div>
+    <div id="forex"></div>
+    <div id="commodities"></div>
+
+  </main>
 `
 export async function initHome() {
+    // for external API
+    //const stocks = await getStock()
+    //const forex = await getForex()
+    //const commodities = await getCommodities()
 
-    const stocks = await getStock()
-    const forex = await getForex()
-    const commodities = await getCommodities()
+
+    // For JSON datas
+    const stocks = await getStockFromJson()
+    const forex = await getForexFromJson()
+    const commodities = await getCommoditiesFromJson()
 
     const allData = [...stocks, ...forex, ...commodities]
+
+    // avoid duplication of search bar
+    const oldSearch = document.querySelector(".search-wrapper")
+    if (oldSearch) oldSearch.remove()
 
     const searchBar = createSearchBar((value, container) => {
 
@@ -38,7 +50,10 @@ export async function initHome() {
     renderResults(filtered, container)
     })
 
-    document.querySelector("main").prepend(searchBar)
+    const main = document.querySelector("main")
+    const h1 = main.querySelector("h1")
+
+    h1.insertAdjacentElement("afterend", searchBar)
 
     document.getElementById("stocks").innerHTML =
         stocks.map(stock => stockCard(stock)).join("")
@@ -52,6 +67,17 @@ export async function initHome() {
 
     document.getElementById("commodities").innerHTML =
         commodities.map(item => commodityCard(item)).join("")
+
+    document.querySelectorAll(".card").forEach(card => {
+
+        card.addEventListener("click", () => {
+
+            const ticker = card.dataset.ticker
+            const type = card.dataset.type
+
+            window.location.href = `#/details?type=${type}&ticker=${ticker}`
+        })
+    })
 }
 
 export default home

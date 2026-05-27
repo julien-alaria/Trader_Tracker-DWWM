@@ -1,24 +1,24 @@
-import home, { initHome } from "./src/pages/public/home.js";
-import about from "./src/pages/public/about.js";
-import register, { initRegister } from "./src/pages/auth/register/register.js";
-import analystRegister, { initAnalystRegister } from "./src/pages/auth/register/analystRegister.js";
-import login, { initLogin } from "./src/pages/auth/login.js";
-import detailsPage, { initDetail} from "./src/pages/public/details.js";
-import { roleGuard } from "./src/middlewares/roleGuard.js";
+import home, { initHome } from "./src/pages/public/home.js"
+import about from "./src/pages/public/about.js"
+import register, { initRegister } from "./src/pages/auth/register/register.js"
+import analystRegister, { initAnalystRegister } from "./src/pages/auth/register/analystRegister.js"
+import login, { initLogin } from "./src/pages/auth/login.js"
+import detailsPage, { initDetail} from "./src/pages/public/details.js"
+import { roleGuard } from "./src/middlewares/roleGuard.js"
 
 import userPage, { initUser } from "./src/pages/user/user.js"
 import analystPage, { initAnalyst }  from "./src/pages/analyst/analyst.js"
 import adminPage, { initAdmin } from "./src/pages/admin/admin.js"
 
-import notfound from "./src/pages/public/notfound.js";
-import navbar from "./src/components/navbar/navbar.js";
-import footer from "./src/components/footer/footer.js";
+import notfound from "./src/pages/public/notfound.js"
+import navbar from "./src/components/navbar/navbar.js"
+import footer from "./src/components/footer/footer.js"
 
 function router() {
-  const hash = window.location.hash.slice(1) || "/";
+  const hash = (window.location.hash.slice(1) || "/").split("?")[0]
 
-  let content = "";
-  let init = null;
+  let content = ""
+  let init = null
 
   switch (hash) {
     case "/":
@@ -26,7 +26,7 @@ function router() {
       init = initHome
       break;
 
-    case "/detail":
+    case "/details":
       content = detailsPage
       init = initDetail
       break;
@@ -72,15 +72,15 @@ function router() {
       content = notfound;
   }
 
-  document.getElementById("root").innerHTML = content;
+  document.getElementById("root").innerHTML = content
 
   if (init) {
-    init();
+    init()
   }
 }
 
-document.getElementById("nav").innerHTML = navbar();
-document.getElementById("foot").innerHTML = footer();
+document.getElementById("nav").innerHTML = navbar()
+document.getElementById("foot").innerHTML = footer()
 
-window.addEventListener("hashchange", router);
-window.addEventListener("load", router);
+window.addEventListener("hashchange", router)
+window.addEventListener("load", router)

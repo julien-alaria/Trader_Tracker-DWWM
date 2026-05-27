@@ -1,6 +1,9 @@
 import http from "../../config/instanceHttp.js"
 import { formatMarketCap } from "../../utils/format.js"
 
+/*
+Functions for external API
+*/
 async function getStock() {
 
     try {
@@ -65,4 +68,76 @@ async function getCommodities() {
     }
 }
 
-export { getStock, getForex, getCommodities }
+/*
+Functions for JSON datas
+*/
+
+async function getStockFromJson() {
+
+    try {
+        const res = await fetch("./data/stocks.json")
+        const data = await res.json()
+
+        return data.map(stock => ({
+            ticker: stock.ticker,
+            name: stock.name,
+            marketCap: formatMarketCap(stock.marketCap),
+            price: stock.price,
+            high: stock.high,
+            low: stock.low
+        }))
+
+    } catch (error) {
+        console.error(error.message)
+        return []
+    }
+}
+
+async function getForexFromJson() {
+
+    function formatForexName(ticker) {
+        return ticker
+            .replace("C:", "")
+            .replace(/(.{3})(.{3})/, "$1 / $2")
+    }
+
+    try {
+        const res = await fetch("./data/forex.json")
+        const data = await res.json()
+
+        return data.map(forex => ({
+            ticker: forex.ticker,
+            name: formatForexName(forex.ticker),
+            high: forex.high,
+            low: forex.low,
+            close: forex.close,
+        }))
+
+    } catch (error) {
+        console.error(error.message)
+        return []
+    }
+}
+
+async function getCommoditiesFromJson() {
+
+    try {
+        const res = await fetch("./data/commodities.json")
+        const data = await res.json()
+
+        return data.map(commodity => ({
+            ticker: commodity.ticker,
+            name: commodity.name,
+            price: commodity.price,
+            high: commodity.high,
+            low: commodity.low
+        }))
+
+    } catch (error) {
+        console.error(error.message)
+        return []
+    }
+}
+
+
+export { getStock, getForex, getCommodities, getStockFromJson, getForexFromJson, getCommoditiesFromJson }

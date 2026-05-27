@@ -6,13 +6,10 @@ const forexImages = {
 
 export default function forexCard({ ticker, name, high, low, close, image } = {}) {
 
-  const finalImage =
-    image ||
-    forexImages[ticker] ||
-    "/assets/default.png"
+  const finalImage = image || forexImages[ticker] || "/assets/default.png"
 
   return `
-    <div class="card forex">
+    <div class="card forex" data-type="forex" data-ticker="${ticker}" >
 
         <img
           class="card-image"

@@ -9,7 +9,7 @@ export default function stockCard({ticker = 'N/A', name = 'Unknown company', mar
   const finalImage = image || DEFAULT_IMAGE
 
   return `
-    <div class="card stock">
+    <div class="card stock" data-type="stock" data-ticker="${ticker}" >
 
         <div class="chart" id="tv-${ticker}"></div>
 

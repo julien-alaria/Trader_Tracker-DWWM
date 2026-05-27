@@ -1,6 +1,7 @@
 export function createSearchBar(onSearch) {
 
     const wrapper = document.createElement("div")
+    wrapper.className = "search-wrapper"
 
     const input = document.createElement("input")
     input.type = "search"
