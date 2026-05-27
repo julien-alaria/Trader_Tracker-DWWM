@@ -1,0 +1,10 @@
+#asset_detail {
+    width: 80vw;
+    height: 100%;
+    background-color: aqua;
+}
+
+.tv-chart {
+    width: 100%;
+    min-height: 120px;
+}

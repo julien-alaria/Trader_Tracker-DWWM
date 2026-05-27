@@ -1,5 +1,6 @@
 @import "./src/styles/home.css";
 @import "./src/styles/cards.css";
+@import "./src/styles/details.css";
 
 html, body {
   height: 100%;

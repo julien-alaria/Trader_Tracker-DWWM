@@ -1,10 +1,10 @@
 export function loadTradingViewChart(ticker) {
+
   new TradingView.widget({
     container_id: `tv-${ticker}`,
     symbol: ticker,
-    interval: "D",
-    width: "100%",
-    height: 120,
+    interval: "W",
+    autosize: true,
     theme: "dark",
     style: "1",
     locale: "en",

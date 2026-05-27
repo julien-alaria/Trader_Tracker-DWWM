@@ -1,11 +1,9 @@
 import home, { initHome } from "./src/pages/public/home.js";
 import about from "./src/pages/public/about.js";
 import register, { initRegister } from "./src/pages/auth/register/register.js";
-import analystRegister, {
-  initAnalystRegister,
-} from "./src/pages/auth/register/analystRegister.js";
+import analystRegister, { initAnalystRegister } from "./src/pages/auth/register/analystRegister.js";
 import login, { initLogin } from "./src/pages/auth/login.js";
-
+import detailsPage, { initDetail} from "./src/pages/public/details.js";
 import { roleGuard } from "./src/middlewares/roleGuard.js";
 
 import userPage, { initUser } from "./src/pages/user/user.js"
@@ -26,6 +24,11 @@ function router() {
     case "/":
       content = home
       init = initHome
+      break;
+
+    case "/detail":
+      content = detailsPage
+      init = initDetail
       break;
 
     case "/about":
