@@ -1,11 +1,22 @@
-export default function forexCard({ ticker, name, high, low, close, image = 'https://placehold.co/300x180'} = {}) {
+const forexImages = {
+  'C:EURJPY': "/assets/eur_jpy.jpeg",
+  'C:EURUSD': "/assets/eur_usd.jpeg",
+  'C:EURCHF': "/assets/eur_chf.jpeg"
+}
+
+export default function forexCard({ ticker, name, high, low, close, image } = {}) {
+
+  const finalImage =
+    image ||
+    forexImages[ticker] ||
+    "/assets/default.png"
 
   return `
     <div class="card forex">
 
         <img
           class="card-image"
-          src="${image}"
+          src="${finalImage}"
           alt="${ticker}"
         >
 
