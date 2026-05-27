@@ -12,14 +12,14 @@ class InstanceHttp {
     }
 
     async handleResponse(response) {
-        if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`)
-        }
-
         if (response.status === 401) {
             localStorage.removeItem("token")
             window.location.href = "/login"
             throw new Error("Unauthorized")
+        }
+
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`)
         }
 
         return response.json()

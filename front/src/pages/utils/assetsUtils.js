@@ -1,4 +1,5 @@
 import http from "../../config/instanceHttp.js"
+import { formatMarketCap } from "../../utils/format.js"
 
 async function getStock() {
 
@@ -8,7 +9,7 @@ async function getStock() {
         return data.message.map(stock => ({
             ticker: stock.ticker,
             name: stock.name,
-            marketCap: stock.marketCap,
+            marketCap: formatMarketCap(stock.marketCap),
             price: stock.price,
             high: stock.high,
             low: stock.low
