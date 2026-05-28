@@ -1,4 +1,4 @@
-import { getStock, getForex, getCommodities, getStockFromJson, getForexFromJson, getCommoditiesFromJson } from "../utils/assetsUtils.js"
+import { getStock, getForex, getCommodities  } from "../utils/assetsUtils.js"
 import { loadTradingViewChart } from "../../../src/utils/tradingChart.js"
 
 const detailsPage = `
@@ -25,13 +25,13 @@ export async function initDetail() {
     console.log("TICKER:", ticker)
 
     // POUR API
-    //const stocks = await getStock()
-    //const forex = await getForex()
-    //const commodities = await getCommodities()
+    const stocks = await getStock()
+    const forex = await getForex()
+    const commodities = await getCommodities()
 
-    const stocks = await getStockFromJson()
-    const forex = await getForexFromJson()
-    const commodities = await getCommoditiesFromJson()
+    //const stocks = await getStockFromJson()
+    //const forex = await getForexFromJson()
+    //const commodities = await getCommoditiesFromJson()
 
     const allAssets = [
         ...stocks,

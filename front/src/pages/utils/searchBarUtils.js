@@ -20,7 +20,7 @@ export function createSearchBar(onSearch) {
     return wrapper
 }
 
-export function renderResults(results, container) {
+export function renderResults(results, container, onSelect) {
 
     container.innerHTML = ""
 
@@ -38,6 +38,11 @@ export function renderResults(results, container) {
             <strong>${item.ticker}</strong>
             <p>${item.name ?? item.type ?? ""}</p>
         `
+        div.style.cursor = "pointer"
+
+        div.addEventListener("click", () => {
+            onSelect(item)
+        })
 
         container.appendChild(div)
     })

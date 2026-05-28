@@ -7,8 +7,6 @@ const router = express.Router()
 
 router.use("/auth", authRouter)
 router.use("/users", userRouter)
-
-//router.use("/admin/dashboard", dashboardRouter)
 router.use("/assets", stockRouter)
 
 export default router

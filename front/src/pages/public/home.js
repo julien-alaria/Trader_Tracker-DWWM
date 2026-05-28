@@ -1,4 +1,4 @@
-import { getStock, getForex, getCommodities, getStockFromJson, getForexFromJson, getCommoditiesFromJson} from "../utils/assetsUtils.js"
+import { getStock, getForex, getCommodities } from "../utils/assetsUtils.js"
 import stockCard from "../../components/home/cards/stockCards.js"
 import forexCard from "../../components/home/cards/forexCards.js"
 import commodityCard from "../../components/home/cards/commodityCards.js"
@@ -16,16 +16,10 @@ const home = `
   </main>
 `
 export async function initHome() {
-    // for external API
-    //const stocks = await getStock()
-    //const forex = await getForex()
-    //const commodities = await getCommodities()
-
-
-    // For JSON datas
-    const stocks = await getStockFromJson()
-    const forex = await getForexFromJson()
-    const commodities = await getCommoditiesFromJson()
+    
+    const stocks = await getStock()
+    const forex = await getForex()
+    const commodities = await getCommodities()
 
     const allData = [...stocks, ...forex, ...commodities]
 
@@ -46,8 +40,9 @@ export async function initHome() {
         (item.ticker ?? "").toLowerCase().includes(v) ||
         (item.name ?? "").toLowerCase().includes(v)
     )
-
-    renderResults(filtered, container)
+    // result of search bar
+    renderResults(filtered, container, (item) => {
+        window.location.hash =`#/details?type=${item.type}&ticker=${item.ticker}`})
     })
 
     const main = document.querySelector("main")

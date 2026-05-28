@@ -2,7 +2,7 @@ import { restClient } from '@massive.com/client-js'
 import dotenv from 'dotenv'
 
 dotenv.config()
-
+const rest = restClient(process.env.POLY_API_KEY)
 /**
  * imports, roads & utils for LOCAL JSON
  */
@@ -43,7 +43,9 @@ async function getAAPLStock(req, res) {
 }
 
 async function getMultipleAggregates() { 
+  // filter for results
   const tickers = ["MSFT", "NVDA", "AMZN", "INTC"] 
+  
   const results = await Promise.all( tickers.map(async (ticker) => { 
     const [metaRes, aggRes] = await Promise.all([ rest.getTicker({ ticker }), 
       rest.getStocksAggregates({ 
@@ -77,7 +79,7 @@ async function getMultipleAggregates() {
 }
 
 async function aggregateForex() {
-
+  // filter for results
   const tickers = ["C:EURUSD", "C:EURJPY", "C:EURCHF"]
 
   const results = []
@@ -112,7 +114,7 @@ async function aggregateForex() {
 }
 
 async function aggregateMetals() {
-
+  // filter for results
   const tickers = ["C:XAUUSD", "C:XAGUSD"]
 
   const results = []
@@ -164,7 +166,7 @@ async function getAAPLStockJson(req, res) {
 }
 
 async function getMultipleAggregatesJson() {
-
+ 
   const stocks = await readJsonFile('stocks.json')
 
   return stocks.map((stock) => {
