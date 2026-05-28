@@ -3,7 +3,29 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const rest = restClient(process.env.POLY_API_KEY)
+/**
+ * imports, roads & utils for LOCAL JSON
+ */
+import fs from 'fs/promises'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+const dataPath = path.join(__dirname, '../data')
+
+async function readJsonFile(fileName) {
+  const filePath = path.join(dataPath, fileName)
+  const data = await fs.readFile(filePath, 'utf-8')
+
+  return JSON.parse(data)
+}
+
+/**
+ * 
+ * functions for API
+ */
 
 async function getAAPLStock(req, res) {
     return rest.getStocksAggregates(
@@ -129,4 +151,80 @@ async function aggregateMetals() {
   return results
 }
 
-export default { getAAPLStock,  getMultipleAggregates, aggregateForex, aggregateMetals }
+/**
+ * functions for LOCAL JSON
+ */
+async function getAAPLStockJson(req, res) {
+
+  const stocks = await readJsonFile('stocks.json')
+
+  return {
+    results: stocks
+  }
+}
+
+async function getMultipleAggregatesJson() {
+
+  const stocks = await readJsonFile('stocks.json')
+
+  return stocks.map((stock) => {
+
+   
+
+    const meta = {
+      ticker: stock.ticker,
+      name: stock.name,
+      market_cap: stock.marketCap
+    }
+
+    const last = {
+      c: stock.price,
+      h: stock.high,
+      l: stock.low
+    }
+
+    return {
+      type: "nasdaq",
+      ticker: meta.ticker,
+      name: meta.name,
+      marketCap: meta.market_cap,
+      price: last?.c ?? null,
+      high: last?.h ?? null,
+      low: last?.l ?? null
+    }
+  })
+}
+
+async function aggregateForexJson() {
+
+  const forex = await readJsonFile('forex.json')
+
+  return forex.map((agg) => ({
+    type: "forex",
+    ticker: agg.ticker,
+    open: agg.open,
+    high: agg.high,
+    low: agg.low,
+    close: agg.close,
+    volume: agg.volume,
+    timestamp: agg.timestamp
+  }))
+}
+
+async function aggregateMetalsJson() {
+
+  const commodities = await readJsonFile('commodities.json')
+
+  return commodities.map((agg) => ({
+    type: "commodity",
+    ticker: agg.ticker,
+    name: agg.name,
+    price: agg.price ?? null,
+    high: agg.high ?? null,
+    low: agg.low ?? null,
+    open: agg.open ?? null,
+    close: agg.close ?? null
+  }))
+}
+
+export default { getAAPLStock,  getMultipleAggregates, aggregateForex, aggregateMetals, getAAPLStockJson,  getMultipleAggregatesJson, aggregateForexJson, aggregateMetalsJson }

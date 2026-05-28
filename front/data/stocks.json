@@ -34,5 +34,392 @@
     "price": 95.78,
     "high": 99.82,
     "low": 95.6
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "AAPL",
+    "name": "Apple Inc",
+    "marketCap": 3449123000000,
+    "price": 214.32,
+    "high": 216.45,
+    "low": 211.87
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "META",
+    "name": "Meta Platforms Inc",
+    "marketCap": 1385200000000,
+    "price": 548.77,
+    "high": 555.9,
+    "low": 541.62
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "GOOGL",
+    "name": "Alphabet Inc Class A",
+    "marketCap": 2284400000000,
+    "price": 182.41,
+    "high": 184.92,
+    "low": 179.33
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "TSLA",
+    "name": "Tesla Inc",
+    "marketCap": 1126300000000,
+    "price": 352.18,
+    "high": 360.75,
+    "low": 347.11
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "AMD",
+    "name": "Advanced Micro Devices Inc",
+    "marketCap": 312800000000,
+    "price": 192.64,
+    "high": 196.28,
+    "low": 189.5
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "NFLX",
+    "name": "Netflix Inc",
+    "marketCap": 472500000000,
+    "price": 1102.83,
+    "high": 1118.4,
+    "low": 1088.72
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "ADBE",
+    "name": "Adobe Inc",
+    "marketCap": 248900000000,
+    "price": 563.14,
+    "high": 570.88,
+    "low": 556.41
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "PYPL",
+    "name": "PayPal Holdings Inc",
+    "marketCap": 84520000000,
+    "price": 88.46,
+    "high": 90.11,
+    "low": 87.02
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "AVGO",
+    "name": "Broadcom Inc",
+    "marketCap": 798300000000,
+    "price": 1689.22,
+    "high": 1712.5,
+    "low": 1661.8
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "QCOM",
+    "name": "Qualcomm Inc",
+    "marketCap": 231400000000,
+    "price": 208.57,
+    "high": 211.73,
+    "low": 205.4
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "CSCO",
+    "name": "Cisco Systems Inc",
+    "marketCap": 238700000000,
+    "price": 59.84,
+    "high": 60.52,
+    "low": 58.93
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "ORCL",
+    "name": "Oracle Corp",
+    "marketCap": 487600000000,
+    "price": 174.91,
+    "high": 177.45,
+    "low": 172.33
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "CRM",
+    "name": "Salesforce Inc",
+    "marketCap": 286900000000,
+    "price": 296.15,
+    "high": 301.7,
+    "low": 291.84
+  },
+    {
+    "type": "nasdaq",
+    "ticker": "IBM",
+    "name": "International Business Machines Corp",
+    "marketCap": 214500000000,
+    "price": 232.84,
+    "high": 235.91,
+    "low": 229.76
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "INTU",
+    "name": "Intuit Inc",
+    "marketCap": 198400000000,
+    "price": 712.53,
+    "high": 719.42,
+    "low": 704.11
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "NOW",
+    "name": "ServiceNow Inc",
+    "marketCap": 168900000000,
+    "price": 823.77,
+    "high": 831.2,
+    "low": 815.66
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "SNOW",
+    "name": "Snowflake Inc",
+    "marketCap": 74200000000,
+    "price": 224.19,
+    "high": 228.91,
+    "low": 219.85
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "SHOP",
+    "name": "Shopify Inc",
+    "marketCap": 119800000000,
+    "price": 92.41,
+    "high": 94.22,
+    "low": 90.76
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "UBER",
+    "name": "Uber Technologies Inc",
+    "marketCap": 182700000000,
+    "price": 88.63,
+    "high": 90.11,
+    "low": 87.05
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "LYFT",
+    "name": "Lyft Inc",
+    "marketCap": 8420000000,
+    "price": 21.47,
+    "high": 22.05,
+    "low": 20.98
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "SQ",
+    "name": "Block Inc",
+    "marketCap": 56700000000,
+    "price": 91.74,
+    "high": 93.66,
+    "low": 89.9
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "DOCU",
+    "name": "DocuSign Inc",
+    "marketCap": 14200000000,
+    "price": 68.11,
+    "high": 69.48,
+    "low": 66.93
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "ZM",
+    "name": "Zoom Video Communications Inc",
+    "marketCap": 24100000000,
+    "price": 78.53,
+    "high": 80.12,
+    "low": 77.01
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "CRWD",
+    "name": "CrowdStrike Holdings Inc",
+    "marketCap": 109600000000,
+    "price": 446.29,
+    "high": 452.8,
+    "low": 439.77
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "PANW",
+    "name": "Palo Alto Networks Inc",
+    "marketCap": 128300000000,
+    "price": 371.42,
+    "high": 376.99,
+    "low": 366.14
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "ZS",
+    "name": "Zscaler Inc",
+    "marketCap": 38600000000,
+    "price": 248.93,
+    "high": 252.6,
+    "low": 244.88
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "OKTA",
+    "name": "Okta Inc",
+    "marketCap": 18900000000,
+    "price": 108.74,
+    "high": 110.29,
+    "low": 106.8
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "PLTR",
+    "name": "Palantir Technologies Inc",
+    "marketCap": 184500000000,
+    "price": 79.55,
+    "high": 81.22,
+    "low": 77.94
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "NET",
+    "name": "Cloudflare Inc",
+    "marketCap": 46800000000,
+    "price": 132.68,
+    "high": 135.11,
+    "low": 130.42
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "DDOG",
+    "name": "Datadog Inc",
+    "marketCap": 52300000000,
+    "price": 151.82,
+    "high": 154.37,
+    "low": 148.91
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "MDB",
+    "name": "MongoDB Inc",
+    "marketCap": 33800000000,
+    "price": 458.91,
+    "high": 464.55,
+    "low": 451.23
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "TEAM",
+    "name": "Atlassian Corp",
+    "marketCap": 61200000000,
+    "price": 234.67,
+    "high": 238.14,
+    "low": 230.11
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "ASML",
+    "name": "ASML Holding NV",
+    "marketCap": 396800000000,
+    "price": 1008.22,
+    "high": 1019.5,
+    "low": 995.73
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "ARM",
+    "name": "Arm Holdings PLC",
+    "marketCap": 168400000000,
+    "price": 161.55,
+    "high": 164.92,
+    "low": 158.44
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "MU",
+    "name": "Micron Technology Inc",
+    "marketCap": 154300000000,
+    "price": 138.74,
+    "high": 141.08,
+    "low": 136.22
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "DELL",
+    "name": "Dell Technologies Inc",
+    "marketCap": 102500000000,
+    "price": 147.28,
+    "high": 149.63,
+    "low": 144.55
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "HPQ",
+    "name": "HP Inc",
+    "marketCap": 38400000000,
+    "price": 39.81,
+    "high": 40.35,
+    "low": 39.12
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "SAP",
+    "name": "SAP SE",
+    "marketCap": 278900000000,
+    "price": 238.17,
+    "high": 241.66,
+    "low": 235.02
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "SONY",
+    "name": "Sony Group Corp",
+    "marketCap": 154600000000,
+    "price": 128.91,
+    "high": 130.45,
+    "low": 127.03
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "TXN",
+    "name": "Texas Instruments Inc",
+    "marketCap": 201700000000,
+    "price": 221.36,
+    "high": 224.51,
+    "low": 218.94
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "ADI",
+    "name": "Analog Devices Inc",
+    "marketCap": 122400000000,
+    "price": 245.77,
+    "high": 248.8,
+    "low": 241.93
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "LRCX",
+    "name": "Lam Research Corp",
+    "marketCap": 142600000000,
+    "price": 1104.42,
+    "high": 1119.73,
+    "low": 1088.56
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "KLAC",
+    "name": "KLA Corp",
+    "marketCap": 118900000000,
+    "price": 892.51,
+    "high": 904.88,
+    "low": 881.17
   }
 ]

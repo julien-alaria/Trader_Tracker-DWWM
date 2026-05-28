@@ -14,7 +14,7 @@ async function getStock(req, res) {
 
 async function getAllStocks(req, res) {
     try {
-        const response = await stockService.getMultipleAggregates()
+        const response = await stockService.getMultipleAggregatesJson()
         console.log(response)
         res.status(200).json({ message: response })
     } catch (error) {
@@ -26,7 +26,7 @@ async function getAllStocks(req, res) {
 
 async function getForex(req, res) {
     try {
-        const response = await stockService.aggregateForex()
+        const response = await stockService.aggregateForexJson()
         console.log(response)
         res.status(200).json({ message: response })
     } catch (error) {
@@ -38,7 +38,7 @@ async function getForex(req, res) {
 
 async function getCommodities(req, res) {
     try {
-        const response = await stockService.aggregateMetals()
+        const response = await stockService.aggregateMetalsJson()
         console.log(response)
         res.status(200).json({ message: response })
     } catch (error) {

@@ -1,0 +1,38 @@
+[
+  {
+    "type": "nasdaq",
+    "ticker": "MSFT",
+    "name": "Microsoft Corp",
+    "marketCap": 3090451689905.1196,
+    "price": 413.62,
+    "high": 420.78,
+    "low": 410.8
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "NVDA",
+    "name": "Nvidia Corp",
+    "marketCap": 5204124060000,
+    "price": 198.48,
+    "high": 201.73,
+    "low": 194.74
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "AMZN",
+    "name": "Amazon.Com Inc",
+    "marketCap": 2853753562276.4404,
+    "price": 272.05,
+    "high": 276.1,
+    "low": 268.795
+  },
+  {
+    "type": "nasdaq",
+    "ticker": "INTC",
+    "name": "Intel Corp",
+    "marketCap": 620811520000,
+    "price": 95.78,
+    "high": 99.82,
+    "low": 95.6
+  }
+]
