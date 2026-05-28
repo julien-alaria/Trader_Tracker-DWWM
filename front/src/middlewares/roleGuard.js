@@ -13,8 +13,6 @@ export function getRoleFromToken() {
 
   const payload = decodeToken(token);
 
-  console.log("PAYLOAD :", payload);
-
   return payload?.role || null;
 }
 
@@ -27,8 +25,6 @@ export function roleGuard(allowedRoles = []) {
   }
 
   const role = getRoleFromToken();
-
-  console.log("ROLE DETECTÉ :", role);
 
   if (!allowedRoles.includes(role)) {
     window.location.hash = "/";

@@ -144,36 +144,57 @@ async function deleteUser(req, res) {
 async function followAsset(req, res) {
     try {
         const user_id = req.user.id
-        const asset_id = Number(req.params.assetId)
+        const { ticker } = req.body
 
-        if (!Number.isInteger(asset_id) || asset_id <= 0) {
-            return res.status(400).json({ error: "Invalid asset ID" })
+        if (!ticker) {
+            return res.status(400).json({ error: "Ticker required" })
         }
 
-        await UserModel.userFollowAsset(user_id, asset_id)
+        const asset = await UserModel.getAssetByTicker(ticker)
+
+        if (!asset) {
+            return res.status(404).json({ error: "Asset not found" })
+        }
+
+        await UserModel.userFollowAsset(user_id, asset.id)
 
         return res.status(201).json({
             message: "asset added to favorites"
         })
 
     } catch (error) {
-        return res.status(500).json({ error: error.message })
+        console.error("FOLLOW ERROR:", error) // 👈 AJOUT CRUCIAL
+        return res.status(500).json({
+            error: error.message
+        })
     }
 }
 
 async function unfollowAsset(req, res) {
     try {
         const user_id = req.user.id
-        const asset_id = Number(req.params.assetId)
+        const { ticker } = req.body
 
-        if (!Number.isInteger(asset_id) || asset_id <= 0) {
-            return res.status(400).json({ error: "Invalid asset ID" })
+        if (!ticker) {
+            return res.status(400).json({
+                error: "Ticker required"
+            })
         }
 
-        const result = await UserModel.userUnfollowAsset(user_id, asset_id)
+        const asset = await UserModel.getAssetByTicker(ticker)
+
+        if (!asset) {
+            return res.status(404).json({
+                error: "Asset not found"
+            })
+        }
+
+        const result = await UserModel.userUnfollowAsset(user_id, asset.id)
 
         if (result.affectedRows === 0) {
-            return res.status(404).json({ error: "Favorite not found" })
+            return res.status(404).json({
+                error: "Favorite not found"
+            })
         }
 
         return res.status(200).json({
@@ -181,7 +202,9 @@ async function unfollowAsset(req, res) {
         })
 
     } catch (error) {
-        return res.status(500).json({ error: error.message })
+        return res.status(500).json({
+            error: error.message
+        })
     }
 }
 

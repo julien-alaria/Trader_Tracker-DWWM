@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../../../config/api.js"
+import http from "../../../config/instanceHttp.js"
 
 const register = ` 
         <h1>Register</h1>
@@ -19,38 +19,33 @@ const register = `
         </form>
         `;
 
-    export function initRegister() {
-        const form = document.querySelector("#register-form");
+  export function initRegister() {
+    const form = document.querySelector("#register-form")
 
-        form.addEventListener("submit", async function (e) {
-            e.preventDefault();
+    form.addEventListener("submit", async function (e) {
+        e.preventDefault()
 
-            const data = new FormData(form);
+        const data = new FormData(form)
 
-            console.log(data.get("name"));
-            console.log(data.get("email"));
-            console.log(data.get("password"));
+        try {
+            const result = await http.post("/auth/register", {
+                name: data.get("name"),
+                email: data.get("email"),
+                password: data.get("password"),
+            })
 
-            const response = await fetch(`${API_BASE_URL}/auth/register`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    name: data.get("name"),
-                    email: data.get("email"),
-                    password: data.get("password"),
-                }),
-            });
+            console.log("REGISTER OK:", result.token)
 
-            const result = await response.json()
-
-            if (response.ok) {
+            if (result.token) {
                 localStorage.setItem("token", result.token)
-
-                console.log(result.token)
+                window.location.hash = "/"
+                window.dispatchEvent(new Event("hashchange"))
             }
-        });
+
+        } catch (error) {
+            console.error("Register failed:", error)
+        }
+    })
 }
 
 export default register

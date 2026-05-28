@@ -4,6 +4,7 @@ import forexCard from "../../components/home/cards/forexCards.js"
 import commodityCard from "../../components/home/cards/commodityCards.js"
 import { createSearchBar, renderResults} from "../utils/searchBarUtils.js"
 import { loadTradingViewChart } from "../../utils/tradingChart.js"
+import http from "../../config/instanceHttp.js"
 
 const home = `
   <main>
@@ -50,18 +51,15 @@ export async function initHome() {
 
     h1.insertAdjacentElement("afterend", searchBar)
 
-    document.getElementById("stocks").innerHTML =
-        stocks.map(stock => stockCard(stock)).join("")
+    document.getElementById("stocks").innerHTML = stocks.map(stock => stockCard(stock)).join("")
 
     stocks.forEach(stock => {
         loadTradingViewChart(stock.ticker)
     })
 
-    document.getElementById("forex").innerHTML =
-        forex.map(pair => forexCard(pair)).join("")
+    document.getElementById("forex").innerHTML = forex.map(pair => forexCard(pair)).join("")
 
-    document.getElementById("commodities").innerHTML =
-        commodities.map(item => commodityCard(item)).join("")
+    document.getElementById("commodities").innerHTML = commodities.map(item => commodityCard(item)).join("")
 
     document.querySelectorAll(".card").forEach(card => {
 
@@ -73,6 +71,26 @@ export async function initHome() {
             window.location.href = `#/details?type=${type}&ticker=${ticker}`
         })
     })
-}
 
+    document.querySelectorAll(".watch-btn").forEach(btn => {
+
+        btn.addEventListener("click", async (e) => {
+
+            e.stopPropagation()
+
+            const card = btn.closest(".card")
+            const ticker = card.dataset.ticker
+
+            try {
+                await http.post("/users/me/follows", { ticker })
+                btn.textContent = "⭐ Unfollow"
+                card.dataset.followed = "true"
+
+            } catch (error) {
+                console.error(error)
+            }
+        })
+    })
+}
+ 
 export default home

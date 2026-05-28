@@ -11,27 +11,17 @@ const detailsPage = `
 export async function initDetail() {
 
     const hash = window.location.hash
-
-    console.log("RAW HASH:", hash)
-
+    
     const queryIndex = hash.indexOf("?")
-
     const query = queryIndex !== -1 ? hash.substring(queryIndex + 1) : ""
 
     const params = new URLSearchParams(query)
 
     const ticker = params.get("ticker")
 
-    console.log("TICKER:", ticker)
-
-    // POUR API
     const stocks = await getStock()
     const forex = await getForex()
     const commodities = await getCommodities()
-
-    //const stocks = await getStockFromJson()
-    //const forex = await getForexFromJson()
-    //const commodities = await getCommoditiesFromJson()
 
     const allAssets = [
         ...stocks,
@@ -39,19 +29,13 @@ export async function initDetail() {
         ...commodities
     ]
 
-   const asset = allAssets.find(item => {
-        console.log("compare:", item.ticker, ticker)
+    const asset = allAssets.find(item => {
 
         return (
             String(item.ticker ?? "").trim().toUpperCase() ===
             String(ticker ?? "").trim().toUpperCase()
         )
     })
-
-    console.log("URL ticker:", ticker)
-    console.log("allAssets:", allAssets.map(a => a.ticker))
-    console.log("RAW HASH:", window.location.hash)
-    console.log("TICKER:", ticker)
 
     if (!asset) {
         document.getElementById("asset_detail").innerHTML =
@@ -70,11 +54,9 @@ export async function initDetail() {
         <div id="tv-${asset.ticker}"></div>
     `
 
-     if (asset.marketCap) {
+    if (asset.marketCap) {
         loadTradingViewChart(asset.ticker)
     }
-
-    
 }
 
 export default detailsPage

@@ -74,13 +74,31 @@ function router() {
 
   document.getElementById("root").innerHTML = content
 
+  renderNavbar()
+  bindNavbarEvents()
+
   if (init) {
     init()
   }
 }
 
-document.getElementById("nav").innerHTML = navbar()
 document.getElementById("foot").innerHTML = footer()
 
 window.addEventListener("hashchange", router)
 window.addEventListener("load", router)
+
+function renderNavbar() {
+  document.getElementById("nav").innerHTML = navbar()
+}
+
+function bindNavbarEvents() {
+  const btn = document.getElementById("logout-btn")
+
+  if (btn) {
+    btn.addEventListener("click", () => {
+      localStorage.removeItem("token")
+      window.location.hash = "/login"
+    })
+  }
+}
+

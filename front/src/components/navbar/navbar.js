@@ -1,11 +1,42 @@
-import navLink from "../navLinks/navLink.js";
+import navLink from "../navLinks/navLink.js"
 
-export default function navbar(link, label) {
+function getUser() {
+  const token = localStorage.getItem("token")
+  if (!token) return null
+
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]))
+
+    if (payload.exp * 1000 < Date.now()) {
+      localStorage.removeItem("token")
+      return null
+    }
+
+    return payload
+  } catch {
+    return null
+  }
+}
+
+export default function navbar() {
+
+    const user = getUser()
+
     return `
-            <p>NAVBAR</>
+        <nav>
+            <p>NAVBAR</p>
+
             ${navLink("/", "Home")}
-            ${navLink("/register", "Register")}
-            ${navLink("/login", "Login")}
             ${navLink("/about", "About")}
-        `
+
+            ${user ? "" : navLink("/login", "Login")}
+            ${user ? "" : navLink("/register", "Register")}
+
+            ${user?.role === "admin" ? navLink("/admin", "Admin") : ""}
+            ${user?.role === "user" ? navLink("/user", "User") : ""}
+            ${user?.role === "analyst" ? navLink("/analyst", "Analyst") : ""}
+
+            ${user ? `<button id="logout-btn">Logout</button>` : ""}
+        </nav>
+    `
 }

@@ -1,3 +1,5 @@
+import http from "../../../config/instanceHttp.js"
+
 const analystRegister = `
                 <form method="post" id="analyst-form">
                     <label for="name">Analyst Name:</label>
@@ -34,46 +36,37 @@ const analystRegister = `
                 </form>
                 `;
 
-export function initAnalystRegister() {
-  const form = document.getElementById("analyst-form")
+  export function initAnalystRegister() {
+    const form = document.getElementById("analyst-form")
 
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault()
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault()
 
-    const data = new FormData(form);
+      const data = new FormData(form)
 
-    console.log(data.get("name"))
-    console.log(data.get("email"))
-    console.log(data.get("password"))
-    console.log(data.get("company"))
-    console.log(data.get("bio"))
-    console.log(data.get("role"))
-    console.log(data.get("analyst_type_id"))
+      try {
+        const result = await http.post("/auth/register", {
+          name: data.get("name"),
+          email: data.get("email"),
+          password: data.get("password"),
+          company: data.get("company"),
+          bio: data.get("bio"),
+          role: data.get("role"),
+          analyst_type_id: Number(data.get("analyst_type_id")),
+        })
 
-    const response = await fetch("http://localhost:3000/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: data.get("name"),
-        email: data.get("email"),
-        password: data.get("password"),
-        company: data.get("company"),
-        bio: data.get("bio"),
-        role: data.get("role"),
-        analyst_type_id: Number(data.get("analyst_type_id")),
-      }),
+        console.log("REGISTER OK:", result)
+
+        if (result.token) {
+          localStorage.setItem("token", result.token)
+          window.location.hash = "/"
+          window.dispatchEvent(new Event("hashchange"))
+        }
+
+      } catch (error) {
+        console.error("Register failed:", error)
+      }
     })
-
-    const result = await response.json()
-
-    if (response.status === 200) {
-      localStorage.setItem("token", result.token);
-      console.log(result.token)
-    }
-
-  })
 }
 
 export default analystRegister;

@@ -11,9 +11,9 @@ userRouter.get("/me", AuthMiddleware(), UserController.getMe)
 
 userRouter.get("/me/watchlist", AuthMiddleware(), UserController.getWatchlist)
 
-userRouter.post("/me/follows/:assetId", AuthMiddleware(), UserController.followAsset)
+userRouter.post("/me/follows", AuthMiddleware(), UserController.followAsset)
 
-userRouter.delete("/me/follows/:assetId", AuthMiddleware(), UserController.unfollowAsset)
+userRouter.delete("/me/follows", AuthMiddleware(), UserController.unfollowAsset)
 
 // admin
 userRouter.get("/", AuthMiddleware(["admin"]), UserController.getUser)

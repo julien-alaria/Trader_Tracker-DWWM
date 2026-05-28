@@ -1,9 +1,5 @@
-import { formatMarketCap } from "../../../utils/format.js"
-
 export default function stockCard({ticker = 'N/A', name = 'Unknown company', marketCap = 0, high = 'N/A', low = 'N/A', image, price = "N/A",
   isFollowed = false} = {}) {
-
-  const formattedMarketCap = formatMarketCap(marketCap)
 
   const finalImage = image || "/assets/nasdaq_logo.svg.png"
 

@@ -14,7 +14,7 @@ class InstanceHttp {
     async handleResponse(response) {
         if (response.status === 401) {
             localStorage.removeItem("token")
-            window.location.href = "/login"
+            window.location.hash = "/login"
             throw new Error("Unauthorized")
         }
 
@@ -60,10 +60,11 @@ class InstanceHttp {
         return this.handleResponse(response)
     }
 
-    async delete(url) {
+    async delete(url, data) {
         const response = await fetch(API_URL + url, {
             method: "DELETE",
-            headers: this.getHeaders()
+            headers: this.getHeaders(),
+            body: JSON.stringify(data)
         })
         return this.handleResponse(response)
     }

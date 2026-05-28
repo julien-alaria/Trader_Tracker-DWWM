@@ -1,5 +1,6 @@
-import { API_BASE_URL } from "../../config/api.js"
+import http from "../../config/instanceHttp.js"
 import { getRoleFromToken } from "../../middlewares/roleGuard.js";
+
 
 const login = `  
         <h1>Log In</h1>
@@ -22,50 +23,43 @@ const login = `
             
             const data = new FormData(form)
             
-            console.log(data.get("email"))
-            console.log(data.get("password"))
+            const email = data.get("email")
+            const password = data.get("password")
 
-            const response = await fetch(`${API_BASE_URL}/auth/login`, 
-                {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body:
-                    JSON.stringify({
-                    email: data.get("email"),
-                    password: data.get("password"),
-                }),
-                                    
-            })
+            try {
+                const result = await http.post("/auth/login", {
+                    email,
+                    password
+                })
 
-            const result = await response.json()
+                const token = result.token
+                localStorage.setItem("token", token)
 
-            if (response.ok) {
-                localStorage.setItem("token", result.token);
+                const role = getRoleFromToken(token)
 
-                const role = getRoleFromToken();
-
-                console.log("TOKEN :", result.token);
-                console.log("ROLE :", role);
+                console.log("TOKEN :", token)
+                console.log("ROLE :", role)
 
                 if (!role) {
-                    window.location.hash = "/login";
-                    return;
+                    window.location.hash = "/login"
+                    return
                 }
 
                 switch (role) {
                     case "admin":
-                        window.location.hash = "/admin";
-                        break;
+                        window.location.hash = "/admin"
+                        break
                     case "analyst":
-                        window.location.hash = "/analyst";
-                        break;
+                        window.location.hash = "/analyst"
+                        break
                     default:
-                        window.location.hash = "/user";
+                        window.location.hash = "/user"
                 }
-            } else {
-                console.error("Login failed :", result);
+
+                window.dispatchEvent(new Event("hashchange"))
+
+            } catch (error) {
+                console.error("Login failed :", error)
             }
         })
     }

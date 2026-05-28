@@ -41,7 +41,7 @@ async function getUsersByEmail(email) {
 async function getUserWatchlist(id) {
     const db = getConnection()
 
-    const sql = "SELECT assets.id, assets.ticker, assets.name,assets.price, assets.asset_type_id FROM assets JOIN users_assets_follow ON users_assets_follow.asset_id = assets.id WHERE users_assets_follow.user_id = ?"
+    const sql = "SELECT assets.id, assets.ticker, assets.name, assets.asset_type_id FROM assets JOIN users_assets_follow ON users_assets_follow.asset_id = assets.id WHERE users_assets_follow.user_id = ?"
 
     const [result] = await db.execute(sql, [id])
 
@@ -188,18 +188,25 @@ async function userFollowAsset(user_id, asset_id) {
     return result
 }
 
-async function  userUnfollowAsset(user_id, asset_id) {
+async function userUnfollowAsset(user_id, ticker) {
     const db = getConnection()
 
-    if (!Number.isInteger(Number(user_id)) || !Number.isInteger(Number(Number(asset_id)))) {
-        throw new Error("Invalid ID")
-    }
+    const sql = "DELETE users_assets_follow FROM users_assets_follow JOIN assets ON assets.id = users_assets_follow.asset_id WHERE users_assets_follow.user_id = ? AND assets.ticker = ?"
 
-    const sql = "DELETE FROM users_assets_follow WHERE user_id = ? AND asset_id = ?"
-
-    const [result] = await db.execute(sql, [user_id, asset_id])
+    const [result] = await db.execute(sql, [user_id, ticker])
 
     return result
 }
 
-export default { getUsers, getUsersById, getUsersByEmail, getUserWatchlist, createUsers, updateUsers, deleteUsers, userFollowAsset, userUnfollowAsset, getMe }
+async function getAssetByTicker(ticker) {
+
+    const db = getConnection()
+
+    const sql = "SELECT id, ticker FROM assets WHERE ticker = ?"
+
+    const [result] = await db.execute(sql, [ticker])
+
+    return result[0] || null
+}
+
+export default { getUsers, getUsersById, getUsersByEmail, getUserWatchlist, createUsers, updateUsers, deleteUsers, userFollowAsset, userUnfollowAsset, getMe, getAssetByTicker }
