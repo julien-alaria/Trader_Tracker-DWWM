@@ -26,7 +26,7 @@ export function sanitizeUser(data) {
     }
 }
 
-export function sanitizeUpdateUser(data) {
+export function sanitizeUserUpdate(data) {
     const { name, email, password, role, analyst_type_id, company, bio } = data
 
     const sanitized = {}

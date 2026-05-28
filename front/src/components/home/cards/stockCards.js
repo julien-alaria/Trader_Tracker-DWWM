@@ -1,23 +1,18 @@
 import { formatMarketCap } from "../../../utils/format.js"
 
-const DEFAULT_IMAGE = "/assets/nasdaq_logo.svg.png"
-
-export default function stockCard({ticker = 'N/A', name = 'Unknown company', marketCap = 0, high = 'N/A', low = 'N/A', image, price = "N/A"} = {}) {
+export default function stockCard({ticker = 'N/A', name = 'Unknown company', marketCap = 0, high = 'N/A', low = 'N/A', image, price = "N/A",
+  isFollowed = false} = {}) {
 
   const formattedMarketCap = formatMarketCap(marketCap)
 
-  const finalImage = image || DEFAULT_IMAGE
+  const finalImage = image || "/assets/nasdaq_logo.svg.png"
 
   return `
     <div class="card stock" data-type="stock" data-ticker="${ticker}" >
 
         <div class="chart" id="tv-${ticker}"></div>
 
-        <img
-          class="card-image"
-          src="${finalImage}"
-          alt="${ticker}"
-        >
+        <img class="card-image" src="${finalImage}" alt="${ticker}">
 
         <h2 class="card-title">${name}</h2>
 
@@ -38,6 +33,10 @@ export default function stockCard({ticker = 'N/A', name = 'Unknown company', mar
         <p class="card-text">
           Low: ${low}
         </p>
+
+        <button class="watch-btn">
+          ${isFollowed ? "⭐ Unfollow" : "☆ Follow"}
+        </button>
 
     </div>
   `

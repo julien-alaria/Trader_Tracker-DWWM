@@ -9,6 +9,16 @@ async function getUsers() {
     return rows
 }
 
+async function getMe() {
+    const db = getConnection()
+
+    const sql = "SELECT id, name, email, role, analyst_type_id, analyst_verified, company, bio FROM users WHERE id = ?"
+
+    const [result] = await db.execute(sql, [id])
+
+    return result[0] || null
+}
+
 async function getUsersById(id) {
     const db = getConnection()
 
@@ -26,6 +36,16 @@ async function getUsersByEmail(email) {
     const [result] = await db.execute(sql, [email]) 
 
     return result[0] || null
+}
+
+async function getUserWatchlist(id) {
+    const db = getConnection()
+
+    const sql = "SELECT assets.id, assets.ticker, assets.name,assets.price, assets.asset_type_id FROM assets JOIN users_assets_follow ON users_assets_follow.asset_id = assets.id WHERE users_assets_follow.user_id = ?"
+
+    const [result] = await db.execute(sql, [id])
+
+    return result
 }
 
 async function createUsers(data) {
@@ -86,7 +106,7 @@ async function updateUsers(id, data) {
     // admin only
     if (data.role !== undefined) {
         fields.push("role = ?")
-        values.push(role)
+        values.push(data.role)
     }
 
     if (data.analyst_type_id !== undefined) {
@@ -106,17 +126,17 @@ async function updateUsers(id, data) {
     // admin only
     if (data.analyst_verified !== undefined) {
         fields.push("analyst_verified = ?")
-        values.push(analyst_verified)
+        values.push(data.analyst_verified)
     }
 
     if (data.company !== undefined) {
         fields.push("company = ?")
-        values.push(company)
+        values.push(data.company)
     }
 
     if (data.bio !== undefined) {
         fields.push("bio = ?")
-        values.push(bio)
+        values.push(data.bio)
     }
 
     if (fields.length === 0) {
@@ -154,4 +174,32 @@ async function deleteUsers(id) {
     return result
 }
 
-export default { getUsers, getUsersById, getUsersByEmail, createUsers, updateUsers, deleteUsers }
+async function userFollowAsset(user_id, asset_id) {
+    const db = getConnection()
+
+    if (!Number.isInteger(user_id) || !Number.isInteger(asset_id)) {
+        throw new Error("Invalid ID")
+    }
+
+    const sql = "INSERT INTO users_assets_follow (user_id, asset_id) VALUES (?, ?)"
+
+    const [result] = await db.execute(sql, [user_id, asset_id])
+
+    return result
+}
+
+async function  userUnfollowAsset(user_id, asset_id) {
+    const db = getConnection()
+
+    if (!Number.isInteger(Number(user_id)) || !Number.isInteger(Number(Number(asset_id)))) {
+        throw new Error("Invalid ID")
+    }
+
+    const sql = "DELETE FROM users_assets_follow WHERE user_id = ? AND asset_id = ?"
+
+    const [result] = await db.execute(sql, [user_id, asset_id])
+
+    return result
+}
+
+export default { getUsers, getUsersById, getUsersByEmail, getUserWatchlist, createUsers, updateUsers, deleteUsers, userFollowAsset, userUnfollowAsset, getMe }

@@ -1,6 +1,9 @@
 const commodityImages = {
   "C:XAUUSD": "/assets/gold.png",
-  "C:XAGUSD": "/assets/silver.png"
+  "C:XAGUSD": "/assets/silver.png",
+  "C:XPTUSD": "/assets/platinum.png",
+  "C:COPPERUSD": "/assets/copper.png",
+  "C:XPDUSD": "/assets/palladium.png"
 }
 
 export default function commodityCard({ name, ticker, price, high, low, image } = {}) {

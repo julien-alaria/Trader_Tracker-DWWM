@@ -4,14 +4,23 @@ import AuthMiddleware from "../middlewares/authMiddleware.js"
 
 const userRouter = express.Router()
 
-
-userRouter.get("/", AuthMiddleware(["admin"]), UserController.getUser)
-
-userRouter.get("/:id", AuthMiddleware(), UserController.getUserById)
-
+// public
 userRouter.post("/", UserController.createUser)
 
-userRouter.put("/:id", AuthMiddleware(), UserController.updateUser)
+userRouter.get("/me", AuthMiddleware(), UserController.getMe)
+
+userRouter.get("/me/watchlist", AuthMiddleware(), UserController.getWatchlist)
+
+userRouter.post("/me/follows/:assetId", AuthMiddleware(), UserController.followAsset)
+
+userRouter.delete("/me/follows/:assetId", AuthMiddleware(), UserController.unfollowAsset)
+
+// admin
+userRouter.get("/", AuthMiddleware(["admin"]), UserController.getUser)
+
+userRouter.get("/:id", AuthMiddleware(["admin"]), UserController.getUserById)
+
+userRouter.put("/:id", AuthMiddleware(["admin"]), UserController.updateUser)
 
 userRouter.delete("/:id", AuthMiddleware(["admin"]), UserController.deleteUser)
 
