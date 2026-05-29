@@ -15,7 +15,7 @@ const userPage = `
 
         <h2>My Watchlist</h2>
         <div id="watchlist"></div>
-        <div class="update-form">${updateForm}</div>
+        <div class="update-form">${updateForm()}</div>
     </main>
 `
 
@@ -113,12 +113,11 @@ export async function initUser() {
             })
         })
         
-        const form = document.getElementById("register-form")
+        const form = document.getElementById("user-update-form")
         // pre-remplissage formulaire
-        document.getElementById("name").value = user.name
-        document.getElementById("email").value = user.email
+        document.getElementById("user-name").value = user.name
+        document.getElementById("user-email").value = user.email
         
-
         form.addEventListener("submit", async function (e) {
             e.preventDefault()
         
