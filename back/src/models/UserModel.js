@@ -188,12 +188,17 @@ async function userFollowAsset(user_id, asset_id) {
     return result
 }
 
-async function userUnfollowAsset(user_id, ticker) {
+async function userUnfollowAsset(user_id, asset_id) {
+
     const db = getConnection()
 
-    const sql = "DELETE users_assets_follow FROM users_assets_follow JOIN assets ON assets.id = users_assets_follow.asset_id WHERE users_assets_follow.user_id = ? AND assets.ticker = ?"
+    const sql = `
+        DELETE FROM users_assets_follow
+        WHERE user_id = ?
+        AND asset_id = ?
+    `
 
-    const [result] = await db.execute(sql, [user_id, ticker])
+    const [result] = await db.execute(sql, [user_id, asset_id])
 
     return result
 }
@@ -202,9 +207,13 @@ async function getAssetByTicker(ticker) {
 
     const db = getConnection()
 
+    console.log("RAW TICKER ON getAssetByTicker:", JSON.stringify(ticker))
+
     const sql = "SELECT id, ticker FROM assets WHERE ticker = ?"
 
     const [result] = await db.execute(sql, [ticker])
+
+    console.log("SQL RESULT ON getAssetByTicker:", result)
 
     return result[0] || null
 }

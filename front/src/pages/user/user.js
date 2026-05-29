@@ -2,6 +2,7 @@ import http from "../../config/instanceHttp.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
 import stockCard from "../../components/home/cards/stockCards.js"
 import { getStock, getForex, getCommodities } from "../utils/assetsUtils.js"
+import { loadTradingViewChart } from "../../utils/tradingChart.js"
 
 const userPage = `
     <main>
@@ -56,38 +57,55 @@ export async function initUser() {
             }
         })
 
+        console.log("WATCHLIST FINAL ON user.js", watchlist)
+
         if (!watchlist.length) {
             container.innerHTML = "<p>No favorites yet</p>"
             return
         }
 
+        console.log("Watchres ON user.js", watchRes)
+
         container.innerHTML = watchlist.map(asset =>
             stockCard({
-                id: asset.id,
-                ticker: asset.ticker,
-                name: asset.name,
-                price: asset.price,
+                ...asset,
                 isFollowed: true
             })
         ).join("")
+
+        //affichage chart
+        watchlist.forEach(asset => {
+            loadTradingViewChart(asset.ticker)
+        })
+
+        document.querySelectorAll(".card").forEach(card => {
+
+        card.addEventListener("click", () => {
+
+                const ticker = card.dataset.ticker
+                const type = card.dataset.type
+
+                window.location.href = `#/details?type=${type}&ticker=${ticker}`
+            })
+        })
 
         container.querySelectorAll(".watch-btn").forEach(btn => {
             btn.addEventListener("click", async (e) => {
                 e.stopPropagation()
 
-                const card = e.target.closest(".card")
+                const card = btn.closest(".card")
                 const ticker = card.dataset.ticker
-
                 const isFollowed = card.dataset.followed === "true"
 
                 try {
                     if (isFollowed) {
                         await http.delete("/users/me/follows", { ticker })
-                        e.target.textContent = "☆ Follow"
-                        card.dataset.followed = "false"
+                        card.remove()
+                        return
+
                     } else {
                         await http.post("/users/me/follows", { ticker })
-                        e.target.textContent = "⭐ Unfollow"
+                        btn.textContent = "⭐ Unfollow"
                         card.dataset.followed = "true"
                     }
 

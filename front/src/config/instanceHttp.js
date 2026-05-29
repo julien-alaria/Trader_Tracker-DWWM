@@ -72,6 +72,3 @@ class InstanceHttp {
 }
 
 export default new InstanceHttp()
-
-
-//const results = await http.get(...)
