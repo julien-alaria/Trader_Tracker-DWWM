@@ -207,13 +207,9 @@ async function getAssetByTicker(ticker) {
 
     const db = getConnection()
 
-    console.log("RAW TICKER ON getAssetByTicker:", JSON.stringify(ticker))
-
     const sql = "SELECT id, ticker FROM assets WHERE ticker = ?"
 
     const [result] = await db.execute(sql, [ticker])
-
-    console.log("SQL RESULT ON getAssetByTicker:", result)
 
     return result[0] || null
 }

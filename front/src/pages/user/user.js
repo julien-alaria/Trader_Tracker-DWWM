@@ -57,14 +57,10 @@ export async function initUser() {
             }
         })
 
-        console.log("WATCHLIST FINAL ON user.js", watchlist)
-
         if (!watchlist.length) {
             container.innerHTML = "<p>No favorites yet</p>"
             return
         }
-
-        console.log("Watchres ON user.js", watchRes)
 
         container.innerHTML = watchlist.map(asset =>
             stockCard({

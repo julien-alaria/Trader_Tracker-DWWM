@@ -175,9 +175,6 @@ async function unfollowAsset(req, res) {
         const user_id = req.user.id
         const { ticker } = req.body
 
-        console.log("BODY ON unfollowAsset:", req.body)
-        console.log("QUERY  ON unfollowAsset:", req.query)
-
         if (!ticker) {
             return res.status(400).json({
                 error: "Ticker required"
