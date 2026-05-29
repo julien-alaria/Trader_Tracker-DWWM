@@ -119,12 +119,40 @@ async function updateUser(req, res) {
     }
 }
 
+async function updateMe(req, res) {
+    try {
+        const id = req.user.id
+        console.log("REQ USER:", req.user)
+        console.log("BODY:", req.body)
+
+        const sanitizedData = sanitizeUserUpdate(req.body)
+
+        // blocage sécurité : empêcher changement rôle
+        if (sanitizedData.role !== undefined) {
+            delete sanitizedData.role
+        }
+
+        if (Object.keys(sanitizedData).length === 0) {
+            return res.status(400).json({
+                error: "Aucune donnée valide"
+            })
+        }
+
+        const user = await UserModel.updateUsers(id, sanitizedData)
+
+        res.status(200).json(user)
+
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
 async function deleteUser(req, res) {
     try {
         const id = Number(req.params.id)
 
         if (!Number.isInteger(id) || id <= 0) {
-            return res.status(400).json({ error: "ID invalide" })
+            return res.status(400).json({ error: "unvalid ID" })
         }
 
         const result = await UserModel.deleteUsers(id)
@@ -208,4 +236,4 @@ async function unfollowAsset(req, res) {
     }
 }
 
-export default { getUser, getUserById, createUser, updateUser, deleteUser, followAsset, unfollowAsset, getWatchlist, getMe }
+export default { getUser, getUserById, createUser, updateUser, deleteUser, followAsset, unfollowAsset, getWatchlist, getMe, updateMe }

@@ -7,11 +7,14 @@ const userRouter = express.Router()
 // public
 userRouter.post("/", UserController.createUser)
 
+// self users
 userRouter.get("/me", AuthMiddleware(), UserController.getMe)
 
 userRouter.get("/me/watchlist", AuthMiddleware(), UserController.getWatchlist)
 
 userRouter.post("/me/follows", AuthMiddleware(), UserController.followAsset)
+
+userRouter.put("/me", AuthMiddleware(), UserController.updateMe)
 
 userRouter.delete("/me/follows", AuthMiddleware(), UserController.unfollowAsset)
 

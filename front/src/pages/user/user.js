@@ -3,6 +3,7 @@ import { decodeToken } from "../../middlewares/roleGuard.js"
 import stockCard from "../../components/home/cards/stockCards.js"
 import { getStock, getForex, getCommodities } from "../utils/assetsUtils.js"
 import { loadTradingViewChart } from "../../utils/tradingChart.js"
+import updateForm from "../../components/user/userUpdateForm.js"
 
 const userPage = `
     <main>
@@ -14,6 +15,7 @@ const userPage = `
 
         <h2>My Watchlist</h2>
         <div id="watchlist"></div>
+        <div class="update-form">${updateForm}</div>
     </main>
 `
 
@@ -76,7 +78,7 @@ export async function initUser() {
 
         document.querySelectorAll(".card").forEach(card => {
 
-        card.addEventListener("click", () => {
+            card.addEventListener("click", () => {
 
                 const ticker = card.dataset.ticker
                 const type = card.dataset.type
@@ -109,6 +111,44 @@ export async function initUser() {
                     console.error(err)
                 }
             })
+        })
+        
+        const form = document.getElementById("register-form")
+        // pre-remplissage formulaire
+        document.getElementById("name").value = user.name
+        document.getElementById("email").value = user.email
+        
+
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault()
+        
+            const data = new FormData(form)
+
+            const payload = {
+                name: data.get("name"),
+                email: data.get("email"),
+            }
+
+            const password = data.get("password")
+
+            if (password && password.trim() !== "") {
+                payload.password = password
+            }
+    
+            try {
+                const result = await http.put("/users/me", payload)
+    
+                console.log("UPDATE OK:", result.token)
+    
+                if (result.token) {
+                    localStorage.setItem("token", result.token)
+                    window.location.hash = "/"
+                    window.dispatchEvent(new Event("hashchange"))
+                }
+    
+            } catch (error) {
+                console.error("Register failed:", error)
+            }
         })
     } catch (error) {
         console.error(error.message)
