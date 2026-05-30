@@ -6,11 +6,10 @@ async function getUser(req, res) {
     try {
         const results = await UserModel.getUsers()
 
-        res.status(200).json({ results })
+        return res.status(200).json({ results })
 
     } catch (error) {
-
-        res.status(500).json({ error: error.message })
+        return res.status(500).json({ error: error.message })
     }
 }
 
@@ -111,19 +110,17 @@ async function updateUser(req, res) {
 
         const user = await UserModel.updateUsers(id, sanitizedData)
 
-        res.status(200).json(user)
+        return res.status(200).json(user)
 
     } catch (error) {
 
-        res.status(500).json({ error: error.message })
+        return res.status(500).json({ error: error.message })
     }
 }
 
 async function updateMe(req, res) {
     try {
         const id = req.user.id
-        console.log("REQ USER:", req.user)
-        console.log("BODY:", req.body)
 
         const sanitizedData = sanitizeUserUpdate(req.body)
 
