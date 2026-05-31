@@ -1,44 +1,39 @@
-import UserModel from "../models/UserModel.js"
 import AssetModel from "../models/AssetModel.js"
 
 export default function recommendationMiddleware() {
-
     return async function(req, res, next) {
-
         try {
+            const { ticker } = req.body
+            const analyst = req.user
 
-            const userId = req.user.id
-            const { asset_id } = req.body
-
-            const analyst = await UserModel.getUsersById(userId)
+            if (!ticker) {
+                return res.status(400).json({ message: "ticker is required" })
+            }
 
             if (!analyst) {
                 return res.status(404).json({ message: "User not found" })
             }
 
-            if (analyst.role === "admin") {
-                return next()
+            if (analyst.role !== "analyst" && analyst.role !== "admin") {
+                return res.status(403).json({ message: "Unauthorized" })
             }
 
-            if (analyst.role !== "analyst") {
-                return res.status(403).json({ message: "Only analysts can create recommendations" })
-            }
-
-            const asset = await AssetModel.getAssetById(asset_id)
+            const asset = await AssetModel.getAssetByTicker(ticker)
 
             if (!asset) {
                 return res.status(404).json({ message: "Asset not found" })
             }
 
-            console.log("analyst type:", analyst.analyst_type_id, typeof analyst.analyst_type_id)
-            console.log("asset type:", asset.asset_type_id, typeof asset.asset_type_id)
-
-            if (analyst.analyst_type_id !== asset.asset_type_id) {
-                return res.status(403).json({ message: "You cannot recommend this asset type" })
+            if (
+                analyst.role !== "admin" &&
+                analyst.analyst_type_id !== asset.asset_type_id
+            ) {
+                return res.status(403).json({ message: "Forbidden asset type" })
             }
 
-            next()
+            req.asset = asset
 
+            next()
         } catch (error) {
             return res.status(500).json({ error: error.message })
         }

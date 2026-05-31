@@ -11,4 +11,18 @@ async function getAssetById(id) {
     return rows[0] || null
 }
 
-export default { getAssetById }
+async function getAssetByTicker(ticker) {
+    const db = getConnection()
+
+    const sql = `
+        SELECT id, ticker, asset_type_id
+        FROM assets
+        WHERE ticker = ?
+    `
+
+    const [rows] = await db.execute(sql, [ticker])
+
+    return rows[0] || null
+}
+
+export default { getAssetById, getAssetByTicker }

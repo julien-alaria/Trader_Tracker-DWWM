@@ -23,7 +23,7 @@ async function getRecommendations(){
 async function getMyRecommendations(userId){
     const db = getConnection()
 
-    const sql = "SELECT id, status, comment, asset_id, user_id FROM recommendations WHERE id = ?"
+    const sql = "SELECT id, status, comment, asset_id, user_id FROM recommendations WHERE user_id = ?"
 
     const [result] = await db.execute(sql, [userId])
 

@@ -83,7 +83,7 @@ export function sanitizeLogin(data) {
 export function sanitizeRecommendation(data) {
     const { status, comment, asset_id } = data
 
-    if (!status || asset_id === undefined || asset_id === null) {
+    if (!status || !asset_id) {
         throw new Error("Missing required fields")
     }
 
@@ -93,11 +93,15 @@ export function sanitizeRecommendation(data) {
         throw new Error("Invalid asset id")
     }
 
-    return {
+    const sanitizedData = {
         status: validateRecommendationStatus(status),
         comment: validateComment(comment),
-        asset_id: asset_id
+        asset_id: assetId
     }
+
+    console.log("🔥 SANITIZED:", sanitizedData)
+
+    return sanitizedData
 }
 
 

@@ -1,8 +1,28 @@
 import RecommendationModel from "../models/RecommendationModel.js"
+import AssetModel from "../models/AssetModel.js"
 import { sanitizeRecommendation, sanitizeRecommendationUpdate } from "../utils/sanitizer.js"
 
 async function getRecommendation(req, res) {
     try {
+
+        const { ticker } = req.query
+
+        if (ticker) {
+
+            const asset = await AssetModel.getAssetByTicker(ticker)
+
+            if (!asset) {
+                return res.status(404).json({
+                    error: "Asset not found"
+                })
+            }
+
+            const results =
+                await RecommendationModel.getRecommendationsByAssetId(asset.id)
+
+            return res.status(200).json({ results })
+        }
+
         let page = Number(req.query.page) || 1
         let limit = Number(req.query.limit) || 10
 
@@ -20,48 +40,45 @@ async function getRecommendation(req, res) {
 
         const offset = (page - 1) * limit
 
-        const results = await RecommendationModel.getPaginated(limit, offset)
+        const results =
+            await RecommendationModel.getPaginated(limit, offset)
 
-        return res.status(200).json({ page, limit, results })
-
-    } catch (error) {
-        return res.status(500).json({ error: error.message })
-    }
-}
-
-async function getRecommendationsByAsset(req, res) {
-    try {
-        const assetId = Number(req.query.asset_id)
-
-        let results
-
-        if (assetId) {
-            results = await RecommendationModel.getRecommendationsByAssetId(assetId)
-        } else {
-            results = await RecommendationModel.getRecommendations()
-        }
-
-        return res.status(200).json({ results })
+        return res.status(200).json({
+            page,
+            limit,
+            results
+        })
 
     } catch (error) {
-        return res.status(500).json({ error: error.message })
+        return res.status(500).json({
+            error: error.message
+        })
     }
 }
 
 async function createRecommendation(req, res) {
     try {
-        const sanitizedData = sanitizeRecommendation(req.body)
 
-        const Recommendation = await RecommendationModel.createRecommendations({...sanitizedData,
-            user_id: req.user.id
-    })
+        const sanitizedData = sanitizeRecommendation({
+            status: req.body.status,
+            comment: req.body.comment,
+            asset_id: req.asset.id
+        })
 
-        return res.status(201).json({ Recommendation })
+        const recommendation =
+            await RecommendationModel.createRecommendations({
+                ...sanitizedData,
+                user_id: req.user.id
+            })
+
+        return res.status(201).json({ recommendation })
 
     } catch (error) {
+        console.error("CREATE ERROR:", error)
 
-        return res.status(500).json({ error: error.message })
-
+        return res.status(500).json({
+            error: error.message
+        })
     }
 }
 
@@ -94,7 +111,7 @@ async function updateRecommendation(req, res) {
             })
         }
 
-        const Recommendation = await RecommendationModel.updateRecommendations(id, sanitizedData)
+        const recommendation = await RecommendationModel.updateRecommendations(id, sanitizedData)
 
         return res.status(200).json(Recommendation)
 

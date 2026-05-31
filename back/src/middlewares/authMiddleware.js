@@ -2,9 +2,11 @@ import UserModel from "../models/UserModel.js"
 import jwt from "jsonwebtoken"
 
 export default function AuthMiddleware(roles = []) {
+   
 
     return async function(req, res, next) {
         const authHeader = req.header("Authorization")
+     
         const [prefix, token] = authHeader?.split(" ") || [null, undefined]
 
         if (prefix !== "Bearer") {
