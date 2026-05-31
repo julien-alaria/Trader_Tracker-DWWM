@@ -52,7 +52,7 @@ async function updateRecommendation(req, res) {
             return res.status(404).json({ error: "Recommendation not found" })
         }
 
-        if (existingRecommendation.user_id !== req.user.id) {
+        if (req.user.role !== "admin" && existingRecommendation.user_id !== req.user.id) {
             return res.status(403).json({
                 error: "Update denied"
             })
@@ -81,7 +81,7 @@ async function deleteRecommendation(req, res) {
                     return res.status(404).json({ error: "Recommendation not found" })
                 }
 
-                if (existingRecommendation.user_id !== req.user.id) {
+                if (req.user.role !== "admin" && existingRecommendation.user_id !== req.user.id) {
                     return res.status(403).json({
                         error: "Delete denied"
                     })
