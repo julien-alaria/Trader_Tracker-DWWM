@@ -3,7 +3,19 @@ import getConnection from "../db/connection.js"
 async function getRecommendations(){
     const db = getConnection()
 
-    const [rows] = await db.query("SELECT id, status, comment, asset_id, user_id FROM recommendations")
+     const sql = `
+        SELECT 
+            r.id,
+            r.status,
+            r.comment,
+            r.asset_id,
+            r.user_id,
+            u.name AS analyst_name
+        FROM recommendations r
+        JOIN users u ON u.id = r.user_id
+    `
+
+    const [rows] = await db.query(sql)
 
     return rows
 }
@@ -18,14 +30,69 @@ async function getMyRecommendations(userId){
     return result[0] || null
 }
 
+async function getPaginated(limit, offset) {
+    const db = getConnection()
+
+    const sql = `
+        SELECT  r.id,
+            r.status,
+            r.comment,
+            r.asset_id,
+            r.user_id,
+            u.name AS analyst_name
+        FROM recommendations r
+        JOIN users u ON u.id = r.user_id
+        ORDER BY r.id DESC
+        LIMIT ${Number(limit)}
+        OFFSET ${Number(offset)}
+    `
+
+    const [rows] = await db.query(sql)
+
+    return rows
+}
+
 async function getRecommendationsById(id) {
     const db = getConnection()
 
-    const sql = "SELECT id, status, comment, asset_id, user_id FROM recommendations WHERE id = ?"
+    const sql = `
+        SELECT 
+            r.id,
+            r.status,
+            r.comment,
+            r.asset_id,
+            r.user_id,
+            u.name AS analyst_name
+        FROM recommendations r
+        JOIN users u ON u.id = r.user_id
+        WHERE r.id = ?
+    `
 
     const [result] = await db.execute(sql, [id])
 
     return result[0] || null
+}
+
+async function getRecommendationsByAssetId(assetId) {
+    const db = getConnection()
+
+    const sql = `
+        SELECT 
+            r.id,
+            r.status,
+            r.comment,
+            r.asset_id,
+            r.user_id,
+            u.name AS analyst_name
+        FROM recommendations r
+        JOIN users u ON u.id = r.user_id
+        WHERE r.asset_id = ?
+        ORDER BY r.created_at DESC
+    `
+
+    const [rows] = await db.execute(sql, [assetId])
+
+    return rows
 }
 
 async function createRecommendations(data) {
@@ -99,5 +166,5 @@ async function deleteRecommendations(id){
 
 }
 
-export default { getRecommendations, getMyRecommendations, getRecommendationsById,createRecommendations, updateRecommendations, deleteRecommendations }
+export default { getRecommendations, getMyRecommendations, getRecommendationsById, getPaginated, getRecommendationsByAssetId, createRecommendations, updateRecommendations, deleteRecommendations }
 

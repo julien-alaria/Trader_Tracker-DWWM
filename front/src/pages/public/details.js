@@ -1,10 +1,12 @@
 import { getStock, getForex, getCommodities  } from "../utils/assetsUtils.js"
 import { loadTradingViewChart } from "../../../src/utils/tradingChart.js"
+import http from "../../config/instanceHttp.js"
 
 const detailsPage = `
 <main>
     <h1>Details Page</h1>
-    <div id="asset_detail"></div> 
+    <div id="asset-detail"></div> 
+    <div id="recommendation-container"></div>
 </main>
 `
 
@@ -38,12 +40,12 @@ export async function initDetail() {
     })
 
     if (!asset) {
-        document.getElementById("asset_detail").innerHTML =
+        document.getElementById("asset-detail").innerHTML =
             "<p>Asset not found</p>"
         return
     }
 
-    document.getElementById("asset_detail").innerHTML = `
+    document.getElementById("asset-detail").innerHTML = `
         <button onclick="history.back()">Back</button>
 
         <h2>ASSET: ${asset.name}</h2>
@@ -56,6 +58,38 @@ export async function initDetail() {
 
     if (asset.marketCap) {
         loadTradingViewChart(asset.ticker)
+    }
+
+    const recommendationRes =
+    await http.get(`/recommendations?asset_id=${asset.id}`)
+
+    const recommendations =
+        recommendationRes.results || []
+
+    const recommendationContainer =
+        document.getElementById("recommendation-container")
+
+    if (!recommendations.length) {
+
+        recommendationContainer.innerHTML =
+            "<p>No recommendations yet</p>"
+
+    } else {
+
+        recommendationContainer.innerHTML =
+            recommendations.map(rec => `
+                <div class="recommendation">
+
+                    <strong>${rec.status}</strong>
+
+                    <p>${rec.comment}</p>
+
+                    <small>
+                        Analyst: ${rec.analyst_name ?? "unknown"}
+                    </small>
+
+                </div>
+            `).join("")
     }
 }
 
