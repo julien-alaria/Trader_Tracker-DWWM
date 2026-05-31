@@ -77,3 +77,24 @@ export function validateAnalystType(role, analyst_type_id) {
 
     return id
 }
+
+export function validateComment(comment) {
+    const clean = comment ? comment.trim() : null
+
+    if (clean && clean.length > 1000) {
+        throw new Error("Comment too long")
+    }
+
+    return clean
+}
+
+export function validateRecommendationStatus(status) {
+
+    const allowed = ["BUY", "SELL", "HOLD"]
+
+    if (!allowed.includes(status)) {
+        throw new Error("Invalid recommendation status")
+    }
+
+    return status
+}

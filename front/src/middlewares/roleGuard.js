@@ -1,5 +1,10 @@
 export function decodeToken(token) {
   try {
+
+    if (!token) {
+      return null;
+    }
+    
     return JSON.parse(atob(token.split(".")[1]));
   } catch (e) {
     console.error("Token invalide :", e);

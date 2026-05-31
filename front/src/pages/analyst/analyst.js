@@ -24,15 +24,16 @@ export async function initAnalyst() {
 
     try {
         const token = localStorage.getItem("token")
+
+        if (!token) return
+        
         const payload = decodeToken(token);
 
         if (!payload) {
             window.location.hash = "/login"
             return
         }
-
-        document.getElementById("root").innerHTML = analystPage
-            
+ 
         const [userRes, watchRes, stocks, forex, commodities] = await Promise.all([
             http.get("/users/me"),
             http.get("/users/me/watchlist"),
@@ -49,7 +50,7 @@ export async function initAnalyst() {
         document.getElementById("analyst_name").textContent = "Analyst Name: " + user.name
         document.getElementById("analyst_email").textContent = "Email: " + user.email
         document.getElementById("analyst_analystTypeId").textContent = "Speciality: " + user.analyst_type_id
-        document.getElementById("analyst_company").textContent = "Email: " + user.company
+        document.getElementById("analyst_company").textContent = "Company: " + user.company
         document.getElementById("analyst_bio").textContent = "Bio: " + user.bio
 
         const container = document.getElementById("watchlist")

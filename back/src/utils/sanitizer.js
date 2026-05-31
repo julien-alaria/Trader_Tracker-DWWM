@@ -1,4 +1,4 @@
-import { validateName, validateEmail, validatePassword, validateBio, validateCompany, safeRole, validateAnalystType } from "../utils/validators.js"
+import { validateName, validateEmail, validatePassword, validateBio, validateCompany, safeRole, validateAnalystType, validateComment, validateRecommendationStatus } from "../utils/validators.js"
 
 export function sanitizeUser(data) {
     const { name, email, password, role, analyst_type_id, company, bio } = data
@@ -78,4 +78,41 @@ export function sanitizeLogin(data) {
         email: cleanEmail,
         password
     }
+}
+
+export function sanitizeRecommendation(data) {
+    const { status, comment, asset_id } = data
+
+    if (!status || asset_id === undefined || asset_id === null) {
+        throw new Error("Missing required fields")
+    }
+
+    const assetId = Number(asset_id)
+    
+    if (!Number.isInteger(assetId) || assetId <= 0) {
+        throw new Error("Invalid asset id")
+    }
+
+    return {
+        status: validateRecommendationStatus(status),
+        comment: validateComment(comment),
+        asset_id: asset_id
+    }
+}
+
+
+export function sanitizeRecommendationUpdate(data) {
+    const { status, comment } = data
+
+    const sanitized = {}
+
+    if (data.status !== undefined) {
+        sanitized.status = validateRecommendationStatus(status)
+    }
+
+    if (data.comment !== undefined) {
+        sanitized.comment = validateComment(comment)
+    }
+
+    return sanitized
 }

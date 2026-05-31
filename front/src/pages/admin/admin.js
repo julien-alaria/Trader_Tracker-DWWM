@@ -14,6 +14,9 @@ export async function initAdmin() {
 
     try {
         const token = localStorage.getItem("token")
+
+        if (!token) return
+
         const payload = decodeToken(token);
 
         if (!payload) {
@@ -27,8 +30,6 @@ export async function initAdmin() {
 
         const user = response.result
         
-        document.getElementById("root").innerHTML = adminPage
-
         document.getElementById("admin_id").innerHTML = "Admin ID: " + user.id
         document.getElementById("admin_name").innerHTML = "Admin Name: " + user.name
         document.getElementById("admin_email").innerHTML = "Admin Email: " + user.email

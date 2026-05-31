@@ -22,14 +22,15 @@ const userPage = `
 export async function initUser() {
     try {
         const token = localStorage.getItem("token")
+
+        if (!token) return
+
         const payload = decodeToken(token)
 
         if (!payload) {
             window.location.hash = "/login"
             return
         }
-
-        document.getElementById("root").innerHTML = userPage
 
         const [userRes, watchRes, stocks, forex, commodities] = await Promise.all([
             http.get("/users/me"),

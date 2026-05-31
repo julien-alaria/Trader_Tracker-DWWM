@@ -1,7 +1,7 @@
 import UserModel from "../models/UserModel.js"
 import AssetModel from "../models/AssetModel.js"
 
-export default function CommentMiddleware() {
+export default function recommendationMiddleware() {
 
     return async function(req, res, next) {
 
@@ -27,7 +27,7 @@ export default function CommentMiddleware() {
             }
 
             if (analyst.analyst_type_id !== asset.asset_type_id) {
-                return res.status(403).json({ message: "You cannot comment this asset type" })
+                return res.status(403).json({ message: "You cannot recommend this asset type" })
             }
 
             next()
