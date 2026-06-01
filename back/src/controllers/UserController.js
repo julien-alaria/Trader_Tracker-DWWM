@@ -65,6 +65,7 @@ async function getWatchlist(req, res) {
         return res.status(200).json({ result })
 
     } catch (error) {
+        
         return res.status(500).json({ error: error.message })
     }
 }
@@ -182,6 +183,12 @@ async function followAsset(req, res) {
         })
 
     } catch (error) {
+
+        if (error.code === "ER_DUP_ENTRY") {
+            return res.status(409).json({
+                error: "Asset already followed"
+            })
+        } 
         console.error("FOLLOW ERROR:", error)
         return res.status(500).json({
             error: error.message
