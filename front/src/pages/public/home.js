@@ -2,95 +2,139 @@ import { getStock, getForex, getCommodities } from "../utils/assetsUtils.js"
 import stockCard from "../../components/home/cards/stockCards.js"
 import forexCard from "../../components/home/cards/forexCards.js"
 import commodityCard from "../../components/home/cards/commodityCards.js"
-import { createSearchBar, renderResults} from "../utils/searchBarUtils.js"
-import { loadTradingViewChart } from "../../utils/tradingChart.js"
+import { createSearchBar, renderResults } from "../utils/searchBarUtils.js"
 import http from "../../config/instanceHttp.js"
 
 const home = `
   <main>
     <h1>Home</h1>
 
-    <div id="stocks"></div>
-    <div id="forex"></div>
-    <div id="commodities"></div>
+    <div id="search-container"></div>
+
+    <section>
+      <h2>Stocks</h2>
+      <div id="stocks"></div>
+    </section>
+
+    <section>
+      <h2>Forex</h2>
+      <div id="forex"></div>
+    </section>
+
+    <section>
+      <h2>Commodities</h2>
+      <div id="commodities"></div>
+    </section>
 
   </main>
 `
+
+export default home
+
 export async function initHome() {
-    
-    const stocks = await getStock()
-    const forex = await getForex()
-    const commodities = await getCommodities()
+    try {
+        // =========================
+        // 1. DATA FETCHING
+        // =========================
+        const [stocks, forex, commodities] = await Promise.all([
+            getStock(),
+            getForex(),
+            getCommodities()
+        ])
 
-    const allData = [...stocks, ...forex, ...commodities]
+        const allData = [...stocks, ...forex, ...commodities]
 
-    // avoid duplication of search bar
-    const oldSearch = document.querySelector(".search-wrapper")
-    if (oldSearch) oldSearch.remove()
+        // =========================
+        // 2. SEARCH BAR (SAFE INIT)
+        // =========================
+        const oldSearch = document.querySelector(".search-wrapper")
+        if (oldSearch) oldSearch.remove()
 
-    const searchBar = createSearchBar((value, container) => {
+        const searchContainer = document.getElementById("search-container")
 
-    const v = value.trim()
+        const searchBar = createSearchBar((value, container) => {
+            const query = value.trim().toLowerCase()
 
-    if (!v) {
-        container.innerHTML = ""
-        return
-    }
+            if (!query) {
+                container.innerHTML = ""
+                return
+            }
 
-    const filtered = allData.filter(item =>
-        (item.ticker ?? "").toLowerCase().includes(v) ||
-        (item.name ?? "").toLowerCase().includes(v)
-    )
-    // result of search bar
-    renderResults(filtered, container, (item) => {
-        window.location.hash =`#/details?type=${item.type}&ticker=${item.ticker}`})
-    })
+            const filtered = allData.filter(item =>
+                (item.ticker ?? "").toLowerCase().includes(query) ||
+                (item.name ?? "").toLowerCase().includes(query)
+            )
 
-    const main = document.querySelector("main")
-    const h1 = main.querySelector("h1")
+            renderResults(filtered, container, (item) => {
+                window.location.hash = `#/details?type=${item.type}&ticker=${item.ticker}`
+            })
+        })
 
-    h1.insertAdjacentElement("afterend", searchBar)
+        searchContainer.innerHTML = ""
+        searchContainer.appendChild(searchBar)
 
-    document.getElementById("stocks").innerHTML = stocks.map(stock => stockCard(stock)).join("")
+        // =========================
+        // 3. RENDER CARDS
+        // =========================
+        const stocksContainer = document.getElementById("stocks")
+        const forexContainer = document.getElementById("forex")
+        const commoditiesContainer = document.getElementById("commodities")
 
-    stocks.forEach(stock => {
-        loadTradingViewChart(stock.ticker)
-    })
+        stocksContainer.innerHTML = stocks.map(stockCard).join("")
+        forexContainer.innerHTML = forex.map(forexCard).join("")
+        commoditiesContainer.innerHTML = commodities.map(commodityCard).join("")
 
-    document.getElementById("forex").innerHTML = forex.map(pair => forexCard(pair)).join("")
+        // =========================
+        // 4. EVENT DELEGATION (CLICK CARDS)
+        // =========================
+        document.addEventListener("click", (e) => {
+            const card = e.target.closest(".card")
+            if (!card) return
 
-    document.getElementById("commodities").innerHTML = commodities.map(item => commodityCard(item)).join("")
-
-    document.querySelectorAll(".card").forEach(card => {
-
-        card.addEventListener("click", () => {
+            // ignore watch button click
+            if (e.target.classList.contains("watch-btn")) return
 
             const ticker = card.dataset.ticker
             const type = card.dataset.type
 
+            if (!ticker || !type) return
+
             window.location.href = `#/details?type=${type}&ticker=${ticker}`
         })
-    })
 
-    document.querySelectorAll(".watch-btn").forEach(btn => {
-
-        btn.addEventListener("click", async (e) => {
+        // =========================
+        // 5. WATCHLIST ACTIONS
+        // =========================
+        document.addEventListener("click", async (e) => {
+            if (!e.target.classList.contains("watch-btn")) return
 
             e.stopPropagation()
 
-            const card = btn.closest(".card")
+            const card = e.target.closest(".card")
+            if (!card) return
+
             const ticker = card.dataset.ticker
+            if (!ticker) return
 
             try {
-                await http.post("/users/me/follows", { ticker })
-                btn.textContent = "⭐ Unfollow"
-                card.dataset.followed = "true"
+                const isFollowed = card.dataset.followed === "true"
 
-            } catch (error) {
-                console.error(error)
+                if (isFollowed) {
+                    await http.delete("/users/me/follows", { ticker })
+                    e.target.textContent = "☆ Follow"
+                    card.dataset.followed = "false"
+                } else {
+                    await http.post("/users/me/follows", { ticker })
+                    e.target.textContent = "⭐ Unfollow"
+                    card.dataset.followed = "true"
+                }
+
+            } catch (err) {
+                console.error("Watchlist error:", err)
             }
         })
-    })
+
+    } catch (err) {
+        console.error("Home init error:", err)
+    }
 }
- 
-export default home

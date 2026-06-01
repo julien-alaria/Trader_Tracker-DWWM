@@ -9,16 +9,6 @@ async function getUsers() {
     return rows
 }
 
-async function getMe() {
-    const db = getConnection()
-
-    const sql = "SELECT id, name, email, role, analyst_type_id, analyst_verified, company, bio FROM users WHERE id = ?"
-
-    const [result] = await db.execute(sql, [id])
-
-    return result[0] || null
-}
-
 async function getUsersById(id) {
     const db = getConnection()
 
@@ -203,15 +193,5 @@ async function userUnfollowAsset(user_id, asset_id) {
     return result
 }
 
-async function getAssetByTicker(ticker) {
 
-    const db = getConnection()
-
-    const sql = "SELECT id, ticker FROM assets WHERE ticker = ?"
-
-    const [result] = await db.execute(sql, [ticker])
-
-    return result[0] || null
-}
-
-export default { getUsers, getUsersById, getUsersByEmail, getUserWatchlist, createUsers, updateUsers, deleteUsers, userFollowAsset, userUnfollowAsset, getMe, getAssetByTicker }
+export default { getUsers, getUsersById, getUsersByEmail, getUserWatchlist, createUsers, updateUsers, deleteUsers, userFollowAsset, userUnfollowAsset }

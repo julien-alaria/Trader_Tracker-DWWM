@@ -152,6 +152,10 @@ async function deleteUser(req, res) {
             return res.status(400).json({ error: "unvalid ID" })
         }
 
+        if (req.user.role !== "admin") {
+            return res.status(403).json({ error: "Forbidden" })
+        }
+
         const result = await UserModel.deleteUsers(id)
 
         if (result.affectedRows === 0) {
@@ -169,26 +173,16 @@ async function deleteUser(req, res) {
 async function followAsset(req, res) {
     try {
         const user_id = req.user.id
-        const { ticker } = req.body
+        const asset_id = req.asset_id
 
-        if (!ticker) {
-            return res.status(400).json({ error: "Ticker required" })
-        }
-
-        const asset = await UserModel.getAssetByTicker(ticker)
-
-        if (!asset) {
-            return res.status(404).json({ error: "Asset not found" })
-        }
-
-        await UserModel.userFollowAsset(user_id, asset.id)
+        await UserModel.userFollowAsset(user_id, asset_id)
 
         return res.status(201).json({
             message: "asset added to favorites"
         })
 
     } catch (error) {
-        console.error("FOLLOW ERROR:", error) // 👈 AJOUT CRUCIAL
+        console.error("FOLLOW ERROR:", error)
         return res.status(500).json({
             error: error.message
         })
@@ -198,23 +192,9 @@ async function followAsset(req, res) {
 async function unfollowAsset(req, res) {
     try {
         const user_id = req.user.id
-        const { ticker } = req.body
+        const asset_id = req.asset_id
 
-        if (!ticker) {
-            return res.status(400).json({
-                error: "Ticker required"
-            })
-        }
-
-        const asset = await UserModel.getAssetByTicker(ticker)
-
-        if (!asset) {
-            return res.status(404).json({
-                error: "Asset not found"
-            })
-        }
-
-        const result = await UserModel.userUnfollowAsset(user_id, asset.id)
+        const result = await UserModel.userUnfollowAsset(user_id, asset_id)
 
         if (result.affectedRows === 0) {
             return res.status(404).json({

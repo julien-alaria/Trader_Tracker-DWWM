@@ -27,13 +27,15 @@ export function validateEmail(email) {
 export function validatePassword(password) {
     if (!password) throw new Error("Password required")
 
+    const clean = password.trim()
+
     const reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^\da-zA-Z])\S{6,20}$/
 
-    if (!reg.test(password)) {
+    if (!reg.test(clean)) {
         throw new Error("Invalid password")
     }
 
-    return password
+    return clean
 }
 
 export function validateBio(bio) {
@@ -57,7 +59,8 @@ export function validateCompany(company) {
 }
 
 export function safeRole(role) {
-    return role === "analyst" ? "analyst" : "user"
+    const allowed = ["user", "analyst", "admin"]
+    return allowed.includes(role) ? role : "user"
 }
 
 export function validateAnalystType(role, analyst_type_id) {

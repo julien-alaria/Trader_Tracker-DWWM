@@ -99,8 +99,6 @@ export function sanitizeRecommendation(data) {
         asset_id: assetId
     }
 
-    console.log("🔥 SANITIZED:", sanitizedData)
-
     return sanitizedData
 }
 

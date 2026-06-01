@@ -129,9 +129,8 @@ async function updateRecommendations(id, data){
         values.push(data.comment)
     }
 
-    if (data.asset_id !== undefined) {
-        fields.push("asset_id = ?")
-        values.push(data.asset_id)
+    if (fields.length === 0) {
+        throw new Error("No fields to update")
     }
 
     values.push(id)

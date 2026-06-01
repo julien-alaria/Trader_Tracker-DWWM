@@ -1,6 +1,7 @@
 import express from "express"
 import UserController from "../controllers/UserController.js"
 import AuthMiddleware from "../middlewares/authMiddleware.js"
+import RecommendationMiddleware from "../middlewares/RecommendationMiddleware.js"
 
 const userRouter = express.Router()
 
@@ -12,11 +13,11 @@ userRouter.get("/me", AuthMiddleware(), UserController.getMe)
 
 userRouter.get("/me/watchlist", AuthMiddleware(), UserController.getWatchlist)
 
-userRouter.post("/me/follows", AuthMiddleware(), UserController.followAsset)
+userRouter.post("/me/follows", AuthMiddleware(), RecommendationMiddleware(),UserController.followAsset)
 
 userRouter.put("/me", AuthMiddleware(), UserController.updateMe)
 
-userRouter.delete("/me/follows", AuthMiddleware(), UserController.unfollowAsset)
+userRouter.delete("/me/follows", AuthMiddleware(),RecommendationMiddleware(), UserController.unfollowAsset)
 
 // admin
 userRouter.get("/", AuthMiddleware(["admin"]), UserController.getUser)
