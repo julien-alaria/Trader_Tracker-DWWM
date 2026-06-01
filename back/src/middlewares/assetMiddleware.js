@@ -1,6 +1,7 @@
 import AssetModel from "../models/AssetModel.js"
 
-export default function recommendationMiddleware() {
+export default function AssetMiddleware() {
+    
     return async function (req, res, next) {
         try {
             const user = req.user

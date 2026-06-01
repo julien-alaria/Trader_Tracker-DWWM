@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken"
 
 export default function AuthMiddleware(roles = []) {
    
-
     return async function(req, res, next) {
         const authHeader = req.header("Authorization")
      
