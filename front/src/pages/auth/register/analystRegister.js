@@ -9,7 +9,7 @@ const analystRegister = `
                     <input type="email" id="email" name="email" required autocomplete="on">
 
                     <label for="password">Analyst Password:</label>
-                    <input type="password" id="password" name="password" required minlength="6" maxlength="20" autocomplete="on">
+                    <input type="password" id="password" name="password" minlength="6" maxlength="20"  required autocomplete="on">
 
                     <label for="company">Analyst Company:</label>
                     <input type="text" id="company" name="company" maxlength="1000" autocomplete="on">
@@ -33,14 +33,19 @@ const analystRegister = `
                         </div>
                     </fieldset>
                     <input type="submit" value="submit">
+                    <div id="message"></div>
                 </form>
                 `;
 
   export function initAnalystRegister() {
     const form = document.getElementById("analyst-form")
 
+    const messageDiv = document.getElementById("message")
+
     form.addEventListener("submit", async function (e) {
       e.preventDefault()
+
+      messageDiv.innerText = ""
 
       const data = new FormData(form)
 
@@ -52,18 +57,23 @@ const analystRegister = `
           company: data.get("company"),
           bio: data.get("bio"),
           role: data.get("role"),
-          analyst_type_id: Number(data.get("analyst_type_id")),
+          analyst_type_id: Number(data.get("analyst_type_id"))
         })
 
+        messageDiv.innerText = "Inscription réussie ! Redirection..."
         console.log("REGISTER OK:", result)
 
         if (result.token) {
-          localStorage.setItem("token", result.token)
-          window.location.hash = "/"
-          window.dispatchEvent(new Event("hashchange"))
+          localStorage.setItem("token", result.token) 
         }
 
+        setTimeout(() => {
+          window.location.hash = "/"
+          window.dispatchEvent(new Event("hashchange"))
+        }, 1000)
+
       } catch (error) {
+        messageDiv.innerText = error.response?.data?.message || "Une erreur est survenue lors de l'inscription."
         console.error("Register failed:", error)
       }
     })

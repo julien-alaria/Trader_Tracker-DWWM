@@ -7,8 +7,11 @@ import RecommendationRouter from "./Recommendation.route.js"
 const router = express.Router()
 
 router.use("/auth", authRouter)
+
 router.use("/users", userRouter)
+
 router.use("/assets", stockRouter)
+
 router.use("/recommendations", RecommendationRouter)
 
 export default router

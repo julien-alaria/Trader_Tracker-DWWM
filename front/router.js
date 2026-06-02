@@ -4,6 +4,7 @@ import register, { initRegister } from "./src/pages/auth/register/register.js"
 import analystRegister, { initAnalystRegister } from "./src/pages/auth/register/analystRegister.js"
 import login, { initLogin } from "./src/pages/auth/login.js"
 import detailsPage, { initDetail} from "./src/pages/public/details.js"
+
 import { roleGuard } from "./src/middlewares/roleGuard.js"
 
 import userPage, { initUser } from "./src/pages/user/user.js"
@@ -11,7 +12,7 @@ import analystPage, { initAnalyst }  from "./src/pages/analyst/analyst.js"
 import adminPage, { initAdmin } from "./src/pages/admin/admin.js"
 
 import notfound from "./src/pages/public/notfound.js"
-import navbar from "./src/components/navbar/navbar.js"
+import navbar, { renderNavbar, bindNavbarEvents} from "./src/components/navbar/navbar.js"
 import footer from "./src/components/footer/footer.js"
 
 function router() {
@@ -24,26 +25,26 @@ function router() {
     case "/":
       content = home
       init = initHome
-      break;
+      break
 
     case "/details":
       content = detailsPage
       init = initDetail
-      break;
+      break
 
     case "/about":
       content = about
-      break;
+      break
 
     case "/register":
       content = register
       init = initRegister
-      break;
+      break
 
     case "/analystregister":
       content = analystRegister
       init = initAnalystRegister
-      break;
+      break
 
     case "/login":
       content = login
@@ -69,7 +70,7 @@ function router() {
       break
 
     default:
-      content = notfound;
+      content = notfound
   }
 
   document.getElementById("root").innerHTML = content
@@ -85,20 +86,7 @@ function router() {
 document.getElementById("foot").innerHTML = footer()
 
 window.addEventListener("hashchange", router)
+// all dependencies loaded and ready to use,browser triggers the first display
 window.addEventListener("load", router)
 
-function renderNavbar() {
-  document.getElementById("nav").innerHTML = navbar()
-}
-
-function bindNavbarEvents() {
-  const btn = document.getElementById("logout-btn")
-
-  if (btn) {
-    btn.addEventListener("click", () => {
-      localStorage.removeItem("token")
-      window.location.hash = "/login"
-    })
-  }
-}
 

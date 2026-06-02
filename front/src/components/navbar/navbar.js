@@ -40,3 +40,19 @@ export default function navbar() {
         </nav>
     `
 }
+
+export function renderNavbar() {
+  document.getElementById("nav").innerHTML = navbar()
+}
+
+export function bindNavbarEvents() {
+  const btn = document.getElementById("logout-btn")
+
+  if (btn) {
+    btn.addEventListener("click", () => {
+      localStorage.removeItem("token")
+      window.location.hash = "/login"
+    })
+  }
+}
+

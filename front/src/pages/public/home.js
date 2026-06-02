@@ -33,9 +33,7 @@ export default home
 
 export async function initHome() {
     try {
-        // =========================
         // 1. DATA FETCHING
-        // =========================
         const [stocks, forex, commodities] = await Promise.all([
             getStock(),
             getForex(),
@@ -44,9 +42,7 @@ export async function initHome() {
 
         const allData = [...stocks, ...forex, ...commodities]
 
-        // =========================
         // 2. SEARCH BAR (SAFE INIT)
-        // =========================
         const oldSearch = document.querySelector(".search-wrapper")
         if (oldSearch) oldSearch.remove()
 
@@ -73,9 +69,7 @@ export async function initHome() {
         searchContainer.innerHTML = ""
         searchContainer.appendChild(searchBar)
 
-        // =========================
         // 3. RENDER CARDS
-        // =========================
         const stocksContainer = document.getElementById("stocks")
         const forexContainer = document.getElementById("forex")
         const commoditiesContainer = document.getElementById("commodities")
@@ -84,9 +78,7 @@ export async function initHome() {
         forexContainer.innerHTML = forex.map(forexCard).join("")
         commoditiesContainer.innerHTML = commodities.map(commodityCard).join("")
 
-        // =========================
         // 4. EVENT DELEGATION (CLICK CARDS)
-        // =========================
         document.addEventListener("click", (e) => {
             const card = e.target.closest(".card")
             if (!card) return
@@ -102,9 +94,7 @@ export async function initHome() {
             window.location.href = `#/details?type=${type}&ticker=${ticker}`
         })
 
-        // =========================
         // 5. WATCHLIST ACTIONS
-        // =========================
         document.addEventListener("click", async (e) => {
             if (!e.target.classList.contains("watch-btn")) return
 

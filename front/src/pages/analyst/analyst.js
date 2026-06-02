@@ -65,8 +65,7 @@ export async function initAnalyst() {
     }
 }
 
-/* ---------------- UI ---------------- */
-
+// UI 
 function renderAnalyst(user) {
     const map = {
         analyst_id: user.id,
@@ -83,8 +82,7 @@ function renderAnalyst(user) {
     })
 }
 
-/* ---------------- DATA ---------------- */
-
+// DATA 
 function buildWatchlist(raw, assets) {
     return raw.map(w => {
         const asset = assets.find(a => a.ticker === w.ticker)
@@ -97,8 +95,7 @@ function buildWatchlist(raw, assets) {
     })
 }
 
-/* ---------------- RENDER ---------------- */
-
+// RENDER 
 function renderWatchlist(watchlist) {
     const container = document.getElementById("watchlist")
     if (!container) return
@@ -117,8 +114,7 @@ function renderWatchlist(watchlist) {
     })
 }
 
-/* ---------------- EVENTS ---------------- */
-
+// EVENTS
 function bindEvents() {
     document.querySelectorAll(".card").forEach(card => {
         card.addEventListener("click", () => {
@@ -153,8 +149,7 @@ function bindEvents() {
     })
 }
 
-/* ---------------- FORM ---------------- */
-
+// FORM 
 function initForm(user) {
     const form = document.getElementById("analyst-update-form")
     if (!form) return

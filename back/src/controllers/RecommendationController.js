@@ -1,9 +1,6 @@
 import RecommendationModel from "../models/RecommendationModel.js"
 import AssetModel from "../models/AssetModel.js"
-import {
-    sanitizeRecommendation,
-    sanitizeRecommendationUpdate
-} from "../utils/sanitizer.js"
+import { sanitizeRecommendation, sanitizeRecommendationUpdate } from "../utils/sanitizer.js"
 
 /**
  * GET /recommendations
@@ -14,9 +11,7 @@ async function getRecommendation(req, res) {
     try {
         const { ticker } = req.query
 
-        // =========================
         // FILTER BY ASSET (ticker)
-        // =========================
         if (ticker) {
             const asset = await AssetModel.getAssetByTicker(ticker)
 
@@ -34,9 +29,7 @@ async function getRecommendation(req, res) {
             })
         }
 
-        // =========================
         // PAGINATION MODE
-        // =========================
         let page = Number(req.query.page) || 1
         let limit = Number(req.query.limit) || 10
 
@@ -70,7 +63,7 @@ async function createRecommendation(req, res) {
         // sécurité middleware obligatoire
         if (!req.asset) {
             return res.status(400).json({
-                error: "Asset not resolved (middleware missing)"
+                error: "Asset not resolved"
             })
         }
 
@@ -130,9 +123,7 @@ async function updateRecommendation(req, res) {
             })
         }
 
-        // =========================
         // AUTHORIZATION
-        // =========================
         if (
             req.user.role !== "admin" &&
             existing.user_id !== req.user.id
@@ -178,9 +169,7 @@ async function deleteRecommendation(req, res) {
             })
         }
 
-        // =========================
         // AUTHORIZATION
-        // =========================
         if (
             req.user.role !== "admin" &&
             existing.user_id !== req.user.id
@@ -203,9 +192,4 @@ async function deleteRecommendation(req, res) {
     }
 }
 
-export default {
-    getRecommendation,
-    createRecommendation,
-    updateRecommendation,
-    deleteRecommendation
-}
+export default { getRecommendation, createRecommendation, updateRecommendation, deleteRecommendation }

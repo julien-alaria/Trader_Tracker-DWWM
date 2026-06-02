@@ -64,10 +64,7 @@ export async function initUser() {
     }
 }
 
-/* -----------------------
-   UI RENDER
------------------------- */
-
+// UI RENDER
 function renderUserInfo(user) {
     const idEl = document.getElementById("user_id")
     const nameEl = document.getElementById("user_name")
@@ -109,10 +106,7 @@ function renderWatchlist(watchlist) {
     })
 }
 
-/* -----------------------
-   EVENTS
------------------------- */
-
+// EVENTS
 function bindCardNavigation() {
     document.querySelectorAll(".card").forEach(card => {
         card.addEventListener("click", () => {
@@ -149,10 +143,7 @@ function bindWatchButtons() {
     })
 }
 
-/* -----------------------
-   FORM
------------------------- */
-
+// FORM
 function initUpdateForm(user) {
     const form = document.getElementById("user-update-form")
     if (!form) return

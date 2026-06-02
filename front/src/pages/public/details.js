@@ -27,8 +27,7 @@ export async function initDetail() {
             return
         }
 
-        /* ---------------- ASSETS ---------------- */
-
+        // ASSETS
         const stocks = await getStock()
         const forex = await getForex()
         const commodities = await getCommodities()
@@ -46,13 +45,11 @@ export async function initDetail() {
             return
         }
 
-        /* ---------------- USER ---------------- */
-
+        // USER
         const token = localStorage.getItem("token")
         const user = token ? decodeToken(token) : null
 
-        /* ---------------- ASSET RENDER ---------------- */
-
+        // ASSET RENDER 
         const chartId = `tv-${asset.ticker.replace(/[^a-zA-Z0-9]/g, "_")}`
 
         document.getElementById("asset-detail").innerHTML = `
@@ -67,12 +64,10 @@ export async function initDetail() {
             <div id="${chartId}"></div>
         `
 
-        /* ---------------- CHART ---------------- */
-
+        // CHART 
         loadTradingViewChart(asset.ticker)
 
-        /* ---------------- RECOMMENDATIONS ---------------- */
-
+        // RECOMMENDATIONS 
         const recommendationRes =
             await http.get(`/recommendations?ticker=${asset.ticker}`)
 
@@ -93,8 +88,7 @@ export async function initDetail() {
             `
             : "<p>No recommendations yet</p>"
 
-        /* ---------------- FORM PERMISSION ---------------- */
-
+        //FORM PERMISSION
         const canRecommend =
             user &&
             (
@@ -123,8 +117,7 @@ export async function initDetail() {
             </form>
         `
 
-        /* ---------------- FORM HANDLER ---------------- */
-
+        // FORM HANDLER
         document.getElementById("rec-form").addEventListener("submit", async (e) => {
             e.preventDefault()
 
