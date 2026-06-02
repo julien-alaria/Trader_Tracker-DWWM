@@ -13,17 +13,21 @@ const register = `
             <input type="password" id="password" name="password" required minlength="6" maxlength="20" autocomplete="on">
 
             <input type="submit" value="submit">
+            <div id="message"></div>
         </form>
-        <form action="/#/analystregister">
-            <input type="submit" value="Register as Analyst" />
-        </form>
+        <p>Register as Analyst ?</p>
+        <a href="#/analystregister" class="btn">Register as Analyst</a>
         `;
 
   export function initRegister() {
     const form = document.querySelector("#register-form")
 
+    const messageDiv = document.getElementById("message")
+
     form.addEventListener("submit", async function (e) {
         e.preventDefault()
+
+        messageDiv.innerText = ""
 
         const data = new FormData(form)
 
@@ -38,11 +42,19 @@ const register = `
 
             if (result.token) {
                 localStorage.setItem("token", result.token)
-                window.location.hash = "/"
-                window.dispatchEvent(new Event("hashchange"))
+
+                 messageDiv.innerText = "Registration successful. Redirecting..."
+
+                setTimeout(() => {
+                    window.location.hash = "/"
+                    window.dispatchEvent(new Event("hashchange"))
+                }, 1000)
+            } else {
+                messageDiv.innerText + "Account created, but automatic login failed."
             }
 
         } catch (error) {
+            messageDiv.innerText = error.response?.data?.message || "An error occurred during registration."
             console.error("Register failed:", error)
         }
     })

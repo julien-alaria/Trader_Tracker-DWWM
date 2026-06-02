@@ -2,6 +2,7 @@ import { getStock, getForex, getCommodities } from "../utils/assetsUtils.js"
 import { loadTradingViewChart } from "../../utils/tradingChart.js"
 import http from "../../config/instanceHttp.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
+import { formatChartId, formatMarketCap } from "../../utils/format.js"
 
 
 const detailsPage = `
@@ -28,9 +29,11 @@ export async function initDetail() {
         }
 
         // ASSETS
-        const stocks = await getStock()
-        const forex = await getForex()
-        const commodities = await getCommodities()
+        const [stocks, forex, commodities] = await Promise.all([
+            getStock(),
+            getForex(),
+            getCommodities()
+        ])
 
         const allAssets = [...stocks, ...forex, ...commodities]
 
@@ -50,14 +53,14 @@ export async function initDetail() {
         const user = token ? decodeToken(token) : null
 
         // ASSET RENDER 
-        const chartId = `tv-${asset.ticker.replace(/[^a-zA-Z0-9]/g, "_")}`
+        const chartId = formatChartId(asset.ticker)
 
         document.getElementById("asset-detail").innerHTML = `
             <button onclick="history.back()">Back</button>
 
             <h2>ASSET: ${asset.name}</h2>
             <div>PRICE: ${asset.price}</div>
-            <div>MARKET CAP: ${asset.marketCap ?? "N/A"}</div>
+            <div>MARKET CAP: ${formatMarketCap(asset.marketCap)}</div>
             <div>HIGH: ${asset.high}</div>
             <div>LOW: ${asset.low}</div>
 
@@ -65,12 +68,10 @@ export async function initDetail() {
         `
 
         // CHART 
-        loadTradingViewChart(asset.ticker)
+        loadTradingViewChart(asset.ticker, chartId)
 
         // RECOMMENDATIONS 
-        const recommendationRes =
-            await http.get(`/recommendations?ticker=${asset.ticker}`)
-
+        const recommendationRes = await http.get(`/recommendations?ticker=${asset.ticker}`)
         const recommendations = recommendationRes.results || []
 
         const recommendationContainer = document.getElementById("recommendation-container")
@@ -99,7 +100,7 @@ export async function initDetail() {
 
         const formContainer = document.getElementById("recommendation-form")
 
-        if (!canRecommend) return
+        //if (!canRecommend) return
 
         formContainer.innerHTML = `
             <h3>Create Recommendation</h3>
@@ -114,29 +115,43 @@ export async function initDetail() {
                 <textarea name="comment" placeholder="Comment"></textarea>
 
                 <button type="submit">Submit</button>
+                <div id="message"></div>
             </form>
         `
 
         // FORM HANDLER
-        document.getElementById("rec-form").addEventListener("submit", async (e) => {
-            e.preventDefault()
+        const recForm = document.getElementById("rec-form")
+        
+        if (recForm) {
+            recForm.addEventListener("submit", async (e) => {
+                e.preventDefault()
 
-            const data = new FormData(e.target)
+                const messageDiv = document.getElementById("message")
 
-            try {
-                await http.post("/recommendations", {
-                    status: data.get("status"),
-                    comment: data.get("comment"),
-                    ticker: asset.ticker
-                })
+                messageDiv.innerText = ""
 
-                // clean refresh (no full reload)
-                await initDetail()
+                const data = new FormData(e.target)
 
-            } catch (err) {
-                console.error("Recommendation error:", err)
-            }
-        })
+                try {
+                    await http.post("/recommendations", {
+                        status: data.get("status"),
+                        comment: data.get("comment"),
+                        ticker: asset.ticker
+                    })
+
+                    messageDiv.innerText = "Recommendation successful"
+
+                    setTimeout(async () => {
+                        // clean refresh (no full reload)
+                        await initDetail() 
+                    }, 1000)
+                    
+                } catch (err) {
+                    messageDiv.innerText = err.response?.data?.message || "Recommendation error."
+                    console.error("Recommendation error:", err)
+                }
+            })
+        }
 
     } catch (error) {
         console.error("DETAILS INIT ERROR:", error)

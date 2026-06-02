@@ -60,20 +60,23 @@ const analystRegister = `
           analyst_type_id: Number(data.get("analyst_type_id"))
         })
 
-        messageDiv.innerText = "Inscription réussie ! Redirection..."
         console.log("REGISTER OK:", result)
 
         if (result.token) {
           localStorage.setItem("token", result.token) 
+
+          messageDiv.innerText = "Registration successful. Redirecting..."
+
+          setTimeout(() => {
+            window.location.hash = "/"
+            window.dispatchEvent(new Event("hashchange"))
+          }, 1000)
+        } else {
+          messageDiv.innerText = "Account created, but automatic login failed."
         }
-
-        setTimeout(() => {
-          window.location.hash = "/"
-          window.dispatchEvent(new Event("hashchange"))
-        }, 1000)
-
+        
       } catch (error) {
-        messageDiv.innerText = error.response?.data?.message || "Une erreur est survenue lors de l'inscription."
+        messageDiv.innerText = error.response?.data?.message || "An error occurred during registration."
         console.error("Register failed:", error)
       }
     })

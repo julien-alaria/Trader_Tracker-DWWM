@@ -60,7 +60,6 @@ async function getRecommendation(req, res) {
  */
 async function createRecommendation(req, res) {
     try {
-        // sécurité middleware obligatoire
         if (!req.asset) {
             return res.status(400).json({
                 error: "Asset not resolved"

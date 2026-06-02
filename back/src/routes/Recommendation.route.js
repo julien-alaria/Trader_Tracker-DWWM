@@ -3,6 +3,7 @@ import RecommendationController from "../controllers/RecommendationController.js
 import AuthMiddleware from "../middlewares/authMiddleware.js"
 import AssetMiddleware from "../middlewares/assetMiddleware.js"
 
+
 const RecommendationRouter = express.Router()
 
 RecommendationRouter.get("/", RecommendationController.getRecommendation)

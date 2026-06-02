@@ -67,7 +67,8 @@ async function createUsers(data) {
         id: result.insertId,
         name,
         email,
-        role
+        role,
+        analyst_type_id
     }
 }
 

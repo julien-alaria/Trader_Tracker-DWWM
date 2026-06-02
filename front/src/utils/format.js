@@ -22,3 +22,11 @@ export function formatValues(value) {
 
   return value.toString()
 }
+
+export function formatTicker(ticker) {
+  return ticker.replace(/[^a-zA-Z0-9]/g, "_")
+}
+
+export function formatChartId(ticker) {
+  return `tv-${formatTicker(ticker)}`
+}
