@@ -24,7 +24,7 @@ async function readJsonFile(fileName) {
 
 /**
  * 
- * functions for API
+ * functions for MASSIVE API
  */
 
 async function getAAPLStock(req, res) {

@@ -54,13 +54,14 @@ export async function initDetail() {
 
         // ASSET RENDER 
         const chartId = formatChartId(asset.ticker)
+        console.log("ASSET", asset)
 
         document.getElementById("asset-detail").innerHTML = `
             <button onclick="history.back()">Back</button>
 
             <h2>ASSET: ${asset.name}</h2>
             <div>PRICE: ${asset.price}</div>
-            <div>MARKET CAP: ${formatMarketCap(asset.marketCap)}</div>
+            <div>MARKET CAP: ${asset.marketCap}</div>
             <div>HIGH: ${asset.high}</div>
             <div>LOW: ${asset.low}</div>
 
@@ -90,67 +91,85 @@ export async function initDetail() {
             : "<p>No recommendations yet</p>"
 
         //FORM PERMISSION
+        // Récupération des détails ticker = asset_id
+        const dbAsset = await http.get(`/assets/details/${ticker}`);
+        
+        console.log("Accès autorisé, Asset trouvé :", dbAsset);
+        
         const canRecommend =
             user &&
             (
                 user.role === "admin" ||
                 (user.role === "analyst" &&
-                    user.analyst_type_id === asset.asset_type_id)
+                    user.analyst_type_id === dbAsset.asset_type_id)
             )
 
         const formContainer = document.getElementById("recommendation-form")
 
-        //if (!canRecommend) return
+        if (canRecommend) {
+            formContainer.innerHTML = `
+                <h3>Create Recommendation</h3>
 
-        formContainer.innerHTML = `
-            <h3>Create Recommendation</h3>
+                <form id="rec-form">
+                    <select name="status">
+                        <option value="BUY">BUY</option>
+                        <option value="SELL">SELL</option>
+                        <option value="HOLD">HOLD</option>
+                    </select>
 
-            <form id="rec-form">
-                <select name="status">
-                    <option value="BUY">BUY</option>
-                    <option value="SELL">SELL</option>
-                    <option value="HOLD">HOLD</option>
-                </select>
+                    <textarea name="comment" placeholder="Comment"></textarea>
 
-                <textarea name="comment" placeholder="Comment"></textarea>
+                    <button type="submit">Submit</button>
+                    <div id="message"></div>
+                </form>
+            `
 
-                <button type="submit">Submit</button>
-                <div id="message"></div>
-            </form>
-        `
+            // FORM HANDLER
+            const recForm = document.getElementById("rec-form")
+            
+            if (recForm) {
+                recForm.addEventListener("submit", async (e) => {
+                    e.preventDefault()
 
-        // FORM HANDLER
-        const recForm = document.getElementById("rec-form")
-        
-        if (recForm) {
-            recForm.addEventListener("submit", async (e) => {
-                e.preventDefault()
+                    const messageDiv = document.getElementById("message")
 
-                const messageDiv = document.getElementById("message")
+                    messageDiv.innerText = ""
 
-                messageDiv.innerText = ""
+                    const data = new FormData(e.target)
 
-                const data = new FormData(e.target)
+                    try {
+                        await http.post("/recommendations", {
+                            status: data.get("status"),
+                            comment: data.get("comment"),
+                            ticker: asset.ticker
+                        })
 
-                try {
-                    await http.post("/recommendations", {
-                        status: data.get("status"),
-                        comment: data.get("comment"),
-                        ticker: asset.ticker
-                    })
+                        messageDiv.innerText = "Recommendation successful"
 
-                    messageDiv.innerText = "Recommendation successful"
-
-                    setTimeout(async () => {
-                        // clean refresh (no full reload)
-                        await initDetail() 
-                    }, 1000)
-                    
-                } catch (err) {
-                    messageDiv.innerText = err.response?.data?.message || "Recommendation error."
-                    console.error("Recommendation error:", err)
-                }
-            })
+                        setTimeout(async () => {
+                            await initDetail() 
+                        }, 1000)
+                        
+                    } catch (err) {
+                        messageDiv.innerText = err.response?.data?.message || "Recommendation error."
+                        console.error("Recommendation error:", err)
+                    }
+                })
+            }
+        } else {
+            if (user && user.role === "analyst") {
+                formContainer.innerHTML = `<p>Your specialization does not allow you to recommend this asset.</p>`;
+            } else if (user && user.role === "user") {
+                // Ajoute ce bloc pour les utilisateurs simples
+                formContainer.innerHTML = `<p>Only analysts are allowed to post recommendations.</p>`;
+            } else if (!user) {
+                formContainer.innerHTML = `
+                    <div class="login-prompt">
+                        <p>Want to post a recommendation?</p>
+                        <button onclick="window.location.hash='#/login'">Log In to your Analyst Account</button>
+                    </div>
+                `;
+            }
         }
 
     } catch (error) {
