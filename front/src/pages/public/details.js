@@ -54,7 +54,6 @@ export async function initDetail() {
 
         // ASSET RENDER 
         const chartId = formatChartId(asset.ticker)
-        console.log("ASSET", asset)
 
         document.getElementById("asset-detail").innerHTML = `
             <button onclick="history.back()">Back</button>
@@ -86,7 +85,6 @@ export async function initDetail() {
                 user.role === 'admin' || 
                 user.id === rec.user_id 
             );
-            console.log("REC_ANALYST",rec.user_id)
 
             return `
                 <div class="recommendation">
@@ -122,8 +120,6 @@ export async function initDetail() {
         //FORM PERMISSION
         // Récupération des détails ticker = asset_id
         const dbAsset = await http.get(`/assets/details/${ticker}`)
-        
-        console.log("Accès autorisé, Asset trouvé :", dbAsset)
         
         const canRecommend =
             user &&
