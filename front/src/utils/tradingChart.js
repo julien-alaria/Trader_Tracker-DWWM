@@ -5,7 +5,7 @@ export function loadTradingViewChart(ticker) {
     symbol: ticker,
     interval: "W",
     autosize: true,
-    theme: "dark",
+    theme: "light",
     style: "1",
     locale: "en",
     hide_top_toolbar: true,

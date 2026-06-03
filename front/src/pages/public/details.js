@@ -3,6 +3,7 @@ import { loadTradingViewChart } from "../../utils/tradingChart.js"
 import http from "../../config/instanceHttp.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
 import { formatChartId, formatMarketCap } from "../../utils/format.js"
+import recoForm from "../../components/recommendations/recoForm.js"
 
 
 const detailsPage = `
@@ -85,16 +86,34 @@ export async function initDetail() {
                         <strong>${rec.status}</strong>
                         <p>${rec.comment}</p>
                         <small>Analyst: ${rec.analyst_name ?? "unknown"}</small>
+                        <button class="delete-btn" data-id="${rec.id}">DELETE</button>
                     </div>
                 `).join("")}
             `
             : "<p>No recommendations yet</p>"
 
+        
+        recommendationContainer.addEventListener("click", async (e) => {
+   
+            if (e.target.classList.contains("delete-btn")) {
+                const recId = e.target.dataset.id;
+                const recommendationDiv = e.target.closest(".recommendation") 
+                
+                try {
+                    await http.delete(`/recommendations/${recId}`)
+                    recommendationDiv.remove() 
+                    console.log("Suppression réussie.")
+                } catch (err) {
+                    console.error("Erreur suppression:", err)
+                }
+            }
+        })
+
         //FORM PERMISSION
         // Récupération des détails ticker = asset_id
-        const dbAsset = await http.get(`/assets/details/${ticker}`);
+        const dbAsset = await http.get(`/assets/details/${ticker}`)
         
-        console.log("Accès autorisé, Asset trouvé :", dbAsset);
+        console.log("Accès autorisé, Asset trouvé :", dbAsset)
         
         const canRecommend =
             user &&
@@ -108,20 +127,7 @@ export async function initDetail() {
 
         if (canRecommend) {
             formContainer.innerHTML = `
-                <h3>Create Recommendation</h3>
-
-                <form id="rec-form">
-                    <select name="status">
-                        <option value="BUY">BUY</option>
-                        <option value="SELL">SELL</option>
-                        <option value="HOLD">HOLD</option>
-                    </select>
-
-                    <textarea name="comment" placeholder="Comment"></textarea>
-
-                    <button type="submit">Submit</button>
-                    <div id="message"></div>
-                </form>
+                ${recoForm()}
             `
 
             // FORM HANDLER
@@ -156,13 +162,19 @@ export async function initDetail() {
                     }
                 })
             }
+
         } else {
+
             if (user && user.role === "analyst") {
+
                 formContainer.innerHTML = `<p>Your specialization does not allow you to recommend this asset.</p>`;
+
             } else if (user && user.role === "user") {
-                // Ajoute ce bloc pour les utilisateurs simples
+
                 formContainer.innerHTML = `<p>Only analysts are allowed to post recommendations.</p>`;
+
             } else if (!user) {
+
                 formContainer.innerHTML = `
                     <div class="login-prompt">
                         <p>Want to post a recommendation?</p>
