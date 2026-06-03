@@ -2,7 +2,7 @@ import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
 import { loadTradingViewChart } from "../../utils/tradingChart.js"
 import http from "../../config/instanceHttp.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
-import { formatChartId, formatMarketCap } from "../../utils/format.js"
+import { formatChartId, formatMarketCap, formatDate } from "../../utils/format.js"
 import recoForm from "../../components/recommendations/recoForm.js"
 
 const detailsPage = `
@@ -92,7 +92,8 @@ export async function initDetail() {
                 <div class="recommendation">
                     <strong>${rec.status}</strong>
                     <p>${rec.comment}</p>
-                    <small>Analyst: ${rec.analyst_name ?? "unknown"}</small>
+                    <small><p>Analyst: ${rec.analyst_name ?? "unknown"}</p></small>
+                    <small><p>Published on ${formatDate(rec.created_at)}</p></small>
                     
                     ${isAuthorized ? `<button class="delete-btn" data-id="${rec.id}">DELETE</button>` : ""}
                 </div>

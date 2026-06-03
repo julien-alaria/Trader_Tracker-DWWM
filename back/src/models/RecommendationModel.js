@@ -83,6 +83,7 @@ async function getRecommendationsByAssetId(assetId) {
             r.comment,
             r.asset_id,
             r.user_id,
+            r.created_at,
             u.name AS analyst_name
         FROM recommendations r
         JOIN users u ON u.id = r.user_id
