@@ -5,7 +5,6 @@ import { decodeToken } from "../../middlewares/roleGuard.js"
 import { formatChartId, formatMarketCap } from "../../utils/format.js"
 import recoForm from "../../components/recommendations/recoForm.js"
 
-
 const detailsPage = `
 <main>
     <h1>Details Page</h1>
@@ -79,18 +78,28 @@ export async function initDetail() {
         const recommendationContainer = document.getElementById("recommendation-container")
 
         recommendationContainer.innerHTML = recommendations.length
-            ? `
-                <h3>Analysts Recommendations</h3>
-                ${recommendations.map(rec => `
-                    <div class="recommendation">
-                        <strong>${rec.status}</strong>
-                        <p>${rec.comment}</p>
-                        <small>Analyst: ${rec.analyst_name ?? "unknown"}</small>
-                        <button class="delete-btn" data-id="${rec.id}">DELETE</button>
-                    </div>
-                `).join("")}
-            `
-            : "<p>No recommendations yet</p>"
+    ? `
+        <h3>Analysts Recommendations</h3>
+        ${recommendations.map(rec => {
+           // Dynamic button display
+            const isAuthorized = user && (
+                user.role === 'admin' || 
+                user.id === rec.user_id 
+            );
+            console.log("REC_ANALYST",rec.user_id)
+
+            return `
+                <div class="recommendation">
+                    <strong>${rec.status}</strong>
+                    <p>${rec.comment}</p>
+                    <small>Analyst: ${rec.analyst_name ?? "unknown"}</small>
+                    
+                    ${isAuthorized ? `<button class="delete-btn" data-id="${rec.id}">DELETE</button>` : ""}
+                </div>
+            `;
+        }).join("")}
+    `
+    : "<p>No recommendations yet</p>";
 
         
         recommendationContainer.addEventListener("click", async (e) => {
