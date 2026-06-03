@@ -1,7 +1,7 @@
 import http from "../../config/instanceHttp.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
-import stockCard from "../../components/home/cards/stockCards.js"
-import { getStock, getForex, getCommodities } from "../utils/assetsUtils.js"
+import stockCard from "../../components/cards/stockCards.js"
+import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
 import { loadTradingViewChart } from "../../utils/tradingChart.js"
 import updateForm from "../../components/user/userUpdateForm.js"
 

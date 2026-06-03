@@ -4,13 +4,13 @@ const register = `
         <h1>Register</h1>
         <form id="register-form">
             <label for="name">Nom:</label>
-            <input type="text" id="name" name="name" required minlength="2" maxlength="50" autocomplete="on">
+            <input type="text" id="name" name="name" minlength="2" maxlength="50" required autocomplete="on">
 
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" autocomplete="on">
+            <input type="email" id="email" name="email" required autocomplete="on">
 
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required minlength="6" maxlength="20" autocomplete="on">
+            <input type="password" id="password" name="password" minlength="6" maxlength="20" required autocomplete="on">
 
             <input type="submit" value="submit">
             <div id="message"></div>
@@ -35,7 +35,7 @@ const register = `
             const result = await http.post("/auth/register", {
                 name: data.get("name"),
                 email: data.get("email"),
-                password: data.get("password"),
+                password: data.get("password")
             })
 
             console.log("REGISTER OK:", result.token)
@@ -43,14 +43,14 @@ const register = `
             if (result.token) {
                 localStorage.setItem("token", result.token)
 
-                 messageDiv.innerText = "Registration successful. Redirecting..."
+                messageDiv.innerText = "Registration successful."
 
                 setTimeout(() => {
                     window.location.hash = "/"
                     window.dispatchEvent(new Event("hashchange"))
                 }, 1000)
             } else {
-                messageDiv.innerText + "Account created, but automatic login failed."
+                messageDiv.innerText = "Account created, but automatic login failed."
             }
 
         } catch (error) {

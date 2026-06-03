@@ -27,14 +27,11 @@ const login = `
             messageDiv.innerText = ""
             
             const data = new FormData(form)
-            
-            const email = data.get("email")
-            const password = data.get("password")
 
             try {
                 const result = await http.post("/auth/login", {
-                    email,
-                    password
+                    email: data.get("email"),
+                    password: data.get("password")
                 })
 
                 const token = result.token

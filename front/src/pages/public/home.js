@@ -1,9 +1,9 @@
-import { getStock, getForex, getCommodities } from "../utils/assetsUtils.js"
-import stockCard from "../../components/home/cards/stockCards.js"
-import forexCard from "../../components/home/cards/forexCards.js"
-import commodityCard from "../../components/home/cards/commodityCards.js"
-import { createSearchBar, renderResults } from "../utils/searchBarUtils.js"
-import http from "../../config/instanceHttp.js"
+import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js";
+import stockCard from "../../components/cards/stockCards.js";
+import forexCard from "../../components/cards/forexCards.js";
+import commodityCard from "../../components/cards/commodityCards.js";
+import { createSearchBar, renderResults } from "../../components/searchBar/searchBarUtils.js";
+import http from "../../config/instanceHttp.js";
 
 const home = `
   <main>
@@ -27,104 +27,103 @@ const home = `
     </section>
 
   </main>
-`
+`;
 
-export default home
+export default home;
 
 export async function initHome() {
-    try {
-        // 1. DATA FETCHING
-        const [stocks, forex, commodities] = await Promise.all([
-            getStock(),
-            getForex(),
-            getCommodities()
-        ])
+  try {
+    // 1. DATA FETCHING
+    const [stocks, forex, commodities] = await Promise.all([
+      getStock(),
+      getForex(),
+      getCommodities(),
+    ]);
 
-        const allData = [...stocks, ...forex, ...commodities]
+    const allData = [...stocks, ...forex, ...commodities];
 
-        // 2. SEARCH BAR (SAFE INIT)
-        const oldSearch = document.querySelector(".search-wrapper")
-        if (oldSearch) oldSearch.remove()
+    // 2. SEARCH BAR (SAFE INIT)
+    const oldSearch = document.querySelector(".search-wrapper");
+    if (oldSearch) oldSearch.remove();
 
-        const searchContainer = document.getElementById("search-container")
+    const searchContainer = document.getElementById("search-container");
 
-        const searchBar = createSearchBar((value, container) => {
-            const query = value.trim().toLowerCase()
+    const searchBar = createSearchBar((value, container) => {
+      const query = value.trim().toLowerCase();
 
-            if (!query) {
-                container.innerHTML = ""
-                return
-            }
+      if (!query) {
+        container.innerHTML = "";
+        return;
+      }
 
-            const filtered = allData.filter(item =>
-                (item.ticker ?? "").toLowerCase().includes(query) ||
-                (item.name ?? "").toLowerCase().includes(query)
-            )
+      const filtered = allData.filter(
+        (item) =>
+          (item.ticker ?? "").toLowerCase().includes(query) ||
+          (item.name ?? "").toLowerCase().includes(query),
+      );
 
-            renderResults(filtered, container, (item) => {
-                window.location.hash = `#/details?type=${item.type}&ticker=${item.ticker}`
-            })
-        })
+      renderResults(filtered, container, (item) => {
+        window.location.hash = `#/details?type=${item.type}&ticker=${item.ticker}`;
+      });
+    });
 
-        searchContainer.innerHTML = ""
-        searchContainer.appendChild(searchBar)
+    searchContainer.innerHTML = "";
+    searchContainer.appendChild(searchBar);
 
-        // 3. RENDER CARDS
-        const stocksContainer = document.getElementById("stocks")
-        const forexContainer = document.getElementById("forex")
-        const commoditiesContainer = document.getElementById("commodities")
+    // 3. RENDER CARDS
+    const stocksContainer = document.getElementById("stocks");
+    const forexContainer = document.getElementById("forex");
+    const commoditiesContainer = document.getElementById("commodities");
 
-        stocksContainer.innerHTML = stocks.map(stockCard).join("")
-        forexContainer.innerHTML = forex.map(forexCard).join("")
-        commoditiesContainer.innerHTML = commodities.map(commodityCard).join("")
+    stocksContainer.innerHTML = stocks.map(stockCard).join("");
+    forexContainer.innerHTML = forex.map(forexCard).join("");
+    commoditiesContainer.innerHTML = commodities.map(commodityCard).join("");
 
-        // 4. EVENT DELEGATION (CLICK CARDS)
-        document.addEventListener("click", (e) => {
-            const card = e.target.closest(".card")
-            if (!card) return
+    // 4. EVENT DELEGATION (CLICK CARDS)
+    document.addEventListener("click", (e) => {
+      const card = e.target.closest(".card");
+      if (!card) return;
 
-            // ignore watch button click
-            if (e.target.classList.contains("watch-btn")) return
+      // ignore watch button click
+      if (e.target.classList.contains("watch-btn")) return;
 
-            const ticker = card.dataset.ticker
-            const type = card.dataset.type
+      const ticker = card.dataset.ticker;
+      const type = card.dataset.type;
 
-            if (!ticker || !type) return
+      if (!ticker || !type) return;
 
-            window.location.href = `#/details?type=${type}&ticker=${ticker}`
-        })
+      window.location.href = `#/details?type=${type}&ticker=${ticker}`;
+    });
 
-        // 5. WATCHLIST ACTIONS
-        document.addEventListener("click", async (e) => {
-            if (!e.target.classList.contains("watch-btn")) return
+    // 5. WATCHLIST ACTIONS
+    document.addEventListener("click", async (e) => {
+      if (!e.target.classList.contains("watch-btn")) return;
 
-            e.stopPropagation()
+      e.stopPropagation();
 
-            const card = e.target.closest(".card")
-            if (!card) return
+      const card = e.target.closest(".card");
+      if (!card) return;
 
-            const ticker = card.dataset.ticker
-            if (!ticker) return
+      const ticker = card.dataset.ticker;
+      if (!ticker) return;
 
-            try {
-                const isFollowed = card.dataset.followed === "true"
+      try {
+        const isFollowed = card.dataset.followed === "true";
 
-                if (isFollowed) {
-                    await http.delete("/users/me/follows", { ticker })
-                    e.target.textContent = "☆ Follow"
-                    card.dataset.followed = "false"
-                } else {
-                    await http.post("/users/me/follows", { ticker })
-                    e.target.textContent = "⭐ Unfollow"
-                    card.dataset.followed = "true"
-                }
-
-            } catch (err) {
-                console.error("Watchlist error:", err)
-            }
-        })
-
-    } catch (err) {
-        console.error("Home init error:", err)
-    }
+        if (isFollowed) {
+          await http.delete("/users/me/follows", { ticker });
+          e.target.textContent = "☆ Follow";
+          card.dataset.followed = "false";
+        } else {
+          await http.post("/users/me/follows", { ticker });
+          e.target.textContent = "⭐ Unfollow";
+          card.dataset.followed = "true";
+        }
+      } catch (err) {
+        console.error("Watchlist error:", err);
+      }
+    });
+  } catch (err) {
+    console.error("Home init error:", err);
+  }
 }

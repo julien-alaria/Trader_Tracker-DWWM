@@ -1,4 +1,4 @@
-import { getStock, getForex, getCommodities } from "../utils/assetsUtils.js"
+import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
 import { loadTradingViewChart } from "../../utils/tradingChart.js"
 import http from "../../config/instanceHttp.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
