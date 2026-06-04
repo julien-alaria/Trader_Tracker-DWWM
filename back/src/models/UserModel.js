@@ -180,14 +180,9 @@ async function userFollowAsset(user_id, asset_id) {
 }
 
 async function userUnfollowAsset(user_id, asset_id) {
-
     const db = getConnection()
 
-    const sql = `
-        DELETE FROM users_assets_follow
-        WHERE user_id = ?
-        AND asset_id = ?
-    `
+    const sql = "DELETE FROM users_assets_follow WHERE user_id = ? AND asset_id = ?"
 
     const [result] = await db.execute(sql, [user_id, asset_id])
 

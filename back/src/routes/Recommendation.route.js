@@ -4,7 +4,6 @@ import AuthMiddleware from "../middlewares/authMiddleware.js"
 import AssetMiddleware from "../middlewares/assetMiddleware.js"
 import SpecializationMiddleware from "../middlewares/specializationMiddleware.js"
 
-
 const RecommendationRouter = express.Router()
 
 RecommendationRouter.get("/", RecommendationController.getRecommendation)

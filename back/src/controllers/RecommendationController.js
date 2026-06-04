@@ -104,8 +104,7 @@ async function updateRecommendation(req, res) {
             })
         }
 
-        const sanitizedData =
-            sanitizeRecommendationUpdate(req.body)
+        const sanitizedData = sanitizeRecommendationUpdate(req.body)
 
         if (Object.keys(sanitizedData).length === 0) {
             return res.status(400).json({
@@ -113,8 +112,7 @@ async function updateRecommendation(req, res) {
             })
         }
 
-        const existing =
-            await RecommendationModel.getRecommendationsById(id)
+        const existing = await RecommendationModel.getRecommendationsById(id)
 
         if (!existing) {
             return res.status(404).json({
@@ -123,17 +121,13 @@ async function updateRecommendation(req, res) {
         }
 
         // AUTHORIZATION
-        if (
-            req.user.role !== "admin" &&
-            existing.user_id !== req.user.id
-        ) {
+        if (req.user.role !== "admin" && existing.user_id !== req.user.id) {
             return res.status(403).json({
                 error: "Update denied"
             })
         }
 
-        const recommendation =
-            await RecommendationModel.updateRecommendations(id, sanitizedData)
+        const recommendation = await RecommendationModel.updateRecommendations(id, sanitizedData)
 
         return res.status(200).json({
             recommendation
@@ -159,8 +153,7 @@ async function deleteRecommendation(req, res) {
             })
         }
 
-        const existing =
-            await RecommendationModel.getRecommendationsById(id)
+        const existing = await RecommendationModel.getRecommendationsById(id)
 
         if (!existing) {
             return res.status(404).json({
@@ -169,10 +162,7 @@ async function deleteRecommendation(req, res) {
         }
 
         // AUTHORIZATION
-        if (
-            req.user.role !== "admin" &&
-            existing.user_id !== req.user.id
-        ) {
+        if (req.user.role !== "admin" && existing.user_id !== req.user.id) {
             return res.status(403).json({
                 error: "Delete denied"
             })

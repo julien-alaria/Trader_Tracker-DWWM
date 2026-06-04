@@ -34,7 +34,8 @@ async function getPaginated(limit, offset) {
     const db = getConnection()
 
     const sql = `
-        SELECT  r.id,
+        SELECT  
+            r.id,
             r.status,
             r.comment,
             r.asset_id,
