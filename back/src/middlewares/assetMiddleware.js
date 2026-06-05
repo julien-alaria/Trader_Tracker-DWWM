@@ -4,7 +4,7 @@ export default function AssetMiddleware() {
     
     return async function (req, res, next) {
         try {
-            const user = req.user
+            //const user = req.user
             const { ticker } = req.body
 
             if (!ticker) {
@@ -18,8 +18,8 @@ export default function AssetMiddleware() {
             }
 
             req.asset = asset
-            req.asset_id = asset.id
-            delete req.body.ticker
+            //req.asset_id = asset.id
+            //delete req.body.ticker
 
             return next()
 

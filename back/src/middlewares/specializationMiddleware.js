@@ -1,4 +1,5 @@
 export default function SpecializationMiddleware() {
+    
     return async function (req, res, next) {
         try {
             const { role, analyst_type_id } = req.user //authMiddleware
