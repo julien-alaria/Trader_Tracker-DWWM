@@ -80,12 +80,6 @@ export async function initDetail() {
     ? `
         <h3>Analysts Recommendations</h3>
         ${recommendations.map(rec => {
-           // Dynamic button display
-            const isAuthorized = user && (
-                user.role === 'admin' || 
-                user.id === rec.user_id 
-            );
-
             return `
                 <div class="recommendation">
                     <strong>${rec.status}</strong>
@@ -93,7 +87,7 @@ export async function initDetail() {
                     <small><p>Analyst: ${rec.analyst_name ?? "unknown"}</p></small>
                     <small><p>Published on ${formatDate(rec.created_at)}</p></small>
                     
-                    ${isAuthorized ? `<button class="delete-btn" data-id="${rec.id}">DELETE</button>` : ""}
+                  
                 </div>
             `;
         }).join("")}
@@ -101,22 +95,6 @@ export async function initDetail() {
     : "<p>No recommendations yet</p>";
 
         
-        recommendationContainer.addEventListener("click", async (e) => {
-   
-            if (e.target.classList.contains("delete-btn")) {
-                const recId = e.target.dataset.id;
-                const recommendationDiv = e.target.closest(".recommendation") 
-                
-                try {
-                    await http.delete(`/recommendations/${recId}`)
-                    recommendationDiv.remove() 
-                    console.log("Suppression réussie.")
-                } catch (err) {
-                    console.error("Erreur suppression:", err)
-                }
-            }
-        })
-
         //FORM PERMISSION
         // Récupération des détails ticker = asset_id
         const dbAsset = await http.get(`/assets/details/${ticker}`)

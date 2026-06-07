@@ -54,6 +54,7 @@ export async function initUser() {
         const watchlist = buildWatchlist(watchlistRaw, allAssets)
 
         renderWatchlist(watchlist)
+        renderRecommendations(recommendationsRes.results)
 
         bindCardNavigation()
         bindWatchButtons()

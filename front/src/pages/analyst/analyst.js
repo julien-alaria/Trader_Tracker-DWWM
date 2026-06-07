@@ -21,6 +21,9 @@ const analystPage = `
     <h2>Watchlist</h2>
     <div id="watchlist"></div>
 
+    <h2>My Recommendations</h2>
+    <div id="my-recommendations"></div>
+
     <div class="update-form">
         ${analystUpdateForm()}
     </div>
@@ -38,16 +41,18 @@ export async function initAnalyst() {
             return
         }
 
-        const [userRes, watchRes, stocks, forex, commodities] =
+        const [userRes, watchRes, recommendationsRes, stocks, forex, commodities] =
             await Promise.all([
                 http.get("/users/me"),
                 http.get("/users/me/watchlist"),
+                http.get("/recommendations/me"),
                 getStock(),
                 getForex(),
                 getCommodities()
             ])
 
         const user = userRes.result
+        console.log(recommendationsRes)
 
         renderAnalyst(user)
 
@@ -56,8 +61,10 @@ export async function initAnalyst() {
         const watchlist = buildWatchlist(watchRes.result, allAssets)
 
         renderWatchlist(watchlist)
+        renderRecommendations(recommendationsRes.results || [], user)
 
         bindEvents()
+        bindRecommendationEvents(user)
         initForm(user)
 
     } catch (err) {
@@ -75,6 +82,8 @@ function renderAnalyst(user) {
         analyst_company: user.company,
         analyst_bio: user.bio
     }
+
+    console.log("USER:", user)
 
     Object.entries(map).forEach(([id, value]) => {
         const el = document.getElementById(id)
@@ -95,7 +104,7 @@ function buildWatchlist(raw, assets) {
     })
 }
 
-// RENDER 
+// RENDER WATCHLIST
 function renderWatchlist(watchlist) {
     const container = document.getElementById("watchlist")
     if (!container) return
@@ -111,6 +120,96 @@ function renderWatchlist(watchlist) {
 
     watchlist.forEach(asset => {
         loadTradingViewChart(asset.ticker)
+    })
+}
+
+// RENDER RECOMMENDATIONS
+function renderRecommendations(recommendations, user) {
+    const container = document.getElementById("my-recommendations")
+    if (!container) return
+
+    if (!recommendations.length) {
+        container.innerHTML = "<p>No recommendations yet</p>"
+        return
+    }
+
+    container.innerHTML = recommendations.map(rec => {
+
+        const isAuthorized = user && (user.role === "admin" || Number(user.id) === Number(rec.user_id))
+
+        console.log("REC USER ID:", rec.user_id, typeof rec.user_id)
+        console.log("USER ID:", user.id, typeof user.id)
+
+        return `
+        <div class="recommendation" data-id="${rec.id}">
+            <strong>${rec.status}</strong>
+            <p>${rec.comment}</p>
+            <p>Asset: ${rec.name} (${rec.ticker})</p>
+
+            <small>${new Date(rec.created_at).toLocaleDateString()}</small>
+
+            ${isAuthorized ? `
+                <button class="delete-btn" data-id="${rec.id}">DELETE</button>
+
+                <form class="edit-form hidden" data-id="${rec.id}">
+                    <select name="status">
+                        <option value="BUY">BUY</option>
+                        <option value="SELL">SELL</option>
+                        <option value="HOLD">HOLD</option>
+                    </select>
+
+                    <input name="comment" placeholder="comment" />
+
+                    <button type="submit">EDIT</button>
+                </form>
+            ` : ""}
+        </div>
+        `
+    }).join("")
+}
+
+function bindRecommendationEvents(user) {
+    const container = document.getElementById("my-recommendations")
+    if (!container) return
+
+    // DELETE
+    container.addEventListener("click", async (e) => {
+
+        if (e.target.classList.contains("delete-btn")) {
+            const id = e.target.dataset.id
+            const card = e.target.closest(".recommendation")
+
+            try {
+                await http.delete(`/recommendations/${id}`)
+                card.remove()
+            } catch (err) {
+                console.error("DELETE ERROR:", err)
+            }
+        }
+    })
+
+    // UPDATE
+    container.addEventListener("submit", async (e) => {
+        if (!e.target.classList.contains("edit-form")) return
+
+        e.preventDefault()
+
+        const id = e.target.dataset.id
+        const data = new FormData(e.target)
+
+        try {
+            await http.put(`/recommendations/${id}`, {
+                status: data.get("status"),
+                comment: data.get("comment")
+            })
+
+            // refresh
+            const updated = await http.get("/recommendations/me")
+            renderRecommendations(updated.results || [], user)
+
+        } catch (err) {
+            console.error("UPDATE ERROR:", err)
+        }
     })
 }
 

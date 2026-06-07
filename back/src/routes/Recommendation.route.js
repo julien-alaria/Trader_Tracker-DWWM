@@ -6,6 +6,8 @@ import SpecializationMiddleware from "../middlewares/specializationMiddleware.js
 
 const RecommendationRouter = express.Router()
 
+RecommendationRouter.get("/me", AuthMiddleware(["analyst", "admin"]), RecommendationController.getMyRecommendation)
+
 RecommendationRouter.get("/", RecommendationController.getRecommendation)
 
 RecommendationRouter.post("/", AuthMiddleware(["analyst", "admin"]), AssetMiddleware(), SpecializationMiddleware(), RecommendationController.createRecommendation)

@@ -55,6 +55,18 @@ async function getRecommendation(req, res) {
     }
 }
 
+async function getMyRecommendation(req, res) {
+    try {
+        const userId = req.user.id
+
+        const results = await RecommendationModel.getMyRecommendations(userId)
+
+        return res.status(200).json({ results })
+    } catch (error) {
+        return res.status(500).json({ error: error.message })
+    }
+}
+
 /**
  * POST /recommendations
  */
@@ -181,4 +193,4 @@ async function deleteRecommendation(req, res) {
     }
 }
 
-export default { getRecommendation, createRecommendation, updateRecommendation, deleteRecommendation }
+export default { getRecommendation, getMyRecommendation, createRecommendation, updateRecommendation, deleteRecommendation }

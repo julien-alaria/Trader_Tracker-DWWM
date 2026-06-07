@@ -23,11 +23,26 @@ async function getRecommendations(){
 async function getMyRecommendations(userId){
     const db = getConnection()
 
-    const sql = "SELECT id, status, comment, asset_id, user_id FROM recommendations WHERE user_id = ?"
+    const sql = `
+    SELECT
+        r.id,
+        r.status,
+        r.comment,
+        r.created_at,
+        r.asset_id,
+        r.user_id, 
+        a.ticker,
+        a.name
+    FROM recommendations r
+    JOIN assets a
+        ON a.id = r.asset_id
+    WHERE r.user_id = ?
+    ORDER BY r.created_at DESC
+    `
 
-    const [result] = await db.execute(sql, [userId])
+    const [rows] = await db.execute(sql, [userId])
 
-    return result[0] || null
+    return rows
 }
 
 async function getPaginated(limit, offset) {
