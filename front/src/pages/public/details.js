@@ -20,7 +20,6 @@ export async function initDetail() {
         const queryIndex = hash.indexOf("?")
         const query = queryIndex !== -1 ? hash.substring(queryIndex + 1) : ""
         const params = new URLSearchParams(query)
-
         const ticker = params.get("ticker")
 
         if (!ticker) {
@@ -28,144 +27,110 @@ export async function initDetail() {
             return
         }
 
-        // ASSETS
+        //ASSETS
         const [stocks, forex, commodities] = await Promise.all([
-            getStock(),
-            getForex(),
-            getCommodities()
+            getStock(), getForex(), getCommodities()
         ])
-
         const allAssets = [...stocks, ...forex, ...commodities]
-
         const asset = allAssets.find(item =>
-            String(item.ticker ?? "").trim().toUpperCase() ===
-            String(ticker).trim().toUpperCase()
+            String(item.ticker ?? "").trim().toUpperCase() === String(ticker).trim().toUpperCase()
         )
 
         if (!asset) {
-            document.getElementById("asset-detail").innerHTML =
-                "<p>Asset not found</p>"
+            document.getElementById("asset-detail").innerHTML = "<p>Asset not found</p>"
             return
         }
 
-        // USER
+        //USER & WATCHLIST
         const token = localStorage.getItem("token")
         const user = token ? decodeToken(token) : null
 
-        // ASSET RENDER 
-        const chartId = formatChartId(asset.ticker)
+        const watchRes = user ? await http.get(`/users/me/watchlist`) : { result: [] };
+        const isFollowed = watchRes.result?.some(w => w.ticker === asset.ticker);
 
+        //PAGE RENDERING
+        const chartId = formatChartId(asset.ticker)
         document.getElementById("asset-detail").innerHTML = `
             <button onclick="history.back()">Back</button>
-
             <h2>ASSET: ${asset.name}</h2>
+            <button id="follow-toggle-btn" data-ticker="${asset.ticker}" data-followed="${isFollowed}">
+                ${isFollowed ? "⭐ Unfollow" : "☆ Follow"}
+            </button>
             <div>PRICE: ${asset.price}</div>
             <div>MARKET CAP: ${asset.marketCap}</div>
             <div>HIGH: ${asset.high}</div>
             <div>LOW: ${asset.low}</div>
-
             <div id="${chartId}"></div>
-        `
+        `;
 
-        // CHART 
+        //FOLLOW 
+        const followBtn = document.getElementById("follow-toggle-btn");
+        followBtn.addEventListener("click", async () => {
+            const currentStatus = followBtn.dataset.followed === "true";
+            const ticker = followBtn.dataset.ticker;
+            followBtn.disabled = true;
+            try {
+                if (currentStatus) {
+                    await http.delete(`/users/me/follows/${ticker}`);
+                    followBtn.dataset.followed = "false";
+                    followBtn.textContent = "☆ Follow";
+                } else {
+                    await http.post("/users/me/follows", { ticker });
+                    followBtn.dataset.followed = "true";
+                    followBtn.textContent = "⭐ Unfollow";
+                }
+            } catch (err) {
+                console.error("Follow error:", err);
+            } finally {
+                followBtn.disabled = false;
+            }
+        });
+
+        //CHARTS & RECOMMENDATIONS
         loadTradingViewChart(asset.ticker, chartId)
-
-        // RECOMMENDATIONS 
         const recommendationRes = await http.get(`/recommendations?ticker=${asset.ticker}`)
         const recommendations = recommendationRes.results || []
-
-        const recommendationContainer = document.getElementById("recommendation-container")
-
-        recommendationContainer.innerHTML = recommendations.length
-    ? `
-        <h3>Analysts Recommendations</h3>
-        ${recommendations.map(rec => {
-            return `
+        document.getElementById("recommendation-container").innerHTML = recommendations.length
+            ? `<h3>Analysts Recommendations</h3>${recommendations.map(rec => `
                 <div class="recommendation">
                     <strong>${rec.status}</strong>
                     <p>${rec.comment}</p>
                     <small><p>Analyst: ${rec.analyst_name ?? "unknown"}</p></small>
                     <small><p>Published on ${formatDate(rec.created_at)}</p></small>
-                    
-                  
-                </div>
-            `;
-        }).join("")}
-    `
-    : "<p>No recommendations yet</p>";
-
+                </div>`).join("")}`
+            : "<p>No recommendations yet</p>";
         
-        //FORM PERMISSION
-        // Récupération des détails ticker = asset_id
+        //RECOMMENDATION FORM
         const dbAsset = await http.get(`/assets/details/${ticker}`)
-        
-        const canRecommend =
-            user &&
-            (
-                user.role === "admin" ||
-                (user.role === "analyst" &&
-                    user.analyst_type_id === dbAsset.asset_type_id)
-            )
-
+        const canRecommend = user && (user.role === "admin" || (user.role === "analyst" && user.analyst_type_id === dbAsset.asset_type_id))
         const formContainer = document.getElementById("recommendation-form")
-
+        
         if (canRecommend) {
-            formContainer.innerHTML = `
-                ${recoForm()}
-            `
-
-            // FORM HANDLER
+            formContainer.innerHTML = recoForm()
             const recForm = document.getElementById("rec-form")
-            
             if (recForm) {
                 recForm.addEventListener("submit", async (e) => {
                     e.preventDefault()
-
                     const messageDiv = document.getElementById("message")
-
-                    messageDiv.innerText = ""
-
+                    messageDiv.innerText = "Processing..."
                     const data = new FormData(e.target)
-
                     try {
                         await http.post("/recommendations", {
                             status: data.get("status"),
                             comment: data.get("comment"),
                             ticker: asset.ticker
                         })
-
                         messageDiv.innerText = "Recommendation successful"
-
-                        setTimeout(async () => {
-                            await initDetail() 
-                        }, 1000)
-                        
+                        setTimeout(async () => { await initDetail() }, 1000)
                     } catch (err) {
                         messageDiv.innerText = err.response?.data?.message || "Recommendation error."
-                        console.error("Recommendation error:", err)
                     }
                 })
             }
-
+        } else if (user) {
+            formContainer.innerHTML = `<p>${user.role === "analyst" ? "Your specialization does not allow you to recommend this asset." : "Only analysts can post."}</p>`;
         } else {
-
-            if (user && user.role === "analyst") {
-
-                formContainer.innerHTML = `<p>Your specialization does not allow you to recommend this asset.</p>`;
-
-            } else if (user && user.role === "user") {
-
-                formContainer.innerHTML = `<p>Only analysts are allowed to post recommendations.</p>`;
-
-            } else if (!user) {
-
-                formContainer.innerHTML = `
-                    <div class="login-prompt">
-                        <p>Want to post a recommendation?</p>
-                        <button onclick="window.location.hash='#/login'">Log In to your Analyst Account</button>
-                    </div>
-                `;
-            }
+            formContainer.innerHTML = `<div class="login-prompt"><p>Want to post a recommendation?</p><button onclick="window.location.hash='#/login'">Log In</button></div>`;
         }
 
     } catch (error) {

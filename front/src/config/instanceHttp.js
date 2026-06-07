@@ -61,10 +61,10 @@ class InstanceHttp {
     }
 
     async delete(url) {
-    const response = await fetch(API_URL + url, {
-        method: "DELETE",
-        headers: this.getHeaders()
-    })
+        const response = await fetch(API_URL + url, {
+            method: "DELETE",
+            headers: this.getHeaders()
+        })
     return this.handleResponse(response)
     }
 

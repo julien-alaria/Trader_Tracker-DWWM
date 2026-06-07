@@ -2,6 +2,10 @@
 @import "./src/styles/cards.css";
 @import "./src/styles/details.css";
 
+* {
+  box-sizing: border-box;
+}
+
 html, body {
   height: 100%;
   margin: 0;
@@ -40,12 +44,6 @@ main {
     display: block;
 }
 
-#stocks {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 16px;
-    align-items: start;
-}
 
 footer {
     height: 10vh;

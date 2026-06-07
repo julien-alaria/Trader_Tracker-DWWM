@@ -5,7 +5,6 @@ export default function AssetMiddleware() {
     return async function (req, res, next) {
         try {
             //const user = req.user
-            
             const ticker = req.body?.ticker || req.params?.ticker
 
             if (!ticker) {

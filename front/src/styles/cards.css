@@ -1,19 +1,22 @@
 .card {
   display: flex;
   flex-direction: column;
-  width: 50%;
   padding: 1rem;
   border-radius: 12px;
   background: #1e1e1e;
   color: white;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   cursor: pointer;
+  box-sizing: border-box; 
+  height: 100%;           
 }
 
 .card.stock {
   background: #b5aeae;
   color: black;
 }
+
+.card.stock .card-description { color: #333; }
 
 .card.stock .card-image {
   width: 90%;
@@ -59,4 +62,10 @@
 
 .chart {
   pointer-events: none;
+}
+
+
+.card .chart {
+    height: 200px; /* Important : TradingView a besoin d'une hauteur */
+    width: 100%;
 }

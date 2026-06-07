@@ -1,10 +1,11 @@
-#asset_detail {
+#asset-detail {
     width: 80vw;
-    height: 100%;
-    background-color: aqua;
+    margin: 0 auto;
+    padding: 2rem;
 }
 
 .tv-chart {
     width: 100%;
-    min-height: 120px;
+    height: 120px; 
+    margin-top: 20px;
 }

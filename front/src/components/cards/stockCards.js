@@ -1,10 +1,17 @@
-export default function stockCard({ticker = 'N/A', name = 'Unknown company', marketCap = 0, high, low, image, price = "N/A",
-  isFollowed = false} = {}) {
+export default function stockCard({
+  ticker = 'N/A', 
+  name = 'Unknown company', 
+  marketCap = 0, 
+  high, 
+  low, 
+  image, 
+  price = "N/A"
+} = {}) {
 
   const finalImage = image || "/assets/nasdaq_logo.svg.png"
 
   return `
-    <div class="card stock" data-type="stock" data-ticker="${ticker}" data-followed="${isFollowed}" >
+    <div class="card stock" data-type="stock" data-ticker="${ticker}">
 
         <div class="chart" id="tv-${ticker}"></div>
 
@@ -14,7 +21,7 @@ export default function stockCard({ticker = 'N/A', name = 'Unknown company', mar
 
         <p class="card-description">${ticker}</p>
 
-         <p class="card-text">
+        <p class="card-text">
           Market Cap: ${marketCap}
         </p>
 
@@ -29,10 +36,6 @@ export default function stockCard({ticker = 'N/A', name = 'Unknown company', mar
         <p class="card-text">
           Low: ${low}
         </p>
-
-        <button class="watch-btn">
-          ${isFollowed ? "⭐ Unfollow" : "☆ Follow"}
-        </button>
 
     </div>
   `

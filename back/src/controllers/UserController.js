@@ -203,17 +203,12 @@ async function unfollowAsset(req, res) {
 
         const result = await UserModel.userUnfollowAsset(user_id, asset_id)
 
-        if (result.affectedRows === 0) {
-            return res.status(404).json({
-                error: "Favorite not found"
-            })
-        }
-
         return res.status(200).json({
-            message: "asset removed from favorites"
+            message: "asset removed from favorites (or was not followed)"
         })
 
     } catch (error) {
+        console.error("UNFOLLOW ERROR:", error)
         return res.status(500).json({
             error: error.message
         })
