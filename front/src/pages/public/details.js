@@ -130,7 +130,7 @@ export async function initDetail() {
         } else if (user) {
             formContainer.innerHTML = `<p>${user.role === "analyst" ? "Your specialization does not allow you to recommend this asset." : "Only analysts can post."}</p>`;
         } else {
-            formContainer.innerHTML = `<div class="login-prompt"><p>Want to post a recommendation?</p><button onclick="window.location.hash='#/login'">Log In</button></div>`;
+            formContainer.innerHTML = `<div class="login-prompt"><p>Want to post a recommendation?</p><button onclick="window.location.hash='#/login'">Log In as Analyst</button></div>`;
         }
 
     } catch (error) {
