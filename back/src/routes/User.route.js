@@ -17,7 +17,7 @@ userRouter.post("/me/follows", AuthMiddleware(), AssetMiddleware(), UserControll
 
 userRouter.put("/me", AuthMiddleware(), UserController.updateMe)
 
-userRouter.delete("/me/follows", AuthMiddleware(), AssetMiddleware(), UserController.unfollowAsset)
+userRouter.delete("/me/follows/:ticker", AuthMiddleware(), AssetMiddleware(), UserController.unfollowAsset)
 
 // admin
 userRouter.get("/", AuthMiddleware(["admin"]), UserController.getUser)

@@ -189,5 +189,4 @@ async function userUnfollowAsset(user_id, asset_id) {
     return result
 }
 
-
 export default { getUsers, getUsersById, getUsersByEmail, getUserWatchlist, createUsers, updateUsers, deleteUsers, userFollowAsset, userUnfollowAsset }

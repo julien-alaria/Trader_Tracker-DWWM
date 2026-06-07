@@ -52,7 +52,6 @@ export async function initAnalyst() {
             ])
 
         const user = userRes.result
-        console.log(recommendationsRes)
 
         renderAnalyst(user)
 
@@ -82,8 +81,6 @@ function renderAnalyst(user) {
         analyst_company: user.company,
         analyst_bio: user.bio
     }
-
-    console.log("USER:", user)
 
     Object.entries(map).forEach(([id, value]) => {
         const el = document.getElementById(id)
@@ -136,9 +133,6 @@ function renderRecommendations(recommendations, user) {
     container.innerHTML = recommendations.map(rec => {
 
         const isAuthorized = user && (user.role === "admin" || Number(user.id) === Number(rec.user_id))
-
-        console.log("REC USER ID:", rec.user_id, typeof rec.user_id)
-        console.log("USER ID:", user.id, typeof user.id)
 
         return `
         <div class="recommendation" data-id="${rec.id}">
@@ -234,7 +228,7 @@ function bindEvents() {
 
             try {
                 if (isFollowed) {
-                    await http.delete("/users/me/follows", { ticker })
+                    await http.delete(`/users/me/follows/${ticker}`)
                     card.remove()
                 } else {
                     await http.post("/users/me/follows", { ticker })
