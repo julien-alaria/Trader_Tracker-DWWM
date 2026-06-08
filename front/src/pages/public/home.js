@@ -7,11 +7,26 @@ import { enableCarouselWindow } from "../../utils/lazyloading.js"
 
 const home = `
   <main>
+
     <h1>Home</h1>
     <div id="search-container"></div>
-    <section><h2>Stocks</h2><div class="carousel" id="stocks"></div></section>
-    <section><h2>Forex</h2><div class="carousel" id="forex"></div></section>
-    <section><h2>Commodities</h2><div class="carousel" id="commodities"></div></section>
+    <section>
+
+    <h2>Stocks</h2>
+    <div class="carousel" id="stocks"></div>
+    </section>
+
+    <section>
+    <h2>Forex</h2>
+    <div class="carousel" id="forex"></div>
+    </section>
+
+    <section>
+    <h2>Commodities</h2>
+    <div class="carousel" id="commodities">
+    </div>
+    </section>
+    
   </main>
 `
 
@@ -59,7 +74,7 @@ export async function initHome() {
         //BUILD CAROUSELS
         enableCarouselWindow({ selector: "#stocks", batchSize: 5, getData: () => stocks.map(stockCard) });
         enableCarouselWindow({ selector: "#forex", batchSize: 5, getData: () => forex.map(forexCard) });
-        enableCarouselWindow({ selector: "#commodities", batchSize: 5, getData: () => commodities.map(commodityCard) });
+        enableCarouselWindow({ selector: "#commodities", batchSize: 3, getData: () => commodities.map(commodityCard) });
 
     } catch (err) {
         console.error("Erreur lors de l'initialisation de la home:", err);

@@ -3,8 +3,8 @@
   margin: 0 auto;
   overflow: hidden;
   position: relative;
+  min-height: 250px; /* Donne de l'espace pour que le carrousel respire */
 }
-
 .carousel-window {
   width: 100%;
   overflow: hidden;
@@ -12,8 +12,11 @@
 
 .carousel-track {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
   gap: 24px;
+  width: max-content;
   will-change: transform;
   transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -44,4 +47,10 @@
     background: white;
     border: 1px solid #ddd;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+#commodities {
+    width: 100%;
+    min-height: 100px;
+    overflow: hidden;
 }
