@@ -1,10 +1,132 @@
+
+#home-top{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    background-color: navy;
+    color: white;
+    padding: 10px;
+    min-height: 90vh;
+    box-sizing: border-box;
+    gap: 30px;
+}
+
+#home-top-title {
+    font-size: 7rem;
+}
+
+#home-top-text {
+    font-size: 3rem;
+}
+
+#home-top-register{
+    border: 1px solid white;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+    background-color: #1a1a1a;
+    font-size: 2rem;
+}
+
+#home-top-register:hover {
+    background-color: orange;
+    color: #1a1a1a;  
+}
+
+#home-search-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.search-input{
+    padding: 10px;
+    width: 30vw;
+    font-size: 2rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+}
+
+#home-stocks{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+#home-stocks-title {
+  font-size: 3rem;
+}
+
+#home-stocks-text {
+  font-size: 3rem;
+
+}
+
+#home-forex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+#home-forex-title {
+  font-size: 3rem;
+}
+
+#home-stocks-text {
+  font-size: 3rem;
+}
+
+#home-middle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    background-color: navy;
+    color: white;
+    padding: 10px;
+    min-height: 50vh;
+    box-sizing: border-box;
+    gap: 30px;
+}
+
+#home-middle-text {
+  font-size: 3rem;
+}
+
+#home-commodities {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+#home-commodities-title {
+  font-size: 3rem;
+}
+
+#home-commodities-text {
+  font-size: 3rem;
+}
+
+
+
+
 .carousel {
   width: 90%;
   margin: 0 auto;
   overflow: hidden;
   position: relative;
-  min-height: 250px; /* Donne de l'espace pour que le carrousel respire */
+  min-height: 250px;
 }
+
 .carousel-window {
   width: 100%;
   overflow: hidden;

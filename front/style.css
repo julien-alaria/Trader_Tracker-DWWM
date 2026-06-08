@@ -22,11 +22,40 @@ body {
     background-color: whitesmoke;
 }
 
-#nav {
+main {
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    padding: 0;
+    display: block;
+}
+
+#root{
+    padding: 0;
+    margin: 0;
+}
+
+nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
     border: 2px solid black;
     text-decoration: none;
-    background-color: blue; 
+    background-color: black; 
+    color: white;
     height: 10vh;
+}
+
+#nav-register {
+    border: 1px solid white;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+}
+
+#nav-register:hover {
+    background-color: orange;
+    color: #1a1a1a;       
 }
 
 ul {
@@ -35,18 +64,15 @@ ul {
 
 a {
     text-decoration: none;
-    color: black;
-}
-
-main {
-    flex: 1;
-    padding: 20px;
-    display: block;
+    font-size: 1rem;
+    color: white;
 }
 
 
 footer {
-    height: 10vh;
+    min-height: 50vh;
+    background-color: navy;
+    color: white;
     border: 2px solid black;
 }
 

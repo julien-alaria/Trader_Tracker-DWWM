@@ -7,17 +7,16 @@ export default function navbar() {
 
     return `
         <nav>
-            <p>NAVBAR</p>
 
-            ${navLink("/", "Home")}
-            ${navLink("/about", "About")}
+            ${navLink("/", "TRADER TRACKER", "nav-home")}
+            ${navLink("/about", "About", "nav-about")}
 
-            ${user ? "" : navLink("/login", "Login")}
-            ${user ? "" : navLink("/register", "Register")}
+            ${user ? "" : navLink("/login", "Sign In |", "nav-login")}
+            ${user ? "" : navLink("/register", "CREATE FREE ACCOUNT", "nav-register")}
 
-            ${user?.role === "admin" ? navLink("/admin", "Admin") : ""}
-            ${user?.role === "user" ? navLink("/user", "User") : ""}
-            ${user?.role === "analyst" ? navLink("/analyst", "Analyst") : ""}
+            ${user?.role === "admin" ? navLink("/admin", "Admin",  "nav-admin") : ""}
+            ${user?.role === "user" ? navLink("/user", "User", "nav-user") : ""}
+            ${user?.role === "analyst" ? navLink("/analyst", "Analyst", "nav-analyst") : ""}
 
             ${user ? `<button id="logout-btn">Logout</button>` : ""}
         </nav>

@@ -5,29 +5,55 @@ import commodityCard from "../../components/cards/commodityCards.js"
 import { createSearchBar, renderResults } from "../../components/searchBar/searchBarUtils.js"
 import { enableCarouselWindow } from "../../utils/lazyloading.js"
 
+
 const home = `
-  <main>
+    <section id="home-top">
+        <h1 id="home-top-title">TRADER TRACKER</h1>
 
-    <h1>Home</h1>
-    <div id="search-container"></div>
-    <section>
+        <p id="home-top-text">
+            Suivez vos investissements en toute simplicité
+        </p>
 
-    <h2>Stocks</h2>
-    <div class="carousel" id="stocks"></div>
+        <a id="home-top-register" href="#/register">CREATE FREE ACCOUNT</a>
     </section>
 
-    <section>
-    <h2>Forex</h2>
-    <div class="carousel" id="forex"></div>
+   <section id="home-search-bar"> 
+        <h2 id="search-bar-text">FIND YOUR ASSET</h2>
+        <div id="search-container"></div>
+   </section> 
+
+    <section id="home-stocks">
+        <h2 id="home-stocks-title">NASDAQ</h2>
+
+        <p id="home-stocks-text">Marché boursier américain destiné à de nouvelles sociétés à fort potentiel de croissance, notamment dans le secteur des technologies de pointe</p>
+
+        <div class="carousel" id="stocks"></div>
     </section>
 
-    <section>
-    <h2>Commodities</h2>
-    <div class="carousel" id="commodities">
-    </div>
+    <section id="home-forex">
+        <h2 id="home-forex-title">Forex</h2>
+
+        <p id="home-stocks-text">Marché des changes sur lequel s'échangent les monnaies du monde entier</p>
+
+
+        <div class="carousel" id="forex"></div>
     </section>
-    
-  </main>
+
+    <section id="home-middle">
+        <p id="home-middle-text">
+            Prenez en main vos investissements dès aujourd’hui.
+        </p>
+
+        <a id="home-top-register" href="#/register">CREATE FREE ACCOUNT</a>
+    </section>
+
+    <section id="home-commodities">
+        <h2 id="home-commodities-title">Comex</h2>
+
+        <p id="home-commodities-text">La plus grande place d’échange pour les contrats à terme sur les métaux</p>
+
+        <div class="carousel" id="commodities"></div>
+    </section>
 `
 
 export default home

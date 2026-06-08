@@ -5,7 +5,8 @@ export function createSearchBar(onSearch) {
 
     const input = document.createElement("input")
     input.type = "search"
-    input.placeholder = "Rechercher..."
+    input.className="search-input"
+    input.placeholder = "Search an asset..."
 
     const resultsContainer = document.createElement("div")
     resultsContainer.className = "result-container"
