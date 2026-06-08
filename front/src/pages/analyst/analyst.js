@@ -1,45 +1,52 @@
-import http from "../../config/instanceHttp.js";
-import { decodeToken } from "../../middlewares/roleGuard.js";
-import stockCard from "../../components/cards/stockCards.js";
-import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js";
-import analystUpdateForm from "../../components/user/analystUpdateForm.js";
-import { enableCarouselWindow } from "../../utils/lazyloading.js";
+import http from "../../config/instanceHttp.js"
+import { decodeToken } from "../../middlewares/roleGuard.js"
+import stockCard from "../../components/cards/stockCards.js"
+import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
+import analystUpdateForm from "../../components/user/analystUpdateForm.js"
+import { enableCarouselWindow } from "../../utils/lazyloading.js"
 
 const analystPage = `
-<main>
-    <h1>Analyst Page</h1>
-    <section>
-        <div id="analyst_id"></div>
-        <div id="analyst_name"></div>
-        <div id="analyst_email"></div>
-        <div id="analyst_type"></div>
-        <div id="analyst_company"></div>
-        <div id="analyst_bio"></div>
-    </section>
+    <main>
+        <h1>Analyst Page</h1>
 
-    <h2>Watchlist</h2>
-    <div class="carousel" id="watchlist"></div>
+        <section>
+            <div id="analyst_id"></div>
+            <div id="analyst_name"></div>
+            <div id="analyst_email"></div>
+            <div id="analyst_type"></div>
+            <div id="analyst_company"></div>
+            <div id="analyst_bio"></div>
+        </section>
 
-    <h2>My Recommendations</h2>
-    <div id="my-recommendations"></div>
+        <section>
+            <h2>Watchlist</h2>
+            <div class="carousel" id="watchlist"></div>
+        </section>
 
-    <div class="update-form">
-        ${analystUpdateForm()}
-    </div>
-</main>
-`;
+        <section>
+            <h2>My Recommendations</h2>
+            <div id="my-recommendations"></div>
+        </section>
 
-export default analystPage;
+        <section>
+            <div class="update-form">
+                ${analystUpdateForm()}
+            </div>
+        </section>
+    </main>
+`
+
+export default analystPage
 
 export async function initAnalyst() {
     try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
+        const token = localStorage.getItem("token")
+        if (!token) return
 
-        const payload = decodeToken(token);
+        const payload = decodeToken(token)
         if (!payload) {
-            window.location.hash = "/login";
-            return;
+            window.location.hash = "/login"
+            return
         }
 
         const [userRes, watchRes, recommendationsRes, stocks, forex, commodities] =
@@ -52,34 +59,34 @@ export async function initAnalyst() {
                 getCommodities()
             ]);
 
-        const user = userRes.result;
-        renderAnalyst(user);
+        const user = userRes.result
+        renderAnalyst(user)
 
-        const allAssets = [...stocks, ...forex, ...commodities];
-        const watchlist = buildWatchlist(watchRes.result, allAssets);
+        const allAssets = [...stocks, ...forex, ...commodities]
+        const watchlist = buildWatchlist(watchRes.result, allAssets)
 
-        renderWatchlist(watchlist);
+        renderWatchlist(watchlist)
         
-        renderRecommendations(recommendationsRes.results || [], user);
-        bindRecommendationEvents(user);
-        initForm(user);
+        renderRecommendations(recommendationsRes.results || [], user)
+        bindRecommendationEvents(user)
+        initForm(user)
 
-        bindNavigation();
+        bindNavigation()
     } catch (err) {
-        console.error("ANALYST INIT ERROR:", err);
+        console.error("ANALYST INIT ERROR:", err)
     }
 }
 
 function renderWatchlist(watchlist) {
-    const container = document.getElementById("watchlist");
-    if (!container) return;
+    const container = document.getElementById("watchlist")
+    if (!container) return
 
     if (!watchlist.length) {
-        container.innerHTML = "<p>No favorites yet</p>";
-        return;
+        container.innerHTML = "<p>No favorites yet</p>"
+        return
     }
 
-    const watchlistHTML = watchlist.map(asset => stockCard(asset));
+    const watchlistHTML = watchlist.map(asset => stockCard(asset))
 
     enableCarouselWindow({
         selector: "#watchlist",
@@ -159,7 +166,7 @@ function bindRecommendationEvents(user) {
             } catch (err) {
                 console.error("DELETE ERROR:", err)
             }
-        }
+        }""
     })
 
     container.addEventListener("submit", async (e) => {

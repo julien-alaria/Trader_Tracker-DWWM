@@ -42,8 +42,6 @@ export function enableCarouselWindow({ selector = ".carousel", batchSize = 5, ge
     const slide = (direction) => {
         const next = startIndex + direction;
 
-        console.log(`Slide direction: ${direction}, Current: ${startIndex}, Next: ${next}, Max: ${data.length - batchSize}`);
-     
         if (next < 0 || next > data.length - batchSize) return;
 
         startIndex = next;
@@ -58,7 +56,6 @@ export function enableCarouselWindow({ selector = ".carousel", batchSize = 5, ge
     render();
 
     carousel.addEventListener("wheel", (e) => {
-      console.log("Scroll détecté sur :", carousel.id);
       e.preventDefault();
       e.stopPropagation();
       const direction = Math.sign(e.deltaY);

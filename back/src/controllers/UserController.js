@@ -90,10 +90,6 @@ async function createUser(req, res) {
 async function updateUser(req, res) {
     try {
 
-        if (data.role !== undefined && !isAdmin) {
-            throw new Error("Forbidden")
-        }
-
         const id = Number(req.params.id)
 
         if (!Number.isInteger(id) || id <= 0) {

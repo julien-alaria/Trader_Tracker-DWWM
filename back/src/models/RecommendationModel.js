@@ -45,7 +45,7 @@ async function getMyRecommendations(userId){
     return rows
 }
 
-async function getPaginated(limit, offset) {
+async function getAllRecommendations() {
     const db = getConnection()
 
     const sql = `
@@ -53,14 +53,18 @@ async function getPaginated(limit, offset) {
             r.id,
             r.status,
             r.comment,
+            r.created_at,
             r.asset_id,
             r.user_id,
+            a.ticker,
+            a.name,
             u.name AS analyst_name
         FROM recommendations r
+        JOIN assets a
+        ON a.id = r.asset_id
         JOIN users u ON u.id = r.user_id
         ORDER BY r.id DESC
-        LIMIT ${Number(limit)}
-        OFFSET ${Number(offset)}
+
     `
 
     const [rows] = await db.query(sql)
@@ -182,5 +186,5 @@ async function deleteRecommendations(id){
 
 }
 
-export default { getRecommendations, getMyRecommendations, getRecommendationsById, getPaginated, getRecommendationsByAssetId, createRecommendations, updateRecommendations, deleteRecommendations }
+export default { getRecommendations, getMyRecommendations, getRecommendationsById, getAllRecommendations, getRecommendationsByAssetId, createRecommendations, updateRecommendations, deleteRecommendations }
 

@@ -4,6 +4,8 @@ export default function analystUpdateForm() {
                 <form method="post" id="analyst-update-form">
                     <label for="name">Analyst Name:</label>
                     <input type="text" id="analyst-name" name="name" required minlength="2" maxlength="50" autocomplete="on">
+                    
+                    <input type="hidden" id="target-user-id" name="target_user_id" value="">
 
                     <label for="email">Analyst Email:</label>
                     <input type="email" id="analyst-email" name="email" required autocomplete="on">
