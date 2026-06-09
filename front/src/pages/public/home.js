@@ -5,7 +5,6 @@ import commodityCard from "../../components/cards/commodityCards.js"
 import { createSearchBar, renderResults } from "../../components/searchBar/searchBarUtils.js"
 import { enableCarouselWindow } from "../../utils/lazyloading.js"
 
-
 const home = `
     <section id="home-top">
         <h1 id="home-top-title">TRADER TRACKER</h1>
@@ -17,10 +16,10 @@ const home = `
         <a id="home-top-register" href="#/register">CREATE FREE ACCOUNT</a>
     </section>
 
-   <section id="home-search-bar"> 
+    <section id="home-search-bar"> 
         <h2 id="search-bar-text">FIND YOUR ASSET</h2>
         <div id="search-container"></div>
-   </section> 
+    </section> 
 
     <section id="home-stocks">
         <h2 id="home-stocks-title">NASDAQ</h2>
@@ -103,7 +102,7 @@ export async function initHome() {
         enableCarouselWindow({ selector: "#commodities", batchSize: 3, getData: () => commodities.map(commodityCard) });
 
     } catch (err) {
-        console.error("Erreur lors de l'initialisation de la home:", err);
-        alert("Problème de chargement des actifs.");
+        console.error("Error in home initialization:", err);
+        alert("Problem during assets download.");
     }
 }

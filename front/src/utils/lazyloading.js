@@ -6,9 +6,24 @@ export function enableCarouselWindow({ selector = ".carousel", batchSize = 5, ge
   const chartObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        const ticker = entry.target.dataset.ticker;
-        loadTradingViewChart(ticker);
-        observer.unobserve(entry.target);
+        const el = entry.target; // Ta div class="chart"
+        const ticker = el.dataset.ticker;
+        
+        // 🟢 Sécurisation de l'extraction de l'historique local
+        const rawHistory = el.getAttribute('data-history');
+        let historyData = [];
+
+        if (rawHistory) {
+          try {
+            historyData = JSON.parse(rawHistory);
+          } catch (e) {
+            console.error("Erreur lors du JSON.parse de l'historique", e);
+          }
+        }
+
+        // 🟢 Envoi combiné du Ticker ET des données à charger
+        loadTradingViewChart(ticker, historyData);
+        observer.unobserve(el);
       }
     });
   }, { threshold: 0.1 });

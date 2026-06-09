@@ -52,7 +52,7 @@ async function getMultipleAggregates() {
         stocksTicker: ticker, 
         multiplier: "1", 
         timespan: "day", 
-        from: "2026-05-01", 
+        from: "2025-06-09", 
         to: "2026-06-09", 
         adjusted: "true", 
         sort: "desc", 
@@ -77,7 +77,7 @@ async function getMultipleAggregates() {
   return results 
 
 }
-
+// API SCRAPPING
 async function getMultipleAggregatesOneShot() { 
   const tickers = ["MSFT", "NVDA", "AMZN", "INTC", "IBM", "INTU", "NOW", "SNOW", "SHOP", "UBER", "LYFT", "SQ", "DOCU", "ZM", "CRWD", "PANW", "ZS", "OKTA", "PLTR", "NET", "DDOG", "MDB", "TEAM", "ASML", "ARM", "MU", "DELL", "HPQ", "SAP", "SONY", "TXN", "ADI", "LRCX", "KLAC"] 
   
@@ -92,7 +92,7 @@ async function getMultipleAggregatesOneShot() {
         stocksTicker: ticker, 
         multiplier: "1", 
         timespan: "day", 
-        from: "2026-05-01", 
+        from: "2026-06-09", 
         to: "2026-06-09", 
         adjusted: "true", 
         sort: "asc",
@@ -102,7 +102,13 @@ async function getMultipleAggregatesOneShot() {
       const meta = metaRes.results 
       const dataPoints = aggRes.results || []
       const last = dataPoints.at(-1) 
-      const history = dataPoints.map(point => point.c)
+      const history = dataPoints.map(point => ({
+        o: point.o, 
+        h: point.h, 
+        l: point.l, 
+        c: point.c, 
+        x: point.t 
+      }))
       
       results.push({ 
         type: "nasdaq",
@@ -208,7 +214,7 @@ async function aggregateMetals() {
  */
 async function getAAPLStockJson(req, res) {
 
-  const stocks = await readJsonFile('stocks.json')
+  const stocks = await readJsonFile('nasdaq.json')
 
   return {
     results: stocks
@@ -217,7 +223,7 @@ async function getAAPLStockJson(req, res) {
 
 async function getMultipleAggregatesJson() {
  
-  const stocks = await readJsonFile('stocks.json')
+  const stocks = await readJsonFile('nasdaq.json')
 
   return stocks.map((stock) => {
 

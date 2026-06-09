@@ -87,7 +87,7 @@ export async function initDetail() {
         });
 
         //CHARTS & RECOMMENDATIONS
-        loadTradingViewChart(asset.ticker, chartId)
+        loadTradingViewChart(asset.ticker, asset.history);
         const recommendationRes = await http.get(`/recommendations?ticker=${asset.ticker}`)
         const recommendations = recommendationRes.results || []
         document.getElementById("recommendation-container").innerHTML = recommendations.length

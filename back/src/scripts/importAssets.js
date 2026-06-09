@@ -8,7 +8,7 @@ const db = getConnection()
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// mapping FIXE (ta règle métier)
+// mapping FIXE
 const typeMap = {
   forex: 1,
   nasdaq: 2,
@@ -17,7 +17,7 @@ const typeMap = {
 
 const files = [
   { type: "forex", file: "forex.json" },
-  { type: "nasdaq", file: "stocks.json" },
+  { type: "nasdaq", file: "nasdaq.json" },
   { type: "comex", file: "commodities.json" }
 ]
 

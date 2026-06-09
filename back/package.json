@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
+    "scrap": "node src/scripts/scrapper.js",
     "import": "node src/scripts/importAssets.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

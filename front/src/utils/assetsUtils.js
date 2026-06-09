@@ -15,6 +15,7 @@ async function getStock() {
       price: stock.price,
       high: stock.high,
       low: stock.low,
+      history: stock.history
     }));
   } catch (error) {
     console.error(error.message);
@@ -36,6 +37,7 @@ async function getForex() {
       high: forex.high,
       low: forex.low,
       close: forex.close,
+      history: forex.history
     }));
   } catch (error) {
     console.error(error.message);
@@ -53,6 +55,8 @@ async function getCommodities() {
       price: commodity.price,
       high: commodity.high,
       low: commodity.low,
+      close: commodity.close,
+      history: commodity.history
     }));
   } catch (error) {
     console.error(error.message);
