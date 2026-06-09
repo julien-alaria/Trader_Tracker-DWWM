@@ -17,7 +17,9 @@
   background-color: rgba(0, 0, 0, 0.11)
 }
 
-.card.stock .card-description { color: #333; }
+.card.stock .card-description { 
+  color: #333; 
+}
 
 .card.stock .card-image {
   width: 90%;
@@ -37,17 +39,20 @@
   object-fit: cover;
 }
 
-.card-title {
-  margin-top: 1rem;
-  font-size: 1.5rem;
-}
-
 .card-description {
   color: #ccc;
 }
 
-.card-text {
-  margin-top: 0.5rem;
+.card-title {
+    font-size: 1.4rem;
+    margin: 5px 0;
+    text-align: center;
+    color: #1a1a1a;
+    /* Forces the display on a single line */
+    width: 100%;               
+    white-space: nowrap;      
+    overflow: hidden;          
+    text-overflow: ellipsis;
 }
 
 .result-item  {
@@ -65,9 +70,12 @@
   pointer-events: none;
 }
 
-
-.card .chart {
-    height: 200px; /* Important : TradingView needs an height */
+.card.stock .chart {
     width: 100%;
-    border-radius: 20px;
+    height: 80px;
+    min-height: 80px;
+    margin-top: 15px;    
+    margin-bottom: 15px; 
+    overflow: hidden;
+    pointer-events: none;
 }

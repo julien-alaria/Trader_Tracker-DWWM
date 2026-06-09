@@ -10,7 +10,7 @@ const home = `
         <h1 id="home-top-title">TRADER TRACKER</h1>
 
         <p id="home-top-text">
-            Suivez vos investissements en toute simplicité
+            Track your investments with ease
         </p>
 
         <a id="home-top-register" href="#/register">CREATE FREE ACCOUNT</a>
@@ -24,7 +24,7 @@ const home = `
     <section id="home-stocks">
         <h2 id="home-stocks-title">NASDAQ</h2>
 
-        <p id="home-stocks-text">Marché boursier américain destiné à de nouvelles sociétés à fort potentiel de croissance, notamment dans le secteur des technologies de pointe</p>
+        <p id="home-stocks-text">Nasdaq is a US stock market for new companies with high growth potential, particularly in the high-tech sector.</p>
 
         <div class="carousel" id="stocks"></div>
     </section>
@@ -32,14 +32,14 @@ const home = `
     <section id="home-forex">
         <h2 id="home-forex-title">Forex</h2>
 
-        <p id="home-stocks-text">Marché des changes sur lequel s'échangent les monnaies du monde entier</p>
+        <p id="home-stocks-text">Foreign exchange market where currencies from all over the world are traded</p>
 
         <div class="carousel" id="forex"></div>
     </section>
 
     <section id="home-middle">
         <p id="home-middle-text">
-            Prenez en main vos investissements dès aujourd’hui
+           Take control of your investments today
         </p>
 
         <a id="home-top-register" href="#/register">CREATE FREE ACCOUNT</a>
@@ -48,7 +48,7 @@ const home = `
     <section id="home-commodities">
         <h2 id="home-commodities-title">Comex</h2>
 
-        <p id="home-commodities-text">La plus grande place d’échange pour les contrats à terme sur les métaux</p>
+        <p id="home-commodities-text">The largest exchange for metals futures contracts</p>
 
         <div class="carousel" id="commodities"></div>
     </section>

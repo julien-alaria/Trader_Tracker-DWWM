@@ -16,7 +16,7 @@ export function enableCarouselWindow({ selector = ".carousel", batchSize = 5, ge
           catch (e) { console.error("Erreur JSON.parse", e) }
         }
 
-        loadTradingViewChart(ticker, historyData)
+        loadTradingViewChart(ticker, historyData, true);
         observer.unobserve(el)
       }
     })

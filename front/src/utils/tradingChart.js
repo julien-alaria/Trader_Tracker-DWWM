@@ -14,11 +14,12 @@
 //   })
 // }
 
-export function loadTradingViewChart(ticker, historyData = []) {
+export function loadTradingViewChart(ticker, historyData = [], isMini = false) {
+ 
   const container = document.querySelector(`#tv-${ticker}`);
   if (!container || !historyData.length) return;
 
-  // Polygon Datas
+  // mapping Polygon Datas (x, o, h, l, c)
   const candlestickData = historyData.map((candle) => ({
     x: candle.x,
     y: [candle.o, candle.h, candle.l, candle.c]
@@ -27,14 +28,20 @@ export function loadTradingViewChart(ticker, historyData = []) {
   const options = {
     chart: {
       type: "candlestick",
-      height: 200,
+      height: isMini ? 80 : 350,
+      sparkline: {
+        enabled: isMini
+      },
       toolbar: {
         show: false
       },
       zoom: {
-        enabled: true
+        enabled: !isMini
       },
-      background: "transparent"
+      background: "transparent",
+      animations: {
+        enabled: !isMini 
+      }
     },
 
     series: [{
@@ -57,13 +64,14 @@ export function loadTradingViewChart(ticker, historyData = []) {
     xaxis: {
       type: "datetime",
       labels: {
-        show: true
+        show: !isMini
       }
     },
 
     yaxis: {
+      show: !isMini,
       tooltip: {
-        enabled: true
+        enabled: !isMini
       }
     },
 
@@ -73,7 +81,7 @@ export function loadTradingViewChart(ticker, historyData = []) {
     },
 
     tooltip: {
-      enabled: true,
+      enabled: !isMini,
       theme: "dark"
     }
   };
