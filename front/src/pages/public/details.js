@@ -5,6 +5,15 @@ import { decodeToken } from "../../middlewares/roleGuard.js"
 import { formatChartId, formatMarketCap, formatDate } from "../../utils/format.js"
 import recoForm from "../../components/recommendations/recoForm.js"
 
+// Dictionnaire local pour uniformiser le Comex comme sur home.js
+const commodityImages = {
+    "C:XAUUSD": "/assets/gold.png",
+    "C:XAGUSD": "/assets/silver.png",
+    "C:XPTUSD": "/assets/platinum.png",
+    "C:COPPERUSD": "/assets/copper.png",
+    "C:XPDUSD": "/assets/palladium.png"
+}
+
 const detailsPage = `
 <main>
     <h1>Details Page</h1>
@@ -27,7 +36,7 @@ export async function initDetail() {
             return
         }
 
-        //ASSETS
+        // ASSETS FETCHING
         const [stocks, forex, commodities] = await Promise.all([
             getStock(), getForex(), getCommodities()
         ])
@@ -41,29 +50,60 @@ export async function initDetail() {
             return
         }
 
-        //USER & WATCHLIST
+        // UNIFORMISATION DE LA LOGIQUE IMAGE & LOGO (Strictement identique à home.js)
+        let finalImage = asset.image || "/assets/default.png";
+        let fallbackImage = "/assets/default.png";
+
+        if (asset.type === "nasdaq") {
+            finalImage = asset.image || "/assets/nasdaq_logo.svg.png";
+            fallbackImage = "/assets/nasdaq_logo.svg.png";
+        } else if (asset.type === "commodity") {
+            finalImage = commodityImages[asset.ticker] || "/assets/default.png";
+            fallbackImage = "/assets/default.png";
+        } else if (asset.type === "forex") {
+            finalImage = "/assets/forex_logo.png"; // Optionnel, si tu as une icône forex globale
+            fallbackImage = "/assets/forex_logo.png";
+        }
+
+        // USER & WATCHLIST
         const token = localStorage.getItem("token")
         const user = token ? decodeToken(token) : null
 
         const watchRes = user ? await http.get(`/users/me/watchlist`) : { result: [] };
         const isFollowed = watchRes.result?.some(w => w.ticker === asset.ticker);
 
-        //PAGE RENDERING
+       // PAGE RENDERING WITH LOGO
         const chartId = formatChartId(asset.ticker)
         document.getElementById("asset-detail").innerHTML = `
-            <button onclick="history.back()">Back</button>
-            <h2>ASSET: ${asset.name}</h2>
-            <button id="follow-toggle-btn" data-ticker="${asset.ticker}" data-followed="${isFollowed}">
-                ${isFollowed ? "⭐ Unfollow" : "☆ Follow"}
+            <button onclick="history.back()" class="btn-back">Back</button>
+            
+            <div class="asset-header">
+                <img class="asset-logo" 
+                     src="${finalImage}" 
+                     alt="${asset.ticker}" 
+                     onerror="this.onerror=null; this.src='${fallbackImage}';">
+                <div class="asset-title-container">
+                    <h1 class="asset-name">${asset.name}</h1>
+                    <span class="asset-ticker">${asset.ticker}</span>
+                </div>
+            </div>
+
+            <button id="follow-toggle-btn" class="follow-btn" data-ticker="${asset.ticker}" data-followed="${isFollowed}">
+                <span class="follow-icon">${isFollowed ? "×" : "+"}</span>
+                <span class="follow-text">${isFollowed ? "Remove" : "Track Asset"}</span>
             </button>
-            <div>PRICE: ${asset.price}</div>
-            <div>MARKET CAP: ${asset.marketCap}</div>
-            <div>HIGH: ${asset.high}</div>
-            <div>LOW: ${asset.low}</div>
+            
+            <div class="asset-info">
+                <div>PRICE: ${asset.price ?? "N/A"}</div>
+                <div>MARKET CAP: ${asset.marketCap ? formatMarketCap(asset.marketCap) : "N/A"}</div>
+                <div>HIGH: ${asset.high ?? "N/A"}</div>
+                <div>LOW: ${asset.low ?? "N/A"}</div>
+            </div>
+            
             <div id="${chartId}"></div>
         `;
 
-        //FOLLOW 
+        // FOLLOW EVENT LISTENER
         const followBtn = document.getElementById("follow-toggle-btn");
         followBtn.addEventListener("click", async () => {
             const currentStatus = followBtn.dataset.followed === "true";
@@ -86,7 +126,7 @@ export async function initDetail() {
             }
         });
 
-        //CHARTS & RECOMMENDATIONS
+        // CHARTS & RECOMMENDATIONS
         loadTradingViewChart(asset.ticker, asset.history);
         const recommendationRes = await http.get(`/recommendations?ticker=${asset.ticker}`)
         const recommendations = recommendationRes.results || []
@@ -100,7 +140,7 @@ export async function initDetail() {
                 </div>`).join("")}`
             : "<p>No recommendations yet</p>";
         
-        //RECOMMENDATION FORM
+        // RECOMMENDATION FORM
         const dbAsset = await http.get(`/assets/details/${ticker}`)
         const canRecommend = user && (user.role === "admin" || (user.role === "analyst" && user.analyst_type_id === dbAsset.asset_type_id))
         const formContainer = document.getElementById("recommendation-form")

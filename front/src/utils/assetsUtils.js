@@ -11,6 +11,7 @@ async function getStock() {
     return data.message.map((stock) => ({
       ticker: stock.ticker,
       name: stock.name,
+      image: stock.image,
       marketCap: formatMarketCap(stock.marketCap),
       price: stock.price,
       high: stock.high,

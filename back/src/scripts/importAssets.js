@@ -58,7 +58,7 @@ async function importFile(type, file) {
     )
   }
 
-  console.log(`✔ Imported ${type}`)
+  console.log(`[OK] Imported ${type}`)
 }
 
 async function run() {
@@ -71,7 +71,7 @@ async function run() {
     console.log("IMPORT DONE (FIXED TYPES ARCHITECTURE)")
 
   } catch (err) {
-    console.error("❌ ERROR:", err.message)
+    console.error("[ERR] ERROR:", err.message)
   }
 }
 

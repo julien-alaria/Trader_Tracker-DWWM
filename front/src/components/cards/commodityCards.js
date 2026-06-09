@@ -8,7 +8,7 @@ const commodityImages = {
 
 export default function commodityCard({ name, ticker, price, high, low, image } = {}) {
 
-  const finalImage = image || commodityImages[ticker] || "/assets/default.png"
+  const finalImage = commodityImages[ticker]
 
   return `
     <div class="card commodity" data-type="commodity" data-ticker="${ticker}">

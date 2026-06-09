@@ -77,62 +77,6 @@ async function getMultipleAggregates() {
   return results 
 
 }
-// API SCRAPPING
-async function getMultipleAggregatesOneShot() { 
-  const tickers = ["MSFT", "NVDA", "AMZN", "INTC", "IBM", "INTU", "NOW", "SNOW", "SHOP", "UBER", "LYFT", "SQ", "DOCU", "ZM", "CRWD", "PANW", "ZS", "OKTA", "PLTR", "NET", "DDOG", "MDB", "TEAM", "ASML", "ARM", "MU", "DELL", "HPQ", "SAP", "SONY", "TXN", "ADI", "LRCX", "KLAC"] 
-  
-  const results = [] 
-
-  for (const ticker of tickers) {
-    try {
-      console.log(`[API] Récupération de ${ticker}... (${results.length + 1}/${tickers.length})`)
-
-      const metaRes = await rest.getTicker({ ticker })
-      const aggRes = await rest.getStocksAggregates({ 
-        stocksTicker: ticker, 
-        multiplier: "1", 
-        timespan: "day", 
-        from: "2026-06-09", 
-        to: "2026-06-09", 
-        adjusted: "true", 
-        sort: "asc",
-        limit: "30", 
-      })
-
-      const meta = metaRes.results 
-      const dataPoints = aggRes.results || []
-      const last = dataPoints.at(-1) 
-      const history = dataPoints.map(point => ({
-        o: point.o, 
-        h: point.h, 
-        l: point.l, 
-        c: point.c, 
-        x: point.t 
-      }))
-      
-      results.push({ 
-        type: "nasdaq",
-        ticker: meta.ticker, 
-        name: meta.name, 
-        marketCap: meta.market_cap,
-        price: last?.c ?? null, 
-        high: last?.h ?? null, 
-        low: last?.l ?? null,
-        history: history
-      })
-
-      console.log(results)
-      console.log(`Pause de 25 secondes réglementaire...`)
-      await new Promise(r => setTimeout(r, 25000))
-
-    } catch (error) {
-      console.error(`❌ Erreur sur le ticker ${ticker}:`, error.message)
-      await new Promise(r => setTimeout(r, 10000))
-    }
-  }
-
-  return results 
-}
 
 async function aggregateForex() {
   // filter for results
@@ -224,15 +168,26 @@ async function getAAPLStockJson(req, res) {
 async function getMultipleAggregatesJson() {
  
   const stocks = await readJsonFile('nasdaq.json')
+  const POLYGON_API_KEY = process.env.POLY_API_KEY
 
   return stocks.map((stock) => {
 
-   
+    let finalImageUrl = null
+
+    if (stock.image) {
+      // Redirection to the correct Polygon server which knows how to decode and validate the parameter ?apiKey=
+      const cleanUrl = stock.image.replace("api.massive.com", "api.polygon.io")
+      finalImageUrl = `${cleanUrl}?apiKey=${POLYGON_API_KEY}`
+    } else {
+      // Fallback si pas de logo trouvé dans le JSON
+      finalImageUrl = "/assets/nasdaq_logo.svg.png"
+    }
 
     const meta = {
       ticker: stock.ticker,
       name: stock.name,
-      market_cap: stock.marketCap
+      market_cap: stock.marketCap,
+      image: finalImageUrl
     }
 
     const last = {
@@ -245,6 +200,7 @@ async function getMultipleAggregatesJson() {
       type: "nasdaq",
       ticker: meta.ticker,
       name: meta.name,
+      image: meta.image,
       marketCap: meta.market_cap,
       price: last?.c ?? null,
       high: last?.h ?? null,
@@ -286,4 +242,4 @@ async function aggregateMetalsJson() {
   }))
 }
 
-export default { getAAPLStock,  getMultipleAggregates, getMultipleAggregatesOneShot, aggregateForex, aggregateMetals, getAAPLStockJson,  getMultipleAggregatesJson, aggregateForexJson, aggregateMetalsJson }
+export default { getAAPLStock,  getMultipleAggregates, aggregateForex, aggregateMetals, getAAPLStockJson,  getMultipleAggregatesJson, aggregateForexJson, aggregateMetalsJson }
