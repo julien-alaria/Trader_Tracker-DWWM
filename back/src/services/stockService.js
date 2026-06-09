@@ -83,12 +83,10 @@ async function getMultipleAggregatesOneShot() {
   
   const results = [] 
 
-  // On remplace le Promise.all global par une boucle for...of pour y aller un par un
   for (const ticker of tickers) {
     try {
       console.log(`[API] Récupération de ${ticker}... (${results.length + 1}/${tickers.length})`)
 
-      // On exécute les deux requêtes du ticker l'une après l'autre pour ne pas surcharger
       const metaRes = await rest.getTicker({ ticker })
       const aggRes = await rest.getStocksAggregates({ 
         stocksTicker: ticker, 
@@ -97,7 +95,7 @@ async function getMultipleAggregatesOneShot() {
         from: "2026-05-01", 
         to: "2026-06-09", 
         adjusted: "true", 
-        sort: "asc", // IMPORTANT: "asc" pour que l'historique soit dans le bon sens chronologique pour ton graphe !
+        sort: "asc",
         limit: "30", 
       })
 
@@ -118,15 +116,11 @@ async function getMultipleAggregatesOneShot() {
       })
 
       console.log(results)
-
-      // PAUSE ANTI-429: L'API autorise 5 requêtes/min. On fait 2 requêtes par ticker, 
-      // donc on attend 25 secondes entre chaque ticker pour être totalement safe.
       console.log(`Pause de 25 secondes réglementaire...`)
       await new Promise(r => setTimeout(r, 25000))
 
     } catch (error) {
       console.error(`❌ Erreur sur le ticker ${ticker}:`, error.message)
-      // En cas d'échec, on attend quand même avant le suivant
       await new Promise(r => setTimeout(r, 10000))
     }
   }
