@@ -53,7 +53,8 @@ export async function initUser() {
         const watchlist = buildWatchlist(watchRes.result, allAssets)
 
         renderWatchlist(watchlist)
-        bindEvents()
+        bindEvents(watchlist)
+        bindNavigation()
         initUpdateForm(user)
 
     } catch (err) {
@@ -70,12 +71,11 @@ function renderWatchlist(watchlist) {
         return
     }
 
-    const watchlistHTML = watchlist.map(asset => stockCard(asset))
-
     enableCarouselWindow({
         selector: "#watchlist",
         batchSize: 5,
-        getData: () => watchlistHTML
+        getData: () => watchlist, 
+        cardComponent: stockCard  
     })
 }
 
@@ -96,30 +96,59 @@ function buildWatchlist(watchlistRaw, allAssets) {
     })
 }
 
-function bindEvents() {
- document.addEventListener("click", async (e) => {
-    if (!e.target.classList.contains("watch-btn")) return
-    e.stopPropagation()
+function bindEvents(watchlist) {
+    let container = document.getElementById("watchlist")
+    if (!container) return
 
-    const card = e.target.closest(".card")
-    if (!card) return
+    container.addEventListener("click", async (e) => {
+        if (!e.target.classList.contains("watch-btn")) return
+        e.stopPropagation()
 
-    const ticker = card.dataset.ticker
-    try {
-        //API
-        await http.delete(`/me/follows/${ticker}`)
-        
-        card.remove() 
+        const card = e.target.closest(".card")
+        if (!card) return
 
-        //ASSETS CHECKING
-        const container = document.getElementById("watchlist")
-        if (container && container.children.length === 0) {
-            container.innerHTML = "<p>No favorites yet</p>"
+        const ticker = card.dataset.ticker
+        try {
+            await http.delete(`/me/follows/${ticker}`)
+            
+            const index = watchlist.findIndex(a => a.ticker === ticker)
+            if (index !== -1) {
+                watchlist.splice(index, 1) 
+                
+                // The traces of the carousel are destroyed.
+                delete container.dataset.bound 
+                container.innerHTML = "" 
+                
+                // SECURITY: If the list becomes empty, a clean node is recreated without event listeners.
+                if (watchlist.length === 0) {
+                    const clone = container.cloneNode(true)
+                    container.parentNode.replaceChild(clone, container)
+                    clone.innerHTML = "<p>No favorites yet</p>"
+                    return
+                }
+                
+                renderWatchlist(watchlist) 
+            }
+        } catch (err) {
+            console.error("WATCH ERROR:", err)
         }
-    } catch (err) {
-        console.error("WATCH ERROR:", err)
+    })
+}
+
+function bindNavigation() {
+    const watchlistContainer = document.getElementById("watchlist")
+    if (watchlistContainer) {
+        watchlistContainer.addEventListener("click", (e) => {
+           
+            if (e.target.classList.contains("watch-btn")) return
+
+            const card = e.target.closest(".card")
+            if (card) {
+                const { ticker, type } = card.dataset
+                window.location.hash = `#/details?type=${type}&ticker=${ticker}`
+            }
+        })
     }
-})
 }
 
 function initUpdateForm(user) {

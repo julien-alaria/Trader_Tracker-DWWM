@@ -66,12 +66,12 @@ export async function initAnalyst() {
         const watchlist = buildWatchlist(watchRes.result, allAssets)
 
         renderWatchlist(watchlist)
-        
         renderRecommendations(recommendationsRes.results || [], user)
+        
         bindRecommendationEvents(user)
         initForm(user)
-
-        bindNavigation()
+        bindNavigation() // Handles card clicks
+        
     } catch (err) {
         console.error("ANALYST INIT ERROR:", err)
     }
@@ -86,12 +86,11 @@ function renderWatchlist(watchlist) {
         return
     }
 
-    const watchlistHTML = watchlist.map(asset => stockCard(asset))
-
     enableCarouselWindow({
         selector: "#watchlist",
         batchSize: 5,
-        getData: () => watchlistHTML
+        getData: () => watchlist,       
+        cardComponent: stockCard 
     });
 }
 
@@ -166,7 +165,7 @@ function bindRecommendationEvents(user) {
             } catch (err) {
                 console.error("DELETE ERROR:", err)
             }
-        }""
+        }
     })
 
     container.addEventListener("submit", async (e) => {
@@ -187,13 +186,18 @@ function bindRecommendationEvents(user) {
     })
 }
 
+// Event delegation to the carousel container for navigation
 function bindNavigation() {
-    document.querySelectorAll(".card").forEach(card => {
-        card.addEventListener("click", () => {
-            const { ticker, type } = card.dataset
-            window.location.hash = `#/details?type=${type}&ticker=${ticker}`
+    const watchlistContainer = document.getElementById("watchlist")
+    if (watchlistContainer) {
+        watchlistContainer.addEventListener("click", (e) => {
+            const card = e.target.closest(".card")
+            if (card) {
+                const { ticker, type } = card.dataset
+                window.location.hash = `#/details?type=${type}&ticker=${ticker}`
+            }
         })
-    })
+    }
 }
 
 function initForm(user) {

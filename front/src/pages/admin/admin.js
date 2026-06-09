@@ -102,12 +102,11 @@ function renderWatchlist(watchlist) {
         return
     }
 
-    const watchlistHTML = watchlist.map(asset => stockCard(asset))
-
     enableCarouselWindow({
         selector: "#watchlist",
         batchSize: 5,
-        getData: () => watchlistHTML
+        getData: () => watchlist, 
+        cardComponent: stockCard  
     })
 }
 
@@ -225,12 +224,17 @@ function bindRecommendationEvents(user) {
 }
 
 function bindNavigation() {
-    document.querySelectorAll(".card").forEach(card => {
-        card.addEventListener("click", () => {
-            const { ticker, type } = card.dataset
-            window.location.hash = `#/details?type=${type}&ticker=${ticker}`
+    const watchlistContainer = document.getElementById("watchlist")
+    if (watchlistContainer) {
+        // Un seul écouteur sur le conteneur attrape les clics de toutes les cartes présentes ou futures
+        watchlistContainer.addEventListener("click", (e) => {
+            const card = e.target.closest(".card")
+            if (card) {
+                const { ticker, type } = card.dataset
+                window.location.hash = `#/details?type=${type}&ticker=${ticker}`
+            }
         })
-    })
+    }
 }
 
 function initForm(user) {

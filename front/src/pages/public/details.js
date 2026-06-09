@@ -5,7 +5,6 @@ import { decodeToken } from "../../middlewares/roleGuard.js"
 import { formatChartId, formatMarketCap, formatDate } from "../../utils/format.js"
 import recoForm from "../../components/recommendations/recoForm.js"
 
-// Dictionnaire local pour uniformiser le Comex comme sur home.js
 const commodityImages = {
     "C:XAUUSD": "/assets/gold.png",
     "C:XAGUSD": "/assets/silver.png",
@@ -50,7 +49,7 @@ export async function initDetail() {
             return
         }
 
-        // UNIFORMISATION DE LA LOGIQUE IMAGE & LOGO (Strictement identique à home.js)
+        // STANDARDIZATION OF IMAGE & LOGO LOGIC
         let finalImage = asset.image || "/assets/default.png";
         let fallbackImage = "/assets/default.png";
 
@@ -61,7 +60,7 @@ export async function initDetail() {
             finalImage = commodityImages[asset.ticker] || "/assets/default.png";
             fallbackImage = "/assets/default.png";
         } else if (asset.type === "forex") {
-            finalImage = "/assets/forex_logo.png"; // Optionnel, si tu as une icône forex globale
+            finalImage = "/assets/forex_logo.png";
             fallbackImage = "/assets/forex_logo.png";
         }
 
