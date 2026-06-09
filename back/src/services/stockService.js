@@ -52,11 +52,11 @@ async function getMultipleAggregates() {
         stocksTicker: ticker, 
         multiplier: "1", 
         timespan: "day", 
-        from: "2026-04-25", 
-        to: "2026-05-04", 
+        from: "2026-05-01", 
+        to: "2026-06-09", 
         adjusted: "true", 
         sort: "desc", 
-        limit: "1", 
+        limit: "30", 
       }) ]) 
       const meta = metaRes.results 
       const last = aggRes.results?.at(-1) 
@@ -68,7 +68,7 @@ async function getMultipleAggregates() {
         marketCap: meta.market_cap,
         price: last?.c ?? null, 
         high: last?.h ?? null, 
-        low: last?.l ?? null 
+        low: last?.l ?? null
       } 
     }) 
   ) 
@@ -76,6 +76,62 @@ async function getMultipleAggregates() {
     await new Promise(r => setTimeout(r, 500))
   return results 
 
+}
+
+async function getMultipleAggregatesOneShot() { 
+  const tickers = ["MSFT", "NVDA", "AMZN", "INTC", "IBM", "INTU", "NOW", "SNOW", "SHOP", "UBER", "LYFT", "SQ", "DOCU", "ZM", "CRWD", "PANW", "ZS", "OKTA", "PLTR", "NET", "DDOG", "MDB", "TEAM", "ASML", "ARM", "MU", "DELL", "HPQ", "SAP", "SONY", "TXN", "ADI", "LRCX", "KLAC"] 
+  
+  const results = [] 
+
+  // On remplace le Promise.all global par une boucle for...of pour y aller un par un
+  for (const ticker of tickers) {
+    try {
+      console.log(`[API] Récupération de ${ticker}... (${results.length + 1}/${tickers.length})`)
+
+      // On exécute les deux requêtes du ticker l'une après l'autre pour ne pas surcharger
+      const metaRes = await rest.getTicker({ ticker })
+      const aggRes = await rest.getStocksAggregates({ 
+        stocksTicker: ticker, 
+        multiplier: "1", 
+        timespan: "day", 
+        from: "2026-05-01", 
+        to: "2026-06-09", 
+        adjusted: "true", 
+        sort: "asc", // IMPORTANT: "asc" pour que l'historique soit dans le bon sens chronologique pour ton graphe !
+        limit: "30", 
+      })
+
+      const meta = metaRes.results 
+      const dataPoints = aggRes.results || []
+      const last = dataPoints.at(-1) 
+      const history = dataPoints.map(point => point.c)
+      
+      results.push({ 
+        type: "nasdaq",
+        ticker: meta.ticker, 
+        name: meta.name, 
+        marketCap: meta.market_cap,
+        price: last?.c ?? null, 
+        high: last?.h ?? null, 
+        low: last?.l ?? null,
+        history: history
+      })
+
+      console.log(results)
+
+      // PAUSE ANTI-429: L'API autorise 5 requêtes/min. On fait 2 requêtes par ticker, 
+      // donc on attend 25 secondes entre chaque ticker pour être totalement safe.
+      console.log(`Pause de 25 secondes réglementaire...`)
+      await new Promise(r => setTimeout(r, 25000))
+
+    } catch (error) {
+      console.error(`❌ Erreur sur le ticker ${ticker}:`, error.message)
+      // En cas d'échec, on attend quand même avant le suivant
+      await new Promise(r => setTimeout(r, 10000))
+    }
+  }
+
+  return results 
 }
 
 async function aggregateForex() {
@@ -192,7 +248,8 @@ async function getMultipleAggregatesJson() {
       marketCap: meta.market_cap,
       price: last?.c ?? null,
       high: last?.h ?? null,
-      low: last?.l ?? null
+      low: last?.l ?? null,
+      history: stock.history || []
     }
   })
 }
@@ -229,4 +286,4 @@ async function aggregateMetalsJson() {
   }))
 }
 
-export default { getAAPLStock,  getMultipleAggregates, aggregateForex, aggregateMetals, getAAPLStockJson,  getMultipleAggregatesJson, aggregateForexJson, aggregateMetalsJson }
+export default { getAAPLStock,  getMultipleAggregates, getMultipleAggregatesOneShot, aggregateForex, aggregateMetals, getAAPLStockJson,  getMultipleAggregatesJson, aggregateForexJson, aggregateMetalsJson }
