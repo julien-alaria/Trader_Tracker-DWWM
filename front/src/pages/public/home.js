@@ -119,8 +119,8 @@ export async function initHome() {
         })
 
     } catch (err) {
-        console.log("%c--- DIAGNOSTIC ERREUR ---", "color: lighblue font-weight: bold")
-        console.error("L'erreur brute :", err)
+        console.log("%c--- DIAGNOSTIC ERROR ---", "color: lighblue font-weight: bold")
+        console.error("ERROR :", err)
         console.dir(err)
     }
 }
