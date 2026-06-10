@@ -9,6 +9,22 @@ async function getUsers() {
     return rows
 }
 
+async function getUsersPaginated(limit = 2, offset = 0) {
+    const db = getConnection()
+
+    const parsedLimit = parseInt(limit, 10) || 2
+    const parsedOffset = parseInt(offset, 10) || 0
+
+  const [rows] = await db.query(
+    `SELECT id, name, email, role, analyst_type_id,
+            analyst_verified, company, bio
+     FROM users
+     LIMIT ${parsedLimit} OFFSET ${parsedOffset}`
+)
+
+    return rows
+}
+
 async function getUsersById(id) {
     const db = getConnection()
 
@@ -189,4 +205,4 @@ async function userUnfollowAsset(user_id, asset_id) {
     return result
 }
 
-export default { getUsers, getUsersById, getUsersByEmail, getUserWatchlist, createUsers, updateUsers, deleteUsers, userFollowAsset, userUnfollowAsset }
+export default { getUsers,getUsersPaginated, getUsersById, getUsersByEmail, getUserWatchlist, createUsers, updateUsers, deleteUsers, userFollowAsset, userUnfollowAsset }
