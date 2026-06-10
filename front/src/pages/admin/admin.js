@@ -26,7 +26,7 @@ const adminPage = `
         </section>
 
         <section>
-            <h2>Gestion des Utilisateurs</h2>
+            <h2 id="admin-users-title">Gestion des Utilisateurs</h2>
             <div id="users-list"></div>
         </section>
     

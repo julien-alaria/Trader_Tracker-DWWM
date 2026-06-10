@@ -50,7 +50,7 @@
     line-height: 1.6;
 }
 
-.follow-btn {
+.detail-btn{
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-size: 13px;
     font-weight: 500;
@@ -66,18 +66,18 @@
     transition: background-color 0.1s ease, border-color 0.1s ease;
 }
 
-.follow-btn:hover {
+.detail-btn:hover {
     background-color: #e9ecef;
     border-color: #b8daff;
 }
 
-.follow-btn[data-followed="true"] {
+.detail-btn[data-followed="true"] {
     background-color: #e8f0fe;
     color: #1a73e8;
     border-color: #1a73e8;
 }
 
-.follow-btn[data-followed="true"]:hover {
+.detail-btn[data-followed="true"]:hover {
     background-color: #d2e3fc;
 }
 
@@ -86,3 +86,31 @@
     line-height: 1;
     font-weight: bold;
 }
+
+#recommendation-container {
+    display: flex;
+    flex-direction: column;
+    margin: 4rem 2rem;
+}
+
+#reco-title {
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.recommendation {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.login-message {
+    font-size: 1.8rem;
+    margin: 4rem 2rem;
+}
+
+#login-btn {
+    font-size: 1.5rem;
+}
+

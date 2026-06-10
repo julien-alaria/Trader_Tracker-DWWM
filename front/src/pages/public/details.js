@@ -87,7 +87,7 @@ export async function initDetail() {
                 </div>
             </div>
 
-            <button id="follow-toggle-btn" class="follow-btn" data-ticker="${asset.ticker}" data-followed="${isFollowed}">
+            <button id="follow-toggle-btn" class="detail-btn" data-ticker="${asset.ticker}" data-followed="${isFollowed}">
                 <span class="follow-icon">${isFollowed ? "×" : "+"}</span>
                 <span class="follow-text">${isFollowed ? "Remove" : "Track Asset"}</span>
             </button>
@@ -130,7 +130,7 @@ export async function initDetail() {
         const recommendationRes = await http.get(`/recommendations?ticker=${asset.ticker}`)
         const recommendations = recommendationRes.results || []
         document.getElementById("recommendation-container").innerHTML = recommendations.length
-            ? `<h3>Analysts Recommendations</h3>${recommendations.map(rec => `
+            ? `<h3 id="reco-title">Analysts Recommendations</h3>${recommendations.map(rec => `
                 <div class="recommendation">
                     <strong>${rec.status}</strong>
                     <p>${rec.comment}</p>
@@ -169,7 +169,10 @@ export async function initDetail() {
         } else if (user) {
             formContainer.innerHTML = `<p>${user.role === "analyst" ? "Your specialization does not allow you to recommend this asset." : "Only analysts can post."}</p>`;
         } else {
-            formContainer.innerHTML = `<div class="login-prompt"><p>Want to post a recommendation?</p><button onclick="window.location.hash='#/login'">Log In as Analyst</button></div>`;
+            formContainer.innerHTML = `<div class=login-message>
+            <p><strong>Want to post a recommendation?</strong></p>
+            <button class="detail-btn" id="login-btn" onclick="window.location.hash='#/login'">Log In as Analyst</button>
+            </div>`;
         }
 
     } catch (error) {
