@@ -6,12 +6,22 @@ import dotenv from 'dotenv'
 dotenv.config()
 const rest = restClient(process.env.POLY_API_KEY)
 
-const TICKERS = [
-  "MSFT", "NVDA", "AMZN", "INTC", "IBM", "INTU", "NOW", "SNOW", 
-  "SHOP", "UBER", "LYFT", "SQ", "DOCU", "ZM", "CRWD", "PANW", 
-  "ZS", "OKTA", "PLTR", "NET", "DDOG", "MDB", "TEAM", "ASML", 
-  "ARM", "MU", "DELL", "HPQ", "SAP", "SONY", "TXN", "ADI", "LRCX", "KLAC"
-]
+const TICKERS = []
+
+for await (const stock of rest.listTickers({
+  market: "stocks",
+  active: true,
+  exchange: "XNAS",
+  limit: 1000
+})) {
+  TICKERS.push(stock.ticker)
+
+  if (TICKERS.length >= 1000) {
+    break
+  }
+}
+
+console.log(`${TICKERS.length} tickers chargés`)
 
 // PATH OF SAVE FILE
 const OUTPUT_PATH = path.resolve("./src/data/nasdaq.json")

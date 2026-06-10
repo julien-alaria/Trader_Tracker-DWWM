@@ -70,7 +70,8 @@ export async function initAdmin() {
 
         const allRecommendations = recommendationsRes.results
         console.log("ALL RECOMMENDATIONS", allRecommendations)
-        renderRecommendations(allRecommendations || [], payload) // Payload contient le rôle
+        renderRecommendations(allRecommendations || [], payload) 
+        //Payload contains the role
         bindRecommendationEvents(payload)
         initForm(user)
         bindNavigation()
@@ -146,7 +147,7 @@ window.editUser = async (id) => {
 
 window.deleteUser = async (id) => {
     const btn = document.querySelector(`button[data-id="${id}"]`)
-    // Transformation temporaire du bouton
+    // Temporary button transformation
     btn.innerHTML = "Confirmer ?"
     btn.onclick = async () => {
         await http.delete(`/users/${id}`)
@@ -158,8 +159,8 @@ function renderRecommendations(recommendations, user) {
     const container = document.getElementById("all-recommendations")
     
     container.innerHTML = recommendations.map(rec => {
-        // L'admin voit tout, et on peut afficher une étiquette différente 
-        // si c'est sa propre recommandation ou celle d'un autre
+        // The admin sees everything, and we can display a different label
+        // depending on whether it's their own recommendation or someone else's
         const isMine = Number(user.id) === Number(rec.user_id)
         
         return `
@@ -226,7 +227,7 @@ function bindRecommendationEvents(user) {
 function bindNavigation() {
     const watchlistContainer = document.getElementById("watchlist")
     if (watchlistContainer) {
-        // Un seul écouteur sur le conteneur attrape les clics de toutes les cartes présentes ou futures
+        // A single listener on the container catches clicks from all current or future cards
         watchlistContainer.addEventListener("click", (e) => {
             const card = e.target.closest(".card")
             if (card) {
