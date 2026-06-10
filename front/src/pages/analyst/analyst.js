@@ -132,7 +132,7 @@ function renderRecommendations(recommendations, user) {
         <div class="recommendation" data-id="${rec.id}">
             <strong>${rec.status}</strong>
             <p>${rec.comment}</p>
-            <p>Asset: ${rec.name} (${rec.ticker})</p>
+            <p>${rec.name} (${rec.ticker})</p>
             <small>${new Date(rec.created_at).toLocaleDateString()}</small>
             ${isAuthorized ? `
                 <button class="delete-btn" data-id="${rec.id}">DELETE</button>
