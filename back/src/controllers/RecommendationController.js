@@ -46,8 +46,9 @@ async function getRecommendation(req, res) {
 async function getRecommendationPagin(req, res) {
     try {
         const { ticker } = req.query
-        const limit = Number(req.query.limit)
-        const offset = Number(req.query.offset)
+        
+        const limit = Math.max(1, Number.parseInt(req.query.limit ?? 2, 10))
+        const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10))
 
         // FILTER BY ASSET (ticker)
         if (ticker) {
