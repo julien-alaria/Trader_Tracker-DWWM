@@ -8,17 +8,19 @@ const rest = restClient(process.env.POLY_API_KEY)
 
 const TICKERS = []
 
-for await (const stock of rest.listTickers({
+const tickersResponse = await rest.listTickers({
   market: "stocks",
   active: true,
   exchange: "XNAS",
   limit: 1000
-})) {
-  TICKERS.push(stock.ticker)
+})
 
-  if (TICKERS.length >= 1000) {
-    break
-  }
+const dataResults = tickersResponse.results || []
+
+// Map them into your TICKERS array and cap it at 1000
+for (const stock of dataResults) {
+  TICKERS.push(stock.ticker)
+  if (TICKERS.length >= 1000) break
 }
 
 console.log(`${TICKERS.length} tickers chargés`)
