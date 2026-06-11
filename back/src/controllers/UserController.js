@@ -13,6 +13,28 @@ async function getUser(req, res) {
     }
 }
 
+async function getUserPagin(req, res) {
+    try {
+        const limit = Math.max(1, Number.parseInt(req.query.limit ?? 10, 10))
+        const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10))
+
+        const results = await UserModel.getUsersPaginated(limit + 1, offset)
+
+        const hasNext = results.length > limit
+
+        if (hasNext) results.pop()
+
+        return res.status(200).json({
+            results,
+            hasNext
+        })
+
+    } catch (error) {
+        console.error("USER PAGIN ERROR:", error)
+        return res.status(500).json({ error: error.message })
+    }
+}
+
 async function getMe(req, res) {
     try {
         const user_id = req.user.id
@@ -211,4 +233,4 @@ async function unfollowAsset(req, res) {
     }
 }
 
-export default { getUser, getUserById, createUser, updateUser, deleteUser, followAsset, unfollowAsset, getWatchlist, getMe, updateMe }
+export default { getUser, getUserPagin, getUserById, createUser, updateUser, deleteUser, followAsset, unfollowAsset, getWatchlist, getMe, updateMe }
