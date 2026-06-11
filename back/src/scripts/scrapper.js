@@ -6,24 +6,73 @@ import dotenv from 'dotenv'
 dotenv.config()
 const rest = restClient(process.env.POLY_API_KEY)
 
-const TICKERS = []
+// TOP 300 - NASDAQ & SOCIÉTÉS TECHNOLOGIQUES MAJEURES
+const TICKERS = [
+  // --- LES GÉANTS ET BIG TECH (Mégacaps) ---
+  "MSFT", "AAPL", "NVDA", "AMZN", "GOOGL", "META", "TSLA", "AVGO", "ASML", "AMD",
+  "NFLX", "ADBE", "CSCO", "QCOM", "TMUS", "INTU", "AMAT", "ISRG", "TXN", "MU",
+  
+  // --- LOGICIELS, CLOUD & SAAS ---
+  "ORACLE", "CRM", "NOW", "SAP", "INTC", "IBM", "PANW", "SNOW", "SHOP", "TEAM",
+  "WDAY", "PLTR", "DDOG", "MDB", "NET", "CRWD", "ZS", "OKTA", "DOCU", "ZM",
+  "HUBS", "SPLK", "NOW", "ADSK", "ANSS", "PTC", "CDNS", "SNPS", "DATA", "TWLO",
+  "ZEN", "PAYC", "PCTY", "U", "MSTR", "BILL", "PATH", "DT", "DYAT", "APP",
 
-const tickersResponse = await rest.listTickers({
-  market: "stocks",
-  active: true,
-  exchange: "XNAS",
-  limit: 1000
-})
+  // --- MATÉRIEL, SEMI-CONDUCTEURS & INFRASTRUCTURE ---
+  "ARM", "DELL", "HPQ", "HPE", "LRCX", "KLAC", "ADI", "NXPI", "MRVL", "MCHP",
+  "ON", "MPWR", "SMCI", "STV", "VRT", "WDC", "STX", "ANET", "JNPR", "CIEN",
+  "FSLR", "ENPH", "SEDG", "COHR", "IPG", "LITE", "VIAV", "CCCS", "TER", "TOELY",
 
-const dataResults = tickersResponse.results || []
+  // --- FINTECH, E-COMMERCE & SERVICES TECH ---
+  "SQ", "PYPL", "MELI", "SE", "CPNG", "PDD", "BABA", "JD", "BIDU", "NTES",
+  "UBER", "LYFT", "GRUB", "DASH", "PINS", "SNAP", "TTD", "ROKU", "MTCH", "IAC",
+  "EXPE", "BKNG", "TRIP", "ABNB", "CHWY", "ETS", "CVNA", "W", "RVMD", "UPST",
 
-// Map them into your TICKERS array and cap it at 1000
-for (const stock of dataResults) {
-  TICKERS.push(stock.ticker)
-  if (TICKERS.length >= 1000) break
-}
+  // --- JEUX VIDÉO, DIVERTISSEMENT & MÉDIAS ---
+  "SONY", "NTDOY", "EA", "TTWO", "ATVI", "SEGA", "UBSFY", "NCMSF", "CCOEY", "WCG",
+  "SPOT", "LYV", "RBLX", "DIS", "PARA", "WBD", "FOXA", "NFLX", "IQ", "HUYA",
 
-console.log(`${TICKERS.length} tickers chargés`)
+  // --- CYBERSÉCURITÉ & RÉSEAU ---
+  "FTNT", "CHKP", "QLYS", "TENB", "RAPID", "VRNS", "SAIL", "PING", "FORG", "SCWX",
+  "BB", "FFIV", "NET", "AKAM", "FSLY", "LLNW", "ALTR", "LUNA", "EXTR", "NETGEAR",
+
+  // --- BIOTECH, SANTÉ CONNECTÉE & MEDTECH ---
+  "AMGN", "REGN", "VRTX", "GILD", "BIIB", "ILMN", "ALGN", "DXCM", "PODD", "TNDM",
+  "TDOC", "LVGO", "OMCL", "HQY", "CERE", "SGEN", "MRNA", "BNTX", "NVAX", "AZN",
+
+  // --- AUTOMOBILE CONNECTÉE, IA & ROBOTIQUE ---
+  "RIVN", "LCID", "NIO", "XPEV", "LI", "FSR", "NKLA", "QS", "INVZ", "LAZR",
+  "OUST", "VLDR", "MVIS", "JOBY", "ACHR", "BLDE", "AAV", "BOTZ", "IRBT", "AI",
+
+  // --- TÉLÉCOMS, SATELLITE & IOT ---
+  "VZ", "T", "S", "CHTR", "CMCSA", "LBRDK", "FYBR", "IRDM", "SATL", "ORBK",
+  "GOGO", "VSAT", "LRLCY", "SIMO", "GLW", "COMM", "HLIT", "SATS", "DISH", "ASTS",
+
+  // --- INDUSTRIE TECH, AUTOMATISATION & DRONES ---
+  "HON", "GE", "ROK", "AME", "KEYS", "TER", "NATI", "METT", "A", "FTV",
+  "AVT", "ARROW", "TDY", "HEI", "BWXT", "EH", "UAVS", "AMRC", "BLDP", "FCEL",
+
+  // --- COMPOSANTS ET MATÉRIAUX AVANCÉS ---
+  "CREE", "WOLF", "IIVI", "ROG", "CABO", "CNSL", "BAND", "SHEN", "LICT", "CNSX",
+  "ATNI", "SPOK", "ECOV", "ALGM", "POWI", "PI", "INDI", "NVTS", "CEVA", "PXLW",
+
+  // --- AUTRES COMPAGNIES MAJEURES DU NASDAQ ---
+  "COST", "PEP", "CSX", "PDCO", "FAST", "PAYX", "CTAS", "IDXX", "KDP", "EXC",
+  "MELI", "MAR", "ORLY", "CTSH", "MNST", "MDLZ", "KLAC", "SNPS", "CDNS", "ASML",
+  "AAL", "FAST", "VRSK", "SIRI", "DLTR", "EBAY", "ANSS", "ALGN", "ALXN", "VRSN",
+
+  // --- TECH SECONDAIRES, DATA & ANALYTICS ---
+  "NEWR", "SUMO", "ESTC", "FORR", "GART", "SNDR", "RAMP", "MAXR", "BCOV", "QMCO",
+  "TCX", "DPRO", "MVIS", "KE", "SCPL", "MKTX", "SEI", "ENV", "SSNC", "TYL",
+
+  // --- SERVICES DE CONSULTING & INTÉGRATION ---
+  "ACN", "INFY", "WIT", "CTSH", "EPAM", "GLOB", "GIB", "CACI", "LDOS", "SAIC",
+  "EXLS", "WNS", "TTEC", "CNXC", "TASK", "SCSC", "EPLUS", "PCYO", "HCKT", "BBAI",
+
+  // --- DISTRIBUTEURS ET COMPOSANTS ---
+  "TD SYNNEX", "SNX", "IM", "GTT", "EGOV", "PRFT", "DAVA", "GRID", "MTEK", "KVHI",
+  "AEY", "KRNT", "ITI", "RELL", "BELFA", "SGA", "IESC", "MTRX", "TAYD", "POWL"
+]
 
 // PATH OF SAVE FILE
 const OUTPUT_PATH = path.resolve("./src/data/nasdaq.json")
