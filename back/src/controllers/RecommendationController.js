@@ -43,6 +43,54 @@ async function getRecommendation(req, res) {
     }
 }
 
+async function getRecommendationPagin(req, res) {
+    try {
+        const { ticker } = req.query
+        
+        const limit = Math.max(1, Number.parseInt(req.query.limit ?? 2, 10))
+        const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10))
+
+        // FILTER BY ASSET (ticker)
+        if (ticker) {
+            const asset = await AssetModel.getAssetByTicker(ticker)
+
+            if (!asset) {
+                return res.status(404).json({
+                    error: "Asset not found"
+                })
+            }
+
+            const results =
+                await RecommendationModel.getRecommendationsByAssetId(asset.id)
+
+            return res.status(200).json({
+                results
+            })
+        }
+
+        const results =
+            await RecommendationModel.getAllRecommendationsPaginated(limit, offset)
+
+        const nextPage =
+            await RecommendationModel.getAllRecommendationsPaginated(
+                limit,
+                offset + Number(limit)
+            )
+
+        const hasNext = nextPage.length > 0
+
+        return res.status(200).json({
+            results,
+            hasNext
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        })
+    }
+}
+
 async function getMyRecommendation(req, res) {
     try {
         const userId = req.user.id
@@ -181,4 +229,4 @@ async function deleteRecommendation(req, res) {
     }
 }
 
-export default { getRecommendation, getMyRecommendation, createRecommendation, updateRecommendation, deleteRecommendation }
+export default { getRecommendation, getRecommendationPagin, getMyRecommendation, createRecommendation, updateRecommendation, deleteRecommendation }

@@ -8,7 +8,7 @@ const RecommendationRouter = express.Router()
 
 RecommendationRouter.get("/me", AuthMiddleware(["analyst", "admin"]), RecommendationController.getMyRecommendation)
 
-RecommendationRouter.get("/", RecommendationController.getRecommendation)
+RecommendationRouter.get("/", RecommendationController.getRecommendationPagin)
 
 RecommendationRouter.post("/", AuthMiddleware(["analyst", "admin"]), AssetMiddleware(), SpecializationMiddleware(), RecommendationController.createRecommendation)
 

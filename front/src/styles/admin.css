@@ -24,3 +24,10 @@
     align-items: start;
     justify-content: space-around;
 }
+
+.recommendation p {
+    width: 20%;               
+    white-space: nowrap;      
+    overflow: hidden;          
+    text-overflow: ellipsis;
+}

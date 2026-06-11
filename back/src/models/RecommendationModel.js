@@ -72,6 +72,34 @@ async function getAllRecommendations() {
     return rows
 }
 
+async function getAllRecommendationsPaginated(limit = 2, offset = 0) {
+    const db = getConnection()
+
+    const parsedLimit = Math.max(1, Number.parseInt(limit ?? 2, 10))
+    const parsedOffset = Math.max(0, Number.parseInt(offset ?? 0, 10))
+
+    const sql = `
+        SELECT 
+            r.id,
+            r.status,
+            r.comment,
+            r.created_at,
+            r.asset_id,
+            r.user_id,
+            a.ticker,
+            a.name,
+            u.name AS analyst_name
+        FROM recommendations r
+        JOIN assets a ON a.id = r.asset_id
+        JOIN users u ON u.id = r.user_id
+        ORDER BY r.created_at DESC
+        LIMIT ? OFFSET ?
+    `
+
+    const [rows] = await db.execute(sql, [parsedLimit, parsedOffset])
+    return rows
+}
+
 async function getRecommendationsById(id) {
     const db = getConnection()
 
@@ -186,5 +214,5 @@ async function deleteRecommendations(id){
 
 }
 
-export default { getRecommendations, getMyRecommendations, getRecommendationsById, getAllRecommendations, getRecommendationsByAssetId, createRecommendations, updateRecommendations, deleteRecommendations }
+export default { getRecommendations, getAllRecommendationsPaginated, getMyRecommendations, getRecommendationsById, getAllRecommendations, getRecommendationsByAssetId, createRecommendations, updateRecommendations, deleteRecommendations }
 

@@ -9,19 +9,15 @@ async function getUsers() {
     return rows
 }
 
-async function getUsersPaginated(limit = 2, offset = 0) {
+async function getUsersPaginated(limit = 10, offset = 0) {
     const db = getConnection()
 
-    const parsedLimit = parseInt(limit, 10) || 2
-    const parsedOffset = parseInt(offset, 10) || 0
+    const parsedLimit = Math.max(1, Number.parseInt(limit, 10))
+    const parsedOffset = Math.max(0, Number.parseInt(offset, 10))
 
-  const [rows] = await db.query(
-    `SELECT id, name, email, role, analyst_type_id,
-            analyst_verified, company, bio
-     FROM users
-     LIMIT ${parsedLimit} OFFSET ${parsedOffset}`
-)
+    const sql = "SELECT id, name, email, role, analyst_type_id, analyst_verified, company, bio FROM users ORDER BY id DESC LIMIT ? OFFSET ?"
 
+    const [rows] = await db.execute(sql, [parsedLimit, parsedOffset])
     return rows
 }
 
