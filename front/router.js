@@ -1,4 +1,5 @@
 import home, { initHome } from "./src/pages/public/home.js"
+import list, { initList } from "./src/pages/public/list.js"
 import about from "./src/pages/public/about.js"
 import register, { initRegister } from "./src/pages/auth/register/register.js"
 import analystRegister, { initAnalystRegister } from "./src/pages/auth/register/analystRegister.js"
@@ -25,6 +26,11 @@ function router() {
     case "/":
       content = home
       init = initHome
+      break
+    
+    case "/list":
+      content =list
+      init = initList
       break
 
     case "/details":

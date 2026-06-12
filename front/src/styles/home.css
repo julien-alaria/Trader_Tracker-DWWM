@@ -181,3 +181,8 @@
     min-height: 100px;
     overflow: hidden;
 }
+
+#all-assets-btn {
+  font-size: 3rem;
+  color: #1a1a1a;
+}

@@ -9,7 +9,7 @@ export default function stockCard({
   history = []
 } = {}) {
 
-  const finalImage = image || "/assets/nasdaq_logo.svg.png";
+  const finalImage = image || "/assets/nasdaq_logo.svg.png"
 
   return `
     <div class="card stock" data-type="stock" data-ticker="${ticker}">

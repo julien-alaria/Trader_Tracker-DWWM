@@ -27,6 +27,8 @@ const home = `
         <p id="home-stocks-text">Nasdaq is a US stock market for new companies with high growth potential, particularly in the high-tech sector.</p>
 
         <div class="carousel" id="stocks"></div>
+
+        <a href="#/list" class="btn" id="all-assets-btn">All Assets By List</a>
     </section>
 
     <section id="home-forex">

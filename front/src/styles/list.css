@@ -1,0 +1,26 @@
+.asset-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#asset-list-container {
+    cursor: pointer;
+}
+
+#assets-list-container .asset-item a {
+    color: black;
+    font-size: 3rem;
+    text-decoration: none;
+}
+
+#assets-list-container .asset-item a:hover {
+    color: #333;
+}
+
+#logo-list {
+    width: 30px; height: 30px; margin-right: 10px;
+}

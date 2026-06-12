@@ -2,6 +2,7 @@
 @import "./src/styles/cards.css";
 @import "./src/styles/details.css";
 @import "./src/styles/admin.css";
+@import "./src/styles/list.css";
 
 * {
   box-sizing: border-box;
