@@ -19,6 +19,14 @@ const adminPage = `
     <section>
         <h2>Watchlist</h2>
         <div class="carousel" id="watchlist"></div>
+
+        <h2>By List</h2>
+        <div id="watchlist-list-container"></div>
+        
+        <div id="watchlist-pagination">
+            <button id="watchlist-prev-btn">Previous</button>
+            <button id="watchlist-next-btn">Next</button>
+        </div>
     </section>
 
     <section>
@@ -67,6 +75,16 @@ const usersPaginator = createPaginator({
     mapResponse: (res) => res
 })
 
+const watchlistPaginator = createPaginator({
+    endpoint: "/users/me/watchlist-paginated", // Assurez-vous que votre route pointe vers getWatchlistPagin
+    limit: 5,
+    render: renderWatchlistList,
+    mapResponse: (res) => ({
+        results: res.results, // Correction ici : c'est 'results' (avec un s) que vous renvoyez dans le controller
+        hasNext: res.hasNext
+    })
+})
+
 // INIT
 export async function initAdmin() {
     try {
@@ -94,14 +112,17 @@ export async function initAdmin() {
         ])
 
         const user = userRes.result
+       
 
         renderAdmin(user)
 
         const allAssets = [...stocks, ...forex, ...commodities]
         renderWatchlist(buildWatchlist(watchRes.result, allAssets))
+        const fullWatchlist = buildWatchlist(watchRes.result, allAssets)
 
         await usersPaginator.load()
         await recommendationsPaginator.load()
+        await watchlistPaginator.load()
 
         usersPaginator.bind({
             nextBtn: document.getElementById("users-next-btn"),
@@ -111,6 +132,11 @@ export async function initAdmin() {
         recommendationsPaginator.bind({
             nextBtn: document.getElementById("next-btn"),
             prevBtn: document.getElementById("prev-btn")
+        })
+
+       watchlistPaginator.bind({
+            nextBtn: document.getElementById("watchlist-next-btn"),
+            prevBtn: document.getElementById("watchlist-prev-btn")
         })
 
         bindRecommendationEvents(payload)
@@ -159,6 +185,25 @@ function buildWatchlist(raw, assets) {
         const asset = assets.find(a => a.ticker === w.ticker)
         return { ...w, ...asset, isFollowed: true }
     })
+}
+
+// Watchlist BY LIST
+function renderWatchlistList(watchlist) {
+    const container = document.getElementById("watchlist-list-container")
+    container.innerHTML = watchlist.map(item => `
+        <div class="watchlist-item" data-ticker="${item.ticker}" data-type="${item.asset_type_id}">
+            <span><strong>${item.ticker}</strong></span>
+            <span>${item.name}</span>
+        </div>
+    `).join("")
+
+    container.querySelectorAll('.watchlist-item').forEach(el => {
+        el.style.cursor = 'pointer';
+        el.onclick = () => {
+            const { ticker, type } = el.dataset;
+            window.location.hash = `#/details?type=${type}&ticker=${ticker}`;
+        }
+    });
 }
 
 // USERS

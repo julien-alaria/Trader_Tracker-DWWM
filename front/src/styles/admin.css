@@ -31,3 +31,11 @@
     overflow: hidden;          
     text-overflow: ellipsis;
 }
+
+.watchlist-item{
+ display: flex;
+    flex-direction: row;
+    align-items: start;
+    margin: 1rem;
+    justify-content: space-around;
+}

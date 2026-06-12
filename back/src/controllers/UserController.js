@@ -92,6 +92,29 @@ async function getWatchlist(req, res) {
     }
 }
 
+async function getWatchlistPagin(req, res) {
+    try {
+        const user_id = req.user.id 
+        const limit = Math.max(1, Number.parseInt(req.query.limit ?? 10, 10))
+        const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10))
+
+        const results = await UserModel.getUserWatchlistPaginated(user_id, limit + 1, offset)
+
+        const hasNext = results.length > limit
+
+        if (hasNext) results.pop()
+
+        return res.status(200).json({
+            results,
+            hasNext
+        })
+
+    } catch (error) {
+        console.error("WATCHLIST PAGIN ERROR:", error)
+        return res.status(500).json({ error: error.message })
+    }
+}
+
 async function createUser(req, res) {
     try {
 
@@ -233,4 +256,17 @@ async function unfollowAsset(req, res) {
     }
 }
 
-export default { getUser, getUserPagin, getUserById, createUser, updateUser, deleteUser, followAsset, unfollowAsset, getWatchlist, getMe, updateMe }
+export default { 
+    getUser, 
+    getUserPagin, 
+    getUserById,
+    createUser, 
+    updateUser, 
+    deleteUser, 
+    followAsset, 
+    unfollowAsset, 
+    getWatchlist, 
+    getWatchlistPagin,
+    getMe, 
+    updateMe 
+}
