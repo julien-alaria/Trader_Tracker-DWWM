@@ -4,6 +4,7 @@ import stockCard from "../../components/cards/stockCards.js"
 import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
 import analystUpdateForm from "../../components/user/analystUpdateForm.js"
 import { enableCarouselWindow } from "../../utils/lazyloading.js"
+import { createPaginator } from "../../utils/pagination.js"
 
 const analystPage = `
     <main>
@@ -21,11 +22,24 @@ const analystPage = `
         <section>
             <h2>Watchlist</h2>
             <div class="carousel" id="watchlist"></div>
+
+            <h2>Watchlist By List</h2>
+            <div id="watchlist-list-container"></div>
+            
+            <div id="watchlist-pagination">
+                <button id="watchlist-prev-btn">Previous</button>
+                <button id="watchlist-next-btn">Next</button>
+            </div>
         </section>
 
         <section>
             <h2>My Recommendations</h2>
             <div id="my-recommendations"></div>
+
+            <div id="pagination">
+                <button id="prev-btn">Previous</button>
+                <button id="next-btn">Next</button>
+            </div>
         </section>
 
         <section>
@@ -38,6 +52,25 @@ const analystPage = `
 
 export default analystPage
 
+// PAGINATORS
+const recommendationsPaginator = createPaginator({
+    endpoint: "/recommendations/me",
+    limit: 3,
+    render: renderRecommendations,
+    getPayload: () => decodeToken(localStorage.getItem("token")),
+    mapResponse: (res) => res
+})
+
+const watchlistPaginator = createPaginator({
+    endpoint: "/users/me/watchlist-paginated",
+    limit: 5,
+    render: renderWatchlistList,
+    mapResponse: (res) => ({
+        results: res.results,
+        hasNext: res.hasNext
+    })
+})
+
 export async function initAnalyst() {
     try {
         const token = localStorage.getItem("token")
@@ -49,11 +82,10 @@ export async function initAnalyst() {
             return
         }
 
-        const [userRes, watchRes, recommendationsRes, stocks, forex, commodities] =
+        const [userRes, watchRes, stocks, forex, commodities] =
             await Promise.all([
                 http.get("/users/me"),
                 http.get("/users/me/watchlist"),
-                http.get("/recommendations/me"),
                 getStock(),
                 getForex(),
                 getCommodities()
@@ -63,10 +95,20 @@ export async function initAnalyst() {
         renderAnalyst(user)
 
         const allAssets = [...stocks, ...forex, ...commodities]
-        const watchlist = buildWatchlist(watchRes.result, allAssets)
+        renderWatchlist(buildWatchlist(watchRes.result, allAssets))
+        
+        await recommendationsPaginator.load()
+        await watchlistPaginator.load()
 
-        renderWatchlist(watchlist)
-        renderRecommendations(recommendationsRes.results || [], user)
+        watchlistPaginator.bind({
+            nextBtn: document.getElementById("watchlist-next-btn"),
+            prevBtn: document.getElementById("watchlist-prev-btn")
+        })
+
+        recommendationsPaginator.bind({
+            nextBtn: document.getElementById("next-btn"),
+            prevBtn: document.getElementById("prev-btn")
+        })
         
         bindRecommendationEvents(user)
         initForm(user)
@@ -94,6 +136,33 @@ function renderWatchlist(watchlist) {
     });
 }
 
+// Watchlist Builder
+function buildWatchlist(raw, assets) {
+    return raw.map(w => {
+        const asset = assets.find(a => a.ticker === w.ticker)
+        return { ...w, ...asset, isFollowed: true }
+    })
+}
+
+// Watchlist BY LIST
+function renderWatchlistList(watchlist) {
+    const container = document.getElementById("watchlist-list-container")
+    container.innerHTML = watchlist.map(item => `
+        <div class="watchlist-item" data-ticker="${item.ticker}" data-type="${item.asset_type_id}">
+            <span><strong>${item.ticker}</strong></span>
+            <span>${item.name}</span>
+        </div>
+    `).join("")
+
+    container.querySelectorAll('.watchlist-item').forEach(el => {
+        el.style.cursor = 'pointer';
+        el.onclick = () => {
+            const { ticker, type } = el.dataset;
+            window.location.hash = `#/details?type=${type}&ticker=${ticker}`;
+        }
+    });
+}
+
 function renderAnalyst(user) {
     const map = {
         analyst_id: user.id,
@@ -107,13 +176,6 @@ function renderAnalyst(user) {
     Object.entries(map).forEach(([id, value]) => {
         const el = document.getElementById(id)
         if (el) el.textContent = value ?? "N/A"
-    })
-}
-
-function buildWatchlist(raw, assets) {
-    return raw.map(w => {
-        const asset = assets.find(a => a.ticker === w.ticker)
-        return { ...w, ...asset, isFollowed: true }
     })
 }
 
@@ -151,6 +213,7 @@ function renderRecommendations(recommendations, user) {
     }).join("")
 }
 
+// EVENTS
 function bindRecommendationEvents(user) {
     const container = document.getElementById("my-recommendations")
     if (!container) return
@@ -186,7 +249,7 @@ function bindRecommendationEvents(user) {
     })
 }
 
-// Event delegation to the carousel container for navigation
+// EVENT DELEGATION CAROUSEL
 function bindNavigation() {
     const watchlistContainer = document.getElementById("watchlist")
     if (watchlistContainer) {
@@ -200,6 +263,7 @@ function bindNavigation() {
     }
 }
 
+// FORM
 function initForm(user) {
     const form = document.getElementById("analyst-update-form")
     if (!form) return

@@ -1,10 +1,10 @@
 import http from "../../config/instanceHttp.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
-import stockCard from "../../components/cards/stockCards.js"
-import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
 import analystUpdateForm from "../../components/user/analystUpdateForm.js"
-import { enableCarouselWindow } from "../../utils/lazyloading.js"
 import { createPaginator } from "../../utils/pagination.js"
+
+let recommendationsPaginator;
+let usersPaginator;
 
 const adminPage = `
 <main>
@@ -17,16 +17,7 @@ const adminPage = `
     </section>
 
     <section>
-        <h2>Watchlist</h2>
-        <div class="carousel" id="watchlist"></div>
-
-        <h2>Watchlist By List</h2>
-        <div id="watchlist-list-container"></div>
-        
-        <div id="watchlist-pagination">
-            <button id="watchlist-prev-btn">Previous</button>
-            <button id="watchlist-next-btn">Next</button>
-        </div>
+        <h2>ANALYST VALIDATION</h2>
     </section>
 
     <section>
@@ -58,33 +49,6 @@ const adminPage = `
 
 export default adminPage
 
-// PAGINATORS
-const recommendationsPaginator = createPaginator({
-    endpoint: "/recommendations",
-    limit: 3,
-    render: renderRecommendations,
-    getPayload: () => decodeToken(localStorage.getItem("token")),
-    mapResponse: (res) => res
-})
-
-const usersPaginator = createPaginator({
-    endpoint: "/users",
-    limit: 3,
-    render: renderUserList,
-    getPayload: () => decodeToken(localStorage.getItem("token")),
-    mapResponse: (res) => res
-})
-
-const watchlistPaginator = createPaginator({
-    endpoint: "/users/me/watchlist-paginated", // Assurez-vous que votre route pointe vers getWatchlistPagin
-    limit: 5,
-    render: renderWatchlistList,
-    mapResponse: (res) => ({
-        results: res.results, // Correction ici : c'est 'results' (avec un s) que vous renvoyez dans le controller
-        hasNext: res.hasNext
-    })
-})
-
 // INIT
 export async function initAdmin() {
     try {
@@ -97,32 +61,33 @@ export async function initAdmin() {
             return
         }
 
-        const [
-            userRes,
-            watchRes,
-            stocks,
-            forex,
-            commodities
-        ] = await Promise.all([
-            http.get("/users/me"),
-            http.get("/users/me/watchlist"),
-            getStock(),
-            getForex(),
-            getCommodities()
+        const [userRes] = await Promise.all([
+            http.get("/users/me")
         ])
 
         const user = userRes.result
-       
-
         renderAdmin(user)
 
-        const allAssets = [...stocks, ...forex, ...commodities]
-        renderWatchlist(buildWatchlist(watchRes.result, allAssets))
-        const fullWatchlist = buildWatchlist(watchRes.result, allAssets)
+        // PAGINATORS
+        recommendationsPaginator = createPaginator({
+            endpoint: "/recommendations",
+            limit: 3,
+            // Fix: Injection de l'utilisateur pour le rendu dynamique
+            render: (data) => renderRecommendations(data, user),
+            getPayload: () => decodeToken(localStorage.getItem("token")),
+            mapResponse: (res) => res
+        })
+
+        usersPaginator = createPaginator({
+            endpoint: "/users",
+            limit: 3,
+            render: renderUserList,
+            getPayload: () => decodeToken(localStorage.getItem("token")),
+            mapResponse: (res) => res
+        })
 
         await usersPaginator.load()
         await recommendationsPaginator.load()
-        await watchlistPaginator.load()
 
         usersPaginator.bind({
             nextBtn: document.getElementById("users-next-btn"),
@@ -134,13 +99,7 @@ export async function initAdmin() {
             prevBtn: document.getElementById("prev-btn")
         })
 
-       watchlistPaginator.bind({
-            nextBtn: document.getElementById("watchlist-next-btn"),
-            prevBtn: document.getElementById("watchlist-prev-btn")
-        })
-
-        bindRecommendationEvents(payload)
-        bindNavigation()
+        bindRecommendationEvents(user)
         initForm(user)
 
     } catch (err) {
@@ -160,50 +119,6 @@ function renderAdmin(user) {
         const el = document.getElementById(id)
         if (el) el.textContent = value ?? "N/A"
     })
-}
-
-// WATCHLIST
-function renderWatchlist(watchlist) {
-    const container = document.getElementById("watchlist")
-    if (!container) return
-
-    if (!watchlist.length) {
-        container.innerHTML = "<p>No favorites yet</p>"
-        return
-    }
-
-    enableCarouselWindow({
-        selector: "#watchlist",
-        batchSize: 5,
-        getData: () => watchlist,
-        cardComponent: stockCard
-    })
-}
-
-function buildWatchlist(raw, assets) {
-    return raw.map(w => {
-        const asset = assets.find(a => a.ticker === w.ticker)
-        return { ...w, ...asset, isFollowed: true }
-    })
-}
-
-// Watchlist BY LIST
-function renderWatchlistList(watchlist) {
-    const container = document.getElementById("watchlist-list-container")
-    container.innerHTML = watchlist.map(item => `
-        <div class="watchlist-item" data-ticker="${item.ticker}" data-type="${item.asset_type_id}">
-            <span><strong>${item.ticker}</strong></span>
-            <span>${item.name}</span>
-        </div>
-    `).join("")
-
-    container.querySelectorAll('.watchlist-item').forEach(el => {
-        el.style.cursor = 'pointer';
-        el.onclick = () => {
-            const { ticker, type } = el.dataset;
-            window.location.hash = `#/details?type=${type}&ticker=${ticker}`;
-        }
-    });
 }
 
 // USERS
@@ -296,21 +211,6 @@ function bindRecommendationEvents(user) {
     })
 }
 
-// WATCHLIST NAVIGATION
-function bindNavigation() {
-    const watchlistContainer = document.getElementById("watchlist")
-
-    if (!watchlistContainer) return
-
-    watchlistContainer.addEventListener("click", (e) => {
-        const card = e.target.closest(".card")
-        if (!card) return
-
-        const { ticker, type } = card.dataset
-        window.location.hash = `#/details?type=${type}&ticker=${ticker}`
-    })
-}
-
 // FORM
 function initForm(user) {
     const form = document.getElementById("analyst-update-form")
@@ -362,17 +262,15 @@ window.editUser = async (id) => {
 }
 
 window.deleteUser = async (id) => {
-    const btn = document.querySelector(`button[onclick="deleteUser('${id}')"]`)
-    if (!btn) return
-
-    btn.innerHTML = "Confirmer ?"
-
-    btn.onclick = async () => {
-        try {
-            await http.delete(`/users/${id}`)
-            await usersPaginator.load()
-        } catch (err) {
-            console.error("DELETE USER ERROR:", err)
+    // Suppression immédiate sans étape de confirmation
+    try {
+        await http.delete(`/users/${id}`);
+        
+        // Rafraîchir la liste paginée après la suppression
+        if (usersPaginator) {
+            await usersPaginator.load();
         }
+    } catch (err) {
+        console.error("DELETE USER ERROR:", err);
     }
-}
+};

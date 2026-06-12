@@ -22,7 +22,7 @@ userRouter.delete("/me/follows/:ticker", AuthMiddleware(), AssetMiddleware(), Us
 // admin
 userRouter.get("/", AuthMiddleware(["admin"]), UserController.getUserPagin)
 
-userRouter.get("/me/watchlist-paginated", AuthMiddleware(["admin"]), UserController.getWatchlistPagin)
+userRouter.get("/me/watchlist-paginated", AuthMiddleware(["admin", "analyst"]), UserController.getWatchlistPagin)
 
 userRouter.get("/:id", AuthMiddleware(["admin"]), UserController.getUserById)
 
