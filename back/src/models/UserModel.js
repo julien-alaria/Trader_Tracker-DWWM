@@ -50,6 +50,25 @@ async function getUserWatchlist(id) {
     return result
 }
 
+async function getUserWatchlistPaginated(user_id, limit = 10, offset = 0) {
+    const db = getConnection()
+
+    const parsedLimit = Math.max(1, Number.parseInt(limit, 10))
+    const parsedOffset = Math.max(0, Number.parseInt(offset, 10))
+
+    const sql = `
+        SELECT assets.id, assets.ticker, assets.name, assets.asset_type_id 
+        FROM assets 
+        JOIN users_assets_follow ON users_assets_follow.asset_id = assets.id 
+        WHERE users_assets_follow.user_id = ? 
+        ORDER BY assets.name ASC 
+        LIMIT ? OFFSET ?
+    `
+
+    const [rows] = await db.execute(sql, [user_id, parsedLimit, parsedOffset])
+    return rows
+}
+
 async function createUsers(data) {
     const db = getConnection()
 
@@ -201,4 +220,16 @@ async function userUnfollowAsset(user_id, asset_id) {
     return result
 }
 
-export default { getUsers,getUsersPaginated, getUsersById, getUsersByEmail, getUserWatchlist, createUsers, updateUsers, deleteUsers, userFollowAsset, userUnfollowAsset }
+export default { 
+    getUsers,
+    getUsersPaginated, 
+    getUsersById, 
+    getUsersByEmail, 
+    getUserWatchlist, 
+    getUserWatchlistPaginated,
+    createUsers, 
+    updateUsers, 
+    deleteUsers, 
+    userFollowAsset, 
+    userUnfollowAsset 
+}

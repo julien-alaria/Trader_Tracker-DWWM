@@ -1,5 +1,5 @@
 import http from "../config/instanceHttp.js"
-
+import { decodeToken } from "../middlewares/roleGuard.js";
 export function createPaginator({
     endpoint,
     limit = 3,
