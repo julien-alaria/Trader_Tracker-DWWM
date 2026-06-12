@@ -1,4 +1,4 @@
-import fs from "fs"
+/*import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
 import getConnection from "../db/connection.js"
@@ -72,6 +72,106 @@ async function run() {
 
   } catch (err) {
     console.error("[ERR] ERROR:", err.message)
+  }
+}
+
+run()
+*/
+
+import fs from "fs"
+import path from "path"
+import { fileURLToPath } from "url"
+import getConnection from "../db/connection.js"
+
+const db = getConnection()
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+// mapping FIXE
+const typeMap = {
+  forex: 1,
+  nasdaq: 2,
+  comex: 3
+}
+
+const files = [
+  { type: "forex", file: "forex.json" },
+  { type: "nasdaq", file: "nasdaq.json" },
+  { type: "comex", file: "commodities.json" }
+]
+
+function loadFile(file) {
+  const fullPath = path.join(__dirname, "../data", file)
+  return JSON.parse(fs.readFileSync(fullPath, "utf-8"))
+}
+
+async function importFile(type, file) {
+  const data = loadFile(file)
+  const typeId = typeMap[type]
+
+  if (!typeId) {
+    console.warn(`Unknown type: ${type}`)
+    return
+  }
+
+  let newAssetsCount = 0
+  let skippedCount = 0
+
+  for (const item of data) {
+    const ticker = item.ticker ?? item.symbol
+    
+    let name = item.name ?? item.label
+    if (!name && type === "forex" && ticker) {
+      // Nettoie le "C:" si présent pour faire un nom plus propre (ex: "EURUSD Forex")
+      const cleanTicker = ticker.replace("C:", "")
+      name = `${cleanTicker} Forex`
+    }
+
+    if (!ticker || !name) {
+      console.warn("skipped invalid item:", item)
+      continue
+    }
+
+    // 1. VÉRIFICATION : On regarde si l'asset existe déjà via son ticker unique
+    const [existing] = await db.execute(
+      "SELECT id FROM assets WHERE ticker = ?",
+      [ticker]
+    )
+
+    if (existing.length > 0) {
+      // L'asset existe déjà : on n'y touche ABSOLUMENT PAS (l'id reste intact)
+      skippedCount++
+      continue
+    }
+
+    // 2. INSERTION : Uniquement s'il est vraiment nouveau
+    await db.execute(
+      `
+      INSERT INTO assets (ticker, name, asset_type_id)
+      VALUES (?, ?, ?)
+      `,
+      [ticker, name, typeId]
+    )
+    newAssetsCount++
+  }
+
+  console.log(`[OK] ${type} -> Nouveaux : ${newAssetsCount} | Identiques (Ignorés) : ${skippedCount}`)
+}
+
+async function run() {
+  try {
+    for (const f of files) {
+      await importFile(f.type, f.file)
+    }
+
+    console.log("IMPORT DONE (FIXED TYPES ARCHITECTURE - ANTI-DUPLICATE ID)")
+
+  } catch (err) {
+    console.error("[ERR] ERROR:", err.message)
+  } finally {
+    // Optionnel : ferme la connexion si ton script ne s'arrête pas tout seul
+    // await db.end() 
   }
 }
 
