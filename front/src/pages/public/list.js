@@ -54,7 +54,7 @@ export async function initList() {
 }
 
 function renderAssetList(assets) {
-    console.log(assets)
+    console.log("ASSETS:", assets)
     const container = document.getElementById("assets-list-container")
     if (!container) return
     container.innerHTML = assets.map(item => `

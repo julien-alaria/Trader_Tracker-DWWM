@@ -1,14 +1,12 @@
 .asset-item {
     display: flex;
+    justify-content: space-around;
     align-items: center;
+    align-content: start;
     padding: 15px;
     border-bottom: 1px solid #ddd;
     cursor: pointer;
     transition: background-color 0.2s;
-}
-
-#asset-list-container {
-    cursor: pointer;
 }
 
 #assets-list-container .asset-item a {
@@ -22,5 +20,7 @@
 }
 
 #logo-list {
-    width: 30px; height: 30px; margin-right: 10px;
+    width: 80px; 
+    height: 80px; 
+    margin-right: 10px;
 }
