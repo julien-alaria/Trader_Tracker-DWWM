@@ -20,7 +20,7 @@ const adminPage = `
         <h2>Watchlist</h2>
         <div class="carousel" id="watchlist"></div>
 
-        <h2>By List</h2>
+        <h2>Watchlist By List</h2>
         <div id="watchlist-list-container"></div>
         
         <div id="watchlist-pagination">
