@@ -3,6 +3,7 @@ import { loadTradingViewChart } from "../../utils/tradingChart.js"
 import http from "../../config/instanceHttp.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
 import { formatChartId, formatMarketCap, formatDate } from "../../utils/format.js"
+import analystCard from "../../components/cards/analystCard.js"
 import recoForm from "../../components/recommendations/recoForm.js"
 import { enableCarouselWindow } from "../../utils/lazyloading.js"
 import { createPaginator } from "../../utils/pagination.js"
@@ -18,23 +19,42 @@ const commodityImages = {
 }
 
 const detailsPage = `
-<main>
-    <h1>Details Page</h1>
-    <div id="asset-detail"></div> 
-    <div id="recommendation-container"></div>
+    <main>
+        <section id="detail-section">
+            <h1>Details Page</h1>
+            <div id="asset-detail"></div> 
+        </section>
 
-    <div id="pagination">
-        <button id="prev-btn">Previous</button>
-        <button id="next-btn">Next</button>
-    </div>
+        <section id="recomendations-section">
+            <div id="recommendation-container"></div>
 
-    <div id="recommendation-form"></div>
+            <div id="pagination">
+                <button id="prev-btn">Previous</button>
+                <button id="next-btn">Next</button>
+            </div>
 
-    <div id="analyst-carousel-section" class="hidden">
-        <h2>Analysts covering this asset</h2>
-        <div class="carousel analyst-carousel"></div>
-    </div>
-</main>
+            <div id="recommendation-form"></div>
+        </section>
+
+        <section id="analyst-carousel-section">
+            <div id="analyst-carousel-section" class="hidden">
+                <h2>Analysts covering this asset</h2>
+                <div class="carousel analyst-carousel"></div>
+            </div>
+        </section>
+
+        <section id="analyst-list-section">
+            <h2>All Analysts</h2>
+            <div id="analyst-list-container"></div>
+            
+            <div id="analyst-pagination" style="display: none;">
+                <button id="analyst-prev-btn">Previous</button>
+                <button id="analyst-next-btn">Next</button>
+            </div>
+        </section>
+
+        
+    </main>
 `
 
 export async function initDetail() {
@@ -115,7 +135,7 @@ export async function initDetail() {
             </div>
             
             <div id="${chartId}"></div>
-        `;
+        `
 
         // FOLLOW EVENT LISTENER
         const followBtn = document.getElementById("follow-toggle-btn");
@@ -144,7 +164,7 @@ export async function initDetail() {
         loadTradingViewChart(asset.ticker, asset.history);
 
         try {
-            // Appel direct pour récupérer TOUTES les recommandations
+            // RECOMMENDATIONS
             const recommendationRes = await http.get(`/recommendations?ticker=${asset.ticker}`);
             const recommendations = recommendationRes.results || [];
 
@@ -164,7 +184,7 @@ export async function initDetail() {
             document.getElementById("recommendation-container").innerHTML = "<p>Error loading recommendations</p>";
         }
         
-        // RECOMMENDATION FORM
+        // ANALYSTS CARROUSEL
         const dbAsset = await http.get(`/assets/details/${ticker}`)
 
         try {
@@ -177,20 +197,51 @@ export async function initDetail() {
                 enableCarouselWindow({
                     selector: ".analyst-carousel",
                     batchSize: 3,
-                    getData: () => analysts,
-                    cardComponent: (analyst) => `
-                        <div class="card analyst-card" data-id="${analyst.id}">
-                            <h3>${analyst.name}</h3>
-                            <p>${analyst.company}</p>
-                            <p>${analyst.bio ? analyst.bio.substring(0, 50) + '...' : ''}</p>
-                        </div>
-                    `
+                    getData: () => analysts, 
+                    cardComponent: analystCard
                 });
             }
+
         } catch (e) {
-            console.error("Impossible de charger les analystes:", e);
+            console.error("Impossible de charger les analystes:", e)
         }
 
+        // ANALYSTS LIST PAGINATION
+        // LIST DISPLAY
+        const renderAnalystList = (analysts, payload, meta) => {
+            const container = document.getElementById("analyst-list-container")
+            const paginationDiv = document.getElementById("analyst-pagination")
+
+            container.innerHTML = analysts.map(a => `
+                <div class="analyst-item" data-id="${a.id}">
+                    <span><strong>${a.name}</strong> - ${a.company}</span>
+                </div>
+            `).join("")
+
+            // btn visibility
+            paginationDiv.style.display = (analysts.length === 0 && (!meta || meta.offset === 0)) 
+                ? "none" 
+                : "flex"
+        }
+
+     // PAGINATOR
+        const analystPaginator = createPaginator({
+            endpoint: `/users/analysts?limit=3`,
+            render: renderAnalystList,
+            mapResponse: (res) => ({
+                results: res.results,
+                hasNext: res.meta.hasNext
+            })
+        });
+
+        await analystPaginator.load()
+
+        analystPaginator.bind({
+            nextBtn: document.getElementById("analyst-next-btn"),
+            prevBtn: document.getElementById("analyst-prev-btn")
+        })
+
+        // RECOMMENDATION FORM
         const canRecommend = user && (user.role === "admin" || (user.role === "analyst" && user.analyst_type_id === dbAsset.asset_type_id))
         const formContainer = document.getElementById("recommendation-form")
         
@@ -217,7 +268,7 @@ export async function initDetail() {
                 })
             }
         } else if (user) {
-            formContainer.innerHTML = `<p>${user.role === "analyst" ? "Your specialization does not allow you to recommend this asset." : "Only analysts can post."}</p>`;
+            formContainer.innerHTML = `<p>${user.role === "analyst" ? "Your specialization does not allow you to recommend this asset." : "Only analysts can post."}</p>`
         } else {
             formContainer.innerHTML = `<div class=login-message>
             <p><strong>Want to post a recommendation?</strong></p>
@@ -227,7 +278,7 @@ export async function initDetail() {
 
         const renderRecommendations = (recs, payload, meta) => {
             const container = document.getElementById("recommendation-container");
-            const paginationDiv = document.getElementById("pagination");
+            const paginationDiv = document.getElementById("pagination")
 
             if (!paginationDiv) return; // Sécurité
 
@@ -239,15 +290,14 @@ export async function initDetail() {
                         <p><small>Analyst: ${rec.analyst_name ?? "unknown"}</small></p>
                         <p><small>Published on ${formatDate(rec.created_at)}</small></p>
                     </div>`).join("")
-                : "<p>No recommendations yet</p>";
+                : "<p>No recommendations yet</p>"
 
-            // Utilisation correcte de meta.offset et vérification de la longueur
             if (recs.length === 0 && (!meta || meta.offset === 0)) {
-                paginationDiv.style.display = "none";
+                paginationDiv.style.display = "none"
             } else {
-                paginationDiv.style.display = "flex"; 
+                paginationDiv.style.display = "flex"
             }
-        };
+        }
 
         // PAGINATOR
         recommendationsPaginator = createPaginator({
@@ -262,6 +312,13 @@ export async function initDetail() {
         recommendationsPaginator.bind({
             nextBtn: document.getElementById("next-btn"),
             prevBtn: document.getElementById("prev-btn")
+        })
+
+        enableCarouselWindow({
+            selector: ".analyst-carousel",
+            batchSize: 3, 
+            getData: () => mesAnalystesRecuperes,
+            cardComponent: analystCard
         })
 
     } catch (error) {

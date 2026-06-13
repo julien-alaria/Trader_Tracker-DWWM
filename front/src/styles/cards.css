@@ -79,3 +79,29 @@
     overflow: hidden;
     pointer-events: none;
 }
+
+.card.analyst {
+    cursor: pointer;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    transition: transform 0.2s;
+}
+
+.card.analyst:hover {
+    transform: scale(1.02);
+}
+
+.card.analyst .card-title {
+    color: white; 
+    margin-bottom: 0.5rem;
+}
+
+.card.analyst .card-subtitle {
+    font-weight: bold;
+    color: white;
+}
+
+.card.analyst .card-description {
+    font-size: 0.9rem;
+    color: white;
+}

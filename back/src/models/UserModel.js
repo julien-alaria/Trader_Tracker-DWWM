@@ -201,6 +201,29 @@ async function deleteUsers(id) {
     return result
 }
 
+async function getAllAnalystsPagin(limit = 5, offset = 0) {
+    const db = getConnection();
+    
+    const parsedLimit = Math.max(1, Number.parseInt(limit, 10) || 5)
+    const parsedOffset = Math.max(0, Number.parseInt(offset, 10) || 0)
+
+    const sql = `SELECT id, name, company, bio FROM users WHERE role = 'analyst' LIMIT ? OFFSET ?`;
+    
+    const [rows] = await db.query(sql, [parsedLimit + 1, parsedOffset]);
+    
+    const hasNext = rows.length > parsedLimit;
+    if (hasNext) rows.pop()
+
+    return {
+        results: rows,
+        meta: {
+            limit: parsedLimit,
+            offset: parsedOffset,
+            hasNext
+        }
+    };
+}
+
 async function getAnalystsByType(type_id) {
     const db = getConnection();
     const sql = "SELECT id, name, company, bio FROM users WHERE role = 'analyst' AND analyst_type_id = ?";
@@ -242,6 +265,7 @@ export default {
     createUsers, 
     updateUsers, 
     deleteUsers, 
+    getAllAnalystsPagin,
     getAnalystsByType,
     userFollowAsset, 
     userUnfollowAsset 
