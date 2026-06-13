@@ -4,27 +4,50 @@ import stockCard from "../../components/cards/stockCards.js"
 import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
 import updateForm from "../../components/user/userUpdateForm.js"
 import { enableCarouselWindow } from "../../utils/lazyloading.js"
+import { createPaginator } from "../../utils/pagination.js"
 
 const userPage = `
-<main>
-    <h1>User Page</h1>
+    <main>
+        <h1>User Page</h1>
 
-    <section>
-        <div id="user_id"></div>
-        <div id="user_name"></div>
-        <div id="user_email"></div>
-    </section>
+        <section>
+            <div id="user_id"></div>
+            <div id="user_name"></div>
+            <div id="user_email"></div>
+        </section>
 
-    <h2>My Watchlist</h2>
-    <div class="carousel" id="watchlist"></div>
+        <section>
+            <h2>My Watchlist</h2>
+            <div class="carousel" id="watchlist"></div>
 
-    <div class="update-form">
-        ${updateForm()}
-    </div>
-</main>
+            <h2>Watchlist By List</h2>
+            <div id="watchlist-list-container"></div>
+            
+            <div id="watchlist-pagination">
+                <button id="watchlist-prev-btn">Previous</button>
+                <button id="watchlist-next-btn">Next</button>
+            </div>
+        </section>
+
+        <section>
+            <div class="update-form">
+                ${updateForm()}
+            </div>
+        </section>
+    </main>
 `
 
 export default userPage
+
+const watchlistPaginator = createPaginator({
+    endpoint: "/users/me/watchlist-paginated",
+    limit: 5,
+    render: renderWatchlistList,
+    mapResponse: (res) => ({
+        results: res.results,
+        hasNext: res.hasNext
+    })
+})
 
 export async function initUser() {
     try {
@@ -50,9 +73,15 @@ export async function initUser() {
         renderUserInfo(user)
 
         const allAssets = [...stocks, ...forex, ...commodities]
-        const watchlist = buildWatchlist(watchRes.result, allAssets)
+        renderWatchlist(buildWatchlist(watchRes.result, allAssets))
 
-        renderWatchlist(watchlist)
+        await watchlistPaginator.load()
+
+        watchlistPaginator.bind({
+            nextBtn: document.getElementById("watchlist-next-btn"),
+            prevBtn: document.getElementById("watchlist-prev-btn")
+        })
+
         bindEvents(watchlist)
         bindNavigation()
         initUpdateForm(user)
@@ -79,6 +108,33 @@ function renderWatchlist(watchlist) {
     })
 }
 
+// Watchlist Builder
+function buildWatchlist(raw, assets) {
+    return raw.map(w => {
+        const asset = assets.find(a => a.ticker === w.ticker)
+        return { ...w, ...asset, isFollowed: true }
+    })
+}
+
+// Watchlist BY LIST
+function renderWatchlistList(watchlist) {
+    const container = document.getElementById("watchlist-list-container")
+    container.innerHTML = watchlist.map(item => `
+        <div class="watchlist-item" data-ticker="${item.ticker}" data-type="${item.asset_type_id}">
+            <span><strong>${item.ticker}</strong></span>
+            <span>${item.name}</span>
+        </div>
+    `).join("")
+
+    container.querySelectorAll('.watchlist-item').forEach(el => {
+        el.style.cursor = 'pointer';
+        el.onclick = () => {
+            const { ticker, type } = el.dataset;
+            window.location.hash = `#/details?type=${type}&ticker=${ticker}`;
+        }
+    });
+}
+
 function renderUserInfo(user) {
     const idEl = document.getElementById("user_id")
     const nameEl = document.getElementById("user_name")
@@ -87,13 +143,6 @@ function renderUserInfo(user) {
     if (idEl) idEl.textContent = `User ID: ${user.id}`
     if (nameEl) nameEl.textContent = `User Name: ${user.name}`
     if (emailEl) emailEl.textContent = `Email: ${user.email}`
-}
-
-function buildWatchlist(watchlistRaw, allAssets) {
-    return watchlistRaw.map(w => {
-        const asset = allAssets.find(a => a.ticker === w.ticker)
-        return { ...w, ...asset, isFollowed: true }
-    })
 }
 
 function bindEvents(watchlist) {

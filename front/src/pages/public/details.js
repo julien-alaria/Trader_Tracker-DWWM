@@ -23,9 +23,9 @@ const detailsPage = `
     <div id="asset-detail"></div> 
     <div id="recommendation-container"></div>
 
-     <div id="pagination">
-            <button id="prev-btn">Previous</button>
-            <button id="next-btn">Next</button>
+    <div id="pagination">
+        <button id="prev-btn">Previous</button>
+        <button id="next-btn">Next</button>
     </div>
 
     <div id="recommendation-form"></div>

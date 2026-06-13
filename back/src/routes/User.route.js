@@ -13,6 +13,8 @@ userRouter.get("/analysts/by-type", UserController.getAnalystsByType)
 // self users
 userRouter.get("/me", AuthMiddleware(), UserController.getMe)
 
+userRouter.get("/me/watchlist-paginated", AuthMiddleware(), UserController.getWatchlistPagin)
+
 userRouter.get("/me/watchlist", AuthMiddleware(), UserController.getWatchlist)
 
 userRouter.post("/me/follows", AuthMiddleware(), AssetMiddleware(), UserController.followAsset)
@@ -23,8 +25,6 @@ userRouter.delete("/me/follows/:ticker", AuthMiddleware(), AssetMiddleware(), Us
 
 // admin
 userRouter.get("/", AuthMiddleware(["admin"]), UserController.getUserPagin)
-
-userRouter.get("/me/watchlist-paginated", AuthMiddleware(["admin", "analyst"]), UserController.getWatchlistPagin)
 
 userRouter.get("/:id", AuthMiddleware(["admin"]), UserController.getUserById)
 
