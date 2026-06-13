@@ -59,7 +59,7 @@ async function getMyRecommendationsPaginated(userId, limit = 2, offset = 0){
         ORDER BY r.created_at DESC
         LIMIT ? OFFSET ?
     `
-    // Incompatible binary protocol in method .execute() on Windows, resolved by switching to textual protocol via .query()
+    // Incompatible binary protocol in method .execute() on Windows OS, resolved by switching to textual protocol via .query()
     const [rows] = await db.query(sql, [userId, parsedLimit, parsedOffset])
 
     return rows
@@ -115,7 +115,7 @@ async function getAllRecommendationsPaginated(limit = 2, offset = 0) {
         ORDER BY r.created_at DESC
         LIMIT ? OFFSET ?
     `
-    // Incompatible binary protocol in method .execute() on Windows, resolved by switching to textual protocol via .query()
+    // Incompatible binary protocol in method .execute() on Windows OS, resolved by switching to textual protocol via .query()
     const [rows] = await db.query(sql, [parsedLimit, parsedOffset])
 
     return rows
@@ -164,7 +164,7 @@ async function getRecommendationsByAssetId(assetId, limit = 2, offset = 0) {
         LIMIT ? OFFSET ?
     `
 
-    // Incompatible binary protocol in method .execute() on Windows, resolved by switching to textual protocol via .query()
+    // Incompatible binary protocol in method .execute() on Windows OS, resolved by switching to textual protocol via .query()
     const [rows] = await db.query(sql, [assetId, parsedLimit, parsedOffset])
     return rows
 }
@@ -179,7 +179,7 @@ async function getRecommendationsByAssetIdPaginated(assetId, limit, offset) {
         ORDER BY r.created_at DESC
         LIMIT ? OFFSET ?
     `;
-    // Incompatible binary protocol in method .execute() on Windows, resolved by switching to textual protocol via .query()
+    // Incompatible binary protocol in method .execute() on Windows OS, resolved by switching to textual protocol via .query()
     const [rows] = await db.query(sql, [assetId, Number(limit), Number(offset)]);
     return rows;
 }

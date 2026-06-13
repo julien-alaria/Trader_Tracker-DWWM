@@ -69,7 +69,7 @@ async function getUserWatchlistPaginated(user_id, limit = 10, offset = 0) {
         ORDER BY assets.name ASC 
         LIMIT ? OFFSET ?
     `
-    // Incompatible binary protocol in method .execute() on Windows, resolved by switching to textual protocol via .query()
+    // Incompatible binary protocol in method .execute() on Windows OS, resolved by switching to textual protocol via .query()
     const [rows] = await db.query(sql, [user_id, parsedLimit, parsedOffset])
     return rows
 }
