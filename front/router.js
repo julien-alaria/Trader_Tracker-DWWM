@@ -5,6 +5,7 @@ import register, { initRegister } from "./src/pages/auth/register/register.js"
 import analystRegister, { initAnalystRegister } from "./src/pages/auth/register/analystRegister.js"
 import login, { initLogin } from "./src/pages/auth/login.js"
 import detailsPage, { initDetail} from "./src/pages/public/assetsdetails.js"
+import analystDetailsPage, { initDetailAnalyst } from "./src/pages/public/analystsdetails.js"
 
 import { roleGuard } from "./src/middlewares/roleGuard.js"
 
@@ -15,6 +16,7 @@ import adminPage, { initAdmin } from "./src/pages/admin/admin.js"
 import notfound from "./src/pages/public/notfound.js"
 import navbar, { renderNavbar, bindNavbarEvents} from "./src/components/navbar/navbar.js"
 import footer from "./src/components/footer/footer.js"
+
 
 function router() {
   const hash = (window.location.hash.slice(1) || "/").split("?")[0]
@@ -36,6 +38,11 @@ function router() {
     case "/details":
       content = detailsPage
       init = initDetail
+      break
+
+    case "/analystdetails":
+      content = analystDetailsPage
+      init = initAnalyst
       break
 
     case "/about":

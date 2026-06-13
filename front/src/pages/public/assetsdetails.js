@@ -287,8 +287,8 @@ export async function initDetail() {
                     <div class="recommendation">
                         <strong>${rec.status}</strong>
                         <p>${rec.comment}</p>
-                        <p><small>Analyst: ${rec.analyst_name ?? "unknown"}</small></p>
-                        <p><small>Published on ${formatDate(rec.created_at)}</small></p>
+                        <p>Analyst: ${rec.analyst_name ?? "unknown"}</p>
+                        <p>Published on ${formatDate(rec.created_at)}</p>
                     </div>`).join("")
                 : "<p>No recommendations yet</p>"
 
@@ -320,6 +320,14 @@ export async function initDetail() {
             getData: () => mesAnalystesRecuperes,
             cardComponent: analystCard
         })
+
+        document.querySelector(".analyst-carousel").addEventListener("click", (e) => {
+            const card = e.target.closest(".analyst");
+            if (card) {
+                const analystId = card.dataset.id;
+                window.location.hash = `#/analystdetails?id=${analystId}`;
+            }
+        });
 
     } catch (error) {
         console.error("DETAILS INIT ERROR:", error)
