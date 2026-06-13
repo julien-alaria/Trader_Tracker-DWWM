@@ -4,7 +4,7 @@ import about from "./src/pages/public/about.js"
 import register, { initRegister } from "./src/pages/auth/register/register.js"
 import analystRegister, { initAnalystRegister } from "./src/pages/auth/register/analystRegister.js"
 import login, { initLogin } from "./src/pages/auth/login.js"
-import detailsPage, { initDetail} from "./src/pages/public/details.js"
+import detailsPage, { initDetail} from "./src/pages/public/assetsdetails.js"
 
 import { roleGuard } from "./src/middlewares/roleGuard.js"
 

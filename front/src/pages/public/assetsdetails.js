@@ -214,7 +214,7 @@ export async function initDetail() {
 
             container.innerHTML = analysts.map(a => `
                 <div class="analyst-item" data-id="${a.id}">
-                    <span><strong>${a.name}</strong> - ${a.company}</span>
+                    <p><strong>${a.name}</strong> - ${a.company}</p>
                 </div>
             `).join("")
 
@@ -224,7 +224,7 @@ export async function initDetail() {
                 : "flex"
         }
 
-     // PAGINATOR
+        // PAGINATOR
         const analystPaginator = createPaginator({
             endpoint: `/users/analysts?limit=3`,
             render: renderAnalystList,
@@ -232,7 +232,7 @@ export async function initDetail() {
                 results: res.results,
                 hasNext: res.meta.hasNext
             })
-        });
+        })
 
         await analystPaginator.load()
 
