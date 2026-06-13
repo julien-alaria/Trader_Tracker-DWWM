@@ -10,7 +10,7 @@ async function getUsers() {
 }
 
 async function getUsersPaginated(limit, offset) {
-    const db = getConnection();
+    const db = getConnection()
     
     const l = parseInt(limit, 10);
     const o = parseInt(offset, 10);
@@ -202,7 +202,7 @@ async function deleteUsers(id) {
 }
 
 async function getAllAnalystsPagin(limit = 5, offset = 0) {
-    const db = getConnection();
+    const db = getConnection()
     
     const parsedLimit = Math.max(1, Number.parseInt(limit, 10) || 5)
     const parsedOffset = Math.max(0, Number.parseInt(offset, 10) || 0)
@@ -225,10 +225,24 @@ async function getAllAnalystsPagin(limit = 5, offset = 0) {
 }
 
 async function getAnalystsByType(type_id) {
-    const db = getConnection();
-    const sql = "SELECT id, name, company, bio FROM users WHERE role = 'analyst' AND analyst_type_id = ?";
+    const db = getConnection()
+
+    const sql = "SELECT id, name, company, bio FROM users WHERE role = 'analyst' AND analyst_type_id = ?"
+
     const [rows] = await db.execute(sql, [type_id]);
-    return rows;
+    return rows
+}
+
+async function getAnalystById(id) {
+    const db = getConnection()
+
+    const sql = "SELECT id, name, company, bio FROM users WHERE role = 'analyst' AND id = ?"
+
+    // db.execute retourne un tableau [rows, fields]
+    const [rows] = await db.execute(sql, [id])
+
+    // Retourne le premier élément (l'analyste) ou null si aucun trouvé
+    return rows.length > 0 ? rows[0] : null
 }
 
 async function userFollowAsset(user_id, asset_id) {
@@ -267,6 +281,7 @@ export default {
     deleteUsers, 
     getAllAnalystsPagin,
     getAnalystsByType,
+    getAnalystById,
     userFollowAsset, 
     userUnfollowAsset 
 }

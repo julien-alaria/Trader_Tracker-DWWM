@@ -9,6 +9,7 @@ import { enableCarouselWindow } from "../../utils/lazyloading.js"
 import { createPaginator } from "../../utils/pagination.js"
 
 let recommendationsPaginator
+let analystPaginator
 
 const commodityImages = {
     "C:XAUUSD": "/assets/gold.png",
@@ -37,7 +38,7 @@ const detailsPage = `
         </section>
 
         <section id="analyst-carousel-section">
-            <div id="analyst-carousel-section" class="hidden">
+            <div id="analyst-carousel-container" class="hidden">
                 <h2>Analysts covering this asset</h2>
                 <div class="carousel analyst-carousel"></div>
             </div>
@@ -56,6 +57,41 @@ const detailsPage = `
         
     </main>
 `
+
+const renderRecommendations = (recs, payload, meta) => {
+    const container = document.getElementById("recommendation-container");
+    const paginationDiv = document.getElementById("pagination")
+
+    if (!container || !paginationDiv) return
+
+    container.innerHTML = recs.length > 0
+        ? `<h3 id="reco-title">Analysts Recommendations</h3>` + recs.map(rec => `
+            <div class="recommendation" data-analyst-id="${rec.user_id}">
+                <strong>${rec.status}</strong>
+                <p>${rec.comment}</p>
+                <p>Analyst: ${rec.analyst_name ?? "unknown"}</p>
+                <p>Published on ${formatDate(rec.created_at)}</p>
+            </div>`).join("")
+        : "<p>No recommendations yet</p>"
+
+        container.querySelectorAll('.recommendation').forEach(el => {
+            el.style.cursor = 'pointer';
+
+            el.onclick = () => {
+                const analystId = el.dataset.analystId;
+
+                if (!analystId) return;
+
+                window.location.hash = `#/analystdetails?id=${analystId}`;
+            };
+        });
+     
+    if (recs.length === 0 && (!meta || meta.offset === 0)) {
+        paginationDiv.style.display = "none"
+    } else {
+        paginationDiv.style.display = "flex"
+    }
+}
 
 export async function initDetail() {
     try {
@@ -85,26 +121,26 @@ export async function initDetail() {
         }
 
         // STANDARDIZATION OF IMAGE & LOGO LOGIC
-        let finalImage = asset.image || "/assets/default.png";
-        let fallbackImage = "/assets/default.png";
+        let finalImage = asset.image || "/assets/default.png"
+        let fallbackImage = "/assets/default.png"
 
         if (asset.type === "nasdaq") {
-            finalImage = asset.image || "/assets/nasdaq_logo.svg.png";
-            fallbackImage = "/assets/nasdaq_logo.svg.png";
+            finalImage = asset.image || "/assets/nasdaq_logo.svg.png"
+            fallbackImage = "/assets/nasdaq_logo.svg.png"
         } else if (asset.type === "commodity") {
-            finalImage = commodityImages[asset.ticker] || "/assets/default.png";
-            fallbackImage = "/assets/default.png";
+            finalImage = commodityImages[asset.ticker] || "/assets/default.png"
+            fallbackImage = "/assets/default.png"
         } else if (asset.type === "forex") {
-            finalImage = "/assets/forex_logo.png";
-            fallbackImage = "/assets/forex_logo.png";
+            finalImage = "/assets/forex_logo.png"
+            fallbackImage = "/assets/forex_logo.png"
         }
 
         // USER & WATCHLIST
         const token = localStorage.getItem("token")
         const user = token ? decodeToken(token) : null
 
-        const watchRes = user ? await http.get(`/users/me/watchlist`) : { result: [] };
-        const isFollowed = watchRes.result?.some(w => w.ticker === asset.ticker);
+        const watchRes = user ? await http.get(`/users/me/watchlist`) : { result: [] }
+        const isFollowed = watchRes.result?.some(w => w.ticker === asset.ticker)
 
        // PAGE RENDERING WITH LOGO
         const chartId = formatChartId(asset.ticker)
@@ -138,46 +174,48 @@ export async function initDetail() {
         `
 
         // FOLLOW EVENT LISTENER
-        const followBtn = document.getElementById("follow-toggle-btn");
+        const followBtn = document.getElementById("follow-toggle-btn")
         followBtn.addEventListener("click", async () => {
-            const currentStatus = followBtn.dataset.followed === "true";
-            const ticker = followBtn.dataset.ticker;
-            followBtn.disabled = true;
+            const currentStatus = followBtn.dataset.followed === "true"
+            const ticker = followBtn.dataset.ticker
+            followBtn.disabled = true
             try {
                 if (currentStatus) {
-                    await http.delete(`/users/me/follows/${ticker}`);
-                    followBtn.dataset.followed = "false";
-                    followBtn.textContent = "☆ Follow";
+                    await http.delete(`/users/me/follows/${ticker}`)
+                    followBtn.dataset.followed = "false"
+                    followBtn.textContent = "☆ Follow"
                 } else {
-                    await http.post("/users/me/follows", { ticker });
-                    followBtn.dataset.followed = "true";
-                    followBtn.textContent = "⭐ Unfollow";
+                    await http.post("/users/me/follows", { ticker })
+                    followBtn.dataset.followed = "true"
+                    followBtn.textContent = "⭐ Unfollow"
                 }
             } catch (err) {
-                console.error("Follow error:", err);
+                console.error("Follow error:", err)
             } finally {
-                followBtn.disabled = false;
+                followBtn.disabled = false
             }
         });
 
         // CHARTS & RECOMMENDATIONS
-        loadTradingViewChart(asset.ticker, asset.history);
+        loadTradingViewChart(asset.ticker, asset.history)
 
         try {
-            // RECOMMENDATIONS
-            const recommendationRes = await http.get(`/recommendations?ticker=${asset.ticker}`);
-            const recommendations = recommendationRes.results || [];
+            const recPaginator = createPaginator({
+                endpoint: `/recommendations?ticker=${asset.ticker}`,
+                limit: 5, 
+                render: renderRecommendations,
+                mapResponse: (res) => ({
+                    results: res.results,
+                    hasNext: res.hasNext
+                })
+            })
 
-            const container = document.getElementById("recommendation-container");
-            container.innerHTML = recommendations.length > 0
-                ? `<h3 id="reco-title">Analysts Recommendations</h3>` + recommendations.map(rec => `
-                    <div class="recommendation">
-                        <strong>${rec.status}</strong>
-                        <p>${rec.comment}</p>
-                        <p><small>Analyst: ${rec.analyst_name ?? "unknown"}</small></p>
-                        <p><small>Published on ${formatDate(rec.created_at)}</small></p>
-                    </div>`).join("")
-                : "<p>No recommendations yet</p>";
+            await recPaginator.load();
+
+            recPaginator.bind({
+                nextBtn: document.getElementById("next-btn"),
+                prevBtn: document.getElementById("prev-btn")
+            })
 
         } catch (err) {
             console.error("Erreur chargement recommandations:", err);
@@ -188,19 +226,28 @@ export async function initDetail() {
         const dbAsset = await http.get(`/assets/details/${ticker}`)
 
         try {
-            const analystRes = await http.get(`/users/analysts/by-type?type_id=${dbAsset.asset_type_id}`);
-            const analysts = analystRes.results;
+            const analystRes = await http.get(`/users/analysts/by-type?type_id=${dbAsset.asset_type_id}`)
+            const analysts = analystRes.results
 
-            if (analysts && analysts.length > 0) {
-                document.getElementById("analyst-carousel-section").classList.remove("hidden");
-                
-                enableCarouselWindow({
-                    selector: ".analyst-carousel",
-                    batchSize: 3,
-                    getData: () => analysts, 
-                    cardComponent: analystCard
-                });
-            }
+                if (analysts && analysts.length > 0) {
+                    document.getElementById("analyst-carousel-container").classList.remove("hidden")
+                    
+            
+                    enableCarouselWindow({
+                        selector: ".analyst-carousel",
+                        batchSize: 3,
+                        getData: () => analysts,
+                        cardComponent: analystCard
+                    })
+
+                    document.querySelector(".analyst-carousel").addEventListener("click", (e) => {
+                        const card = e.target.closest(".analyst");
+                        if (card) {
+                            const analystId = card.dataset.id;
+                            window.location.hash = `#/analystdetails?id=${analystId}`
+                        }
+                    })
+                }
 
         } catch (e) {
             console.error("Impossible de charger les analystes:", e)
@@ -241,6 +288,20 @@ export async function initDetail() {
             prevBtn: document.getElementById("analyst-prev-btn")
         })
 
+        const container = document.getElementById("analyst-list-container")
+
+        container.addEventListener("click", (event) => {
+
+            const card = event.target.closest(".analyst-item")
+            
+            if (card) {
+                const analystId = card.dataset.id
+                console.log("ID de l'analyste cliqué :", analystId)
+                
+                window.location.href = `/analyst-detail.html?id=${analystId}`
+            }
+        })
+
         // RECOMMENDATION FORM
         const canRecommend = user && (user.role === "admin" || (user.role === "analyst" && user.analyst_type_id === dbAsset.asset_type_id))
         const formContainer = document.getElementById("recommendation-form")
@@ -275,59 +336,6 @@ export async function initDetail() {
             <button class="detail-btn" id="login-btn" onclick="window.location.hash='#/login'">Log In as Analyst</button>
             </div>`
         }
-
-        const renderRecommendations = (recs, payload, meta) => {
-            const container = document.getElementById("recommendation-container");
-            const paginationDiv = document.getElementById("pagination")
-
-            if (!paginationDiv) return; // Sécurité
-
-            container.innerHTML = recs.length > 0
-                ? `<h3 id="reco-title">Analysts Recommendations</h3>` + recs.map(rec => `
-                    <div class="recommendation">
-                        <strong>${rec.status}</strong>
-                        <p>${rec.comment}</p>
-                        <p>Analyst: ${rec.analyst_name ?? "unknown"}</p>
-                        <p>Published on ${formatDate(rec.created_at)}</p>
-                    </div>`).join("")
-                : "<p>No recommendations yet</p>"
-
-            if (recs.length === 0 && (!meta || meta.offset === 0)) {
-                paginationDiv.style.display = "none"
-            } else {
-                paginationDiv.style.display = "flex"
-            }
-        }
-
-        // PAGINATOR
-        recommendationsPaginator = createPaginator({
-            endpoint: `/recommendations?ticker=${ticker}`,
-            limit: 3,
-            render: (recs) => renderRecommendations(recs),
-            mapResponse: (res) => res 
-        })
-
-        await recommendationsPaginator.load();
-
-        recommendationsPaginator.bind({
-            nextBtn: document.getElementById("next-btn"),
-            prevBtn: document.getElementById("prev-btn")
-        })
-
-        enableCarouselWindow({
-            selector: ".analyst-carousel",
-            batchSize: 3, 
-            getData: () => mesAnalystesRecuperes,
-            cardComponent: analystCard
-        })
-
-        document.querySelector(".analyst-carousel").addEventListener("click", (e) => {
-            const card = e.target.closest(".analyst");
-            if (card) {
-                const analystId = card.dataset.id;
-                window.location.hash = `#/analystdetails?id=${analystId}`;
-            }
-        });
 
     } catch (error) {
         console.error("DETAILS INIT ERROR:", error)

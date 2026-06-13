@@ -222,11 +222,29 @@ async function deleteRecommendation(req, res) {
     }
 }
 
+async function getRecommendationsByAnalyst(req, res) {
+    try {
+        const { analystId } = req.params;
+        const limit = Math.max(1, Number.parseInt(req.query.limit ?? 10, 10));
+        const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10));
+
+        const results = await RecommendationModel.getByAnalystId(analystId, limit, offset);
+        
+        const nextResults = await RecommendationModel.getByAnalystId(analystId, limit, offset + limit);
+        const hasNext = nextResults.length > 0;
+
+        return res.status(200).json({ results, hasNext });
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+}
+
 export default { 
     getRecommendation, 
     getRecommendationPagin, 
     getMyRecommendation, 
     createRecommendation, 
     updateRecommendation, 
-    deleteRecommendation 
+    deleteRecommendation,
+    getRecommendationsByAnalyst
 }

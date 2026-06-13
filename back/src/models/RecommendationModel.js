@@ -255,6 +255,21 @@ async function deleteRecommendations(id){
 
 }
 
+async function getByAnalystId(analystId, limit, offset) {
+    const db = getConnection();
+    const sql = `
+        SELECT r.*, a.ticker, a.name, u.name AS analyst_name
+        FROM recommendations r
+        JOIN assets a ON a.id = r.asset_id
+        JOIN users u ON u.id = r.user_id
+        WHERE r.user_id = ?
+        ORDER BY r.created_at DESC
+        LIMIT ? OFFSET ?
+    `;
+    const [rows] = await db.query(sql, [analystId, limit, offset]);
+    return rows;
+}
+
 export default { 
     getRecommendations, 
     getAllRecommendationsPaginated, 
@@ -266,6 +281,7 @@ export default {
     getRecommendationsByAssetIdPaginated, 
     createRecommendations, 
     updateRecommendations, 
-    deleteRecommendations 
+    deleteRecommendations,
+    getByAnalystId
 }
 

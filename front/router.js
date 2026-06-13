@@ -5,7 +5,7 @@ import register, { initRegister } from "./src/pages/auth/register/register.js"
 import analystRegister, { initAnalystRegister } from "./src/pages/auth/register/analystRegister.js"
 import login, { initLogin } from "./src/pages/auth/login.js"
 import detailsPage, { initDetail} from "./src/pages/public/assetsdetails.js"
-import analystDetailsPage, { initDetailAnalyst } from "./src/pages/public/analystsdetails.js"
+import analystdetails, { initAnalystDetail } from "./src/pages/public/analystsdetails.js"
 
 import { roleGuard } from "./src/middlewares/roleGuard.js"
 
@@ -41,8 +41,8 @@ function router() {
       break
 
     case "/analystdetails":
-      content = analystDetailsPage
-      init = initAnalyst
+      content = analystdetails
+      init = initAnalystDetail
       break
 
     case "/about":

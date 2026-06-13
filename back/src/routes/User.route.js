@@ -12,6 +12,8 @@ userRouter.get("/analysts", UserController.getAnalystsPagin)
 
 userRouter.get("/analysts/by-type", UserController.getAnalystsByType)
 
+userRouter.get("/analysts/:id", UserController.getAnalystsById)
+
 // self users
 userRouter.get("/me", AuthMiddleware(), UserController.getMe)
 

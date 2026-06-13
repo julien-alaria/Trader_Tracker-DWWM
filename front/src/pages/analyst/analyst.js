@@ -160,7 +160,7 @@ function renderWatchlistList(watchlist) {
             const { ticker, type } = el.dataset;
             window.location.hash = `#/details?type=${type}&ticker=${ticker}`;
         }
-    });
+    })
 }
 
 function renderAnalyst(user) {

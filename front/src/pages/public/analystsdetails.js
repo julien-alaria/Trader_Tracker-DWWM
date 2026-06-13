@@ -1,104 +1,111 @@
-// front/src/pages/detailAnalyst.js
-import http from "../../config/instanceHttp.js";
+import http from "../../config/instanceHttp.js"
 import { createPaginator } from "../../utils/pagination.js"
+import { formatDate } from "../../utils/format.js";
 
-const analystDetailsPage = `
+const analystdetails = `
     <main>
-        <section id="detail-section">
-            <h1>Analyst Details Page</h1>
-        </section>
-
         <section>
-            <div id="analyst_id"></div>
-            <div id="analyst_name"></div>
-            <div id="analyst_email"></div>
-            <div id="analyst_type"></div>
-            <div id="analyst_company"></div>
-            <div id="analyst_bio"></div>
+            <h1>Analyst Detail Page</h1>
+            <div id="analyst-detail"></div>
         </section>
 
-         <section>
-            <h2>My Recommendations</h2>
-            <div id="my-recommendations"></div>
+        <section id="analyst-recommendation">
+            <h2>This Analyst Recommendations</h2>
+            <div id="analyst-recommendation-container"></div>
 
-            <div id="pagination">
-                <button id="prev-btn">Previous</button>
-                <button id="next-btn">Next</button>
+            <div id="analyst-pagination">
+                <button id="ana-prev-btn">Previous</button>
+                <button id="ana-next-btn">Next</button>
             </div>
         </section>
-  
     </main>
 `
 
-export default analystDetailsPage
+export default analystdetails
 
+const renderRecommendations = (recs, payload, meta) => {
+    const container = document.getElementById("analyst-recommendation-container")
+    const paginationDiv = document.getElementById("analyst-pagination")
 
-export async function initDetailAnalyst(analystId) {
-    try {
-        const analyst = await http.get(`/users/analysts/${analystId}`);
-        const container = document.getElementById("analyst-detail-container");
-        
-        container.innerHTML = `
-            <div class="analyst-profile">
-                <img src="${analyst.image || '/assets/default_analyst.png'}" alt="${analyst.name}">
-                <h1>${analyst.name}</h1>
-                <p><strong>Company:</strong> ${analyst.company}</p>
-                <p>${analyst.bio}</p>
-                
-                <button id="follow-btn" data-id="${analyst.id}">Follow Analyst</button>
-            </div>
-        `
+    if (!container) return
+    container.innerHTML = recs.length > 0
+        ? `<h3 id="reco-title">Recommendations</h3>` + recs.map(rec => `
+            <div class="recommendation" data-ticker="${rec.ticker}"
+            data-type="asset">
+                <strong>${rec.status}</strong>
+                <p>${rec.name}</p>
+                <p>${rec.comment}</p>
+                <p><small>Published on ${formatDate(rec.created_at)}</small></p>
+            </div>`).join("")
+        : "<p>No recommendations yet</p>"
 
-        await recommendationsPaginator.load()
-
-        // Logique de follow isolée ici
-        document.getElementById("follow-btn").addEventListener("click", async (e) => {
-            const id = e.target.dataset.id;
-            await http.post(`/users/me/follows/analyst/${id}`)
-            // Mise à jour visuelle du bouton
+        container.querySelectorAll('.recommendation').forEach(el => {
+            el.style.cursor = 'pointer';
+            el.onclick = () => {
+                const { ticker, type } = el.dataset
+                window.location.hash = `#/details?type=${type}&ticker=${ticker}`
+            }
         })
 
-        recommendationsPaginator.bind({
-        nextBtn: document.getElementById("next-btn"),
-        prevBtn: document.getElementById("prev-btn")
-        })
-
-    } catch (err) {
-        console.error("Erreur chargement analyste:", err)
+    if (paginationDiv) {
+        paginationDiv.style.display = (recs.length === 0 && (!meta || meta.offset === 0)) ? "none" : "flex";
     }
 }
 
- const renderRecommendations = (recs, payload, meta) => {
-            const container = document.getElementById("my-recommendation");
-            const paginationDiv = document.getElementById("pagination")
-
-            if (!paginationDiv) return; // Sécurité
-
-            container.innerHTML = recs.length > 0
-                ? `<h3 id="reco-title">Analysts Recommendations</h3>` + recs.map(rec => `
-                    <div class="recommendation">
-                        <strong>${rec.status}</strong>
-                        <p>${rec.comment}</p>
-                        <p>Analyst: ${rec.analyst_name ?? "unknown"}</p>
-                        <p>Published on ${formatDate(rec.created_at)}</p>
-                    </div>`).join("")
-                : "<p>No recommendations yet</p>"
-
-            if (recs.length === 0 && (!meta || meta.offset === 0)) {
-                paginationDiv.style.display = "none"
-            } else {
-                paginationDiv.style.display = "flex"
-            }
-        }
-
-
-// PAGINATORS
 const recommendationsPaginator = createPaginator({
-    endpoint: "/recommendations/analysts?${analystId}",
-    limit: 10,
+    endpoint: `/recommendations/analyst`,
+    limit: 3,
     render: renderRecommendations,
     mapResponse: (res) => ({
         results: res.results,
-        hasNext: res.meta.hasNext
+        hasNext: res.hasNext 
     })
 })
+
+export async function initAnalystDetail() {
+
+    const params = new URLSearchParams(window.location.hash.split('?')[1]);
+    const analystId = params.get("id");
+
+    if (!analystId) {
+        console.error("Erreur : Aucun ID d'analyste trouvé dans l'URL");
+        return;
+    }
+
+    try {
+        const response = await http.get(`/users/analysts/${analystId}`)
+        const analyst = response.results
+
+        const container = document.getElementById("analyst-detail")
+        if (!container) return
+
+        container.innerHTML = `
+            <button onclick="history.back()" class="btn-back">Back</button>
+            <div class="asset-header">
+                <h1>${analyst.name}</h1>
+                <p>Company: ${analyst.company}</p>
+                <p>Biographie: ${analyst.bio}</p>
+                <button id="follow-btn">Follow Analyst</button>
+            </div>
+        `
+        // FOLLOW
+        document.getElementById("follow-btn").addEventListener("click", async (e) => {
+            await http.post(`/users/me/follows/analyst/${analystId}`)
+            e.target.textContent = "Following"
+            e.target.disabled = true
+        })
+        // PAGINATION
+        recommendationsPaginator.setEndpoint(`/recommendations/analyst/${analystId}`)
+        await recommendationsPaginator.load()
+
+        recommendationsPaginator.bind({
+            nextBtn: document.getElementById("ana-next-btn"),
+            prevBtn: document.getElementById("ana-prev-btn")
+        })
+
+    } catch (error) {
+        console.error("Analyst Error:", error)
+    }
+}
+
+

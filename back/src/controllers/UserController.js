@@ -226,6 +226,22 @@ async function getAnalystsPagin(req, res) {
     }
 }
 
+async function getAnalystsById(req, res) {
+    try {
+        const { id } = req.params;
+
+        const analyst = await UserModel.getAnalystById(id)
+
+        if (!analyst) {
+            return res.status(404).json({ message: "Analyst not found" });
+        }
+
+        res.status(200).json({ results: analyst})
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 async function getAnalystsByType(req, res) {
     try {
         const { type_id } = req.query;
@@ -289,6 +305,7 @@ export default {
     updateUser, 
     deleteUser, 
     getAnalystsPagin,
+    getAnalystsById,
     getAnalystsByType,
     followAsset, 
     unfollowAsset, 

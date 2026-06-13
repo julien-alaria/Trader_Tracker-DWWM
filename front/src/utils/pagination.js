@@ -6,26 +6,32 @@ export function createPaginator({
     limit = 3,
     render,
     getPayload = () => decodeToken(localStorage.getItem("token")),
-    mapResponse = (res) => res
-}) {
+    mapResponse = (res) => res }) {
+
+    let refs = { next: null, prev: null }
+    let config = { endpoint }
     let offset = 0
     let hasNext = true
 
     async function load() {
-        const separator = endpoint.includes('?') ? '&' : '?';
-        const url = `${endpoint}${separator}limit=${limit}&offset=${offset}`;
-    
-        const res = await http.get(url);
-        const data = mapResponse(res)
+        try {
+            const separator = config.endpoint.includes('?') ? '&' : '?'
+            const url = `${config.endpoint}${separator}limit=${limit}&offset=${offset}`
 
-        hasNext = data.hasNext ?? false
+            const res = await http.get(url)
+            const data = mapResponse(res)
 
-        render(data.results || [], getPayload(), {
-            offset,
-            hasNext
-        })
+            hasNext = data.hasNext ?? false
 
-        updateButtons()
+            render(data.results || [], getPayload(), {
+                offset,
+                hasNext
+            })
+
+            updateButtons()
+        } catch (error) {
+            console.error("Paginator error:", error)
+        }
     }
 
     function next() {
@@ -45,16 +51,17 @@ export function createPaginator({
     }
 
     function bind({ nextBtn, prevBtn }) {
+        refs.next = nextBtn
+        refs.prev = prevBtn
+        
         if (nextBtn) nextBtn.onclick = next
         if (prevBtn) prevBtn.onclick = prev
+        updateButtons()
     }
 
     function updateButtons() {
-        const nextBtn = document.getElementById("next-btn")
-        const prevBtn = document.getElementById("prev-btn")
-
-        if (nextBtn) nextBtn.disabled = !hasNext
-        if (prevBtn) prevBtn.disabled = offset === 0
+        if (refs.next) refs.next.disabled = !hasNext
+        if (refs.prev) refs.prev.disabled = offset === 0
     }
 
     return {
@@ -62,6 +69,11 @@ export function createPaginator({
         next,
         prev,
         reset,
-        bind
+        bind,
+        setEndpoint: (newEndpoint) => {
+            config.endpoint = newEndpoint
+            offset = 0
+            hasNext = true
+        }
     }
 }
