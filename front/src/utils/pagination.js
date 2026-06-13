@@ -12,7 +12,10 @@ export function createPaginator({
     let hasNext = true
 
     async function load() {
-        const res = await http.get(`${endpoint}?limit=${limit}&offset=${offset}`)
+        const separator = endpoint.includes('?') ? '&' : '?';
+        const url = `${endpoint}${separator}limit=${limit}&offset=${offset}`;
+    
+        const res = await http.get(url);
         const data = mapResponse(res)
 
         hasNext = data.hasNext ?? false

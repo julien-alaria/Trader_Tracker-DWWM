@@ -201,6 +201,13 @@ async function deleteUsers(id) {
     return result
 }
 
+async function getAnalystsByType(type_id) {
+    const db = getConnection();
+    const sql = "SELECT id, name, company, bio FROM users WHERE role = 'analyst' AND analyst_type_id = ?";
+    const [rows] = await db.execute(sql, [type_id]);
+    return rows;
+}
+
 async function userFollowAsset(user_id, asset_id) {
     const db = getConnection()
 
@@ -235,6 +242,7 @@ export default {
     createUsers, 
     updateUsers, 
     deleteUsers, 
+    getAnalystsByType,
     userFollowAsset, 
     userUnfollowAsset 
 }

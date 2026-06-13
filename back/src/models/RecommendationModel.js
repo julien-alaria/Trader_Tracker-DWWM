@@ -142,8 +142,11 @@ async function getRecommendationsById(id) {
     return result[0] || null
 }
 
-async function getRecommendationsByAssetId(assetId) {
+async function getRecommendationsByAssetId(assetId, limit = 2, offset = 0) {
     const db = getConnection()
+
+    const parsedLimit = Math.max(1, Number.parseInt(limit ?? 2, 10))
+    const parsedOffset = Math.max(0, Number.parseInt(offset ?? 0, 10))
 
     const sql = `
         SELECT 
@@ -158,10 +161,11 @@ async function getRecommendationsByAssetId(assetId) {
         JOIN users u ON u.id = r.user_id
         WHERE r.asset_id = ?
         ORDER BY r.created_at DESC
+        LIMIT ? OFFSET ?
     `
 
-    const [rows] = await db.execute(sql, [assetId])
-
+    // Incompatible binary protocol in method .execute() on Windows, resolved by switching to textual protocol via .query()
+    const [rows] = await db.query(sql, [assetId, parsedLimit, parsedOffset])
     return rows
 }
 

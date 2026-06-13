@@ -212,6 +212,17 @@ async function deleteUser(req, res) {
     }
 }
 
+async function getAnalystsByType(req, res) {
+    try {
+        const { type_id } = req.query;
+       
+        const analysts = await UserModel.getAnalystsByType(type_id); 
+        res.status(200).json({ results: analysts });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
 async function followAsset(req, res) {
     try {
         const user_id = req.user.id
@@ -263,6 +274,7 @@ export default {
     createUser, 
     updateUser, 
     deleteUser, 
+    getAnalystsByType,
     followAsset, 
     unfollowAsset, 
     getWatchlist, 

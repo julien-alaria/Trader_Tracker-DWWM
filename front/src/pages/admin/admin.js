@@ -3,8 +3,8 @@ import { decodeToken } from "../../middlewares/roleGuard.js"
 import analystUpdateForm from "../../components/user/analystUpdateForm.js"
 import { createPaginator } from "../../utils/pagination.js"
 
-let recommendationsPaginator;
-let usersPaginator;
+let recommendationsPaginator
+let usersPaginator
 
 const adminPage = `
 <main>
@@ -262,11 +262,11 @@ window.editUser = async (id) => {
 }
 
 window.deleteUser = async (id) => {
-    // Suppression immédiate sans étape de confirmation
+    // Immediate deletion without a confirmation step
     try {
         await http.delete(`/users/${id}`);
         
-        // Rafraîchir la liste paginée après la suppression
+        // Refresh the paginated list after deletion
         if (usersPaginator) {
             await usersPaginator.load();
         }

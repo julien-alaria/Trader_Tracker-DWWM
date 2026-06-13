@@ -53,18 +53,14 @@ async function getRecommendationPagin(req, res) {
         // FILTER BY ASSET (ticker)
         if (ticker) {
             const asset = await AssetModel.getAssetByTicker(ticker)
+            if (!asset) return res.status(404).json({ error: "Asset not found" });
 
-            if (!asset) {
-                return res.status(404).json({
-                    error: "Asset not found"
-                })
-            }
+            const results = await RecommendationModel.getRecommendationsByAssetId(asset.id, limit, offset)
 
-            const results = await RecommendationModel.getRecommendationsByAssetId(asset.id)
+            const nextPage = await RecommendationModel.getRecommendationsByAssetIdPaginated(asset.id, limit, offset + limit);
+            const hasNext = nextPage.length > 0;
 
-            return res.status(200).json({
-                results
-            })
+            return res.status(200).json({ results, hasNext })
         }
 
         const results = await RecommendationModel.getAllRecommendationsPaginated(limit, offset)
@@ -226,4 +222,11 @@ async function deleteRecommendation(req, res) {
     }
 }
 
-export default { getRecommendation, getRecommendationPagin, getMyRecommendation, createRecommendation, updateRecommendation, deleteRecommendation }
+export default { 
+    getRecommendation, 
+    getRecommendationPagin, 
+    getMyRecommendation, 
+    createRecommendation, 
+    updateRecommendation, 
+    deleteRecommendation 
+}

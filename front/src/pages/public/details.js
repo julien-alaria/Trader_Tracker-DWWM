@@ -4,6 +4,10 @@ import http from "../../config/instanceHttp.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
 import { formatChartId, formatMarketCap, formatDate } from "../../utils/format.js"
 import recoForm from "../../components/recommendations/recoForm.js"
+import { enableCarouselWindow } from "../../utils/lazyloading.js"
+import { createPaginator } from "../../utils/pagination.js"
+
+let recommendationsPaginator
 
 const commodityImages = {
     "C:XAUUSD": "/assets/gold.png",
@@ -18,7 +22,18 @@ const detailsPage = `
     <h1>Details Page</h1>
     <div id="asset-detail"></div> 
     <div id="recommendation-container"></div>
+
+     <div id="pagination">
+            <button id="prev-btn">Previous</button>
+            <button id="next-btn">Next</button>
+    </div>
+
     <div id="recommendation-form"></div>
+
+    <div id="analyst-carousel-section" class="hidden">
+        <h2>Analysts covering this asset</h2>
+        <div class="carousel analyst-carousel"></div>
+    </div>
 </main>
 `
 
@@ -127,20 +142,55 @@ export async function initDetail() {
 
         // CHARTS & RECOMMENDATIONS
         loadTradingViewChart(asset.ticker, asset.history);
-        const recommendationRes = await http.get(`/recommendations?ticker=${asset.ticker}`)
-        const recommendations = recommendationRes.results || []
-        document.getElementById("recommendation-container").innerHTML = recommendations.length
-            ? `<h3 id="reco-title">Analysts Recommendations</h3>${recommendations.map(rec => `
-                <div class="recommendation">
-                    <strong>${rec.status}</strong>
-                    <p>${rec.comment}</p>
-                    <p><small>Analyst: ${rec.analyst_name ?? "unknown"}</small></p>
-                    <p><small>Published on ${formatDate(rec.created_at)}</small></p>
-                </div>`).join("")}`
-            : "<p>No recommendations yet</p>";
+
+        try {
+            // Appel direct pour récupérer TOUTES les recommandations
+            const recommendationRes = await http.get(`/recommendations?ticker=${asset.ticker}`);
+            const recommendations = recommendationRes.results || [];
+
+            const container = document.getElementById("recommendation-container");
+            container.innerHTML = recommendations.length > 0
+                ? `<h3 id="reco-title">Analysts Recommendations</h3>` + recommendations.map(rec => `
+                    <div class="recommendation">
+                        <strong>${rec.status}</strong>
+                        <p>${rec.comment}</p>
+                        <p><small>Analyst: ${rec.analyst_name ?? "unknown"}</small></p>
+                        <p><small>Published on ${formatDate(rec.created_at)}</small></p>
+                    </div>`).join("")
+                : "<p>No recommendations yet</p>";
+
+        } catch (err) {
+            console.error("Erreur chargement recommandations:", err);
+            document.getElementById("recommendation-container").innerHTML = "<p>Error loading recommendations</p>";
+        }
         
         // RECOMMENDATION FORM
         const dbAsset = await http.get(`/assets/details/${ticker}`)
+
+        try {
+            const analystRes = await http.get(`/users/analysts/by-type?type_id=${dbAsset.asset_type_id}`);
+            const analysts = analystRes.results;
+
+            if (analysts && analysts.length > 0) {
+                document.getElementById("analyst-carousel-section").classList.remove("hidden");
+                
+                enableCarouselWindow({
+                    selector: ".analyst-carousel",
+                    batchSize: 3,
+                    getData: () => analysts,
+                    cardComponent: (analyst) => `
+                        <div class="card analyst-card" data-id="${analyst.id}">
+                            <h3>${analyst.name}</h3>
+                            <p>${analyst.company}</p>
+                            <p>${analyst.bio ? analyst.bio.substring(0, 50) + '...' : ''}</p>
+                        </div>
+                    `
+                });
+            }
+        } catch (e) {
+            console.error("Impossible de charger les analystes:", e);
+        }
+
         const canRecommend = user && (user.role === "admin" || (user.role === "analyst" && user.analyst_type_id === dbAsset.asset_type_id))
         const formContainer = document.getElementById("recommendation-form")
         
@@ -172,8 +222,47 @@ export async function initDetail() {
             formContainer.innerHTML = `<div class=login-message>
             <p><strong>Want to post a recommendation?</strong></p>
             <button class="detail-btn" id="login-btn" onclick="window.location.hash='#/login'">Log In as Analyst</button>
-            </div>`;
+            </div>`
         }
+
+        const renderRecommendations = (recs, payload, meta) => {
+            const container = document.getElementById("recommendation-container");
+            const paginationDiv = document.getElementById("pagination");
+
+            if (!paginationDiv) return; // Sécurité
+
+            container.innerHTML = recs.length > 0
+                ? `<h3 id="reco-title">Analysts Recommendations</h3>` + recs.map(rec => `
+                    <div class="recommendation">
+                        <strong>${rec.status}</strong>
+                        <p>${rec.comment}</p>
+                        <p><small>Analyst: ${rec.analyst_name ?? "unknown"}</small></p>
+                        <p><small>Published on ${formatDate(rec.created_at)}</small></p>
+                    </div>`).join("")
+                : "<p>No recommendations yet</p>";
+
+            // Utilisation correcte de meta.offset et vérification de la longueur
+            if (recs.length === 0 && (!meta || meta.offset === 0)) {
+                paginationDiv.style.display = "none";
+            } else {
+                paginationDiv.style.display = "flex"; 
+            }
+        };
+
+        // PAGINATOR
+        recommendationsPaginator = createPaginator({
+            endpoint: `/recommendations?ticker=${ticker}`,
+            limit: 3,
+            render: (recs) => renderRecommendations(recs),
+            mapResponse: (res) => res 
+        })
+
+        await recommendationsPaginator.load();
+
+        recommendationsPaginator.bind({
+            nextBtn: document.getElementById("next-btn"),
+            prevBtn: document.getElementById("prev-btn")
+        })
 
     } catch (error) {
         console.error("DETAILS INIT ERROR:", error)

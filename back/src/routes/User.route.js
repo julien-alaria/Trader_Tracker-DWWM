@@ -8,6 +8,8 @@ const userRouter = express.Router()
 // public
 userRouter.post("/", UserController.createUser)
 
+userRouter.get("/analysts/by-type", UserController.getAnalystsByType)
+
 // self users
 userRouter.get("/me", AuthMiddleware(), UserController.getMe)
 
