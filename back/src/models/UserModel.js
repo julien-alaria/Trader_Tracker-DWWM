@@ -9,16 +9,21 @@ async function getUsers() {
     return rows
 }
 
-async function getUsersPaginated(limit = 10, offset = 0) {
-    const db = getConnection()
+async function getUsersPaginated(limit, offset) {
+    const db = getConnection();
+    
+    const l = parseInt(limit, 10);
+    const o = parseInt(offset, 10);
 
-    const parsedLimit = Math.max(1, Number.parseInt(limit, 10))
-    const parsedOffset = Math.max(0, Number.parseInt(offset, 10))
-
-    const sql = "SELECT id, name, email, role, analyst_type_id, analyst_verified, company, bio FROM users ORDER BY id DESC LIMIT ? OFFSET ?"
-
-    const [rows] = await db.execute(sql, [parsedLimit, parsedOffset])
-    return rows
+    const sql = `
+        SELECT id, name, email, role, company, bio, analyst_verified, analyst_type_id, created_at 
+        FROM users 
+        ORDER BY id DESC 
+        LIMIT ? OFFSET ?
+    `;
+    
+    const [rows] = await db.query(sql, [l, o]);
+    return rows;
 }
 
 async function getUsersById(id) {
@@ -64,8 +69,8 @@ async function getUserWatchlistPaginated(user_id, limit = 10, offset = 0) {
         ORDER BY assets.name ASC 
         LIMIT ? OFFSET ?
     `
-
-    const [rows] = await db.execute(sql, [user_id, parsedLimit, parsedOffset])
+    // Incompatible binary protocol in method .execute() on Windows, resolved by switching to textual protocol via .query()
+    const [rows] = await db.query(sql, [user_id, parsedLimit, parsedOffset])
     return rows
 }
 

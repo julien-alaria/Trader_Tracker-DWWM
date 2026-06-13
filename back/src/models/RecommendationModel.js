@@ -59,7 +59,8 @@ async function getMyRecommendationsPaginated(userId, limit = 2, offset = 0){
         ORDER BY r.created_at DESC
         LIMIT ? OFFSET ?
     `
-    const [rows] = await db.execute(sql, [userId, parsedLimit, parsedOffset])
+    // Incompatible binary protocol in method .execute() on Windows, resolved by switching to textual protocol via .query()
+    const [rows] = await db.query(sql, [userId, parsedLimit, parsedOffset])
 
     return rows
 }
@@ -114,8 +115,8 @@ async function getAllRecommendationsPaginated(limit = 2, offset = 0) {
         ORDER BY r.created_at DESC
         LIMIT ? OFFSET ?
     `
-
-    const [rows] = await db.execute(sql, [parsedLimit, parsedOffset])
+    // Incompatible binary protocol in method .execute() on Windows, resolved by switching to textual protocol via .query()
+    const [rows] = await db.query(sql, [parsedLimit, parsedOffset])
 
     return rows
 }
@@ -163,6 +164,22 @@ async function getRecommendationsByAssetId(assetId) {
 
     return rows
 }
+
+async function getRecommendationsByAssetIdPaginated(assetId, limit, offset) {
+    const db = getConnection();
+    const sql = `
+        SELECT r.id, r.status, r.comment, r.created_at, r.asset_id, r.user_id, u.name AS analyst_name
+        FROM recommendations r
+        JOIN users u ON u.id = r.user_id
+        WHERE r.asset_id = ?
+        ORDER BY r.created_at DESC
+        LIMIT ? OFFSET ?
+    `;
+    // Incompatible binary protocol in method .execute() on Windows, resolved by switching to textual protocol via .query()
+    const [rows] = await db.query(sql, [assetId, Number(limit), Number(offset)]);
+    return rows;
+}
+
 
 async function createRecommendations(data) {
     const db = getConnection()
@@ -234,5 +251,17 @@ async function deleteRecommendations(id){
 
 }
 
-export default { getRecommendations, getAllRecommendationsPaginated, getMyRecommendations,getMyRecommendationsPaginated, getRecommendationsById, getAllRecommendations, getRecommendationsByAssetId, createRecommendations, updateRecommendations, deleteRecommendations }
+export default { 
+    getRecommendations, 
+    getAllRecommendationsPaginated, 
+    getMyRecommendations,
+    getMyRecommendationsPaginated, 
+    getRecommendationsById, 
+    getAllRecommendations, 
+    getRecommendationsByAssetId, 
+    getRecommendationsByAssetIdPaginated, 
+    createRecommendations, 
+    updateRecommendations, 
+    deleteRecommendations 
+}
 

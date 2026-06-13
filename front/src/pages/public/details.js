@@ -134,8 +134,8 @@ export async function initDetail() {
                 <div class="recommendation">
                     <strong>${rec.status}</strong>
                     <p>${rec.comment}</p>
-                    <small><p>Analyst: ${rec.analyst_name ?? "unknown"}</p></small>
-                    <small><p>Published on ${formatDate(rec.created_at)}</p></small>
+                    <p><small>Analyst: ${rec.analyst_name ?? "unknown"}</small></p>
+                    <p><small>Published on ${formatDate(rec.created_at)}</small></p>
                 </div>`).join("")}`
             : "<p>No recommendations yet</p>";
         
