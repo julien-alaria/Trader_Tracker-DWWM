@@ -241,7 +241,7 @@ export async function initDetail() {
                     })
 
                     document.querySelector(".analyst-carousel").addEventListener("click", (e) => {
-                        const card = e.target.closest(".analyst");
+                        const card = e.target.closest(".analyst")
                         if (card) {
                             const analystId = card.dataset.id;
                             window.location.hash = `#/analystdetails?id=${analystId}`
@@ -266,9 +266,7 @@ export async function initDetail() {
             `).join("")
 
             // btn visibility
-            paginationDiv.style.display = (analysts.length === 0 && (!meta || meta.offset === 0)) 
-                ? "none" 
-                : "flex"
+            paginationDiv.style.display = meta?.hasNext ? "flex" : "none"
         }
 
         // PAGINATOR
