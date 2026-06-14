@@ -266,7 +266,10 @@ export async function initDetail() {
             `).join("")
 
             // btn visibility
-            paginationDiv.style.display = meta?.hasNext ? "flex" : "none"
+            paginationDiv.style.display =
+            (meta?.hasNext || meta?.offset > 0)
+                ? "flex"
+                : "none"
         }
 
         // PAGINATOR
