@@ -166,7 +166,7 @@ async function updateMe(req, res) {
 
         const sanitizedData = sanitizeUserUpdate(req.body)
 
-        // blocage sécurité : empêcher changement rôle
+        // security : avoid role
         if (sanitizedData.role !== undefined) {
             delete sanitizedData.role
         }
@@ -214,15 +214,15 @@ async function deleteUser(req, res) {
 
 async function getAnalystsPagin(req, res) {
     try {
-        const limit = Math.max(1, Number.parseInt(req.query.limit ?? 5, 10));
-        const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10));
+        const limit = Math.max(1, Number.parseInt(req.query.limit ?? 5, 10))
+        const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10))
 
-        const data = await UserModel.getAllAnalystsPagin(limit, offset);
+        const data = await UserModel.getAllAnalystsPagin(limit, offset)
 
         return res.status(200).json(data);
     } catch (error) {
         console.error("ANALYSTS PAGIN ERROR:", error);
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: error.message })
     }
 }
 
@@ -233,7 +233,7 @@ async function getAnalystsById(req, res) {
         const analyst = await UserModel.getAnalystById(id)
 
         if (!analyst) {
-            return res.status(404).json({ message: "Analyst not found" });
+            return res.status(404).json({ message: "Analyst not found" })
         }
 
         res.status(200).json({ results: analyst})
@@ -246,10 +246,11 @@ async function getAnalystsByType(req, res) {
     try {
         const { type_id } = req.query;
        
-        const analysts = await UserModel.getAnalystsByType(type_id); 
-        res.status(200).json({ results: analysts });
+        const analysts = await UserModel.getAnalystsByType(type_id)
+
+        res.status(200).json({ results: analysts })
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message })
     }
 }
 
@@ -291,9 +292,70 @@ async function unfollowAsset(req, res) {
 
     } catch (error) {
         console.error("UNFOLLOW ERROR:", error)
+        return res.status(500).json({ error: error.message })
+    }
+}
+
+async function getFollowedUser(req, res) {
+    try {
+        const limit = Math.max(1, Number.parseInt(req.query.limit ?? 10, 10));
+        const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10));
+
+        const data = await UserModel.getFollowedUsers(
+            req.user.id,
+            limit,
+            offset
+        );
+
+        return res.status(200).json(data);
+
+    } catch (error) {
+        console.error("USER FOLLOWED PAGIN ERROR:", error);
+        return res.status(500).json({ error: error.message });
+    }
+}
+
+async function followUser(req, res) {
+    try {
+        console.log("FOLLOW HIT", req.user.id, req.params.id);
+        const user_id = req.user.id
+        const followUser_id = Number(req.params.id)
+
+        if (req.user.id === Number(req.params.id)) {
+            return res.status(400).json({ error: "Cannot follow yourself" });
+        }
+
+        await UserModel.userFollowUser(user_id, followUser_id)
+
+        return res.status(201).json({message: "user followed successfully"})
+
+    } catch (error) {
+
+        if (error.code === "ER_DUP_ENTRY") {
+        return res.status(409).json({
+            error: "User already followed"
+            })
+        } 
+        console.error("FOLLOW ERROR:", error)
         return res.status(500).json({
             error: error.message
         })
+
+    }
+}
+
+async function unfollowUser(req, res) {
+    try {
+        const user_id = req.user.id
+        const followUser_id = req.params.id
+
+        await UserModel.userUnfollowUser(user_id, followUser_id)
+
+        return res.status(200).json({ message: "user unfollowed successfully"})
+
+    } catch (error) {
+        console.error("UNFOLLOW USER ERROR:", error)
+        return res.status(500).json({ error: error.message })
     }
 }
 
@@ -307,8 +369,11 @@ export default {
     getAnalystsPagin,
     getAnalystsById,
     getAnalystsByType,
+    getFollowedUser,
     followAsset, 
-    unfollowAsset, 
+    unfollowAsset,
+    followUser,
+    unfollowUser, 
     getWatchlist, 
     getWatchlistPagin,
     getMe, 

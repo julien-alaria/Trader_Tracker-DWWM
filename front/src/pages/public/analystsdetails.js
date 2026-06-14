@@ -89,11 +89,29 @@ export async function initAnalystDetail() {
             </div>
         `
         // FOLLOW
-        document.getElementById("follow-btn").addEventListener("click", async (e) => {
-            await http.post(`/users/me/follows/analyst/${analystId}`)
-            e.target.textContent = "Following"
-            e.target.disabled = true
+        const followBtn = document.getElementById("follow-btn");
+
+        followBtn.addEventListener("click", async (e) => {
+            try {
+                followBtn.disabled = true;
+
+                await http.post(`/users/me/follows/users/${analystId}`);
+
+                followBtn.textContent = "Following";
+
+            } catch (err) {
+                console.error(err);
+
+                if (err.status === 409) {
+                    followBtn.textContent = "Following";
+                } else {
+                    followBtn.textContent = "Follow";
+                }
+            } finally {
+                followBtn.disabled = false;
+            }
         })
+        
         // PAGINATION
         recommendationsPaginator.setEndpoint(`/recommendations/analyst/${analystId}`)
         await recommendationsPaginator.load()

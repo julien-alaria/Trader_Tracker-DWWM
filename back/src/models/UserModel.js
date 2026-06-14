@@ -207,11 +207,11 @@ async function getAllAnalystsPagin(limit = 5, offset = 0) {
     const parsedLimit = Math.max(1, Number.parseInt(limit, 10) || 5)
     const parsedOffset = Math.max(0, Number.parseInt(offset, 10) || 0)
 
-    const sql = `SELECT id, name, company, bio FROM users WHERE role = 'analyst' LIMIT ? OFFSET ?`;
+    const sql = `SELECT id, name, company, bio FROM users WHERE role = 'analyst' LIMIT ? OFFSET ?`
     
-    const [rows] = await db.query(sql, [parsedLimit + 1, parsedOffset]);
+    const [rows] = await db.query(sql, [parsedLimit + 1, parsedOffset])
     
-    const hasNext = rows.length > parsedLimit;
+    const hasNext = rows.length > parsedLimit
     if (hasNext) rows.pop()
 
     return {
@@ -221,7 +221,7 @@ async function getAllAnalystsPagin(limit = 5, offset = 0) {
             offset: parsedOffset,
             hasNext
         }
-    };
+    }
 }
 
 async function getAnalystsByType(type_id) {
@@ -269,6 +269,63 @@ async function userUnfollowAsset(user_id, asset_id) {
     return result
 }
 
+async function getFollowedUsers(id, limit, offset) {
+    const db = getConnection();
+
+    const parsedLimit = Math.max(1, Number.parseInt(limit, 10) || 5)
+    const parsedOffset = Math.max(0, Number.parseInt(offset, 10) || 0)
+
+    const sql = `
+        SELECT
+    u.id,
+    u.name,
+    u.company,
+    u.bio,
+    u.analyst_verified
+FROM user_follows uf
+JOIN users u
+    ON u.id = uf.followed_id
+WHERE uf.follower_id = ?
+LIMIT ?
+OFFSET ?
+    `
+
+    const [rows] = await db.query(sql, [
+        id,
+        parsedLimit + 1,
+        parsedOffset
+    ])
+
+    const hasNext = rows.length > parsedLimit;
+
+    if (hasNext) rows.pop()
+
+    return {
+        results: rows,
+        hasNext
+    }
+}
+
+async function userFollowUser(user_id, followUser_id) {
+    const db = getConnection()
+
+    const sql = "INSERT INTO user_follows (follower_id, followed_id) VALUES (?, ?)"
+
+    const [result] = await db.execute(sql, [user_id, followUser_id])
+
+    return result
+}
+
+async function userUnfollowUser(user_id, followUser_id) {
+    const db = getConnection()
+
+    const sql = "DELETE FROM user_follows WHERE follower_id = ? AND followed_id = ?"
+
+    const [result] = await db.execute(sql, [user_id, followUser_id])
+
+    return result
+}
+
 export default { 
     getUsers,
     getUsersPaginated, 
@@ -283,5 +340,8 @@ export default {
     getAnalystsByType,
     getAnalystById,
     userFollowAsset, 
-    userUnfollowAsset 
+    userUnfollowAsset,
+    getFollowedUsers,
+    userFollowUser,
+    userUnfollowUser
 }

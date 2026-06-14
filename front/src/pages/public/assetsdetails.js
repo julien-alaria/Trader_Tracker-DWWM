@@ -297,7 +297,7 @@ export async function initDetail() {
             
             if (card) {
                 const analystId = card.dataset.id
-                window.location.hash = `/analystdetails?id=${analystId}`
+                window.location.hash = `#/analystdetails?id=${analystId}`
             }
         })
 

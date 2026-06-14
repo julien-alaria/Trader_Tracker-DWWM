@@ -15,17 +15,25 @@ userRouter.get("/analysts/by-type", UserController.getAnalystsByType)
 userRouter.get("/analysts/:id", UserController.getAnalystsById)
 
 // self users
+
+// self user info
 userRouter.get("/me", AuthMiddleware(), UserController.getMe)
-
+// self user watchlist
 userRouter.get("/me/watchlist-paginated", AuthMiddleware(), UserController.getWatchlistPagin)
-
+// self user watchlist
 userRouter.get("/me/watchlist", AuthMiddleware(), UserController.getWatchlist)
-
+//assets follow
 userRouter.post("/me/follows", AuthMiddleware(), AssetMiddleware(), UserController.followAsset)
-
+// self user update
 userRouter.put("/me", AuthMiddleware(), UserController.updateMe)
-
+//assets unfollow
 userRouter.delete("/me/follows/:ticker", AuthMiddleware(), AssetMiddleware(), UserController.unfollowAsset)
+// users follow
+userRouter.post("/me/follows/users/:id", AuthMiddleware(), UserController.followUser)
+// users unfollow
+userRouter.delete("/me/follows/users/:id", AuthMiddleware(), UserController.unfollowUser)
+// get users follow
+userRouter.get("/me/follows/users", AuthMiddleware(), UserController.getFollowedUser)
 
 // admin
 userRouter.get("/", AuthMiddleware(["admin"]), UserController.getUserPagin)
