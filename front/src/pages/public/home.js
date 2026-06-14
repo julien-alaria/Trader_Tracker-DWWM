@@ -5,6 +5,9 @@ import stockCard from "../../components/cards/stockCards.js"
 import forexCard from "../../components/cards/forexCards.js"
 import commodityCard from "../../components/cards/commodityCards.js"
 
+// =====================
+// TEMPLATE
+// =====================
 const home = `
     <section id="home-top">
         <h1 id="home-top-title">TRADER TRACKER</h1>
@@ -58,16 +61,12 @@ const home = `
 
 export default home
 
-document.addEventListener("click", (e) => {
-    const card = e.target.closest(".card")
-    if (card && card.dataset.ticker && card.dataset.type) {
-        window.location.hash = `#/details?type=${card.dataset.type}&ticker=${card.dataset.ticker}`
-    }
-})
-
+// =====================
+// INIT
+// =====================
 export async function initHome() {
     try {
-        //DATA FETCHING
+        // 1. DATA FETCHING (Lancement des requêtes immédiatement)
         const [stocks, forex, commodities] = await Promise.all([
             getStock(),
             getForex(),
@@ -76,12 +75,19 @@ export async function initHome() {
 
         const allData = [...stocks, ...forex, ...commodities]
 
-        //SEARCH BAR
+        // 2. TIMING SÉCURITÉ : Attendre que le routeur ait fini d'injecter le HTML
+        await new Promise(resolve => setTimeout(resolve, 0))
+
         const searchContainer = document.getElementById("search-container")
+        if (!searchContainer) return
+
+        // 3. SEARCH BAR INITIALISATION
         const searchBar = createSearchBar((value, container) => {
             const query = value.trim().toLowerCase()
-            if (!query) { container.innerHTML = ""
-                return }
+            if (!query) { 
+                container.innerHTML = ""
+                return 
+            }
 
             const filtered = allData.filter(item =>
                 (item.ticker ?? "").toLowerCase().includes(query) ||
@@ -98,7 +104,7 @@ export async function initHome() {
         searchContainer.innerHTML = ""
         searchContainer.appendChild(searchBar)
 
-        //BUILD CAROUSELS
+        // 4. BUILD CAROUSELS
         enableCarouselWindow({ 
             selector: "#stocks", 
             batchSize: 5, 
@@ -120,9 +126,32 @@ export async function initHome() {
             cardComponent: commodityCard
         })
 
+        // 5. GESTION DES CLICS DE NAVIGATION (DÉLÉGATION SÉCURISÉE)
+        bindCarouselsNavigation()
+
     } catch (err) {
-        console.log("%c--- DIAGNOSTIC ERROR ---", "color: lighblue font-weight: bold")
+        console.log("%c--- DIAGNOSTIC ERROR ---", "color: lightblue; font-weight: bold;")
         console.error("ERROR :", err)
-        console.dir(err)
     }
+}
+
+// =====================
+// EVENTS BINDING
+// =====================
+function bindCarouselsNavigation() {
+    // Liste des sélecteurs de carrousel présents sur la Home
+    const carousels = ["#stocks", "#forex", "#commodities"]
+
+    carousels.forEach(selector => {
+        const container = document.querySelector(selector)
+        if (!container) return
+
+        // On lie l'événement exclusivement sur le conteneur du carrousel, pas sur le document entier !
+        container.onclick = (e) => {
+            const card = e.target.closest(".card")
+            if (card && card.dataset.ticker && card.dataset.type) {
+                window.location.hash = `#/details?type=${card.dataset.type}&ticker=${card.dataset.ticker}`
+            }
+        }
+    })
 }

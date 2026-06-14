@@ -16,7 +16,7 @@
 
 export function loadTradingViewChart(ticker, historyData = [], isMini = false) {
  
-  const container = document.querySelector(`#tv-${ticker}`);
+  const container = document.getElementById(`tv-${ticker}`);
   if (!container || !historyData.length) return;
 
   // mapping Polygon Datas (x, o, h, l, c)

@@ -245,12 +245,22 @@ async function getAnalystsById(req, res) {
 async function getAnalystsByType(req, res) {
     try {
         const { type_id } = req.query;
-       
-        const analysts = await UserModel.getAnalystsByType(type_id)
 
-        res.status(200).json({ results: analysts })
+        if (!type_id) {
+            return res.status(400).json({ message: "Missing type_id parameter" });
+        }
+
+        const limit = Math.max(1, Number.parseInt(req.query.limit ?? 10, 10))
+        const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10))
+
+   
+        const data = await UserModel.getAnalystsByType(type_id, limit, offset)
+
+        return res.status(200).json(data);
+
     } catch (error) {
-        res.status(500).json({ message: error.message })
+        console.error("ANALYSTS BY TYPE PAGIN ERROR:", error);
+        return res.status(500).json({ message: error.message })
     }
 }
 

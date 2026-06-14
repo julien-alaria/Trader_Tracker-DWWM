@@ -224,13 +224,34 @@ async function getAllAnalystsPagin(limit = 5, offset = 0) {
     }
 }
 
-async function getAnalystsByType(type_id) {
-    const db = getConnection()
+async function getAnalystsByType(type_id, limit, offset) {
+    const db = getConnection();
 
-    const sql = "SELECT id, name, company, bio FROM users WHERE role = 'analyst' AND analyst_type_id = ?"
+    const parsedLimit = Math.max(1, Number.parseInt(limit, 10) || 5)
+    const parsedOffset = Math.max(0, Number.parseInt(offset, 10) || 0)
 
-    const [rows] = await db.execute(sql, [type_id]);
-    return rows
+    const sql = `
+        SELECT id, name, company, bio 
+        FROM users 
+        WHERE role = 'analyst' AND analyst_type_id = ?
+        LIMIT ?
+        OFFSET ?
+    `
+
+    const [rows] = await db.query(sql, [
+        type_id,
+        parsedLimit + 1,
+        parsedOffset
+    ])
+
+    const hasNext = rows.length > parsedLimit;
+
+    if (hasNext) rows.pop();
+
+    return {
+        results: rows,
+        hasNext
+    }
 }
 
 async function getAnalystById(id) {
@@ -277,18 +298,18 @@ async function getFollowedUsers(id, limit, offset) {
 
     const sql = `
         SELECT
-    u.id,
-    u.name,
-    u.company,
-    u.bio,
-    u.analyst_verified
-FROM user_follows uf
-JOIN users u
-    ON u.id = uf.followed_id
-WHERE uf.follower_id = ?
-LIMIT ?
-OFFSET ?
-    `
+                u.id,
+                u.name,
+                u.company,
+                u.bio,
+                u.analyst_verified
+            FROM user_follows uf
+            JOIN users u
+                ON u.id = uf.followed_id
+            WHERE uf.follower_id = ?
+            LIMIT ?
+            OFFSET ?
+        `
 
     const [rows] = await db.query(sql, [
         id,

@@ -1,6 +1,7 @@
 import http from "../../config/instanceHttp.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
 import stockCard from "../../components/cards/stockCards.js"
+import analystCard from "../../components/cards/analystCard.js"
 import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
 import analystUpdateForm from "../../components/user/analystUpdateForm.js"
 import { enableCarouselWindow } from "../../utils/lazyloading.js"
@@ -43,6 +44,19 @@ const analystPage = `
         </section>
 
         <section>
+            <h2>Followed Analysts</h2>
+            <div class="carousel" id="follow"></div>
+
+            <h2>Followed Analysts By List</h2>
+            <div id="follow-list-container"></div>
+
+            <div id="follow-pagination">
+                <button id="follow-prev-btn">Previous</button>
+                <button id="follow-next-btn">Next</button>
+            </div>
+        </section>
+
+        <section>
             <div class="update-form">
                 ${analystUpdateForm()}
             </div>
@@ -71,6 +85,17 @@ const watchlistPaginator = createPaginator({
     })
 })
 
+const followPaginator = createPaginator({
+    endpoint: "/users/me/follows/users",
+    limit: 5,
+    render: renderFollowList,
+    mapResponse: (res) => ({
+        results: res.results,
+        hasNext: res.hasNext,
+        offset: res.offset ?? 0
+    })
+})
+
 export async function initAnalyst() {
     try {
         const token = localStorage.getItem("token")
@@ -82,10 +107,11 @@ export async function initAnalyst() {
             return
         }
 
-        const [userRes, watchRes, stocks, forex, commodities] =
+        const [userRes, watchRes, followRes, stocks, forex, commodities] =
             await Promise.all([
                 http.get("/users/me"),
                 http.get("/users/me/watchlist"),
+                http.get("/users/me/follows/users"),
                 getStock(),
                 getForex(),
                 getCommodities()
@@ -97,8 +123,12 @@ export async function initAnalyst() {
         const allAssets = [...stocks, ...forex, ...commodities]
         renderWatchlist(buildWatchlist(watchRes.result, allAssets))
         
+        const follows = followRes.results || []
+        renderFollowCarousel(follows)
+
         await recommendationsPaginator.load()
         await watchlistPaginator.load()
+        await followPaginator.load()
 
         watchlistPaginator.bind({
             nextBtn: document.getElementById("watchlist-next-btn"),
@@ -109,10 +139,15 @@ export async function initAnalyst() {
             nextBtn: document.getElementById("next-btn"),
             prevBtn: document.getElementById("prev-btn")
         })
+
+        followPaginator.bind({
+            nextBtn: document.getElementById("follow-next-btn"),
+            prevBtn: document.getElementById("follow-prev-btn")
+        })
         
         bindRecommendationEvents(user)
         initForm(user)
-        bindNavigation() // Handles card clicks
+        bindNavigation() 
         
     } catch (err) {
         console.error("ANALYST INIT ERROR:", err)
@@ -136,7 +171,6 @@ function renderWatchlist(watchlist) {
     });
 }
 
-// Watchlist Builder
 function buildWatchlist(raw, assets) {
     return raw.map(w => {
         const asset = assets.find(a => a.ticker === w.ticker)
@@ -144,23 +178,26 @@ function buildWatchlist(raw, assets) {
     })
 }
 
-// Watchlist BY LIST
 function renderWatchlistList(watchlist) {
     const container = document.getElementById("watchlist-list-container")
+    if (!container) return
+
     container.innerHTML = watchlist.map(item => `
-        <div class="watchlist-item" data-ticker="${item.ticker}" data-type="${item.asset_type_id}">
+        <div class="watchlist-item" data-ticker="${item.ticker}" data-type="${item.asset_type_id}" style="cursor: pointer;">
             <span><strong>${item.ticker}</strong></span>
             <span>${item.name}</span>
         </div>
     `).join("")
 
-    container.querySelectorAll('.watchlist-item').forEach(el => {
-        el.style.cursor = 'pointer';
-        el.onclick = () => {
-            const { ticker, type } = el.dataset;
-            window.location.hash = `#/details?type=${type}&ticker=${ticker}`;
+    container.onclick = (e) => {
+        const item = e.target.closest(".watchlist-item")
+        if (!item) return
+
+        const { ticker, type } = item.dataset
+        if (ticker) {
+            window.location.hash = `#/details?type=${type}&ticker=${ticker}`
         }
-    })
+    }
 }
 
 function renderAnalyst(user) {
@@ -181,17 +218,21 @@ function renderAnalyst(user) {
 
 function renderRecommendations(recommendations, user) {
     const container = document.getElementById("my-recommendations")
+    const paginationDiv = document.getElementById("pagination") 
     if (!container) return
 
-    if (!recommendations.length) {
+    if (!recommendations || !recommendations.length) {
         container.innerHTML = "<p>No recommendations yet</p>"
-        return
+        if (paginationDiv) paginationDiv.style.display = "none" 
+        return 
     }
+
+    if (paginationDiv) paginationDiv.style.display = "flex"
 
     container.innerHTML = recommendations.map(rec => {
         const isAuthorized = user && (user.role === "admin" || Number(user.id) === Number(rec.user_id))
         return `
-        <div class="recommendation" data-id="${rec.id}">
+        <div class="recommendation" data-id="${rec.id}" data-ticker="${rec.ticker}" data-type="${rec.asset_type_id ?? 'asset'}" style="cursor: pointer;">
             <strong>${rec.status}</strong>
             <p>${rec.comment}</p>
             <p>${rec.name} (${rec.ticker})</p>
@@ -211,9 +252,27 @@ function renderRecommendations(recommendations, user) {
         </div>
         `
     }).join("")
+
+    container.onclick = (e) => {
+        if (
+            e.target.classList.contains("delete-btn") || 
+            e.target.closest(".edit-form") || 
+            e.target.tagName === "SELECT" || 
+            e.target.tagName === "INPUT"
+        ) {
+            return 
+        }
+
+        const card = e.target.closest(".recommendation")
+        if (!card) return
+
+        const { ticker, type } = card.dataset
+        if (ticker) {
+            window.location.hash = `#/details?type=${type}&ticker=${ticker}`
+        }
+    }
 }
 
-// EVENTS
 function bindRecommendationEvents(user) {
     const container = document.getElementById("my-recommendations")
     if (!container) return
@@ -241,20 +300,20 @@ function bindRecommendationEvents(user) {
                 status: data.get("status"),
                 comment: data.get("comment")
             })
-            const updated = await http.get("/recommendations/me")
-            renderRecommendations(updated.results || [], user)
+            // CORRECTIF 1 : Rechargement propre via le paginateur dédié
+            await recommendationsPaginator.load()
         } catch (err) {
             console.error("UPDATE ERROR:", err)
         }
     })
 }
 
-// EVENT DELEGATION CAROUSEL
 function bindNavigation() {
     const watchlistContainer = document.getElementById("watchlist")
     if (watchlistContainer) {
         watchlistContainer.addEventListener("click", (e) => {
-            const card = e.target.closest(".card")
+            // CORRECTIF 2 : Utilise .stock-card (ou la classe exacte de ton composant stockCard)
+            const card = e.target.closest(".stock-card") || e.target.closest(".card")
             if (card) {
                 const { ticker, type } = card.dataset
                 window.location.hash = `#/details?type=${type}&ticker=${ticker}`
@@ -263,7 +322,6 @@ function bindNavigation() {
     }
 }
 
-// FORM
 function initForm(user) {
     const form = document.getElementById("analyst-update-form")
     if (!form) return
@@ -302,4 +360,51 @@ function initForm(user) {
             console.error("UPDATE ERROR:", err)
         }
     })
+}
+
+function renderFollowCarousel(follows) {
+    const container = document.getElementById("follow")
+    if (!container) return
+
+    if (!follows.length) {
+        container.innerHTML = "<p>No analysts followed</p>"
+        return
+    }
+
+    enableCarouselWindow({
+        selector: "#follow",
+        batchSize: 5,
+        getData: () => follows,
+        cardComponent: analystCard
+    })
+
+    container.addEventListener("click", (e) => {
+        const card = e.target.closest(".analyst")
+        if (!card) return
+        window.location.hash = `#/analystdetails?id=${card.dataset.id}`
+    })
+}
+
+function renderFollowList(users, payload, meta) {
+    const container = document.getElementById("follow-list-container")
+    const paginationDiv = document.getElementById("follow-pagination")
+
+    if (!container || !paginationDiv) return
+
+    container.innerHTML = users.map(a => `
+        <div class="follow-item" data-id="${a.id}" style="cursor: pointer;">
+            <p><strong>${a.name}</strong> - ${a.company ?? "Unknown"}</p>
+        </div>
+    `).join("")
+
+    paginationDiv.style.display =
+        (meta?.hasNext || meta?.offset > 0) ? "flex" : "none"
+
+    container.onclick = (e) => {
+        const item = e.target.closest(".follow-item")
+        if (!item) return
+
+        const analystId = item.dataset.id
+        window.location.hash = `#/analystdetails?id=${analystId}`
+    }
 }

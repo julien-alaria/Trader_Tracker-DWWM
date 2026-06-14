@@ -232,10 +232,10 @@ export async function initDetail() {
                 if (analysts && analysts.length > 0) {
                     document.getElementById("analyst-carousel-container").classList.remove("hidden")
                     
-            
+                    
                     enableCarouselWindow({
                         selector: ".analyst-carousel",
-                        batchSize: 3,
+                        batchSize: analysts.length < 3 ? analysts.length : 3,
                         getData: () => analysts,
                         cardComponent: analystCard
                     })
@@ -274,11 +274,11 @@ export async function initDetail() {
 
         // PAGINATOR
         const analystPaginator = createPaginator({
-            endpoint: `/users/analysts?limit=3`,
+            endpoint: `/users/analysts/by-type?type_id=${dbAsset.asset_type_id}&limit=3`,
             render: renderAnalystList,
             mapResponse: (res) => ({
                 results: res.results,
-                hasNext: res.meta.hasNext
+                hasNext: res.hasNext
             })
         })
 
