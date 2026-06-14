@@ -297,9 +297,7 @@ export async function initDetail() {
             
             if (card) {
                 const analystId = card.dataset.id
-                console.log("ID de l'analyste cliqué :", analystId)
-                
-                window.location.href = `/analyst-detail.html?id=${analystId}`
+                window.location.hash = `/analystdetails?id=${analystId}`
             }
         })
 
