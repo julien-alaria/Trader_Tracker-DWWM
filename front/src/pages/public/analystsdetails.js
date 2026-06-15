@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../../config/api.js"
 import http from "../../config/instanceHttp.js"
 import { createPaginator } from "../../utils/pagination.js"
 import { formatDate } from "../../utils/format.js"
@@ -95,10 +96,17 @@ function renderAnalyst(analyst, currentUser) {
     
     const initialText = analyst.isFollowing ? "⭐ Unfollow Analyst" : "☆ Follow Analyst"
 
+    const defaultAvatar = "/assets/default_analyst.png"
+    const imageUrl = analyst.picture ? `${API_BASE_URL}/uploads/${analyst.picture}` : defaultAvatar
+
     container.innerHTML = `
         <button id="back-btn" class="btn-back">Back</button>
 
         <div class="asset-header">
+        <div class="analyst-avatar-container">
+                <img src="${imageUrl}" alt="Photo de ${analyst.name}" class="analyst-profile-pic" />
+            </div>
+            
             <h1>${analyst.name}</h1>
             <p>Company: ${analyst.company}</p>
             <p>Biographie: ${analyst.bio}</p>

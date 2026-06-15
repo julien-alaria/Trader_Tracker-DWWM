@@ -11,6 +11,9 @@ export default function updateForm() {
             <label for="password">Password:</label>
             <input type="password" id="user-password" name="password" minlength="6" maxlength="20" autocomplete="on">
 
+            <label for="picture">Profile Picture (Image):</label>
+            <input type="file" id="picture" name="picture" accept="image/*" />
+
             <input type="submit" value="update">
         </form>
     `

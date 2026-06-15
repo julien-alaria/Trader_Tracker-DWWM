@@ -32,11 +32,7 @@ const register = `
         const data = new FormData(form)
 
         try {
-            const result = await http.post("/auth/register", {
-                name: data.get("name"),
-                email: data.get("email"),
-                password: data.get("password")
-            })
+            const result = await http.post("/auth/register", data)
 
             console.log("REGISTER OK:", result.token)
 

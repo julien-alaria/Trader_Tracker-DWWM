@@ -29,7 +29,7 @@ async function getUsersPaginated(limit, offset) {
 async function getUsersById(id) {
     const db = getConnection()
 
-    const sql = "SELECT id, name, email, role, analyst_type_id, analyst_verified, company, bio FROM users WHERE id = ?"
+    const sql = "SELECT id, name, email, role, analyst_type_id, analyst_verified, company, bio, picture FROM users WHERE id = ?"
 
     const [result] = await db.execute(sql, [id])
 
@@ -172,6 +172,15 @@ async function updateUsers(id, data) {
         throw new Error("No fields to update")
     }
 
+    if (data.picture !== undefined) {
+        fields.push("picture = ?")
+        values.push(data.picture)
+    }
+
+    if (fields.length === 0) {
+        throw new Error("No fields to update")
+    }
+
     values.push(id)
 
     const sql = `UPDATE users SET ${fields.join(", ")} WHERE id = ?`
@@ -209,7 +218,7 @@ async function getAllAnalystsPagin(limit = 5, offset = 0) {
     const parsedLimit = Math.max(1, Number.parseInt(limit, 10) || 5)
     const parsedOffset = Math.max(0, Number.parseInt(offset, 10) || 0)
 
-    const sql = `SELECT id, name, company, bio FROM users WHERE role = 'analyst' LIMIT ? OFFSET ?`
+    const sql = `SELECT id, name, company, bio, picture FROM users WHERE role = 'analyst' LIMIT ? OFFSET ?`
     
     const [rows] = await db.query(sql, [parsedLimit + 1, parsedOffset])
     
@@ -233,7 +242,7 @@ async function getAnalystsByType(type_id, limit, offset) {
     const parsedOffset = Math.max(0, Number.parseInt(offset, 10) || 0)
 
     const sql = `
-        SELECT id, name, company, bio 
+        SELECT id, name, company, bio, picture 
         FROM users 
         WHERE role = 'analyst' AND analyst_type_id = ?
         LIMIT ?
@@ -259,7 +268,7 @@ async function getAnalystsByType(type_id, limit, offset) {
 async function getAnalystById(id) {
     const db = getConnection()
 
-    const sql = "SELECT id, name, company, bio FROM users WHERE role = 'analyst' AND id = ?"
+    const sql = "SELECT id, name, company, bio, picture FROM users WHERE role = 'analyst' AND id = ?"
 
     // db.execute retourne un tableau [rows, fields]
     const [rows] = await db.execute(sql, [id])
@@ -304,7 +313,8 @@ async function getFollowedUsers(id, limit, offset) {
                 u.name,
                 u.company,
                 u.bio,
-                u.analyst_verified
+                u.analyst_verified,
+                u.picture
             FROM user_follows uf
             JOIN users u
                 ON u.id = uf.followed_id

@@ -1,3 +1,5 @@
+import { formatAssetImage } from "../../utils/imageHelper.js"
+
 export default function stockCard({
   ticker = 'N/A', 
   name = 'Unknown company', 
@@ -9,14 +11,14 @@ export default function stockCard({
   history = []
 } = {}) {
 
-  const finalImage = image || "/assets/nasdaq_logo.svg.png"
+  const finalImage = formatAssetImage(ticker);
 
   return `
     <div class="card stock" data-type="stock" data-ticker="${ticker}">
 
         <div class="chart" id="tv-${ticker}" data-ticker="${ticker}" data-history='${JSON.stringify(history)}'></div>
 
-        <img class="card-image" src="${finalImage}" alt="${ticker}" onerror="this.onerror=null; this.src='/assets/nasdaq_logo.svg.png'">
+        <img class="card-image" src="${finalImage}" alt="${ticker}" onerror="this.onerror=null; this.src='/assets/nasdaq_logo.png'">
 
         <h2 class="card-title">${name}</h2>
 

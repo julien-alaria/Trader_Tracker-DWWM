@@ -166,6 +166,10 @@ async function updateMe(req, res) {
 
         const sanitizedData = sanitizeUserUpdate(req.body)
 
+        if (req.file) {
+            sanitizedData.picture = req.file.filename
+        }
+
         // security : avoid role
         if (sanitizedData.role !== undefined) {
             delete sanitizedData.role
@@ -177,9 +181,9 @@ async function updateMe(req, res) {
             })
         }
 
-        const user = await UserModel.updateUsers(id, sanitizedData)
+        const result = await UserModel.updateUsers(id, sanitizedData)
 
-        res.status(200).json(user)
+        res.status(200).json({ message: "Profil mis à jour avec succès", result })
 
     } catch (error) {
         res.status(500).json({ error: error.message })

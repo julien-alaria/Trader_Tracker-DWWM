@@ -178,7 +178,7 @@ async function getMultipleAggregatesJson() {
       const cleanUrl = stock.image.replace("api.massive.com", "api.polygon.io")
       finalImageUrl = `${cleanUrl}?apiKey=${POLYGON_API_KEY}`
     } else {
-      finalImageUrl = "/assets/nasdaq_logo.svg.png"
+      finalImageUrl = "/assets/nasdaq_logo.png"
     }
 
     const meta = {

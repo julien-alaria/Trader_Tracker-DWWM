@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../../config/api.js"
 import http from "../../config/instanceHttp.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
 import stockCard from "../../components/cards/stockCards.js"
@@ -12,6 +13,7 @@ const analystPage = `
         <h1>Analyst Page</h1>
 
         <section>
+            <div><img id="analyst_picture" src="" /></div>
             <div id="analyst_id"></div>
             <div id="analyst_name"></div>
             <div id="analyst_email"></div>
@@ -119,6 +121,7 @@ export async function initAnalyst() {
 
         const user = userRes.result
         renderAnalyst(user)
+        console.log(user)
 
         const allAssets = [...stocks, ...forex, ...commodities]
         renderWatchlist(buildWatchlist(watchRes.result, allAssets))
@@ -207,12 +210,26 @@ function renderAnalyst(user) {
         analyst_email: user.email,
         analyst_type: user.analyst_type_id,
         analyst_company: user.company,
-        analyst_bio: user.bio
+        analyst_bio: user.bio,
+        analyst_picture: user.picture
     }
 
     Object.entries(map).forEach(([id, value]) => {
         const el = document.getElementById(id)
-        if (el) el.textContent = value ?? "N/A"
+        if (!el) return
+
+        // CASE id=analyst_picte
+        if (id === "analyst_picture") {
+            if (value) {
+                el.src = `${API_BASE_URL}/uploads/${value}`
+            } else {
+                el.src = "/assets/default_analyst.png"
+            }
+            el.alt = `Photo de ${user.name || "l'analyste"}`
+
+        } else {
+            el.textContent = value ?? "N/A"
+        }
     })
 }
 

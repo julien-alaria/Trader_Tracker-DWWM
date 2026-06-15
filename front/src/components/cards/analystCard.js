@@ -1,14 +1,24 @@
-export default function analystCard({ id, name, company, bio, image = '/assets/default_analyst.png'} = {}) {
+import { API_BASE_URL } from "../../config/api.js"
+
+export default function analystCard({ id, name, company, bio, picture } = {}) {
+    
+    const defaultAvatar = "/assets/default_analyst.png"
+    const imageUrl = picture ? `${API_BASE_URL}/uploads/${picture}` : defaultAvatar
+
+    // Avoid visibles NULL
+    const displayName = name ?? "Analyst"
+    const displayCompany = company ?? "Independent Analyst"
+    const displayBio = bio ? bio.substring(0, 50) + '...' : 'No bio available.'
+
     return `
-    <div class="card analyst" data-id="${id}">
-        <img class="card-image" src="${image}" alt="${name}">
-        <h2 class="card-title">${name}</h2>
-        <p class="card-subtitle">${company}</p>
+    <div class="card analyst" data-id="${id ?? ''}">
+        <img class="card-image" src="${imageUrl}" alt="${displayName}">
+        <h2 class="card-title">${displayName}</h2>
+        <p class="card-subtitle">${displayCompany}</p>
         <p class="card-description">
-            ${bio ? bio.substring(0, 50) + '...' : 'No bio available.'}
+            ${displayBio}
         </p>
     </div>
     `
 }
-
 

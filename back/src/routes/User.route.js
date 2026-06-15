@@ -1,4 +1,5 @@
 import express from "express"
+import upload from "../services/multerConfig.js"
 import UserController from "../controllers/UserController.js"
 import AuthMiddleware from "../middlewares/authMiddleware.js"
 import AssetMiddleware from "../middlewares/assetMiddleware.js"
@@ -25,7 +26,7 @@ userRouter.get("/me/watchlist", AuthMiddleware(), UserController.getWatchlist)
 //assets follow
 userRouter.post("/me/follows", AuthMiddleware(), AssetMiddleware(), UserController.followAsset)
 // self user update
-userRouter.put("/me", AuthMiddleware(), UserController.updateMe)
+userRouter.put("/me", AuthMiddleware(), upload.single("picture"), UserController.updateMe)
 //assets unfollow
 userRouter.delete("/me/follows/:ticker", AuthMiddleware(), AssetMiddleware(), UserController.unfollowAsset)
 // users follow

@@ -7,6 +7,7 @@ import analystCard from "../../components/cards/analystCard.js"
 import recoForm from "../../components/forms/recoForm.js"
 import { enableCarouselWindow } from "../../utils/lazyloading.js"
 import { createPaginator } from "../../utils/pagination.js"
+import { formatAssetImage } from "../../utils/imageHelper.js"
 
 let recommendationsPaginator
 let analystPaginator
@@ -121,19 +122,8 @@ export async function initDetail() {
         }
 
         // STANDARDIZATION OF IMAGE & LOGO LOGIC
-        let finalImage = asset.image || "/assets/default.png"
-        let fallbackImage = "/assets/default.png"
-
-        if (asset.type === "nasdaq") {
-            finalImage = asset.image || "/assets/nasdaq_logo.svg.png"
-            fallbackImage = "/assets/nasdaq_logo.svg.png"
-        } else if (asset.type === "commodity") {
-            finalImage = commodityImages[asset.ticker] || "/assets/default.png"
-            fallbackImage = "/assets/default.png"
-        } else if (asset.type === "forex") {
-            finalImage = "/assets/forex_logo.png"
-            fallbackImage = "/assets/forex_logo.png"
-        }
+        const finalImage = formatAssetImage(asset.ticker)
+        const fallbackImage = "/assets/nasdaq_logo.png"
 
         // USER & WATCHLIST
         const token = localStorage.getItem("token")

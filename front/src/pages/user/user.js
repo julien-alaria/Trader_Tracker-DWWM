@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "../../config/api.js"
 import http from "../../config/instanceHttp.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
 import stockCard from "../../components/cards/stockCards.js"
@@ -15,6 +16,7 @@ const userPage = `
     <h1>User Page</h1>
 
     <section>
+        <div><img id="user_picture" src="" /></div>
         <div id="user_id"></div>
         <div id="user_name"></div>
         <div id="user_email"></div>
@@ -183,11 +185,17 @@ function renderFollowList(users, payload, meta) {
     if (!container || !paginationDiv) return
 
     // Ajout du style curseur pointer
-    container.innerHTML = users.map(a => `
-        <div class="follow-item" data-id="${a.id}" style="cursor: pointer;">
-            <p><strong>${a.name}</strong> - ${a.company ?? "Unknown"}</p>
-        </div>
-    `).join("")
+    container.innerHTML = users.map(a => {
+        const defaultAvatar = "/assets/default_analyst.png"
+        const imageUrl = a.picture ? `${API_BASE_URL}/uploads/${a.picture}` : defaultAvatar
+
+        return `
+            <div class="follow-item" data-id="${a.id}" style="cursor: pointer; display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <img src="${imageUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="" />
+                <p><strong>${a.name}</strong> - ${a.company ?? "Unknown"}</p>
+            </div>
+        `
+    }).join("")
 
     // Gestion propre de la visibilité des boutons
     paginationDiv.style.display = (meta?.hasNext || (meta?.offset && meta.offset > 0)) ? "flex" : "none"
@@ -253,10 +261,17 @@ function renderUserInfo(user) {
     const idEl = document.getElementById("user_id")
     const nameEl = document.getElementById("user_name")
     const emailEl = document.getElementById("user_email")
+    const imageEl = document.getElementById("user_picture")
 
     if (idEl) idEl.textContent = `User ID: ${user.id}`
     if (nameEl) nameEl.textContent = `User: ${user.name}`
     if (emailEl) emailEl.textContent = `Email: ${user.email}`
+   if (imageEl) {
+        const defaultAvatar = "/assets/default_analyst.png"
+        
+        imageEl.src = user.picture ? `${API_BASE_URL}/uploads/${user.picture}` : defaultAvatar
+        imageEl.alt = `Avatar de ${user.name || 'l\'utilisateur'}`
+    }
 }
 
 // =====================
@@ -337,24 +352,22 @@ function initUpdateForm(user) {
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault()
+        
         const data = new FormData(form)
-        const payload = {
-            name: data.get("name"),
-            email: data.get("email")
-        }
 
-        const password = data.get("password")
-        if (password?.trim()) {
-            payload.password = password
+        const passwordInput = data.get("password")
+        if (!passwordInput || !passwordInput.trim()) {
+            data.delete("password")
         }
 
         try {
-            const result = await http.put("/users/me", payload)
-            if (result.token) {
+            const result = await http.put("/users/me", data)
+
+            if (result && result.token) {
                 localStorage.setItem("token", result.token)
-                window.location.hash = "/"
-                window.dispatchEvent(new Event("hashchange"))
             }
+
+            window.location.reload()
         } catch (err) {
             console.error("UPDATE ERROR:", err)
         }
