@@ -41,6 +41,8 @@ userRouter.get("/me/follows/users/:id/check", AuthMiddleware(), UserController.c
 // admin
 userRouter.get("/", AuthMiddleware(["admin"]), UserController.getUserPagin)
 
+userRouter.get("/pending-analysts", AuthMiddleware(["admin"]), UserController.getPendingAnalyst)
+
 userRouter.get("/:id", AuthMiddleware(["admin"]), UserController.getUserById)
 
 userRouter.put("/:id", AuthMiddleware(["admin"]), UserController.updateUser)

@@ -134,28 +134,34 @@ async function createUser(req, res) {
 
 async function updateUser(req, res) {
     try {
-
         const id = Number(req.params.id)
 
         if (!Number.isInteger(id) || id <= 0) {
             return res.status(400).json({ error: "ID invalide" })
         }
 
+        // 1. On nettoie les données classiques (name, email, bio...) via le sanitizer de base
         const sanitizedData = sanitizeUserUpdate(req.body)
 
-        // no allowed fields
+        // 2. SÉCURITÉ : Puisqu'on est TRÈS SURS que cette route n'est accessible que par l'admin,
+        // on extrait manuellement 'analyst_verified' du req.body et on l'ajoute direct après le sanitizer
+        if (req.body.analyst_verified !== undefined) {
+            sanitizedData.analyst_verified = Number(req.body.analyst_verified) === 1 ? 1 : 0
+        }
+
+        // On revérifie si on a des données à mettre à jour
         if (Object.keys(sanitizedData).length === 0) {
             return res.status(400).json({
                 error: "Aucune donnée valide"
             })
         }
 
+        // 3. On envoie au modèle (qui lui, sait déjà gérer analyst_verified !)
         const user = await UserModel.updateUsers(id, sanitizedData)
 
         return res.status(200).json(user)
 
     } catch (error) {
-
         return res.status(500).json({ error: error.message })
     }
 }
@@ -265,6 +271,15 @@ async function getAnalystsByType(req, res) {
     } catch (error) {
         console.error("ANALYSTS BY TYPE PAGIN ERROR:", error);
         return res.status(500).json({ message: error.message })
+    }
+}
+
+async function getPendingAnalyst(req, res) {
+    try {
+        const results = await UserModel.getPendingAnalysts()
+        return res.status(200).json({ results })
+    } catch (error) {
+        return res.status(500).json({ error: error.message })
     }
 }
 
@@ -397,6 +412,7 @@ export default {
     getAnalystsPagin,
     getAnalystsById,
     getAnalystsByType,
+    getPendingAnalyst,
     getFollowedUser,
     followAsset, 
     unfollowAsset,

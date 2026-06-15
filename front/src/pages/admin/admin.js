@@ -18,6 +18,7 @@ const adminPage = `
 
     <section>
         <h2>ANALYST VALIDATION</h2>
+        <div id="pending-analysts"></div> </section>
     </section>
 
     <section>
@@ -88,6 +89,7 @@ export async function initAdmin() {
 
         await usersPaginator.load()
         await recommendationsPaginator.load()
+        await loadPendingAnalysts()
 
         usersPaginator.bind({
             nextBtn: document.getElementById("users-next-btn"),
@@ -273,4 +275,76 @@ window.deleteUser = async (id) => {
     } catch (err) {
         console.error("DELETE USER ERROR:", err);
     }
-};
+}
+
+// PENDING ANALYSTS
+async function loadPendingAnalysts() {
+    const container = document.getElementById("pending-analysts")
+    if (!container) return
+
+    try {
+        // 1. On appelle la route dédiée
+        const res = await http.get("/users/pending-analysts") 
+        const pendingAnalysts = res.results // C'est directement le tableau des analystes à valider !
+
+        // 2. Si le tableau est vide, c'est qu'il n'y a personne à valider
+        if (!pendingAnalysts || pendingAnalysts.length === 0) {
+            container.innerHTML = `<p class="no-data">🎉 Aucun analyste en attente de validation.</p>`
+            return
+        }
+
+        // 3. Rendu direct du tableau (pas de code de filtrage inutile ici)
+        container.innerHTML = `
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Entreprise</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${pendingAnalysts.map(analyst => `
+                        <tr>
+                            <td><strong>${analyst.name}</strong></td>
+                            <td>${analyst.email}</td>
+                            <td>${analyst.company || "N/A"}</td>
+                            <td>
+                                <button class="approve-btn" data-id="${analyst.id}">
+                                    ✅ Approuver
+                                </button>
+                            </td>
+                        </tr>
+                    `).join("")}
+                </tbody>
+            </table>
+        `
+
+        // Écouteur d'événements pour le bouton Approuver (inchangé)
+        container.querySelectorAll(".approve-btn").forEach(btn => {
+            // Dans la fonction front 'loadPendingAnalysts' :
+            btn.addEventListener("click", async (e) => {
+                const id = e.target.dataset.id
+                e.target.disabled = true
+
+                try {
+                    // On envoie le corps attendu par ton modèle et ton sanitizer
+                    await http.put(`/users/${id}`, { analyst_verified: 1 })
+                    
+                    alert("Analyste approuvé avec succès !")
+                    await loadPendingAnalysts()
+                    if (usersPaginator) await usersPaginator.load()
+                } catch (err) {
+                    console.error("APPROVE ANALYST ERROR:", err)
+                    alert("Erreur lors de la validation.")
+                    e.target.disabled = false
+                }
+            })
+        })
+
+    } catch (err) {
+        console.error("LOAD PENDING ANALYSTS ERROR:", err)
+        container.innerHTML = `<p style="color: red;">Erreur lors du chargement des demandes.</p>`
+    }
+}

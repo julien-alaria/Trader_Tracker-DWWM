@@ -4,7 +4,7 @@ import { hashPassword } from "../utils/password.js"
 async function getUsers() {
     const db = getConnection()
 
-    const [rows] = await db.query("SELECT id, name, email, role, analyst_type_id, analyst_verified, company, bio FROM users")
+    const [rows] = await db.query("SELECT id, name, email, role, analyst_type_id, analyst_verified, company, bio, picture FROM users")
 
     return rows
 }
@@ -277,6 +277,17 @@ async function getAnalystById(id) {
     return rows.length > 0 ? rows[0] : null
 }
 
+async function getPendingAnalysts() {
+    const db = getConnection()
+
+    // On ne prend que les analystes ET ceux dont le statut est à 0
+    const [rows] = await db.query(
+        "SELECT id, name, email, role, analyst_type_id, analyst_verified, company, bio, picture FROM users WHERE role = 'analyst' AND analyst_verified = 0"
+    )
+
+    return rows
+}
+
 async function userFollowAsset(user_id, asset_id) {
     const db = getConnection()
 
@@ -382,6 +393,7 @@ export default {
     getAllAnalystsPagin,
     getAnalystsByType,
     getAnalystById,
+    getPendingAnalysts,
     userFollowAsset, 
     userUnfollowAsset,
     getFollowedUsers,

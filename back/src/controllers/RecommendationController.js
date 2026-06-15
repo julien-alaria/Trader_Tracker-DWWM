@@ -107,6 +107,18 @@ async function createRecommendation(req, res) {
             })
         }
 
+        if (req.user.role === "analyst" && Number(req.user.analyst_verified) !== 1) {
+            return res.status(403).json({
+                error: "Votre compte analyste est en attente de validation. Vous ne pouvez pas publier de recommandation."
+            })
+        }
+
+        if (req.user.role === "analyst" && req.user.analyst_type_id !== req.asset.asset_type_id) {
+            return res.status(403).json({
+                error: "Vous n'êtes pas autorisé à publier sur ce type d'actif."
+            })
+        }
+
         const sanitizedData = sanitizeRecommendation({
             status: req.body.status,
             comment: req.body.comment,
