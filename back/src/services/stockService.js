@@ -175,11 +175,9 @@ async function getMultipleAggregatesJson() {
     let finalImageUrl = null
 
     if (stock.image) {
-      // Redirection to the correct Polygon server which knows how to decode and validate the parameter ?apiKey=
       const cleanUrl = stock.image.replace("api.massive.com", "api.polygon.io")
       finalImageUrl = `${cleanUrl}?apiKey=${POLYGON_API_KEY}`
     } else {
-      // Fallback si pas de logo trouvé dans le JSON
       finalImageUrl = "/assets/nasdaq_logo.svg.png"
     }
 
