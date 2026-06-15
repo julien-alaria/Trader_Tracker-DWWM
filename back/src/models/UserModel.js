@@ -77,7 +77,7 @@ async function getUserWatchlistPaginated(user_id, limit = 10, offset = 0) {
 async function createUsers(data) {
     const db = getConnection()
 
-    const { name, email, password, role, analyst_type_id, company, bio } = data
+    const { name, email, password, role, analyst_type_id, company, bio, picture, document } = data
 
     const [existingEmail] = await db.execute("SELECT id FROM users WHERE email = ?",[email])
 
@@ -93,10 +93,10 @@ async function createUsers(data) {
         }
     }
 
-    const sql = "INSERT INTO users (name, email, password, role, analyst_type_id, analyst_verified, company, bio) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+    const sql = "INSERT INTO users (name, email, password, role, analyst_type_id, analyst_verified, company, bio, picture, document ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
     const [result] = await db.execute(sql,
-        [name, email, hashedPassword, role, analyst_type_id, false, company, bio]
+        [name, email, hashedPassword, role, analyst_type_id, false, company, bio, picture, document]
     )
 
     return {
@@ -104,7 +104,9 @@ async function createUsers(data) {
         name,
         email,
         role,
-        analyst_type_id
+        analyst_type_id,
+        picture,
+        document
     }
 }
 

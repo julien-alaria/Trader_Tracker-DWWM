@@ -1,6 +1,6 @@
 import http from "../../config/instanceHttp.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
-import analystUpdateForm from "../../components/user/analystUpdateForm.js"
+import analystUpdateForm from "../../components/forms/analystUpdateForm.js"
 import { createPaginator } from "../../utils/pagination.js"
 
 let recommendationsPaginator

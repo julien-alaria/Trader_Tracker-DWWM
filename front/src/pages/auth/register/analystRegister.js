@@ -1,7 +1,7 @@
 import http from "../../../config/instanceHttp.js"
 
 const analystRegister = `
-                <form method="post" id="analyst-form">
+                <form method="post" id="analyst-form" enctype="multipart/form-data">
                     <label for="name">Analyst Name:</label>
                     <input type="text" id="name" name="name" required minlength="2" maxlength="50" autocomplete="on">
 
@@ -32,6 +32,13 @@ const analystRegister = `
                             <label for="asset-type3">Comex</label>
                         </div>
                     </fieldset>
+
+                    <label for="picture">Profile Picture (Image):</label>
+                    <input type="file" id="picture" name="picture" accept="image/*" />
+
+                    <label for="document">Certification (PDF):</label>
+                    <input type="file" id="document" name="document" accept=".pdf" />
+
                     <input type="submit" value="submit">
                     <div id="message"></div>
                 </form>
@@ -50,15 +57,7 @@ const analystRegister = `
       const data = new FormData(form)
 
       try {
-        const result = await http.post("/auth/register", {
-          name: data.get("name"),
-          email: data.get("email"),
-          password: data.get("password"),
-          company: data.get("company"),
-          bio: data.get("bio"),
-          role: data.get("role"),
-          analyst_type_id: Number(data.get("analyst_type_id"))
-        })
+        const result = await http.post("/auth/register", data)
 
         console.log("REGISTER OK:", result)
 
@@ -76,10 +75,10 @@ const analystRegister = `
         }
         
       } catch (error) {
-        messageDiv.innerText = error.response?.data?.message || "An error occurred during registration."
+        messageDiv.innerText = error.response?.data?.message || "An error occurred during analyst registration."
         console.error("Register failed:", error)
       }
     })
 }
 
-export default analystRegister;
+export default analystRegister

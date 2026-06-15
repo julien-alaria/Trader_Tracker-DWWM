@@ -30,7 +30,23 @@ async function login(req, res) {
 
 async function register(req, res) {
     try {
+
         const sanitizedData = sanitizeUser(req.body)
+
+        // Multer picture injection
+        if (req.files && req.files['picture']) {
+            sanitizedData.picture = req.files['picture'][0].filename
+        } else {
+            sanitizedData.picture = null
+        }
+
+        // Multer PDF injection
+        if (req.files && req.files['document']) {
+            sanitizedData.document = req.files['document'][0].filename
+        } else {
+            sanitizedData.document = null
+        }
+
         const user = await UserModel.createUsers(sanitizedData)
         const token = generateToken(user)
 

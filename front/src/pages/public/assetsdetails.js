@@ -4,7 +4,7 @@ import http from "../../config/instanceHttp.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
 import { formatChartId, formatMarketCap, formatDate } from "../../utils/format.js"
 import analystCard from "../../components/cards/analystCard.js"
-import recoForm from "../../components/recommendations/recoForm.js"
+import recoForm from "../../components/forms/recoForm.js"
 import { enableCarouselWindow } from "../../utils/lazyloading.js"
 import { createPaginator } from "../../utils/pagination.js"
 

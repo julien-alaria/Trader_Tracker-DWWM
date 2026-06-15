@@ -3,7 +3,7 @@ import { decodeToken } from "../../middlewares/roleGuard.js"
 import stockCard from "../../components/cards/stockCards.js"
 import analystCard from "../../components/cards/analystCard.js"
 import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
-import analystUpdateForm from "../../components/user/analystUpdateForm.js"
+import analystUpdateForm from "../../components/forms/analystUpdateForm.js"
 import { enableCarouselWindow } from "../../utils/lazyloading.js"
 import { createPaginator } from "../../utils/pagination.js"
 

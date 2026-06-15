@@ -4,11 +4,16 @@ const API_URL = API_BASE_URL
 
 class InstanceHttp {
 
-    getHeaders() {
-        return {
-            "Authorization": `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json"
+    getHeaders(data) {
+        const headers = {
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
         }
+
+        if (!(data instanceof FormData)) {
+            headers["Content-Type"] = "application/json";
+        }
+
+        return headers;
     }
 
     async handleResponse(response) {
@@ -19,7 +24,8 @@ class InstanceHttp {
         }
 
         if (!response.ok) {
-            throw new Error(`HTTP Error: ${response.status}`)
+            const errorData = await response.json().catch(() => ({}));
+            throw { response: { data: errorData }, status: response.status } 
         }
 
         return response.json()
@@ -34,28 +40,35 @@ class InstanceHttp {
     }
 
     async post(url, data) {
+        // On utilise bien la variable 'body' qui sait gérer le FormData
+        const body = data instanceof FormData ? data : JSON.stringify(data);
+
         const response = await fetch(API_URL + url, {
             method: "POST",
-            headers: this.getHeaders(),
-            body: JSON.stringify(data)
+            headers: this.getHeaders(data),
+            body: body // <-- CORRECTION ICI
         })
         return this.handleResponse(response)
     }
 
     async put(url, data) {
+        const body = data instanceof FormData ? data : JSON.stringify(data);
+
         const response = await fetch(API_URL + url, {
             method: "PUT",
-            headers: this.getHeaders(),
-            body: JSON.stringify(data)
+            headers: this.getHeaders(data), // Ajout de 'data' pour le Content-Type
+            body: body // <-- CORRECTION ICI
         })
         return this.handleResponse(response)
     }
 
     async patch(url, data) {
+        const body = data instanceof FormData ? data : JSON.stringify(data);
+
         const response = await fetch(API_URL + url, {
             method: "PATCH",
-            headers: this.getHeaders(),
-            body: JSON.stringify(data)
+            headers: this.getHeaders(data), // Ajout de 'data' pour le Content-Type
+            body: body // <-- CORRECTION ICI
         })
         return this.handleResponse(response)
     }
