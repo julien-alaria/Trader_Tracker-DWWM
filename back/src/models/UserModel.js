@@ -347,6 +347,16 @@ async function userUnfollowUser(user_id, followUser_id) {
     return result
 }
 
+async function isFollowing(user_id, followUser_id) {
+    const db = getConnection()
+
+    const sql = "SELECT 1 FROM user_follows WHERE follower_id = ? AND followed_id = ? LIMIT 1"
+    const [rows] = await db.execute(sql, [user_id, followUser_id])
+
+    // Si rows.length > 0, la relation existe, donc true, sinon false
+    return rows.length > 0
+}
+
 export default { 
     getUsers,
     getUsersPaginated, 
@@ -364,5 +374,6 @@ export default {
     userUnfollowAsset,
     getFollowedUsers,
     userFollowUser,
-    userUnfollowUser
+    userUnfollowUser,
+    isFollowing
 }

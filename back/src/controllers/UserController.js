@@ -327,7 +327,6 @@ async function getFollowedUser(req, res) {
 
 async function followUser(req, res) {
     try {
-        console.log("FOLLOW HIT", req.user.id, req.params.id);
         const user_id = req.user.id
         const followUser_id = Number(req.params.id)
 
@@ -369,6 +368,21 @@ async function unfollowUser(req, res) {
     }
 }
 
+async function checkIfFollowing(req, res) {
+    try {
+        const user_id = req.user.id // Récupéré via AuthMiddleware()
+        const followUser_id = req.params.id
+
+        // Appel de la fonction de ton modèle (qu'on va créer juste après)
+        const isFollowing = await UserModel.isFollowing(user_id, followUser_id)
+
+        return res.status(200).json({ isFollowing: isFollowing })
+    } catch (error) {
+        console.error("CHECK FOLLOWING ERROR:", error)
+        return res.status(500).json({ error: error.message })
+    }
+}
+
 export default { 
     getUser, 
     getUserPagin, 
@@ -387,5 +401,6 @@ export default {
     getWatchlist, 
     getWatchlistPagin,
     getMe, 
-    updateMe 
+    updateMe,
+    checkIfFollowing
 }

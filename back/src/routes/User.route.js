@@ -34,6 +34,8 @@ userRouter.post("/me/follows/users/:id", AuthMiddleware(), UserController.follow
 userRouter.delete("/me/follows/users/:id", AuthMiddleware(), UserController.unfollowUser)
 // get users follow
 userRouter.get("/me/follows/users", AuthMiddleware(), UserController.getFollowedUser)
+// Nouvelle route dédiée pour vérifier si l'utilisateur connecté suit cet analyste
+userRouter.get("/me/follows/users/:id/check", AuthMiddleware(), UserController.checkIfFollowing)
 
 // admin
 userRouter.get("/", AuthMiddleware(["admin"]), UserController.getUserPagin)

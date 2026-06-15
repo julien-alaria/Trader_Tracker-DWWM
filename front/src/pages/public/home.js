@@ -130,7 +130,6 @@ export async function initHome() {
         bindCarouselsNavigation()
 
     } catch (err) {
-        console.log("%c--- DIAGNOSTIC ERROR ---", "color: lightblue; font-weight: bold;")
         console.error("ERROR :", err)
     }
 }

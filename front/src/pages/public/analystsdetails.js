@@ -59,6 +59,13 @@ export async function initAnalystDetail() {
         const response = await http.get(`/users/analysts/${analystId}`)
         const analyst = response.results
 
+        if (currentUser) {
+            const checkFollow = await http.get(`/users/me/follows/users/${analystId}/check`)
+            analyst.isFollowing = checkFollow.isFollowing // Injecte true ou false dans l'objet
+        } else {
+            analyst.isFollowing = false
+        }
+
         renderAnalyst(analyst, currentUser)
 
         recommendationsPaginator.setEndpoint(
@@ -84,8 +91,9 @@ function renderAnalyst(analyst, currentUser) {
     const container = document.getElementById("analyst-detail")
     if (!container) return
 
-    const isSelf =
-        currentUser && Number(currentUser.id) === Number(analyst.id)
+    const isSelf = currentUser && Number(currentUser.id) === Number(analyst.id)
+    
+    const initialText = analyst.isFollowing ? "⭐ Unfollow Analyst" : "☆ Follow Analyst"
 
     container.innerHTML = `
         <button id="back-btn" class="btn-back">Back</button>
@@ -95,8 +103,8 @@ function renderAnalyst(analyst, currentUser) {
             <p>Company: ${analyst.company}</p>
             <p>Biographie: ${analyst.bio}</p>
 
-            <button id="follow-btn" ${isSelf ? "disabled" : ""}>
-                ${isSelf ? "Your Profile" : "Follow Analyst"}
+            <button id="follow-btn" ${isSelf ? "disabled" : ""} data-followed="${analyst.isFollowing}">
+                ${isSelf ? "Your Profile" : initialText}
             </button>
         </div>
     `
@@ -105,6 +113,7 @@ function renderAnalyst(analyst, currentUser) {
         .addEventListener("click", () => history.back())
 
     if (!isSelf) {
+        // Plus besoin de passer l'état initial en paramètre, le dataset s'en charge !
         bindFollowButton(analyst.id)
     }
 }
@@ -117,19 +126,29 @@ function bindFollowButton(analystId) {
     if (!btn) return
 
     btn.addEventListener("click", async () => {
+        // 1. On récupère l'état actuel directement depuis le dataset du bouton
+        const isFollowing = btn.dataset.followed === "true"
+        btn.disabled = true
+
         try {
-            btn.disabled = true
-
-            await http.post(`/users/me/follows/users/${analystId}`)
-
-            btn.textContent = "Following"
-
-        } catch (err) {
-            if (err.status === 409) {
-                btn.textContent = "Following"
+            if (isFollowing) {
+                // ---- LOGIQUE UNFOLLOW ----
+                await http.delete(`/users/me/follows/users/${analystId}`)
+                
+                // Mise à jour du dataset et du texte en cas de succès
+                btn.dataset.followed = "false"
+                btn.textContent = "☆ Follow Analyst"
             } else {
-                btn.textContent = "Follow"
+                // ---- LOGIQUE FOLLOW ----
+                await http.post(`/users/me/follows/users/${analystId}`)
+                
+                // Mise à jour du dataset et du texte en cas de succès
+                btn.dataset.followed = "true"
+                btn.textContent = "⭐ Unfollow Analyst"
             }
+        } catch (err) {
+            console.error("Follow/Unfollow error:", err)
+            alert("Impossible de mettre à jour le suivi.")
         } finally {
             btn.disabled = false
         }
