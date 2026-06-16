@@ -228,7 +228,7 @@ function renderWatchlistList(watchlist) {
    
     container.innerHTML = watchlist.map(item => {
         const defaultAvatar = "/assets/logo/nasdaq_logo.png"
-        const imageUrl = `/assets/logos/${item.ticker.toLowerCase()}.svg` || defaultAvatar;
+        const imageUrl = `/assets/logos/${item.ticker.toLowerCase()}.svg` || defaultAvatar
 
         return `
 
@@ -298,28 +298,31 @@ function renderRecommendations(recommendations, user) {
         return 
     }
 
-    console.log("RECOMMENDATIONS:", recommendations)
-    console.log("USER", user)
-
     if (paginationDiv) paginationDiv.style.display = "flex"
 
     container.innerHTML = recommendations.map(rec => {
-        const defaultAvatar = "/assets/default_analyst.png"
-        const imageUrl = rec.picture ? `${API_BASE_URL}/uploads/${rec.picture}` : defaultAvatar
+         const defaultAvatar = "/assets/logo/nasdaq_logo.png"
+            const imageUrl = `/assets/logos/${rec.ticker.toLowerCase()}.svg` || defaultAvatar
+
+            let recoImage
+
+            if (rec.status === "BUY") {
+                recoImage = "/assets/arrows/up-green.svg";
+            } else if (rec.status === "SELL") {
+                recoImage = "/assets/arrows/down-red.svg";
+            } else {
+                recoImage = "/assets/arrows/medium-blue.svg";
+            }
 
         const isAuthorized = user && (user.role === "admin" || Number(user.id) === Number(rec.user_id))
         return `
         <div class="recommendation" data-id="${rec.id}" data-ticker="${rec.ticker}" data-type="${rec.asset_type_id ?? 'asset'}" style="cursor: pointer;">
 
-
-            <img src="${imageUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="analyst-picture" />
-
-
-
-
+            <img src="${recoImage}" style="width: 50px; height: 50px; object-fit: contain;" alt="reco-image" />
             <strong>${rec.status}</strong>
+            <img src="${imageUrl}" style="width: 50px; height: 50px; object-fit: contain;" alt="analyst-picture" />
+            <p>${rec.ticker}</p>
             <p>${rec.comment}</p>
-            <p>${rec.name} (${rec.ticker})</p>
             <small>${new Date(rec.created_at).toLocaleDateString()}</small>
             ${isAuthorized ? `
                 <button class="delete-btn" data-id="${rec.id}">DELETE</button>

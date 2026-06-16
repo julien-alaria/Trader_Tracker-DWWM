@@ -166,7 +166,7 @@ function bindFollowButton(analystId) {
 // =====================
 // RENDER RECOMMENDATIONS
 // =====================
-function renderRecommendations(recs, payload, meta) {
+function renderRecommendations(recs, meta) {
     const container = document.getElementById("analyst-recommendation-container")
     const paginationDiv = document.getElementById("analyst-pagination")
 
@@ -180,14 +180,31 @@ function renderRecommendations(recs, payload, meta) {
 
     container.innerHTML =
         `<h3 id="reco-title">Recommendations</h3>` +
-        recs.map(rec => `
+        recs.map(rec => {
+            const defaultAvatar = "/assets/logo/nasdaq_logo.png"
+            const imageUrl = `/assets/logos/${rec.ticker.toLowerCase()}.svg` || defaultAvatar
+
+            let recoImage
+
+            if (rec.status === "BUY") {
+                recoImage = "/assets/arrows/up-green.svg";
+            } else if (rec.status === "SELL") {
+                recoImage = "/assets/arrows/down-red.svg";
+            } else {
+                recoImage = "/assets/arrows/medium-blue.svg";
+            }
+
+        return `
             <div class="recommendation" data-ticker="${rec.ticker}" data-type="asset">
+                <img src="${recoImage}" style="width: 50px; height: 50px; object-fit: contain;" alt="reco-image" />
                 <strong>${rec.status}</strong>
+                <img src="${imageUrl}" style="width: 50px; height: 50px; object-fit: contain;" alt="analyst-picture" />
                 <p>${rec.name}</p>
                 <p>${rec.comment}</p>
                 <p><small>${formatDate(rec.created_at)}</small></p>
             </div>
-        `).join("")
+        `
+    }).join("")
 
     container.querySelectorAll(".recommendation").forEach(el => {
         el.style.cursor = "pointer"
@@ -200,9 +217,7 @@ function renderRecommendations(recs, payload, meta) {
 
     if (paginationDiv) {
         paginationDiv.style.display =
-            recs.length === 0 && (!meta || meta.offset === 0)
-                ? "none"
-                : "flex"
+            recs.length === 0 && (!meta || meta.offset === 0) ? "none" : "flex"
     }
 }
 

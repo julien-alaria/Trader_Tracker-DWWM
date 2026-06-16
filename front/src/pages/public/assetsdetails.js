@@ -291,10 +291,7 @@ export async function initDetail() {
         // =====================
         // RENDER ANALYST LIST
         // =====================
-        const renderAnalystList = (analysts, payload, meta) => {
-
-            //Payload null
-            console.log("PAYLOAD:", payload)
+        const renderAnalystList = (analysts, meta) => {
 
             const container = document.getElementById("analyst-list-container")
             const paginationDiv = document.getElementById("analyst-pagination")
