@@ -157,7 +157,8 @@ async function getRecommendationsByAssetId(assetId, limit = 2, offset = 0) {
             r.asset_id,
             r.user_id,
             r.created_at,
-            u.name AS analyst_name
+            u.name AS analyst_name,
+            u.picture as analyst_picture
         FROM recommendations r
         JOIN users u ON u.id = r.user_id
         WHERE r.asset_id = ?

@@ -62,20 +62,43 @@ const detailsPage = `
 // RECOMMENDATIONS PAGINATION
 // =====================
 const renderRecommendations = (recs, payload, meta) => {
+    
     const container = document.getElementById("recommendation-container")
     const paginationDiv = document.getElementById("pagination")
 
     if (!container || !paginationDiv) return
 
+    
+
     // recommandation creation
     container.innerHTML = recs.length > 0
-        ? `<h3 id="reco-title">Analysts Recommendations</h3>` + recs.map(rec => `
-            <div class="recommendation" data-analyst-id="${rec.user_id}">
-                <strong>${rec.status}</strong>
-                <p>${rec.comment}</p>
-                <p>Analyst: ${rec.analyst_name ?? "unknown"}</p>
-                <p>Published on ${formatDate(rec.created_at)}</p>
-            </div>`).join("")
+        ? `<h3 id="reco-title">Analysts Recommendations</h3>` + recs.map(rec =>{
+
+            const defaultAvatar = "/assets/default_analyst.png"
+            const imageUrl = rec.analyst_picture ? `${API_BASE_URL}/uploads/${rec.analyst_picture}` : defaultAvatar
+
+            let recoImage
+
+            if (rec.status === "BUY") {
+                recoImage = "/assets/arrows/up-green.svg";
+            } else if (rec.status === "SELL") {
+                recoImage = "/assets/arrows/down-red.svg";
+            } else {
+                recoImage = "/assets/arrows/medium-blue.svg";
+            }
+
+            return  `
+                <div class="recommendation" data-analyst-id="${rec.user_id}">
+                    <img src="${recoImage}" style="width: 50px; height: 50px; object-fit: contain;" alt="reco-image" />
+                    <strong>${rec.status}</strong>
+                    <p>${rec.comment}</p>
+                    <img src="${imageUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="analyst-picture" />
+                    <p>Analyst: ${rec.analyst_name ?? "unknown"}</p>
+                    <p>Published on ${formatDate(rec.created_at)}</p>
+                </div>
+            `
+
+        }).join("")
         : "<p>No recommendations yet</p>"
         
         // click feature
