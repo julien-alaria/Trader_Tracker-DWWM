@@ -19,6 +19,9 @@ export default function analystUpdateForm() {
                     <label for="bio">Analyst Biography:</label>
                     <textarea id="analyst-bio" name="bio" rows="5" cols="33" maxlength="100"></textarea>
 
+                    <label for="picture">Profile Picture (Image):</label>
+                    <input type="file" id="picture" name="picture" accept="image/*" />
+
                     <input type="hidden" id="role" name="role" value="analyst" />
 
                     <input type="submit" value="update">

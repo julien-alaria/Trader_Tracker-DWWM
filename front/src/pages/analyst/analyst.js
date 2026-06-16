@@ -8,6 +8,9 @@ import analystUpdateForm from "../../components/forms/analystUpdateForm.js"
 import { enableCarouselWindow } from "../../utils/lazyloading.js"
 import { createPaginator } from "../../utils/pagination.js"
 
+// =====================
+// TEMPLATE
+// =====================
 const analystPage = `
     <main>
         <h1>Analyst Page</h1>
@@ -68,7 +71,9 @@ const analystPage = `
 
 export default analystPage
 
+// =====================
 // PAGINATORS
+// =====================
 const recommendationsPaginator = createPaginator({
     endpoint: "/recommendations/me",
     limit: 3,
@@ -98,6 +103,9 @@ const followPaginator = createPaginator({
     })
 })
 
+// =====================
+// INIT
+// =====================
 export async function initAnalyst() {
     try {
         const token = localStorage.getItem("token")
@@ -217,7 +225,7 @@ function renderAnalyst(user) {
         const el = document.getElementById(id)
         if (!el) return
 
-        // CASE id=analyst_picte
+        // CASE id=analyst_picture
         if (id === "analyst_picture") {
             if (value) {
                 el.src = `${API_BASE_URL}/uploads/${value}`
@@ -355,26 +363,26 @@ function initForm(user) {
     })
 
     form.addEventListener("submit", async (e) => {
-        e.preventDefault()
-        const data = new FormData(form)
-        const payload = {
-            name: data.get("name"),
-            email: data.get("email"),
-            company: data.get("company"),
-            bio: data.get("bio")
-        }
-        const password = data.get("password")
-        if (password?.trim()) payload.password = password
-        try {
-            const result = await http.put("/users/me", payload)
-            if (result.token) {
-                localStorage.setItem("token", result.token)
-                window.location.hash = "/"
-                window.dispatchEvent(new Event("hashchange"))
-            }
-        } catch (err) {
-            console.error("UPDATE ERROR:", err)
-        }
+         e.preventDefault()
+         
+         const data = new FormData(form)
+ 
+         const passwordInput = data.get("password")
+         if (!passwordInput || !passwordInput.trim()) {
+             data.delete("password")
+         }
+ 
+         try {
+             const result = await http.put("/users/me", data)
+ 
+             if (result && result.token) {
+                 localStorage.setItem("token", result.token)
+             }
+ 
+             window.location.reload()
+         } catch (err) {
+             console.error("UPDATE ERROR:", err)
+         }
     })
 }
 

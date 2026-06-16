@@ -45,7 +45,9 @@ userRouter.get("/pending-analysts", AuthMiddleware(["admin"]), UserController.ge
 
 userRouter.get("/:id", AuthMiddleware(["admin"]), UserController.getUserById)
 
-userRouter.put("/:id", AuthMiddleware(["admin"]), UserController.updateUser)
+userRouter.put("/:id", AuthMiddleware(["admin"]), upload.fields([ 
+    { name: 'picture', maxCount: 1 }, 
+    { name: 'document', maxCount: 1 }]), UserController.updateUser)
 
 userRouter.delete("/:id", AuthMiddleware(["admin"]), UserController.deleteUser)
 

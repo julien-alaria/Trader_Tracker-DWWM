@@ -100,7 +100,7 @@ export async function initUser() {
             return
         }
 
-        // Sécurité asynchrone pour laisser le temps au DOM d'être injecté par le routeur
+        // Asynchronous security to allow time for the DOM to be injected by the router
         await new Promise(resolve => setTimeout(resolve, 0))
 
         const [userRes, watchRes, followRes, stocks, forex, commodities] =
@@ -124,11 +124,11 @@ export async function initUser() {
         renderWatchlist(watchlist)
         renderFollowCarousel()
 
-        // Chargement initial des paginateurs
+        // Initial loading of paginators
         await watchlistPaginator.load()
         await followPaginator.load()
 
-        // Liaisons d'événements des boutons de pagination
+        // Event bindings for pagination buttons
         watchlistPaginator.bind({
             nextBtn: document.getElementById("watchlist-next-btn"),
             prevBtn: document.getElementById("watchlist-prev-btn")
@@ -167,7 +167,7 @@ function renderFollowCarousel() {
         cardComponent: analystCard
     })
 
-    // Écouteur au clic via addEventListener (au lieu de la propriété .onclick pour éviter d'écraser)
+    // Click listener via addEventListener (instead of the .onclick property to avoid overwriting)
     container.addEventListener("click", (e) => {
         const card = e.target.closest(".analyst")
         if (!card) return
@@ -184,23 +184,23 @@ function renderFollowList(users, payload, meta) {
 
     if (!container || !paginationDiv) return
 
-    // Ajout du style curseur pointer
+    // Added cursor pointer style
     container.innerHTML = users.map(a => {
         const defaultAvatar = "/assets/default_analyst.png"
         const imageUrl = a.picture ? `${API_BASE_URL}/uploads/${a.picture}` : defaultAvatar
 
         return `
             <div class="follow-item" data-id="${a.id}" style="cursor: pointer; display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                <img src="${imageUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="" />
+                <img src="${imageUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="analyst-picture" />
                 <p><strong>${a.name}</strong> - ${a.company ?? "Unknown"}</p>
             </div>
         `
     }).join("")
 
-    // Gestion propre de la visibilité des boutons
+    // Proper management of button visibility
     paginationDiv.style.display = (meta?.hasNext || (meta?.offset && meta.offset > 0)) ? "flex" : "none"
 
-    // Délégation d'événement propre sur le conteneur
+    // Delegating your own event to the container
     container.onclick = (e) => {
         const item = e.target.closest(".follow-item")
         if (!item) return
@@ -235,14 +235,14 @@ function renderWatchlistList(watchlist) {
     const container = document.getElementById("watchlist-list-container")
     if (!container) return
 
-    // Ajout du data-type, data-ticker et du style curseur pointer
+    // Added data-type, data-ticker, and cursor pointer style
     container.innerHTML = watchlist.map(item => `
         <div class="watchlist-item" data-ticker="${item.ticker}" data-type="${item.asset_type_id}" style="cursor: pointer;">
             <strong>${item.ticker}</strong> - ${item.name}
         </div>
     `).join("")
 
-    // Délégation d'événement unique pour la redirection de la liste
+    // Single event delegation for list redirection
     container.onclick = (e) => {
         const item = e.target.closest(".watchlist-item")
         if (!item) return
@@ -336,6 +336,9 @@ function buildWatchlist(raw, assets) {
     })
 }
 
+// =====================
+// FORM
+// =====================
 function initUpdateForm(user) {
     const form = document.getElementById("user-update-form")
     if (!form) return

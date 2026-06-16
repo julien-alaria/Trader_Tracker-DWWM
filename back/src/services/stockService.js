@@ -168,7 +168,8 @@ async function getAAPLStockJson(req, res) {
 async function getMultipleAggregatesJson() {
  
   const stocks = await readJsonFile('nasdaq.json')
-  const POLYGON_API_KEY = process.env.POLY_API_KEY
+  // API KEY IS DISPLAY ON WEB WHEN FETCHING
+  const POLYGON_API_KEY = "MY_PRIVATE_API_KEY"
 
   return stocks.map((stock) => {
 

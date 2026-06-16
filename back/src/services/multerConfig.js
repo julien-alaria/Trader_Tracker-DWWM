@@ -1,21 +1,21 @@
 import multer from "multer"
 import path from "path"
 
-// Configuration du stockage
+// Storage configuration
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/'); // Le dossier où seront sauvegardées les images
-    },
+        cb(null, 'uploads/')// The folder where the images will be saved
+    }, 
     filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const ext = path.extname(file.originalname); 
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        const ext = path.extname(file.originalname)
         
-        // On récupère l'email de la requête, on enlève les caractères spéciaux et les espaces
+        // retrieve the email from the request, remove the special characters and spaces
         const userEmail = req.body.email 
             ? req.body.email.replace(/[@.]/g, '-').toLowerCase() 
             : "anonymous";
 
-        // Résultat : picture-jean-dupont-gmail-com-17182938.png
+        // Result: picture-john-doe-gmail-com-17182938.png
         cb(null, `${file.fieldname}-${userEmail}-${uniqueSuffix}${ext}`);
     }
 })
@@ -33,7 +33,7 @@ const fileFilter = (req, file, cb) => {
     }
 }
 
-// Initialisation de Multer avec des limites (ex: max 5 Mo par fichier)
+// Initializing Multer with limits (e.g., max 5 MB per file)
 const upload = multer({
     storage: storage,
     fileFilter: fileFilter,
