@@ -3,8 +3,8 @@ import http from "../../config/instanceHttp.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
 import stockCard from "../../components/cards/stockCards.js"
 import analystCard from "../../components/cards/analystCard.js"
-import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
 import analystUpdateForm from "../../components/forms/analystUpdateForm.js"
+import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
 import { enableCarouselWindow } from "../../utils/lazyloading.js"
 import { createPaginator } from "../../utils/pagination.js"
 
@@ -74,6 +74,10 @@ export default analystPage
 // =====================
 // PAGINATORS
 // =====================
+
+// =====================
+// RECOMMENDATIONS PAGINATORS
+// =====================
 const recommendationsPaginator = createPaginator({
     endpoint: "/recommendations/me",
     limit: 3,
@@ -82,6 +86,9 @@ const recommendationsPaginator = createPaginator({
     mapResponse: (res) => res
 })
 
+// =====================
+// WATCHLIST PAGINATORS
+// =====================
 const watchlistPaginator = createPaginator({
     endpoint: "/users/me/watchlist-paginated",
     limit: 5,
@@ -92,6 +99,9 @@ const watchlistPaginator = createPaginator({
     })
 })
 
+// =====================
+// FOLLOW PAGINATORS
+// =====================
 const followPaginator = createPaginator({
     endpoint: "/users/me/follows/users",
     limit: 5,
@@ -117,6 +127,7 @@ export async function initAnalyst() {
             return
         }
 
+        // central fetch
         const [userRes, watchRes, followRes, stocks, forex, commodities] =
             await Promise.all([
                 http.get("/users/me"),
@@ -125,29 +136,39 @@ export async function initAnalyst() {
                 getStock(),
                 getForex(),
                 getCommodities()
-            ]);
+            ])
 
+        // get & display user
         const user = userRes.result
         renderAnalyst(user)
 
+        // get & display assets
         const allAssets = [...stocks, ...forex, ...commodities]
         renderWatchlist(buildWatchlist(watchRes.result, allAssets))
-        
+
+        // get & display follow analysts
         const follows = followRes.results || []
         renderFollowCarousel(follows)
 
+        // Initial loading of recommendationsPaginator
         await recommendationsPaginator.load()
+        // Initial loading of watchlistPaginator
         await watchlistPaginator.load()
+        // Initial loading of followPaginator
         await followPaginator.load()
 
-        watchlistPaginator.bind({
-            nextBtn: document.getElementById("watchlist-next-btn"),
-            prevBtn: document.getElementById("watchlist-prev-btn")
-        })
+        // =====================
+        // BINDERS
+        // =====================
 
         recommendationsPaginator.bind({
             nextBtn: document.getElementById("next-btn"),
             prevBtn: document.getElementById("prev-btn")
+        })
+
+        watchlistPaginator.bind({
+            nextBtn: document.getElementById("watchlist-next-btn"),
+            prevBtn: document.getElementById("watchlist-prev-btn")
         })
 
         followPaginator.bind({
@@ -155,8 +176,11 @@ export async function initAnalyst() {
             prevBtn: document.getElementById("follow-prev-btn")
         })
         
+        // events on recommendations (edit & delete)
         bindRecommendationEvents(user)
+        // analyst edit form
         initForm(user)
+        // events on stock card
         bindNavigation() 
         
     } catch (err) {
@@ -164,6 +188,9 @@ export async function initAnalyst() {
     }
 }
 
+// =====================
+// RENDERING WATCHLIST CARROUSEL
+// =====================
 function renderWatchlist(watchlist) {
     const container = document.getElementById("watchlist")
     if (!container) return
@@ -181,6 +208,9 @@ function renderWatchlist(watchlist) {
     });
 }
 
+// =====================
+// BUILDING WATCHLIST BY LINKING TICKERS OF USER FOLLOW & ALL ASSETS
+// =====================
 function buildWatchlist(raw, assets) {
     return raw.map(w => {
         const asset = assets.find(a => a.ticker === w.ticker)
@@ -188,17 +218,28 @@ function buildWatchlist(raw, assets) {
     })
 }
 
+// =====================
+// RENDERING WATCHLIST LIST
+// =====================
 function renderWatchlistList(watchlist) {
+
     const container = document.getElementById("watchlist-list-container")
     if (!container) return
+   
+    container.innerHTML = watchlist.map(item => {
+        const defaultAvatar = "/assets/logo/nasdaq_logo.png"
+        const imageUrl = `/assets/logos/${item.ticker.toLowerCase()}.svg` || defaultAvatar;
 
-    container.innerHTML = watchlist.map(item => `
-        <div class="watchlist-item" data-ticker="${item.ticker}" data-type="${item.asset_type_id}" style="cursor: pointer;">
-            <span><strong>${item.ticker}</strong></span>
-            <span>${item.name}</span>
-        </div>
-    `).join("")
+        return `
 
+            <div class="watchlist-item" data-ticker="${item.ticker}" data-type="${item.asset_type_id}" style="cursor: pointer;">
+                <img src="${imageUrl}" style="width: 50px; height: 50px; object-fit: contain;" alt="analyst-picture" />
+                <span><strong>${item.ticker}</strong></span>
+                <span>${item.name}</span>
+            </div>
+        `
+    } ).join("")
+    // click event
     container.onclick = (e) => {
         const item = e.target.closest(".watchlist-item")
         if (!item) return
@@ -210,6 +251,9 @@ function renderWatchlistList(watchlist) {
     }
 }
 
+// =====================
+// RENDERING ANALYST
+// =====================
 function renderAnalyst(user) {
     const map = {
         analyst_id: user.id,
@@ -225,14 +269,14 @@ function renderAnalyst(user) {
         const el = document.getElementById(id)
         if (!el) return
 
-        // CASE id=analyst_picture
+        // CASE id === analyst_picture
         if (id === "analyst_picture") {
             if (value) {
                 el.src = `${API_BASE_URL}/uploads/${value}`
             } else {
                 el.src = "/assets/default_analyst.png"
             }
-            el.alt = `Photo de ${user.name || "l'analyste"}`
+            el.alt = `${user.name || "analyst"}`
 
         } else {
             el.textContent = value ?? "N/A"
@@ -240,6 +284,9 @@ function renderAnalyst(user) {
     })
 }
 
+// =====================
+// RENDERING RECOMMENDATIONS
+// =====================
 function renderRecommendations(recommendations, user) {
     const container = document.getElementById("my-recommendations")
     const paginationDiv = document.getElementById("pagination") 
@@ -251,12 +298,25 @@ function renderRecommendations(recommendations, user) {
         return 
     }
 
+    console.log("RECOMMENDATIONS:", recommendations)
+    console.log("USER", user)
+
     if (paginationDiv) paginationDiv.style.display = "flex"
 
     container.innerHTML = recommendations.map(rec => {
+        const defaultAvatar = "/assets/default_analyst.png"
+        const imageUrl = rec.picture ? `${API_BASE_URL}/uploads/${rec.picture}` : defaultAvatar
+
         const isAuthorized = user && (user.role === "admin" || Number(user.id) === Number(rec.user_id))
         return `
         <div class="recommendation" data-id="${rec.id}" data-ticker="${rec.ticker}" data-type="${rec.asset_type_id ?? 'asset'}" style="cursor: pointer;">
+
+
+            <img src="${imageUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="analyst-picture" />
+
+
+
+
             <strong>${rec.status}</strong>
             <p>${rec.comment}</p>
             <p>${rec.name} (${rec.ticker})</p>
@@ -276,7 +336,7 @@ function renderRecommendations(recommendations, user) {
         </div>
         `
     }).join("")
-
+    // click event
     container.onclick = (e) => {
         if (
             e.target.classList.contains("delete-btn") || 
@@ -297,6 +357,9 @@ function renderRecommendations(recommendations, user) {
     }
 }
 
+// =====================
+// WATCH RECOMMENDATIONS EVENTS (DELETE & EDIT)
+// =====================
 function bindRecommendationEvents(user) {
     const container = document.getElementById("my-recommendations")
     if (!container) return
@@ -332,11 +395,13 @@ function bindRecommendationEvents(user) {
     })
 }
 
+// =====================
+// WATCH NAVIGATION EVENTS ON STOCK CARD
+// =====================
 function bindNavigation() {
     const watchlistContainer = document.getElementById("watchlist")
     if (watchlistContainer) {
         watchlistContainer.addEventListener("click", (e) => {
-            // CORRECTIF 2 : Utilise .stock-card (ou la classe exacte de ton composant stockCard)
             const card = e.target.closest(".stock-card") || e.target.closest(".card")
             if (card) {
                 const { ticker, type } = card.dataset
@@ -346,6 +411,9 @@ function bindNavigation() {
     }
 }
 
+// =====================
+// FORM
+// =====================
 function initForm(user) {
     const form = document.getElementById("analyst-update-form")
     if (!form) return
@@ -386,6 +454,9 @@ function initForm(user) {
     })
 }
 
+// =====================
+// CARROUSEL FOLLOW ANALYSTS
+// =====================
 function renderFollowCarousel(follows) {
     const container = document.getElementById("follow")
     if (!container) return
@@ -409,17 +480,29 @@ function renderFollowCarousel(follows) {
     })
 }
 
+// =====================
+// FOLLOW PAGINATION
+// =====================
 function renderFollowList(users, payload, meta) {
     const container = document.getElementById("follow-list-container")
     const paginationDiv = document.getElementById("follow-pagination")
 
     if (!container || !paginationDiv) return
 
-    container.innerHTML = users.map(a => `
+    container.innerHTML = users.map(a => {
+        const defaultAvatar = "/assets/default_analyst.png"
+        const imageUrl = a.picture ? `${API_BASE_URL}/uploads/${a.picture}` : defaultAvatar
+    
+
+        return `
         <div class="follow-item" data-id="${a.id}" style="cursor: pointer;">
+             <img src="${imageUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="analyst-picture" />
+        
             <p><strong>${a.name}</strong> - ${a.company ?? "Unknown"}</p>
         </div>
-    `).join("")
+        `
+        
+    } ).join("")
 
     paginationDiv.style.display =
         (meta?.hasNext || meta?.offset > 0) ? "flex" : "none"

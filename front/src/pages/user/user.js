@@ -297,7 +297,7 @@ function bindEvents(watchlist) {
             if (index !== -1) {
                 watchlist.splice(index, 1)
                 renderWatchlist(watchlist)
-                // Force le rafraîchissement synchrone de la liste paginée pour rester raccord
+                
                 await watchlistPaginator.load()
             }
         } catch (err) {

@@ -62,7 +62,6 @@ const detailsPage = `
 // RECOMMENDATIONS PAGINATION
 // =====================
 const renderRecommendations = (recs, payload, meta) => {
-    console.log("RENDER RECOMMENDATIONS", recs)
     const container = document.getElementById("recommendation-container")
     const paginationDiv = document.getElementById("pagination")
 
@@ -109,7 +108,6 @@ export async function initDetail() {
         const query = queryIndex !== -1 ? hash.substring(queryIndex + 1) : ""
         const params = new URLSearchParams(query)
         const ticker = params.get("ticker")
-        console.log("TICKER", ticker)
 
         if (!ticker) {
             document.getElementById("asset-detail").innerHTML = "<p>Missing ticker</p>"
@@ -126,7 +124,6 @@ export async function initDetail() {
         const asset = allAssets.find(item =>
             String(item.ticker ?? "").trim().toUpperCase() === String(ticker).trim().toUpperCase()
         )
-        console.log("ASSET", asset)
 
         if (!asset) {
             document.getElementById("asset-detail").innerHTML = "<p>Asset not found</p>"
@@ -259,13 +256,9 @@ export async function initDetail() {
         // fetch to get asset by ticker
         const dbAsset = await http.get(`/assets/details/${ticker}`)
 
-        console.log("dbAsset", dbAsset)
-
         try {
             const analystRes = await http.get(`/users/analysts/by-type?type_id=${dbAsset.asset_type_id}`)
             const analysts = analystRes.results
-
-            console.log("Analysts", analysts)
 
                 if (analysts && analysts.length > 0) {
                     document.getElementById("analyst-carousel-container").classList.remove("hidden")
@@ -300,10 +293,8 @@ export async function initDetail() {
         // =====================
         const renderAnalystList = (analysts, payload, meta) => {
 
-            console.log("ANALYST:", analysts)
             //Payload null
             console.log("PAYLOAD:", payload)
-            console.log("META", meta)
 
             const container = document.getElementById("analyst-list-container")
             const paginationDiv = document.getElementById("analyst-pagination")

@@ -52,9 +52,10 @@ async function getMyRecommendationsPaginated(userId, limit = 2, offset = 0){
     const parsedOffset = Math.max(0, Number.parseInt(offset ?? 0, 10))
 
     const sql = `
-        SELECT r.id, r.status, r.comment, r.created_at, r.asset_id, r.user_id, a.ticker, a.name
+        SELECT r.id, r.status, r.comment, r.created_at, r.asset_id, r.user_id, a.ticker, a.name, u.name, u.picture
         FROM recommendations r
         JOIN assets a ON a.id = r.asset_id
+        JOIN users u on u.id = r.user_id
         WHERE r.user_id = ?
         ORDER BY r.created_at DESC
         LIMIT ? OFFSET ?
