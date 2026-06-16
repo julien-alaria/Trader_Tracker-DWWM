@@ -121,7 +121,6 @@ export async function initAnalyst() {
 
         const user = userRes.result
         renderAnalyst(user)
-        console.log(user)
 
         const allAssets = [...stocks, ...forex, ...commodities]
         renderWatchlist(buildWatchlist(watchRes.result, allAssets))

@@ -12,14 +12,6 @@ import { formatAssetImage } from "../../utils/imageHelper.js"
 let recommendationsPaginator
 let analystPaginator
 
-const commodityImages = {
-    "C:XAUUSD": "/assets/gold.png",
-    "C:XAGUSD": "/assets/silver.png",
-    "C:XPTUSD": "/assets/platinum.png",
-    "C:COPPERUSD": "/assets/copper.png",
-    "C:XPDUSD": "/assets/palladium.png"
-}
-
 const detailsPage = `
     <main>
         <section id="detail-section">

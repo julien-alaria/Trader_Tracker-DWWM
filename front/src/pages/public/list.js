@@ -1,4 +1,5 @@
 import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
+import { formatAssetImage } from "../../utils/imageHelper.js"
 
 // =====================
 // TEMPLATE
@@ -86,11 +87,19 @@ function renderAssetList(targetContainer, assets) {
         return
     }
 
-    targetContainer.innerHTML = assets.map(item => `
-        <div class="asset-item" data-ticker="${item.ticker}" data-type="${item.type}" style="cursor: pointer;">
-            <img id="logo-list" src="${item.image || '/assets/default.png'}" alt="${item.name} logo" onerror="this.onerror=null; this.src='/assets/default.png';">
-            <span><strong>${item.ticker}</strong></span>
-            <span>${item.name}</span>
-        </div>
-    `).join("")
+    targetContainer.innerHTML = assets.map(item => {
+      
+        const finalImage = formatAssetImage(item.ticker)
+
+        return `
+            <div class="asset-item" data-ticker="${item.ticker}" data-type="${item.type}" style="cursor: pointer;">
+                <img id="logo-list" 
+                     src="${finalImage}" 
+                     alt="${item.name} logo" 
+                     onerror="this.onerror=null; this.src='/assets/nasdaq_logo.png';">
+                <span><strong>${item.ticker}</strong></span>
+                <span>${item.name}</span>
+            </div>
+        `
+    }).join("")
 }

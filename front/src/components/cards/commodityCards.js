@@ -1,14 +1,8 @@
-const commodityImages = {
-  "C:XAUUSD": "/assets/gold.png",
-  "C:XAGUSD": "/assets/silver.png",
-  "C:XPTUSD": "/assets/platinum.png",
-  "C:COPPERUSD": "/assets/copper.png",
-  "C:XPDUSD": "/assets/palladium.png"
-}
+import { formatAssetImage } from "../../utils/imageHelper.js"
 
 export default function commodityCard({ name, ticker, price, high, low, image } = {}) {
 
-  const finalImage = commodityImages[ticker]
+  const finalImage = formatAssetImage(ticker)
 
   return `
     <div class="card commodity" data-type="commodity" data-ticker="${ticker}">
