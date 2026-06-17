@@ -1,16 +1,13 @@
 import { createPaginator } from "../../utils/pagination.js";
 
-/**
- * Crée une liste paginée asynchrone reliée à une route API back-end
- */
 export function createPaginationList({
   targetSelector,
   prefix,
   endpoint,
   itemTemplate,
   buildUrl,
-  limit = 5
-}) {
+  limit = 5 }) {
+    
   const target = document.querySelector(targetSelector);
   if (!target) return null;
 
