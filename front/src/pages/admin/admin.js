@@ -3,9 +3,9 @@ import { decodeToken } from "../../middlewares/roleGuard.js"
 import analystUpdateForm from "../../components/forms/analystUpdateForm.js"
 import { createPaginator } from "../../utils/pagination.js"
 
-let recommendationsPaginator
-let usersPaginator
-
+// =====================
+// TEMPLATE
+// =====================
 const adminPage = `
 <main>
     <h1>ADMIN PAGE</h1>
@@ -50,7 +50,15 @@ const adminPage = `
 
 export default adminPage
 
+// =====================
+// STATE GLOBAL
+// =====================
+let recommendationsPaginator
+let usersPaginator
+
+// =====================
 // INIT
+// =====================
 export async function initAdmin() {
     try {
         const token = localStorage.getItem("token")
@@ -69,7 +77,9 @@ export async function initAdmin() {
         const user = userRes.result
         renderAdmin(user)
 
-        // PAGINATORS
+        // =====================
+        // PAGINATOR
+        // =====================
         recommendationsPaginator = createPaginator({
             endpoint: "/recommendations",
             limit: 3,
@@ -91,6 +101,9 @@ export async function initAdmin() {
         await recommendationsPaginator.load()
         await loadPendingAnalysts()
 
+        // =====================
+        // BINDERS
+        // =====================
         usersPaginator.bind({
             nextBtn: document.getElementById("users-next-btn"),
             prevBtn: document.getElementById("users-prev-btn")
@@ -109,7 +122,9 @@ export async function initAdmin() {
     }
 }
 
-// RENDER ADMIN INFO
+// =====================
+// RENDER ADMIN
+// =====================
 function renderAdmin(user) {
     const map = {
         admin_id: user.id,
@@ -123,161 +138,9 @@ function renderAdmin(user) {
     })
 }
 
-// USERS
-function renderUserList(users) {
-    const container = document.getElementById("users-list")
-
-    container.innerHTML = users.map(user => `
-        <div class="user-item">
-            <span>${user.name} (${user.role})</span>
-            <button onclick="editUser('${user.id}')">Éditer</button>
-            <button onclick="deleteUser('${user.id}')">Supprimer</button>
-        </div>
-    `).join("")
-}
-
-// RECOMMENDATIONS
-function renderRecommendations(recommendations, user) {
-    const container = document.getElementById("all-recommendations")
-
-    container.innerHTML = recommendations.map(rec => {
-        const isMine = Number(user.id) === Number(rec.user_id)
-
-        return `
-        <div class="recommendation" data-id="${rec.id}">
-            <strong>${rec.status}</strong>
-            <p>${rec.comment}</p>
-
-            <div class="meta">
-                <span>Analyst: <strong>${rec.analyst_name}</strong></span>
-                ${isMine ? '<span class="badge">Me</span>' : ''}
-            </div>
-
-            <p>Asset: ${rec.name} (${rec.ticker})</p>
-
-            <button class="delete-btn" data-id="${rec.id}">
-                DELETE
-            </button>
-
-            <form class="edit-form hidden" data-id="${rec.id}">
-                <select name="status">
-                    <option value="BUY" ${rec.status === "BUY" ? "selected" : ""}>BUY</option>
-                    <option value="SELL" ${rec.status === "SELL" ? "selected" : ""}>SELL</option>
-                    <option value="HOLD" ${rec.status === "HOLD" ? "selected" : ""}>HOLD</option>
-                </select>
-
-                <input name="comment" value="${rec.comment}" required />
-
-                <button type="submit">EDIT</button>
-            </form>
-        </div>
-        `
-    }).join("")
-}
-
-// EVENTS
-function bindRecommendationEvents(user) {
-    const container = document.getElementById("all-recommendations")
-    if (!container) return
-
-    container.addEventListener("click", async (e) => {
-        if (!e.target.classList.contains("delete-btn")) return
-
-        try {
-            await http.delete(`/recommendations/${e.target.dataset.id}`)
-            await recommendationsPaginator.load()
-        } catch (err) {
-            console.error("DELETE ERROR:", err)
-        }
-    })
-
-    container.addEventListener("submit", async (e) => {
-        if (!e.target.classList.contains("edit-form")) return
-
-        e.preventDefault()
-
-        const id = e.target.dataset.id
-        const data = new FormData(e.target)
-
-        try {
-            await http.put(`/recommendations/${id}`, {
-                status: data.get("status"),
-                comment: data.get("comment")
-            })
-
-            await recommendationsPaginator.load()
-
-        } catch (err) {
-            console.error("UPDATE ERROR:", err)
-        }
-    })
-}
-
-// FORM
-function initForm(user) {
-    const form = document.getElementById("analyst-update-form")
-    if (!form) return
-
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault()
-
-        const data = new FormData(form)
-        const targetId = data.get("target_user_id")
-
-        const payload = {
-            name: data.get("name"),
-            email: data.get("email"),
-            company: data.get("company"),
-            bio: data.get("bio")
-        }
-
-        const url = targetId ? `/users/${targetId}` : "/users/me"
-
-        try {
-            await http.put(url, payload)
-            alert("Profil mis à jour !")
-            initAdmin()
-        } catch (err) {
-            console.error("UPDATE ERROR:", err)
-        }
-    })
-}
-
-// GLOBAL USER ACTIONS
-window.editUser = async (id) => {
-    try {
-        const res = await http.get(`/users/${id}`)
-        const user = res.result
-
-        document.getElementById("analyst-name").value = user.name
-        document.getElementById("analyst-email").value = user.email
-        document.getElementById("analyst-company").value = user.company || ""
-        document.getElementById("analyst-bio").value = user.bio || ""
-        document.getElementById("target-user-id").value = user.id
-
-        document.querySelector(".update-form")
-            .scrollIntoView({ behavior: "smooth" })
-
-    } catch (err) {
-        console.error("EDIT USER ERROR:", err)
-    }
-}
-
-window.deleteUser = async (id) => {
-    // Immediate deletion without a confirmation step
-    try {
-        await http.delete(`/users/${id}`);
-        
-        // Refresh the paginated list after deletion
-        if (usersPaginator) {
-            await usersPaginator.load();
-        }
-    } catch (err) {
-        console.error("DELETE USER ERROR:", err);
-    }
-}
-
+// =====================
 // PENDING ANALYSTS
+// =====================
 async function loadPendingAnalysts() {
     const container = document.getElementById("pending-analysts")
     if (!container) return
@@ -347,4 +210,175 @@ async function loadPendingAnalysts() {
         console.error("LOAD PENDING ANALYSTS ERROR:", err)
         container.innerHTML = `<p style="color: red;">Erreur lors du chargement des demandes.</p>`
     }
+}
+
+// =====================
+// EVENTS ON RECOMMENDATIONS
+// =====================
+function bindRecommendationEvents(user) {
+    const container = document.getElementById("all-recommendations")
+    if (!container) return
+
+    container.addEventListener("click", async (e) => {
+        if (!e.target.classList.contains("delete-btn")) return
+
+        try {
+            await http.delete(`/recommendations/${e.target.dataset.id}`)
+            await recommendationsPaginator.load()
+        } catch (err) {
+            console.error("DELETE ERROR:", err)
+        }
+    })
+
+    container.addEventListener("submit", async (e) => {
+        if (!e.target.classList.contains("edit-form")) return
+
+        e.preventDefault()
+
+        const id = e.target.dataset.id
+        const data = new FormData(e.target)
+
+        try {
+            await http.put(`/recommendations/${id}`, {
+                status: data.get("status"),
+                comment: data.get("comment")
+            })
+
+            await recommendationsPaginator.load()
+
+        } catch (err) {
+            console.error("UPDATE ERROR:", err)
+        }
+    })
+}
+
+// =====================
+// INIT FORM
+// =====================
+function initForm(user) {
+    const form = document.getElementById("analyst-update-form")
+    if (!form) return
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault()
+
+        const data = new FormData(form)
+        const targetId = data.get("target_user_id")
+
+        const payload = {
+            name: data.get("name"),
+            email: data.get("email"),
+            company: data.get("company"),
+            bio: data.get("bio")
+        }
+
+        const url = targetId ? `/users/${targetId}` : "/users/me"
+
+        try {
+            await http.put(url, payload)
+            alert("Profil mis à jour !")
+            initAdmin()
+        } catch (err) {
+            console.error("UPDATE ERROR:", err)
+        }
+    })
+}
+
+// =====================
+// GLOBAL USER ACTIONS EDIT & DELETE
+// =====================
+window.editUser = async (id) => {
+    try {
+        const res = await http.get(`/users/${id}`)
+        const user = res.result
+
+        document.getElementById("analyst-name").value = user.name
+        document.getElementById("analyst-email").value = user.email
+        document.getElementById("analyst-company").value = user.company || ""
+        document.getElementById("analyst-bio").value = user.bio || ""
+        document.getElementById("target-user-id").value = user.id
+
+        document.querySelector(".update-form")
+            .scrollIntoView({ behavior: "smooth" })
+
+    } catch (err) {
+        console.error("EDIT USER ERROR:", err)
+    }
+}
+
+window.deleteUser = async (id) => {
+    // Immediate deletion without a confirmation step
+    try {
+        await http.delete(`/users/${id}`);
+        
+        // Refresh the paginated list after deletion
+        if (usersPaginator) {
+            await usersPaginator.load();
+        }
+    } catch (err) {
+        console.error("DELETE USER ERROR:", err);
+    }
+}
+
+
+
+// =====================
+// PAGINATOR FUNCTIONS
+// =====================
+
+
+// =====================
+// RENDER RECOMMENDATIONS
+// =====================
+function renderRecommendations(recommendations, user) {
+    const container = document.getElementById("all-recommendations")
+
+    container.innerHTML = recommendations.map(rec => {
+        const isMine = Number(user.id) === Number(rec.user_id)
+
+        return `
+        <div class="recommendation" data-id="${rec.id}">
+            <strong>${rec.status}</strong>
+            <p>${rec.comment}</p>
+
+            <div class="meta">
+                <span>Analyst: <strong>${rec.analyst_name}</strong></span>
+                ${isMine ? '<span class="badge">Me</span>' : ''}
+            </div>
+
+            <p>Asset: ${rec.name} (${rec.ticker})</p>
+
+            <button class="delete-btn" data-id="${rec.id}">
+                DELETE
+            </button>
+
+            <form class="edit-form hidden" data-id="${rec.id}">
+                <select name="status">
+                    <option value="BUY" ${rec.status === "BUY" ? "selected" : ""}>BUY</option>
+                    <option value="SELL" ${rec.status === "SELL" ? "selected" : ""}>SELL</option>
+                    <option value="HOLD" ${rec.status === "HOLD" ? "selected" : ""}>HOLD</option>
+                </select>
+
+                <input name="comment" value="${rec.comment}" required />
+
+                <button type="submit">EDIT</button>
+            </form>
+        </div>
+        `
+    }).join("")
+}
+
+// =====================
+// RENDER USERS
+// =====================
+function renderUserList(users) {
+    const container = document.getElementById("users-list")
+
+    container.innerHTML = users.map(user => `
+        <div class="user-item">
+            <span>${user.name} (${user.role})</span>
+            <button onclick="editUser('${user.id}')">Éditer</button>
+            <button onclick="deleteUser('${user.id}')">Supprimer</button>
+        </div>
+    `).join("")
 }

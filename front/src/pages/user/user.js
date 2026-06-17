@@ -82,7 +82,6 @@ const followPaginator = createPaginator({
     mapResponse: (res) => ({
         results: res.results,
         hasNext: res.hasNext
-        // Nettoyé de la clé offset forcée pour éviter les conflits d'état interne
     })
 })
 
@@ -103,6 +102,9 @@ export async function initUser() {
         // Asynchronous security to allow time for the DOM to be injected by the router
         await new Promise(resolve => setTimeout(resolve, 0))
 
+        // =====================
+        // ASSETS FETCHING
+        // =====================
         const [userRes, watchRes, followRes, stocks, forex, commodities] =
             await Promise.all([
                 http.get("/users/me"),
@@ -113,14 +115,19 @@ export async function initUser() {
                 getCommodities()
             ])
 
+         // get & display user
         const user = userRes.result
         renderUserInfo(user)
 
+         // get & display assets
         const allAssets = [...stocks, ...forex, ...commodities]
         const watchlist = buildWatchlist(watchRes.result, allAssets)
 
         followState = followRes.results || []
 
+        // =====================
+        // PAGINATORS CALLING
+        // =====================
         renderWatchlist(watchlist)
         renderFollowCarousel()
 
@@ -128,7 +135,9 @@ export async function initUser() {
         await watchlistPaginator.load()
         await followPaginator.load()
 
-        // Event bindings for pagination buttons
+        // =====================
+        // BINDERS
+        // =====================
         watchlistPaginator.bind({
             nextBtn: document.getElementById("watchlist-next-btn"),
             prevBtn: document.getElementById("watchlist-prev-btn")
@@ -146,6 +155,60 @@ export async function initUser() {
     } catch (err) {
         console.error("USER INIT ERROR:", err)
     }
+}
+
+// =====================
+// USER INFO
+// =====================
+function renderUserInfo(user) {
+    const idEl = document.getElementById("user_id")
+    const nameEl = document.getElementById("user_name")
+    const emailEl = document.getElementById("user_email")
+    const imageEl = document.getElementById("user_picture")
+
+    if (idEl) idEl.textContent = `User ID: ${user.id}`
+    if (nameEl) nameEl.textContent = `User: ${user.name}`
+    if (emailEl) emailEl.textContent = `Email: ${user.email}`
+   if (imageEl) {
+        const defaultAvatar = "/assets/default_analyst.png"
+        
+        imageEl.src = user.picture ? `${API_BASE_URL}/uploads/${user.picture}` : defaultAvatar
+        imageEl.alt = `Avatar de ${user.name || 'l\'utilisateur'}`
+    }
+}
+
+// =====================
+// builder
+// =====================
+function buildWatchlist(raw, assets) {
+    return raw.map(w => {
+        const asset = assets.find(a => a.ticker === w.ticker)
+        return {
+            ...w,
+            ...asset,
+            isFollowed: true
+        }
+    })
+}
+
+// =====================
+// WATCHLIST CAROUSEL
+// =====================
+function renderWatchlist(watchlist) {
+    const container = document.getElementById("watchlist")
+    if (!container) return
+
+    if (!watchlist.length) {
+        container.innerHTML = "<p>No favorites yet</p>"
+        return
+    }
+
+    enableCarouselWindow({
+        selector: "#watchlist",
+        batchSize: 5,
+        getData: () => watchlist,
+        cardComponent: stockCard
+    })
 }
 
 // =====================
@@ -173,105 +236,6 @@ function renderFollowCarousel() {
         if (!card) return
         window.location.hash = `#/analystdetails?id=${card.dataset.id}`
     })
-}
-
-// =====================
-// FOLLOWED ANALYSTS BY LIST
-// =====================
-function renderFollowList(users, payload, meta) {
-    const container = document.getElementById("follow-list-container")
-    const paginationDiv = document.getElementById("follow-pagination")
-
-    if (!container || !paginationDiv) return
-
-    // Added cursor pointer style
-    container.innerHTML = users.map(a => {
-        const defaultAvatar = "/assets/default_analyst.png"
-        const imageUrl = a.picture ? `${API_BASE_URL}/uploads/${a.picture}` : defaultAvatar
-
-        return `
-            <div class="follow-item" data-id="${a.id}" style="cursor: pointer; display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                <img src="${imageUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="analyst-picture" />
-                <p><strong>${a.name}</strong> - ${a.company ?? "Unknown"}</p>
-            </div>
-        `
-    }).join("")
-
-    // Proper management of button visibility
-    paginationDiv.style.display = (meta?.hasNext || (meta?.offset && meta.offset > 0)) ? "flex" : "none"
-
-    // Delegating your own event to the container
-    container.onclick = (e) => {
-        const item = e.target.closest(".follow-item")
-        if (!item) return
-        window.location.hash = `#/analystdetails?id=${item.dataset.id}`
-    }
-}
-
-// =====================
-// WATCHLIST CAROUSEL
-// =====================
-function renderWatchlist(watchlist) {
-    const container = document.getElementById("watchlist")
-    if (!container) return
-
-    if (!watchlist.length) {
-        container.innerHTML = "<p>No favorites yet</p>"
-        return
-    }
-
-    enableCarouselWindow({
-        selector: "#watchlist",
-        batchSize: 5,
-        getData: () => watchlist,
-        cardComponent: stockCard
-    })
-}
-
-// =====================
-// WATCHLIST BY LIST
-// =====================
-function renderWatchlistList(watchlist) {
-    const container = document.getElementById("watchlist-list-container")
-    if (!container) return
-
-    // Added data-type, data-ticker, and cursor pointer style
-    container.innerHTML = watchlist.map(item => `
-        <div class="watchlist-item" data-ticker="${item.ticker}" data-type="${item.asset_type_id}" style="cursor: pointer;">
-            <strong>${item.ticker}</strong> - ${item.name}
-        </div>
-    `).join("")
-
-    // Single event delegation for list redirection
-    container.onclick = (e) => {
-        const item = e.target.closest(".watchlist-item")
-        if (!item) return
-
-        const { ticker, type } = item.dataset
-        if (ticker) {
-            window.location.hash = `#/details?type=${type}&ticker=${ticker}`
-        }
-    }
-}
-
-// =====================
-// USER INFO
-// =====================
-function renderUserInfo(user) {
-    const idEl = document.getElementById("user_id")
-    const nameEl = document.getElementById("user_name")
-    const emailEl = document.getElementById("user_email")
-    const imageEl = document.getElementById("user_picture")
-
-    if (idEl) idEl.textContent = `User ID: ${user.id}`
-    if (nameEl) nameEl.textContent = `User: ${user.name}`
-    if (emailEl) emailEl.textContent = `Email: ${user.email}`
-   if (imageEl) {
-        const defaultAvatar = "/assets/default_analyst.png"
-        
-        imageEl.src = user.picture ? `${API_BASE_URL}/uploads/${user.picture}` : defaultAvatar
-        imageEl.alt = `Avatar de ${user.name || 'l\'utilisateur'}`
-    }
 }
 
 // =====================
@@ -306,6 +270,9 @@ function bindEvents(watchlist) {
     })
 }
 
+// =====================
+// NAVIGATION EVENTS
+// =====================
 function bindNavigation() {
     const container = document.getElementById("watchlist")
     if (!container) return
@@ -319,20 +286,6 @@ function bindNavigation() {
 
         const { ticker, type } = card.dataset
         window.location.hash = `#/details?type=${type}&ticker=${ticker}`
-    })
-}
-
-// =====================
-// HELPERS & FORM
-// =====================
-function buildWatchlist(raw, assets) {
-    return raw.map(w => {
-        const asset = assets.find(a => a.ticker === w.ticker)
-        return {
-            ...w,
-            ...asset,
-            isFollowed: true
-        }
     })
 }
 
@@ -376,3 +329,75 @@ function initUpdateForm(user) {
         }
     })
 }
+
+
+// =====================
+// PAGINATORS FUNCTIONS
+// =====================
+
+// =====================
+// WATCHLIST BY LIST
+// =====================
+function renderWatchlistList(watchlist) {
+    const container = document.getElementById("watchlist-list-container")
+    if (!container) return
+
+    // Added data-type, data-ticker, and cursor pointer style
+    container.innerHTML = watchlist.map(item => `
+        <div class="watchlist-item" data-ticker="${item.ticker}" data-type="${item.asset_type_id}" style="cursor: pointer;">
+            <strong>${item.ticker}</strong> - ${item.name}
+        </div>
+    `).join("")
+
+    // Single event delegation for list redirection
+    container.onclick = (e) => {
+        const item = e.target.closest(".watchlist-item")
+        if (!item) return
+
+        const { ticker, type } = item.dataset
+        if (ticker) {
+            window.location.hash = `#/details?type=${type}&ticker=${ticker}`
+        }
+    }
+}
+
+// =====================
+// FOLLOWED ANALYSTS BY LIST
+// =====================
+function renderFollowList(users, payload, meta) {
+    const container = document.getElementById("follow-list-container")
+    const paginationDiv = document.getElementById("follow-pagination")
+
+    if (!container || !paginationDiv) return
+
+    // Added cursor pointer style
+    container.innerHTML = users.map(a => {
+        const defaultAvatar = "/assets/default_analyst.png"
+        const imageUrl = a.picture ? `${API_BASE_URL}/uploads/${a.picture}` : defaultAvatar
+
+        return `
+            <div class="follow-item" data-id="${a.id}" style="cursor: pointer; display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                <img src="${imageUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="analyst-picture" />
+                <p><strong>${a.name}</strong> - ${a.company ?? "Unknown"}</p>
+            </div>
+        `
+    }).join("")
+
+    // Proper management of button visibility
+    paginationDiv.style.display = (meta?.hasNext || (meta?.offset && meta.offset > 0)) ? "flex" : "none"
+
+    // Delegating your own event to the container
+    container.onclick = (e) => {
+        const item = e.target.closest(".follow-item")
+        if (!item) return
+        window.location.hash = `#/analystdetails?id=${item.dataset.id}`
+    }
+}
+
+
+
+
+
+
+
+

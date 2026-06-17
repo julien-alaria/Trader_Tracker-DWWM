@@ -16,30 +16,22 @@ async function getRecommendation(req, res) {
             const asset = await AssetModel.getAssetByTicker(ticker)
 
             if (!asset) {
-                return res.status(404).json({
-                    error: "Asset not found"
-                })
+                return res.status(404).json({ message: "Asset not found" })
             }
 
             const results =
                 await RecommendationModel.getRecommendationsByAssetId(asset.id)
 
-            return res.status(200).json({
-                results
-            })
+            return res.status(200).json({ results })
         }
 
         const results =
             await RecommendationModel.getAllRecommendations()
 
-        return res.status(200).json({
-            results
-        })
+        return res.status(200).json({ results })
 
     } catch (error) {
-        return res.status(500).json({
-            error: error.message
-        })
+        return res.status(500).json({ message: error.message })
     }
 }
 
@@ -53,7 +45,7 @@ async function getRecommendationPagin(req, res) {
         // FILTER BY ASSET (ticker)
         if (ticker) {
             const asset = await AssetModel.getAssetByTicker(ticker)
-            if (!asset) return res.status(404).json({ error: "Asset not found" });
+            if (!asset) return res.status(404).json({ message: "Asset not found" });
 
             const results = await RecommendationModel.getRecommendationsByAssetId(asset.id, limit, offset)
 
@@ -72,9 +64,7 @@ async function getRecommendationPagin(req, res) {
         return res.status(200).json({ results, hasNext })
 
     } catch (error) {
-        return res.status(500).json({
-            error: error.message
-        })
+        return res.status(500).json({ message: error.message })
     }
 }
 
@@ -92,7 +82,7 @@ async function getMyRecommendation(req, res) {
 
         return res.status(200).json({ results, hasNext })
     } catch (error) {
-        return res.status(500).json({ error: error.message })
+        return res.status(500).json({ message: error.message })
     }
 }
 
@@ -102,21 +92,15 @@ async function getMyRecommendation(req, res) {
 async function createRecommendation(req, res) {
     try {
         if (!req.asset) {
-            return res.status(400).json({
-                error: "Asset not resolved"
-            })
+            return res.status(400).json({ message: "Asset not resolved" })
         }
 
         if (req.user.role === "analyst" && Number(req.user.analyst_verified) !== 1) {
-            return res.status(403).json({
-                error: "Votre compte analyste est en attente de validation. Vous ne pouvez pas publier de recommandation."
-            })
+            return res.status(403).json({ message: "Your analyst account is pending validation. You cannot publish any recommendations." })
         }
 
         if (req.user.role === "analyst" && req.user.analyst_type_id !== req.asset.asset_type_id) {
-            return res.status(403).json({
-                error: "Vous n'êtes pas autorisé à publier sur ce type d'actif."
-            })
+            return res.status(403).json({ message: "You are not authorized to post on this type of asset." })
         }
 
         const sanitizedData = sanitizeRecommendation({
@@ -131,16 +115,12 @@ async function createRecommendation(req, res) {
                 user_id: req.user.id
             })
 
-        return res.status(201).json({
-            recommendation
-        })
+        return res.status(201).json({ recommendation })
 
     } catch (error) {
         console.error("CREATE ERROR:", error)
 
-        return res.status(500).json({
-            error: error.message
-        })
+        return res.status(500).json({ message: error.message })
     }
 }
 
@@ -152,44 +132,32 @@ async function updateRecommendation(req, res) {
         const id = Number(req.params.id)
 
         if (!Number.isInteger(id) || id <= 0) {
-            return res.status(400).json({
-                error: "ID invalide"
-            })
+            return res.status(400).json({ message: "Invalid ID" })
         }
 
         const sanitizedData = sanitizeRecommendationUpdate(req.body)
 
         if (Object.keys(sanitizedData).length === 0) {
-            return res.status(400).json({
-                error: "Aucune donnée valide"
-            })
+            return res.status(400).json({ message: "Invalid data" })
         }
 
         const existing = await RecommendationModel.getRecommendationsById(id)
 
         if (!existing) {
-            return res.status(404).json({
-                error: "Recommendation not found"
-            })
+            return res.status(404).json({ message: "Recommendation not found" })
         }
 
         // AUTHORIZATION
         if (req.user.role !== "admin" && existing.user_id !== req.user.id) {
-            return res.status(403).json({
-                error: "Update denied"
-            })
+            return res.status(403).json({ message: "Update denied" })
         }
 
         const recommendation = await RecommendationModel.updateRecommendations(id, sanitizedData)
 
-        return res.status(200).json({
-            recommendation
-        })
+        return res.status(200).json({ recommendation })
 
     } catch (error) {
-        return res.status(500).json({
-            error: error.message
-        })
+        return res.status(500).json({ message: error.message })
     }
 }
 
@@ -201,36 +169,26 @@ async function deleteRecommendation(req, res) {
         const id = Number(req.params.id)
 
         if (!Number.isInteger(id) || id <= 0) {
-            return res.status(400).json({
-                error: "Invalid ID"
-            })
+            return res.status(400).json({ message: "Invalid ID" })
         }
 
         const existing = await RecommendationModel.getRecommendationsById(id)
 
         if (!existing) {
-            return res.status(404).json({
-                error: "Recommendation not found"
-            })
+            return res.status(404).json({ message: "Recommendation not found" })
         }
 
         // AUTHORIZATION
         if (req.user.role !== "admin" && existing.user_id !== req.user.id) {
-            return res.status(403).json({
-                error: "Delete denied"
-            })
+            return res.status(403).json({ message: "Delete denied" })
         }
 
         await RecommendationModel.deleteRecommendations(id)
 
-        return res.status(200).json({
-            message: "delete ok"
-        })
+        return res.status(200).json({ message: "delete ok" })
 
     } catch (error) {
-        return res.status(500).json({
-            error: error.message
-        })
+        return res.status(500).json({ message: error.message })
     }
 }
 
@@ -247,7 +205,7 @@ async function getRecommendationsByAnalyst(req, res) {
 
         return res.status(200).json({ results, hasNext });
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ message: error.message });
     }
 }
 

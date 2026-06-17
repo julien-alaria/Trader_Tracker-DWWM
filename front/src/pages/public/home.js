@@ -66,7 +66,9 @@ export default home
 // =====================
 export async function initHome() {
     try {
-        // 1. DATA FETCHING (Lancement des requêtes immédiatement)
+        // =====================
+        // ASSETS FETCHING
+        // =====================
         const [stocks, forex, commodities] = await Promise.all([
             getStock(),
             getForex(),
@@ -75,13 +77,15 @@ export async function initHome() {
 
         const allData = [...stocks, ...forex, ...commodities]
 
-        // 2. TIMING SÉCURITÉ : Attendre que le routeur ait fini d'injecter le HTML
+         // Asynchronous security to allow time for the DOM to be injected by the router
         await new Promise(resolve => setTimeout(resolve, 0))
 
         const searchContainer = document.getElementById("search-container")
         if (!searchContainer) return
 
-        // 3. SEARCH BAR INITIALISATION
+        // =====================
+        // SEARCH BAR
+        // =====================
         const searchBar = createSearchBar((value, container) => {
             const query = value.trim().toLowerCase()
             if (!query) { 
@@ -104,7 +108,9 @@ export async function initHome() {
         searchContainer.innerHTML = ""
         searchContainer.appendChild(searchBar)
 
-        // 4. BUILD CAROUSELS
+        // =====================
+        // BUILD CAROUSELS
+        // =====================
         enableCarouselWindow({ 
             selector: "#stocks", 
             batchSize: 5, 
@@ -126,7 +132,7 @@ export async function initHome() {
             cardComponent: commodityCard
         })
 
-        // 5. GESTION DES CLICS DE NAVIGATION (DÉLÉGATION SÉCURISÉE)
+        // EVENTS
         bindCarouselsNavigation()
 
     } catch (err) {

@@ -89,7 +89,7 @@ async function createUsers(data) {
         const [assetType] = await db.execute("SELECT id FROM assets_types WHERE id = ?", [analyst_type_id])
 
         if (assetType.length === 0) {
-            throw new Error("Type d'actif invalide")
+            throw new Error("Invalid asset type")
         }
     }
 

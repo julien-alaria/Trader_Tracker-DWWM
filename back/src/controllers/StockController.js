@@ -8,7 +8,7 @@ async function getStock(req, res) {
     } catch (error) {
         console.error("Erreur:", error)
 
-        res.status(500).json({ error: "Failed to fetch stock data" })
+        res.status(500).json({ message: "Failed to fetch stock data" })
     }
 }
 
@@ -20,7 +20,7 @@ async function getAllStocks(req, res) {
     } catch (error) {
         console.error("Erreur:", error)
 
-        res.status(500).json({ error: "Failed to fetch stock data" })
+        res.status(500).json({ message: "Failed to fetch stock data" })
     }
 }
 
@@ -31,7 +31,7 @@ async function getForex(req, res) {
     } catch (error) {
         console.error("Erreur:", error)
 
-        res.status(500).json({ error: "Failed to fetch forex data" })
+        res.status(500).json({ message: "Failed to fetch forex data" })
     }
 }
 
@@ -42,7 +42,7 @@ async function getCommodities(req, res) {
     } catch (error) {
         console.error("Erreur:", error)
 
-        res.status(500).json({ error: "Failed to fetch forex data" })
+        res.status(500).json({ message: "Failed to fetch forex data" })
     }
 }
 

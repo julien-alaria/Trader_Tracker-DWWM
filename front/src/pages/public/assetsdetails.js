@@ -10,13 +10,6 @@ import { enableCarouselWindow } from "../../utils/lazyloading.js"
 import { createPaginator } from "../../utils/pagination.js"
 import { formatAssetImage } from "../../utils/imageHelper.js"
 
-
-// =====================
-// STATE GLOBAL
-// =====================
-let recommendationsPaginator
-let analystPaginator
-
 // =====================
 // TEMPLATE
 // =====================
@@ -57,6 +50,15 @@ const detailsPage = `
         
     </main>
 `
+
+export default detailsPage
+
+// =====================
+// STATE GLOBAL
+// =====================
+let recommendationsPaginator
+let analystPaginator
+
 
 // =====================
 // RECOMMENDATIONS PAGINATION
@@ -324,7 +326,7 @@ export async function initDetail() {
                 const imageUrl = a.picture ? `${API_BASE_URL}/uploads/${a.picture}` : defaultAvatar
 
                 return `
-                    <div class="analyst-item" data-id="${a.id} style="cursor">
+                    <div class="analyst-item" data-id="${a.id}" style="cursor">
                     <img src="${imageUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="analyst-picture" />
                     <p><strong>${a.name}</strong> - ${a.company}</p>
                     </div>
@@ -418,4 +420,3 @@ export async function initDetail() {
     }
 }
 
-export default detailsPage

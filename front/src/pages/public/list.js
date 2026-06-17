@@ -16,11 +16,13 @@ const list = `
 export default list
 
 // =====================
-// INIT (TOTALEMENT AUTONOME)
+// INIT
 // =====================
 export async function initList() {
     try {
-        // 1. DATA FETCHING UNIQUE
+        // =====================
+        // DATA FETCHING
+        // =====================
         const [stocks, forex, commodities] = await Promise.all([
             getStock(), getForex(), getCommodities()
         ])
@@ -37,7 +39,9 @@ export async function initList() {
 
         if (!container) return
 
-        // 3. ÉTAT LOCAL DE PAGINATION (Réinitialisé à CHAQUE chargement de page)
+        // =====================
+        // PAGINATION
+        // =====================
         let currentPage = 0
         const limit = 10
 
@@ -52,17 +56,17 @@ export async function initList() {
             if (prevBtn) prevBtn.disabled = currentPage === 0
             if (nextBtn) nextBtn.disabled = (start + limit) >= allAssets.length
             
-            // Affichage du bloc de pagination si nécessaire
+            // Pagination visibility
             if (paginationDiv) {
                 paginationDiv.style.display = allAssets.length > limit ? "flex" : "none"
             }
         }
 
-        // Attachement des clics de pagination nettoyés à chaque init
+        // Click events
         if (nextBtn) nextBtn.onclick = () => { currentPage++; updateView() }
         if (prevBtn) prevBtn.onclick = () => { currentPage--; updateView() }
 
-        // Premier affichage
+        // Display
         updateView()
 
         // 4. DÉLÉGATION D'ÉVÉNEMENT UNIQUE SUR LE CONTENEUR
