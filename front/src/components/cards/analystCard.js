@@ -2,7 +2,7 @@ import { API_BASE_URL } from "../../config/api.js"
 
 export default function analystCard({ id, name, company, bio, picture } = {}) {
     
-    const defaultAvatar = "/assets/default_analyst.png"
+    const defaultAvatar = "/assets/analyst/default_analyst.png"
     const imageUrl = picture ? `${API_BASE_URL}/uploads/${picture}` : defaultAvatar
 
     // Avoid visibles NULL

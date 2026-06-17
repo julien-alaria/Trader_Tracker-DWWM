@@ -1,4 +1,3 @@
-
 export function buildWatchlistData(rawWatchlist, allAssets) {
     if (!rawWatchlist || !allAssets) return [];
 

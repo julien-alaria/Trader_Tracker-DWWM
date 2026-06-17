@@ -1,9 +1,9 @@
 import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
-import { createSearchBar, renderResults } from "../../components/searchBar/searchBarUtils.js"
-import { enableCarouselWindow } from "../../utils/lazyloading.js"
 import stockCard from "../../components/cards/stockCards.js"
 import forexCard from "../../components/cards/forexCards.js"
 import commodityCard from "../../components/cards/commodityCards.js"
+import { createCarousel } from "../../components/carousel/CarouselComponent.js"
+import { initGenericSearchBar } from "../../components/searchBar/searchBarUtils.js"
 
 // =====================
 // TEMPLATE
@@ -11,11 +11,7 @@ import commodityCard from "../../components/cards/commodityCards.js"
 const home = `
     <section id="home-top">
         <h1 id="home-top-title">TRADER TRACKER</h1>
-
-        <p id="home-top-text">
-            Track your investments with ease
-        </p>
-
+        <p id="home-top-text">Track your investments with ease</p>
         <a id="home-top-register" href="#/register">CREATE FREE ACCOUNT</a>
     </section>
 
@@ -26,36 +22,25 @@ const home = `
 
     <section id="home-stocks">
         <h2 id="home-stocks-title">NASDAQ</h2>
-
         <p id="home-stocks-text">Nasdaq is a US stock market for new companies with high growth potential, particularly in the high-tech sector.</p>
-
-        <div class="carousel" id="stocks"></div>
-
+        <div id="stocks-carousel-target"></div>
         <a href="#/list" class="btn" id="all-assets-btn">All Assets By List</a>
     </section>
 
     <section id="home-forex">
         <h2 id="home-forex-title">Forex</h2>
-
-        <p id="home-stocks-text">Foreign exchange market where currencies from all over the world are traded</p>
-
-        <div class="carousel" id="forex"></div>
+        <p id="home-forex-text">Foreign exchange market where currencies from all over the world are traded</p> <div id="forex-carousel-target"></div>
     </section>
 
     <section id="home-middle">
-        <p id="home-middle-text">
-           Take control of your investments today
-        </p>
-
+        <p id="home-middle-text">Take control of your investments today</p>
         <a id="home-top-register" href="#/register">CREATE FREE ACCOUNT</a>
     </section>
 
     <section id="home-commodities">
         <h2 id="home-commodities-title">Comex</h2>
-
         <p id="home-commodities-text">The largest exchange for metals futures contracts</p>
-
-        <div class="carousel" id="commodities"></div>
+        <div id="commodities-carousel-target"></div>
     </section>
 `
 
@@ -74,89 +59,50 @@ export async function initHome() {
             getForex(),
             getCommodities(),
         ])
-
         const allData = [...stocks, ...forex, ...commodities]
 
-         // Asynchronous security to allow time for the DOM to be injected by the router
+        // Sécurité asynchrone pour laisser le temps au routeur d'injecter le template HTML
         await new Promise(resolve => setTimeout(resolve, 0))
-
-        const searchContainer = document.getElementById("search-container")
-        if (!searchContainer) return
 
         // =====================
         // SEARCH BAR
         // =====================
-        const searchBar = createSearchBar((value, container) => {
-            const query = value.trim().toLowerCase()
-            if (!query) { 
-                container.innerHTML = ""
-                return 
-            }
-
-            const filtered = allData.filter(item =>
-                (item.ticker ?? "").toLowerCase().includes(query) ||
-                (item.name ?? "").toLowerCase().includes(query)
-            )
-
-            const limitedResults = filtered.slice(0, 5)
-
-            renderResults(limitedResults, container, (item) => {
+        initGenericSearchBar({
+            targetSelector: "#search-container",
+            data: allData,
+            onSelect: (item) => {
                 window.location.hash = `#/details?type=${item.type}&ticker=${item.ticker}`
-            })
+            }
         })
-
-        searchContainer.innerHTML = ""
-        searchContainer.appendChild(searchBar)
 
         // =====================
-        // BUILD CAROUSELS
+        // CARROUSELS
         // =====================
-        enableCarouselWindow({ 
-            selector: "#stocks", 
-            batchSize: 5, 
-            getData: () => stocks, 
-            cardComponent: stockCard 
+        createCarousel({
+            targetSelector: "#stocks-carousel-target",
+            carouselId: "stocks",
+            data: stocks,
+            cardComponent: stockCard,
+            buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`
         })
 
-        enableCarouselWindow({ 
-            selector: "#forex", 
-            batchSize: 5, 
-            getData: () => forex, 
-            cardComponent: forexCard
+        createCarousel({
+            targetSelector: "#forex-carousel-target",
+            carouselId: "forex",
+            data: forex,
+            cardComponent: forexCard,
+            buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`
         })
 
-        enableCarouselWindow({ 
-            selector: "#commodities", 
-            batchSize: 3, 
-            getData: () => commodities, 
-            cardComponent: commodityCard
+        createCarousel({
+            targetSelector: "#commodities-carousel-target",
+            carouselId: "commodities",
+            data: commodities,
+            cardComponent: commodityCard,
+            buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`
         })
-
-        // EVENTS
-        bindCarouselsNavigation()
 
     } catch (err) {
         console.error("ERROR :", err)
     }
-}
-
-// =====================
-// EVENTS BINDING
-// =====================
-function bindCarouselsNavigation() {
-    // Liste des sélecteurs de carrousel présents sur la Home
-    const carousels = ["#stocks", "#forex", "#commodities"]
-
-    carousels.forEach(selector => {
-        const container = document.querySelector(selector)
-        if (!container) return
-
-        // On lie l'événement exclusivement sur le conteneur du carrousel, pas sur le document entier !
-        container.onclick = (e) => {
-            const card = e.target.closest(".card")
-            if (card && card.dataset.ticker && card.dataset.type) {
-                window.location.hash = `#/details?type=${card.dataset.type}&ticker=${card.dataset.ticker}`
-            }
-        }
-    })
 }

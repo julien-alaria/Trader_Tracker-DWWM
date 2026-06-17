@@ -1,13 +1,11 @@
-import http from "../../config/instanceHttp.js";
-import { decodeToken } from "../../middlewares/roleGuard.js";
-import analystUpdateForm from "../../components/forms/analystUpdateForm.js";
-
-// Importations des composants génériques
-import { createPaginationList } from "../../components/pagination/paginationComponent.js";
-import { bindRecommendationActions } from "../../utils/actionManager.js";
+import http from "../../config/instanceHttp.js"
+import { decodeToken } from "../../middlewares/roleGuard.js"
+import analystUpdateForm from "../../components/forms/analystUpdateForm.js"
+import { createPaginationList } from "../../components/pagination/PaginationComponent.js"
+import { bindRecommendationActions } from "../../utils/actionManager.js"
 
 // =====================
-// TEMPLATE HTML
+// TEMPLATE HTML (Structure épurée, gérée par le composant externe)
 // =====================
 const adminPage = `
 <main>
@@ -41,6 +39,7 @@ const adminPage = `
 `;
 export default adminPage;
 
+// Variables globales pour stocker les instances de pagination
 let recommendationsPaginator = null;
 let usersPaginator = null;
 
@@ -58,11 +57,18 @@ export async function initAdmin() {
             return;
         }
 
-        const [userRes] = await Promise.all([http.get("/users/me")]);
+        const [userRes] = await Promise.all([
+            http.get("/users/me")
+        ]);
+
         const user = userRes.result;
         renderAdmin(user);
 
-        // 1. Recommendations Admin Paginator
+        // --------------------------------------------------
+        // RENDER DES PAGINATIONS (DÉLÉGUÉ AUX COMPOSANTS)
+        // --------------------------------------------------
+
+        // 1. ALL RECOMMENDATIONS PAGINATOR
         recommendationsPaginator = createPaginationList({
             targetSelector: "#recommendations-list-target",
             prefix: "recommendations",
@@ -74,28 +80,37 @@ export async function initAdmin() {
                 <div class="recommendation" data-id="${rec.id}">
                     <strong>${rec.status}</strong>
                     <p>${rec.comment}</p>
+
                     <div class="meta">
                         <span>Analyst: <strong>${rec.analyst_name}</strong></span>
                         ${isMine ? '<span class="badge">Me</span>' : ''}
                     </div>
+
                     <p>Asset: ${rec.name} (${rec.ticker})</p>
-                    <button class="delete-btn" data-id="${rec.id}">DELETE</button>
+
+                    <button class="delete-btn" data-id="${rec.id}">
+                        DELETE
+                    </button>
+
                     <form class="edit-form hidden" data-id="${rec.id}">
                         <select name="status">
                             <option value="BUY" ${rec.status === "BUY" ? "selected" : ""}>BUY</option>
                             <option value="SELL" ${rec.status === "SELL" ? "selected" : ""}>SELL</option>
                             <option value="HOLD" ${rec.status === "HOLD" ? "selected" : ""}>HOLD</option>
                         </select>
+
                         <input name="comment" value="${rec.comment}" required />
+
                         <button type="submit">EDIT</button>
                     </form>
                 </div>
                 `;
             },
+            // Pas de redirection globale nécessaire ici au clic de la ligne
             buildUrl: () => "" 
         });
 
-        // 2. Users Admin Paginator
+        // 2. USERS LIST PAGINATOR
         usersPaginator = createPaginationList({
             targetSelector: "#users-list-target",
             prefix: "users",
@@ -110,11 +125,12 @@ export async function initAdmin() {
             buildUrl: () => ""
         });
 
+        // Lancement initial des chargements asynchrones
         await usersPaginator.load();
         await recommendationsPaginator.load();
         await loadPendingAnalysts();
 
-        // Événements
+        // Liaison des écouteurs d'événements métiers locaux
         bindRecommendationActions("#recommendations-list-target", recommendationsPaginator);
         bindUserListEvents();
         initForm(user);
@@ -124,14 +140,25 @@ export async function initAdmin() {
     }
 }
 
+// =====================
+// RENDER ADMIN INFO
+// =====================
 function renderAdmin(user) {
-    const map = { admin_id: user.id, admin_name: user.name, admin_email: user.email };
+    const map = {
+        admin_id: user.id,
+        admin_name: user.name,
+        admin_email: user.email
+    };
+
     Object.entries(map).forEach(([id, value]) => {
         const el = document.getElementById(id);
         if (el) el.textContent = value ?? "N/A";
     });
 }
 
+// =====================
+// PENDING ANALYSTS
+// =====================
 async function loadPendingAnalysts() {
     const container = document.getElementById("pending-analysts");
     if (!container) return;
@@ -148,7 +175,12 @@ async function loadPendingAnalysts() {
         container.innerHTML = `
             <table class="admin-table">
                 <thead>
-                    <tr><th>Nom</th><th>Email</th><th>Entreprise</th><th>Action</th></tr>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Entreprise</th>
+                        <th>Action</th>
+                    </tr>
                 </thead>
                 <tbody>
                     ${pendingAnalysts.map(analyst => `
@@ -156,7 +188,11 @@ async function loadPendingAnalysts() {
                             <td><strong>${analyst.name}</strong></td>
                             <td>${analyst.email}</td>
                             <td>${analyst.company || "N/A"}</td>
-                            <td><button class="approve-btn" data-id="${analyst.id}">✅ Approuver</button></td>
+                            <td>
+                                <button class="approve-btn" data-id="${analyst.id}">
+                                    ✅ Approuver
+                                </button>
+                            </td>
                         </tr>
                     `).join("")}
                 </tbody>
@@ -167,6 +203,7 @@ async function loadPendingAnalysts() {
             btn.addEventListener("click", async (e) => {
                 const id = e.target.dataset.id;
                 e.target.disabled = true;
+
                 try {
                     await http.put(`/users/${id}`, { analyst_verified: 1 });
                     alert("Analyste approuvé avec succès !");
@@ -174,20 +211,64 @@ async function loadPendingAnalysts() {
                     if (usersPaginator) await usersPaginator.load();
                 } catch (err) {
                     console.error("APPROVE ANALYST ERROR:", err);
+                    alert("Erreur lors de la validation.");
                     e.target.disabled = false;
                 }
             });
         });
+
     } catch (err) {
+        console.error("LOAD PENDING ANALYSTS ERROR:", err);
         container.innerHTML = `<p style="color: red;">Erreur lors du chargement des demandes.</p>`;
     }
 }
 
+// =====================
+// EVENTS ON RECOMMENDATIONS (INTERCEPTEURS LOCALISÉS)
+// =====================
+function bindRecommendationEvents() {
+    const container = document.getElementById("recommendations-list-target");
+    if (!container) return;
+
+    container.addEventListener("click", async (e) => {
+        if (!e.target.classList.contains("delete-btn")) return;
+
+        try {
+            await http.delete(`/recommendations/${e.target.dataset.id}`);
+            await recommendationsPaginator.load();
+        } catch (err) {
+            console.error("DELETE ERROR:", err);
+        }
+    });
+
+    container.addEventListener("submit", async (e) => {
+        if (!e.target.classList.contains("edit-form")) return;
+        e.preventDefault();
+
+        const id = e.target.dataset.id;
+        const data = new FormData(e.target);
+
+        try {
+            await http.put(`/recommendations/${id}`, {
+                status: data.get("status"),
+                comment: data.get("comment")
+            });
+            await recommendationsPaginator.load();
+        } catch (err) {
+            console.error("UPDATE ERROR:", err);
+        }
+    });
+}
+
+// =====================
+// GESTION DES CLICS USERS (Remplace les fonctions globales du window)
+// =====================
 function bindUserListEvents() {
     const container = document.getElementById("users-list-target");
     if (!container) return;
 
     container.addEventListener("click", async (e) => {
+        // Cas 1 : Clic sur Éditer
         if (e.target.classList.contains("edit-user-btn")) {
             const id = e.target.dataset.id;
             try {
@@ -207,11 +288,12 @@ function bindUserListEvents() {
             return;
         }
 
+        // Cas 2 : Clic sur Supprimer
         if (e.target.classList.contains("delete-user-btn")) {
             const id = e.target.dataset.id;
             try {
                 await http.delete(`/users/${id}`);
-                await usersPaginator.load();
+                await usersPaginator.load(); // Refresh auto
             } catch (err) {
                 console.error("DELETE USER ERROR:", err);
             }
@@ -219,12 +301,16 @@ function bindUserListEvents() {
     });
 }
 
+// =====================
+// INIT FORM PROFILE / COMPTE
+// =====================
 function initForm(user) {
     const form = document.getElementById("analyst-update-form");
     if (!form) return;
 
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
+
         const data = new FormData(form);
         const targetId = data.get("target_user_id");
 

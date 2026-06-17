@@ -1,30 +1,40 @@
 import { enableCarouselWindow } from "../../utils/lazyloading.js"
 
-export function initCarousel(containerId, data, cardComponent, buildUrl) {
-
-    const container = document.getElementById(containerId)
-    if (!container) return;
+export function createCarousel({ targetSelector, carouselId, data, cardComponent, buildUrl, onActionClick }) {
+    const target = document.querySelector(targetSelector)
+    if (!target) return
 
     if (!data || data.length === 0) {
-        container.innerHTML = "<p>Aucune donnée disponible</p>";
+        target.innerHTML = "<p>Aucune donnée disponible</p>"
         return;
     }
 
-    // LazyLoading
+    target.innerHTML = "";
+
+    // "data-bound"
+    const carouselEl = document.createElement("div");
+    carouselEl.className = "carousel";
+    carouselEl.id = carouselId;
+    target.appendChild(carouselEl);
+
     enableCarouselWindow({
-        selector: `#${containerId}`,
+        selector: `#${carouselId}`,
         batchSize: 5,
         getData: () => data,
         cardComponent: cardComponent
     });
 
-    container.addEventListener("click", (e) => {
-       
-        if (e.target.closest(".watch-btn")) return;
+    carouselEl.addEventListener("click", (e) => {
+        const actionBtn = e.target.closest(".watch-btn") || e.target.closest(".unfollow-btn")
+        if (actionBtn && onActionClick) {
+            const card = actionBtn.closest(".stock-card") || actionBtn.closest(".card")
+            if (card) onActionClick(card.dataset.ticker)
+            return
+        }
 
-        const card = e.target.closest(".stock-card") || e.target.closest(".card") || e.target.closest(".analyst");
-        if (!card) return;
+        const card = e.target.closest(".stock-card") || e.target.closest(".card")
+        if (!card) return
 
-        window.location.hash = buildUrl(card.dataset);
+        window.location.hash = buildUrl(card.dataset)
     })
 }

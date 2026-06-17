@@ -1,10 +1,5 @@
 import http from "../config/instanceHttp.js";
 
-/**
- * Attache les écouteurs d'événements globaux pour la gestion des recommandations (Delete & Edit)
- * @param {string} targetSelector - Le sélecteur du conteneur cible (ex: "#recommendations-list-target")
- * @param {Object} paginatorInstance - L'instance du composant de pagination à recharger après action
- */
 export function bindRecommendationActions(targetSelector, paginatorInstance) {
   const container = document.querySelector(targetSelector);
   if (!container) return;

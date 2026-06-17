@@ -7,11 +7,12 @@ import { formatChartId, formatMarketCap, formatDate } from "../../utils/format.j
 import analystCard from "../../components/cards/analystCard.js"
 import recoForm from "../../components/forms/recoForm.js"
 import { enableCarouselWindow } from "../../utils/lazyloading.js"
-import { createPaginator } from "../../utils/pagination.js"
 import { formatAssetImage } from "../../utils/imageHelper.js"
+import { createPaginationList } from "../../components/pagination/PaginationComponent.js"
+import { getRecommendationIcon } from "../../utils/recommendationUtils.js"
 
 // =====================
-// TEMPLATE
+// HTML TEMPLATE 
 // =====================
 const detailsPage = `
     <main>
@@ -20,13 +21,7 @@ const detailsPage = `
         </section>
 
         <section id="recomendations-section">
-            <div id="recommendation-container"></div>
-
-            <div id="pagination">
-                <button id="prev-btn">Previous</button>
-                <button id="next-btn">Next</button>
-            </div>
-
+            <div id="recommendation-target"></div>
             <div id="recommendation-form"></div>
         </section>
 
@@ -39,15 +34,8 @@ const detailsPage = `
 
         <section id="analyst-list-section">
             <h2>All Analysts</h2>
-            <div id="analyst-list-container"></div>
-            
-            <div id="analyst-pagination" style="display: none;">
-                <button id="analyst-prev-btn">Previous</button>
-                <button id="analyst-next-btn">Next</button>
-            </div>
+            <div id="analyst-list-target"></div>
         </section>
-
-        
     </main>
 `
 
@@ -58,70 +46,6 @@ export default detailsPage
 // =====================
 let recommendationsPaginator
 let analystPaginator
-
-
-// =====================
-// RECOMMENDATIONS PAGINATION
-// =====================
-const renderRecommendations = (recs, payload, meta) => {
-    
-    const container = document.getElementById("recommendation-container")
-    const paginationDiv = document.getElementById("pagination")
-
-    if (!container || !paginationDiv) return
-
-    
-
-    // recommandation creation
-    container.innerHTML = recs.length > 0
-        ? `<h3 id="reco-title">Analysts Recommendations</h3>` + recs.map(rec =>{
-
-            const defaultAvatar = "/assets/default_analyst.png"
-            const imageUrl = rec.analyst_picture ? `${API_BASE_URL}/uploads/${rec.analyst_picture}` : defaultAvatar
-
-            let recoImage
-
-            if (rec.status === "BUY") {
-                recoImage = "/assets/arrows/up-green.svg";
-            } else if (rec.status === "SELL") {
-                recoImage = "/assets/arrows/down-red.svg";
-            } else {
-                recoImage = "/assets/arrows/medium-blue.svg";
-            }
-
-            return  `
-                <div class="recommendation" data-analyst-id="${rec.user_id}">
-                    <img src="${recoImage}" style="width: 50px; height: 50px; object-fit: contain;" alt="reco-image" />
-                    <strong>${rec.status}</strong>
-                    <p>${rec.comment}</p>
-                    <img src="${imageUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="analyst-picture" />
-                    <p>Analyst: ${rec.analyst_name ?? "unknown"}</p>
-                    <p>Published on ${formatDate(rec.created_at)}</p>
-                </div>
-            `
-
-        }).join("")
-        : "<p>No recommendations yet</p>"
-        
-        // click feature
-        container.querySelectorAll('.recommendation').forEach(el => {
-            el.style.cursor = 'pointer'
-
-            el.onclick = () => {
-                const analystId = el.dataset.analystId
-
-                if (!analystId) return
-
-                window.location.hash = `#/analystdetails?id=${analystId}`
-            }
-        })
-     
-    if (recs.length === 0 && (!meta || meta.offset === 0)) {
-        paginationDiv.style.display = "none"
-    } else {
-        paginationDiv.style.display = "flex"
-    }
-}
 
 // =====================
 // INIT
@@ -140,11 +64,12 @@ export async function initDetail() {
         }
 
         // =====================
-        // ASSETS FETCHING
+        // CENTRALIZED DATA RECOVERY
         // =====================
         const [stocks, forex, commodities] = await Promise.all([
             getStock(), getForex(), getCommodities()
         ])
+
         const allAssets = [...stocks, ...forex, ...commodities]
         const asset = allAssets.find(item =>
             String(item.ticker ?? "").trim().toUpperCase() === String(ticker).trim().toUpperCase()
@@ -161,12 +86,9 @@ export async function initDetail() {
         const finalImage = formatAssetImage(asset.ticker)
         const fallbackImage = "/assets/nasdaq_logo.png"
 
-
         // =====================
         // USER & WATCHLIST 
         // =====================
-
-        //CHECK ID FOR ISFOLLOW
         const token = localStorage.getItem("token")
         const user = token ? decodeToken(token) : null
 
@@ -176,9 +98,6 @@ export async function initDetail() {
         // =====================
         // PAGE HEADER RENDERING WITH LOGO
         // =====================
-
-        // CHECK BUTTON follow-toggle-btn DIFFERENT IF FOLLOW OR NOT
-        //BECAUSE OF FOLLOW EVENT LISTENER
         const chartId = formatChartId(asset.ticker)
         document.getElementById("asset-detail").innerHTML = `
             <button onclick="history.back()" class="btn-back">Back</button>
@@ -221,11 +140,11 @@ export async function initDetail() {
                 if (currentStatus) {
                     await http.delete(`/users/me/follows/${ticker}`)
                     followBtn.dataset.followed = "false"
-                    followBtn.textContent = "☆ Follow"
+                    followBtn.textContent = "Follow"
                 } else {
                     await http.post("/users/me/follows", { ticker })
                     followBtn.dataset.followed = "true"
-                    followBtn.textContent = "⭐ Unfollow"
+                    followBtn.textContent = "Unfollow"
                 }
             } catch (err) {
                 console.error("Follow error:", err)
@@ -240,138 +159,93 @@ export async function initDetail() {
         loadTradingViewChart(asset.ticker, asset.history)
 
         // =====================
-        // RECOMMENDATIONS
-        // =====================
-
-        // =====================
-        // RECOMMENDATION PAGINATOR
+        // RECOMMENDATION PAGINATION
         // =====================
         try {
-            const recPaginator = createPaginator({
+            recommendationsPaginator = createPaginationList({
+                targetSelector: "#recommendation-target",
+                prefix: "reco",
                 endpoint: `/recommendations?ticker=${asset.ticker}`,
-                limit: 5, 
-                render: renderRecommendations,
-                mapResponse: (res) => ({
-                    results: res.results,
-                    hasNext: res.hasNext
-                })
+                itemTemplate: (rec) => {
+                    const defaultAvatar = "/assets/analyst/default_analyst.png"
+                    const imageUrl = rec.analyst_picture ? `${API_BASE_URL}/uploads/${rec.analyst_picture}` : defaultAvatar
+                    const recoImage = getRecommendationIcon(rec.status)
+
+                    return `
+                        <div class="recommendation" data-js-clickable data-analyst-id="${rec.user_id}" style="cursor: pointer;">
+                            <img src="${recoImage}" style="width: 50px; height: 50px; object-fit: contain;" alt="reco-image" />
+                            <strong>${rec.status}</strong>
+                            <p>${rec.comment}</p>
+                            <img src="${imageUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
+                            <p>Analyst: ${rec.analyst_name ?? "unknown"}</p>
+                            <p>Published on ${formatDate(rec.created_at)}</p>
+                        </div>
+                    `
+                },
+                buildUrl: (dataset) => `#/analystdetails?id=${dataset.analystId}`
             })
 
-            // recommendations paginator calling
-            await recPaginator.load()
-
-
-            // =====================
-            // BINDER
-            // =====================
-            recPaginator.bind({
-                nextBtn: document.getElementById("next-btn"),
-                prevBtn: document.getElementById("prev-btn")
-            })
+            await recommendationsPaginator.load()
 
         } catch (err) {
-            console.error("Erreur chargement recommandations:", err)
-            document.getElementById("recommendation-container").innerHTML = "<p>Error loading recommendations</p>"
+            console.error("Error loading recommendations:", err)
+            const targetDiv = document.getElementById("recommendation-target")
+            if (targetDiv) targetDiv.innerHTML = "<p>Error loading recommendations</p>"
         }
         
         // =====================
         // ANALYSTS CARROUSEL
         // =====================
-
-        // fetch to get asset by ticker
         const dbAsset = await http.get(`/assets/details/${ticker}`)
 
         try {
             const analystRes = await http.get(`/users/analysts/by-type?type_id=${dbAsset.asset_type_id}`)
             const analysts = analystRes.results
 
-                if (analysts && analysts.length > 0) {
-                    document.getElementById("analyst-carousel-container").classList.remove("hidden")
-                    
-                    
-                    enableCarouselWindow({
-                        selector: ".analyst-carousel",
-                        batchSize: analysts.length < 3 ? analysts.length : 3,
-                        getData: () => analysts,
-                        cardComponent: analystCard
-                    })
+            if (analysts && analysts.length > 0) {
+                document.getElementById("analyst-carousel-container").classList.remove("hidden")
+                
+                enableCarouselWindow({
+                    selector: ".analyst-carousel",
+                    batchSize: analysts.length < 3 ? analysts.length : 3,
+                    getData: () => analysts,
+                    cardComponent: analystCard
+                })
 
-                    document.querySelector(".analyst-carousel").addEventListener("click", (e) => {
-                        const card = e.target.closest(".analyst")
-                        if (card) {
-                            const analystId = card.dataset.id
-                            window.location.hash = `#/analystdetails?id=${analystId}`
-                        }
-                    })
-                }
-
+                document.querySelector(".analyst-carousel").addEventListener("click", (e) => {
+                    const card = e.target.closest(".analyst")
+                    if (card) {
+                        const analystId = card.dataset.id
+                        window.location.hash = `#/analystdetails?id=${analystId}`
+                    }
+                })
+            }
         } catch (e) {
-            console.error("Impossible de charger les analystes:", e)
+            console.error("Unable to load analysts:", e)
         }
 
         // =====================
-        // ANALYSTS LIST PAGINATION
+        // ANALYST LIST PAGINATION
         // =====================
-        
-        // =====================
-        // RENDER ANALYST LIST
-        // =====================
-        const renderAnalystList = (analysts, meta) => {
-
-            const container = document.getElementById("analyst-list-container")
-            const paginationDiv = document.getElementById("analyst-pagination")
-
-            container.innerHTML = analysts.map(a => {
-                const defaultAvatar = "/assets/default_analyst.png"
+        analystPaginator = createPaginationList({
+            targetSelector: "#analyst-list-target",
+            prefix: "analyst-list",
+            endpoint: `/users/analysts/by-type?type_id=${dbAsset.asset_type_id}`,
+            itemTemplate: (a) => {
+                const defaultAvatar = "/assets/analyst/default_analyst.png"
                 const imageUrl = a.picture ? `${API_BASE_URL}/uploads/${a.picture}` : defaultAvatar
 
                 return `
-                    <div class="analyst-item" data-id="${a.id}" style="cursor">
-                    <img src="${imageUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="analyst-picture" />
-                    <p><strong>${a.name}</strong> - ${a.company}</p>
+                    <div class="analyst-item" data-js-clickable data-id="${a.id}" style="cursor: pointer;">
+                        <img src="${imageUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
+                        <p><strong>${a.name}</strong> - ${a.company}</p>
                     </div>
                 `
-            }).join("")
-
-            // btn visibility
-            paginationDiv.style.display = (meta?.hasNext || (meta?.offset && meta.offset > 0)) ? "flex" : "none"
-        }
-
-        // =====================
-        // ANALYST LIST PAGINATOR
-        // =====================
-        const analystPaginator = createPaginator({
-            endpoint: `/users/analysts/by-type?type_id=${dbAsset.asset_type_id}&limit=3`,
-            render: renderAnalystList,
-            mapResponse: (res) => ({
-                results: res.results,
-                hasNext: res.hasNext
-            })
+            },
+            buildUrl: (dataset) => `#/analystdetails?id=${dataset.id}`
         })
-        // analysts paginator calling
+
         await analystPaginator.load()
-
-
-        // =====================
-        // BINDER
-        // =====================
-        analystPaginator.bind({
-            nextBtn: document.getElementById("analyst-next-btn"),
-            prevBtn: document.getElementById("analyst-prev-btn")
-        })
-
-        // click feature
-        const container = document.getElementById("analyst-list-container")
-
-        container.addEventListener("click", (event) => {
-
-            const card = event.target.closest(".analyst-item")
-            
-            if (card) {
-                const analystId = card.dataset.id
-                window.location.hash = `#/analystdetails?id=${analystId}`
-            }
-        })
 
         // =====================
         // RECOMMENDATION FORM
@@ -385,6 +259,7 @@ export async function initDetail() {
             if (recForm) {
                 recForm.addEventListener("submit", async (e) => {
                     e.preventDefault()
+
                     const messageDiv = document.getElementById("message")
                     messageDiv.innerText = "Processing..."
                     const data = new FormData(e.target)
@@ -397,10 +272,10 @@ export async function initDetail() {
                         })
                         messageDiv.innerText = "Recommendation successful"
                         setTimeout(async () => { await initDetail() }, 1000)
+                        
                     } catch (err) {
                         messageDiv.innerText = err.response?.data?.message || "Recommendation error."
                     }
-
                 })
             }
         // =====================
@@ -419,4 +294,3 @@ export async function initDetail() {
         console.error("DETAILS INIT ERROR:", error)
     }
 }
-

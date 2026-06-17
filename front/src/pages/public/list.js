@@ -1,11 +1,11 @@
 import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js";
 import { formatAssetImage } from "../../utils/imageHelper.js";
 
-// Importation de notre composant de pagination locale délégué
+// Importation du composant de pagination locale délégué
 import { createLocalPaginationList } from "../../components/pagination/paginationComponent.js";
 
 // =====================
-// TEMPLATE HTML
+// TEMPLATE HTML (Structure épurée, le composant gère l'injection)
 // =====================
 const list = `
     <h1>All Assets List</h1>
@@ -13,6 +13,7 @@ const list = `
 `;
 export default list;
 
+// Variable globale pour stocker l'instance du paginateur
 let assetsPaginator = null;
 
 // =====================
@@ -20,14 +21,19 @@ let assetsPaginator = null;
 // =====================
 export async function initList() {
     try {
+        // Récupération centralisée des données d'origine
         const [stocks, forex, commodities] = await Promise.all([
             getStock(), getForex(), getCommodities()
         ]);
         
         const allAssets = [...stocks, ...forex, ...commodities];
 
+        // Attente de sécurité liée à l'injection asynchrone du routeur
         await new Promise(resolve => setTimeout(resolve, 0));
 
+        // ==================================================================
+        // APPLICATION STRICTE DE LA MÉTHODE PAR COMPOSANT
+        // ==================================================================
         assetsPaginator = createLocalPaginationList({
             targetSelector: "#assets-list-target",
             prefix: "assets",
@@ -50,6 +56,7 @@ export async function initList() {
             buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`
         });
 
+        // Déclenchement du premier rendu via le composant
         if (assetsPaginator) {
             await assetsPaginator.load();
         }

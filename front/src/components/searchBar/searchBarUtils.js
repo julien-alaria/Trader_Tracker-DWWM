@@ -48,3 +48,34 @@ export function renderResults(results, container, onSelect) {
         container.appendChild(div)
     })
 }
+
+export function initGenericSearchBar({ targetSelector, data, onSelect }) {
+    const containerTarget = document.querySelector(targetSelector)
+    if (!containerTarget) return
+
+    // Call to create the bar with integrated filtering logic
+    const searchBar = createSearchBar((value, resultsContainer) => {
+        const query = value.trim().toLowerCase()
+        
+        if (!query) { 
+            resultsContainer.innerHTML = ""
+            return 
+        }
+
+        // Filtering on the ticker or asset name
+        const filtered = data.filter(item =>
+            (item.ticker ?? "").toLowerCase().includes(query) ||
+            (item.name ?? "").toLowerCase().includes(query)
+        )
+
+        // Strictly limited to a maximum of 5 results
+        const limitedResults = filtered.slice(0, 5)
+
+        // Original rendering: the received onSelect is passed directly to it
+        renderResults(limitedResults, resultsContainer, onSelect)
+    })
+
+    // Cleaning of the target area and injection of the complete component
+    containerTarget.innerHTML = ""
+    containerTarget.appendChild(searchBar)
+}

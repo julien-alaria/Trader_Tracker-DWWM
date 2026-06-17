@@ -1,16 +1,14 @@
-import { API_BASE_URL } from "../../config/api.js";
-import http from "../../config/instanceHttp.js";
-import { decodeToken } from "../../middlewares/roleGuard.js";
-import stockCard from "../../components/cards/stockCards.js";
-import analystCard from "../../components/cards/analystCard.js";
-import analystUpdateForm from "../../components/forms/analystUpdateForm.js";
-import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js";
-import { buildWatchlistData } from "../../utils/assetFormatter.js";
-
-// Importations des composants génériques
-import { createCarousel } from "../../components/carousel/carouselComponent.js";
-import { createPaginationList } from "../../components/pagination/paginationComponent.js";
-import { bindRecommendationActions } from "../../utils/actionManager.js";
+import { API_BASE_URL } from "../../config/api.js"
+import http from "../../config/instanceHttp.js"
+import { decodeToken } from "../../middlewares/roleGuard.js"
+import stockCard from "../../components/cards/stockCards.js"
+import analystCard from "../../components/cards/analystCard.js"
+import analystUpdateForm from "../../components/forms/analystUpdateForm.js"
+import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
+import { buildWatchlistData } from "../../utils/assetFormatter.js"
+import { createCarousel } from "../../components/carousel/CarouselComponent.js"
+import { createPaginationList } from "../../components/pagination/PaginationComponent.js"
+import { bindRecommendationActions } from "../../utils/actionManager.js"
 
 // =====================
 // TEMPLATE HTML
@@ -58,29 +56,36 @@ const analystPage = `
         </div>
     </section>
 </main>
-`;
-export default analystPage;
+`
 
-let recommendationsPaginator = null;
-let watchlistPaginator = null;
-let followPaginator = null;
+export default analystPage
+
+// Variables globales à la page pour stocker les instances de pagination
+let recommendationsPaginator = null
+let watchlistPaginator = null
+let followPaginator = null
 
 // =====================
-// INIT
+// FONCTION CENTRALE D'INITIALISATION
 // =====================
 export async function initAnalyst() {
   try {
-    const token = localStorage.getItem("token");
+    // --- Vérifications de Sécurité d'accès ---
+    const token = localStorage.getItem("token")
     if (!token) return;
 
-    const payload = decodeToken(token);
+    const payload = decodeToken(token)
     if (!payload) {
-      window.location.hash = "/login";
+      window.location.hash = "/login"
       return;
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    // Attente de sécurité liée à l'injection asynchrone du routeur
+    await new Promise((resolve) => setTimeout(resolve, 0))
 
+    // --------------------------------------------------
+    // RÉCUPÉRATION CENTRALISÉE DES DONNÉES
+    // --------------------------------------------------
     const [userRes, watchRes, followRes, stocks, forex, commodities] =
       await Promise.all([
         http.get("/users/me"),
@@ -91,20 +96,23 @@ export async function initAnalyst() {
         getCommodities(),
       ]);
 
-    const user = userRes.result;
-    renderAnalystInfo(user);
+    const user = userRes.result
+    renderAnalystInfo(user)
 
-    const allAssets = [...stocks, ...forex, ...commodities];
-    const watchlist = buildWatchlistData(watchRes.result, allAssets);
-    const followState = followRes.results || [];
+    const allAssets = [...stocks, ...forex, ...commodities]
+    const watchlist = buildWatchlistData(watchRes.result, allAssets)
+    const followState = followRes.results || []
 
-    // Carrousels
+    // --------------------------------------------------
+    // RENDER DES CARROUSELS (DÉLÉGUÉ AUX COMPOSANTS)
+    // --------------------------------------------------
     createCarousel({
       targetSelector: "#watchlist-carousel-target",
       carouselId: "analyst-watchlist-carousel",
       data: watchlist,
       cardComponent: stockCard,
-      buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`,
+      buildUrl: (dataset) =>
+        `#/details?type=${dataset.type}&ticker=${dataset.ticker}`,
     });
 
     createCarousel({
@@ -115,31 +123,35 @@ export async function initAnalyst() {
       buildUrl: (dataset) => `#/analystdetails?id=${dataset.id}`,
     });
 
-    // 1. Recommendations List
+    // --------------------------------------------------
+    // RENDER DES PAGINATIONS (DÉLÉGUÉ AUX COMPOSANTS)
+    // --------------------------------------------------
+
+    // 1. RECOMMANDATIONS PAGINATOR
     recommendationsPaginator = createPaginationList({
       targetSelector: "#recommendations-list-target",
       prefix: "recommendations",
       endpoint: "/recommendations/me",
       itemTemplate: (rec) => {
-        const defaultAvatar = "/assets/logo/nasdaq_logo.png";
-        const imageUrl = rec.ticker ? `/assets/logos/${rec.ticker.toLowerCase()}.svg` : defaultAvatar;
+        const defaultAvatar = "/assets/logo/nasdaq_logo.png"
+        const imageUrl = rec.ticker
+          ? `/assets/logos/${rec.ticker.toLowerCase()}.svg`
+          : defaultAvatar;
 
-        let recoImage = "/assets/arrows/medium-blue.svg";
-        if (rec.status === "BUY") recoImage = "/assets/arrows/up-green.svg";
-        if (rec.status === "SELL") recoImage = "/assets/arrows/down-red.svg";
+        let recoImage = "/assets/arrows/medium-blue.svg"
+        if (rec.status === "BUY") recoImage = "/assets/arrows/up-green.svg"
+        if (rec.status === "SELL") recoImage = "/assets/arrows/down-red.svg"
 
-        const isAuthorized = user && (user.role === "admin" || Number(user.id) === Number(rec.user_id));
+        const isAuthorized = user && (user.role === "admin" || Number(user.id) === Number(rec.user_id))
 
         return `
-          <div class="recommendation" data-id="${rec.id}">
-              <div data-js-clickable data-ticker="${rec.ticker}" data-type="${rec.asset_type_id ?? 'asset'}" style="cursor: pointer;">
-                  <img src="${recoImage}" style="width: 50px; height: 50px; object-fit: contain;" alt="reco-image" />
-                  <strong>${rec.status}</strong>
-                  <img src="${imageUrl}" style="width: 50px; height: 50px; object-fit: contain;" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
-                  <p>${rec.ticker}</p>
-                  <p>${rec.comment}</p>
-                  <small>${new Date(rec.created_at).toLocaleDateString()}</small>
-              </div>
+          <div class="recommendation" data-js-clickable data-id="${rec.id}" data-ticker="${rec.ticker}" data-type="${rec.asset_type_id ?? 'asset'}" style="cursor: pointer; margin-bottom: 12px;">
+              <img src="${recoImage}" style="width: 50px; height: 50px; object-fit: contain;" alt="reco-image" />
+              <strong>${rec.status}</strong>
+              <img src="${imageUrl}" style="width: 50px; height: 50px; object-fit: contain;" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
+              <p>${rec.ticker}</p>
+              <p>${rec.comment}</p>
+              <small>${new Date(rec.created_at).toLocaleDateString()}</small>
               ${isAuthorized ? `
                   <button class="delete-btn" data-id="${rec.id}">DELETE</button>
                   <form class="edit-form hidden" data-id="${rec.id}">
@@ -148,24 +160,27 @@ export async function initAnalyst() {
                           <option value="SELL">SELL</option>
                           <option value="HOLD">HOLD</option>
                       </select>
-                      <input name="comment" value="${rec.comment}" required />
+                      <input name="comment" placeholder="comment" />
                       <button type="submit">EDIT</button>
                   </form>
               ` : ""}
           </div>
         `;
       },
-      buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`,
+      buildUrl: (dataset) =>
+        `#/details?type=${dataset.type}&ticker=${dataset.ticker}`,
     });
 
-    // 2. Watchlist List
+    // 2. WATCHLIST PAGINATOR
     watchlistPaginator = createPaginationList({
       targetSelector: "#watchlist-list-target",
       prefix: "watchlist",
       endpoint: "/users/me/watchlist-paginated",
       itemTemplate: (item) => {
         const defaultLogo = "/assets/logo/nasdaq_logo.png";
-        const logoUrl = item.ticker ? `/assets/logos/${item.ticker.toLowerCase()}.svg` : defaultLogo;
+        const logoUrl = item.ticker
+          ? `/assets/logos/${item.ticker.toLowerCase()}.svg`
+          : defaultLogo;
 
         return `
           <div class="watchlist-item" data-js-clickable data-ticker="${item.ticker}" data-type="${item.asset_type_id}" style="cursor: pointer; display: flex; align-items: center; gap: 15px; margin-bottom: 8px;">
@@ -175,46 +190,54 @@ export async function initAnalyst() {
           </div>
         `;
       },
-      buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`,
+      buildUrl: (dataset) =>
+        `#/details?type=${dataset.type}&ticker=${dataset.ticker}`,
     });
 
-    // 3. Follow List
+    // 3. FOLLOW PAGINATOR
     followPaginator = createPaginationList({
       targetSelector: "#follow-list-target",
       prefix: "follow",
       endpoint: "/users/me/follows/users",
       itemTemplate: (a) => {
-        const defaultAvatar = "/assets/default_analyst.png";
-        const avatarUrl = a.picture ? `${API_BASE_URL}/uploads/${a.picture}` : defaultAvatar;
+        const defaultAvatar = "/assets/analyst/default_analyst.png";
+        const avatarUrl = a.picture
+          ? `${API_BASE_URL}/uploads/${a.picture}`
+          : defaultAvatar;
 
         return `
           <div class="follow-item" data-js-clickable data-id="${a.id}" style="cursor: pointer; display: flex; align-items: center; gap: 15px; margin-bottom: 8px;">
                <img src="${avatarUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
                <p><strong>${a.name}</strong> - ${a.company ?? "Unknown"}</p>
           </div>
-        `;
+        `
       },
       buildUrl: (dataset) => `#/analystdetails?id=${dataset.id}`,
-    });
+    })
 
-    await recommendationsPaginator.load();
-    await watchlistPaginator.load();
-    await followPaginator.load();
+    // Premier chargement des listes asynchrones
+    await recommendationsPaginator.load()
+    await watchlistPaginator.load()
+    await followPaginator.load()
 
-    const globalContainer = document.getElementById("watchlist-list-global");
+    // Logique d'affichage d'origine du bloc global Watchlist
+    const globalContainer = document.getElementById("watchlist-list-global")
     if (globalContainer) {
-      globalContainer.style.display = watchRes.result.length < 5 ? "none" : "flex";
+      globalContainer.style.display = watchRes.result.length < 5 ? "none" : "flex"
     }
 
-    // Gestion centralisée des événements de Recommandation (DELETE / EDIT) via le composant d'action
-    bindRecommendationActions("#recommendations-list-target", recommendationsPaginator);
-    
-    initLocalUpdateForm(user);
+    // Initialisation des écouteurs de clics (Formulaires, Suppressions et Profil)
+    bindRecommendationActions("#recommendations-list-target", recommendationsPaginator)
+    initLocalUpdateForm(user)
+
   } catch (err) {
-    console.error("ANALYST INIT ERROR:", err);
+    console.error("ANALYST INIT ERROR:", err)
   }
 }
 
+// =====================
+// FONCTIONS MÉTIERS LOCALES
+// =====================
 function renderAnalystInfo(user) {
   const map = {
     analyst_id: user.id,
@@ -223,23 +246,25 @@ function renderAnalystInfo(user) {
     analyst_type: user.analyst_type_id,
     analyst_company: user.company,
     analyst_bio: user.bio,
-  };
+  }
 
   Object.entries(map).forEach(([id, value]) => {
     const el = document.getElementById(id);
     if (el) el.textContent = value ?? "N/A";
-  });
+  })
 
   const imageEl = document.getElementById("analyst_picture");
   if (imageEl) {
-    imageEl.src = user.picture ? `${API_BASE_URL}/uploads/${user.picture}` : "/assets/default_analyst.png";
-    imageEl.alt = `${user.name || "analyst"}`;
+    imageEl.src = user.picture
+      ? `${API_BASE_URL}/uploads/${user.picture}`
+      : "/assets/default_analyst.png";
+    imageEl.alt = `${user.name || "analyst"}`
   }
 }
 
 function initLocalUpdateForm(user) {
   const form = document.getElementById("analyst-update-form");
-  if (!form) return;
+  if (!form) return
 
   const fields = {
     "analyst-name": user.name,
@@ -249,21 +274,27 @@ function initLocalUpdateForm(user) {
   };
 
   Object.entries(fields).forEach(([id, value]) => {
-    const el = document.getElementById(id);
-    if (el) el.value = value ?? "";
-  });
+    const el = document.getElementById(id)
+    if (el) el.value = value ?? ""
+  })
 
   form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const data = new FormData(form);
-    if (!data.get("password")?.trim()) data.delete("password");
+    e.preventDefault()
+    const data = new FormData(form)
+
+    const passwordInput = data.get("password");
+    if (!passwordInput || !passwordInput.trim()) {
+      data.delete("password")
+    }
 
     try {
-      const result = await http.put("/users/me", data);
-      if (result?.token) localStorage.setItem("token", result.token);
-      window.location.reload();
+      const result = await http.put("/users/me", data)
+      if (result && result.token) {
+        localStorage.setItem("token", result.token)
+      }
+      window.location.reload()
     } catch (err) {
-      console.error("UPDATE ERROR:", err);
+      console.error("UPDATE ERROR:", err)
     }
-  });
+  })
 }
