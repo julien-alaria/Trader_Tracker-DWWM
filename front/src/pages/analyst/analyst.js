@@ -136,7 +136,7 @@ export async function initAnalyst() {
       prefix: "recommendations",
       endpoint: "/recommendations/me",
       itemTemplate: (rec) => {
-        const defaultAvatar = "/assets/logo/nasdaq_logo.png"
+        const defaultAvatar = "/assets/logos/nasdaq_logo.png"
         const imageUrl = rec.ticker
           ? `/assets/logos/${rec.ticker.toLowerCase()}.svg`
           : defaultAvatar
@@ -178,7 +178,7 @@ export async function initAnalyst() {
       prefix: "watchlist",
       endpoint: "/users/me/watchlist-paginated",
       itemTemplate: (item) => {
-        const defaultLogo = "/assets/logo/nasdaq_logo.png"
+        const defaultLogo = "/assets/logos/nasdaq_logo.png"
         const logoUrl = item.ticker
           ? `/assets/logos/${item.ticker.toLowerCase()}.svg`
           : defaultLogo

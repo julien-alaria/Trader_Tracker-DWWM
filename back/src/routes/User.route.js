@@ -7,9 +7,9 @@ import AssetMiddleware from "../middlewares/assetMiddleware.js"
 const userRouter = express.Router()
 
 // public
-userRouter.post("/", UserController.createUser)
+//userRouter.post("/", UserController.createUser)
 
-userRouter.get("/analysts", UserController.getAnalystsPagin)
+//userRouter.get("/analysts", UserController.getAnalystsPagin)
 
 userRouter.get("/analysts/by-type", UserController.getAnalystsByType)
 
@@ -35,7 +35,7 @@ userRouter.post("/me/follows/users/:id", AuthMiddleware(), UserController.follow
 userRouter.delete("/me/follows/users/:id", AuthMiddleware(), UserController.unfollowUser)
 // get users follow
 userRouter.get("/me/follows/users", AuthMiddleware(), UserController.getFollowedUser)
-// Nouvelle route dédiée pour vérifier si l'utilisateur connecté suit cet analyste
+// New dedicated route to check if the logged-in user is following this analyst
 userRouter.get("/me/follows/users/:id/check", AuthMiddleware(), UserController.checkIfFollowing)
 
 // admin

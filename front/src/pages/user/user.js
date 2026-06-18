@@ -137,7 +137,7 @@ export async function initUser() {
             prefix: "watchlist",
             endpoint: "/users/me/watchlist-paginated",
             itemTemplate: (item) => {
-                const defaultLogo = "/assets/logo/nasdaq_logo.png"
+                const defaultLogo = "/assets/logos/nasdaq_logo.png"
                 const logoUrl = item.ticker ? `/assets/logos/${item.ticker.toLowerCase()}.svg` : defaultLogo
 
                 return `

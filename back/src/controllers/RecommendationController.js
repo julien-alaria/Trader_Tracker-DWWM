@@ -2,39 +2,7 @@ import RecommendationModel from "../models/RecommendationModel.js"
 import AssetModel from "../models/AssetModel.js"
 import { sanitizeRecommendation, sanitizeRecommendationUpdate } from "../utils/sanitizer.js"
 
-/**
- * GET /recommendations
- * - option: ?ticker=MSFT (filter asset)
- * - sinon pagination
- */
-async function getRecommendation(req, res) {
-    try {
-        const { ticker } = req.query
-
-        // FILTER BY ASSET (ticker)
-        if (ticker) {
-            const asset = await AssetModel.getAssetByTicker(ticker)
-
-            if (!asset) {
-                return res.status(404).json({ message: "Asset not found" })
-            }
-
-            const results =
-                await RecommendationModel.getRecommendationsByAssetId(asset.id)
-
-            return res.status(200).json({ results })
-        }
-
-        const results =
-            await RecommendationModel.getAllRecommendations()
-
-        return res.status(200).json({ results })
-
-    } catch (error) {
-        return res.status(500).json({ message: error.message })
-    }
-}
-
+// GET
 async function getRecommendationPagin(req, res) {
     try {
         const { ticker } = req.query
@@ -86,9 +54,7 @@ async function getMyRecommendation(req, res) {
     }
 }
 
-/**
- * POST /recommendations
- */
+// POST
 async function createRecommendation(req, res) {
     try {
         if (!req.asset) {
@@ -124,9 +90,7 @@ async function createRecommendation(req, res) {
     }
 }
 
-/**
- * PUT /recommendations/:id
- */
+// PUT /recommendations/:id
 async function updateRecommendation(req, res) {
     try {
         const id = Number(req.params.id)
@@ -161,9 +125,7 @@ async function updateRecommendation(req, res) {
     }
 }
 
-/**
- * DELETE /recommendations/:id
- */
+// DELETE /recommendations/:id
 async function deleteRecommendation(req, res) {
     try {
         const id = Number(req.params.id)
@@ -210,7 +172,6 @@ async function getRecommendationsByAnalyst(req, res) {
 }
 
 export default { 
-    getRecommendation, 
     getRecommendationPagin, 
     getMyRecommendation, 
     createRecommendation, 

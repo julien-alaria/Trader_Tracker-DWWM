@@ -2,17 +2,6 @@ import UserModel from "../models/UserModel.js"
 import generateToken from "../services/authTokenService.js"
 import { sanitizeUser, sanitizeUserUpdate } from "../utils/sanitizer.js"
 
-async function getUser(req, res) {
-    try {
-        const results = await UserModel.getUsers()
-
-        return res.status(200).json({ results })
-
-    } catch (error) {
-        return res.status(500).json({ error: error.message })
-    }
-}
-
 async function getUserPagin(req, res) {
     try {
         const limit = Math.max(1, Number.parseInt(req.query.limit ?? 10, 10))
@@ -115,22 +104,22 @@ async function getWatchlistPagin(req, res) {
     }
 }
 
-async function createUser(req, res) {
-    try {
+// async function createUser(req, res) {
+//     try {
 
-        const sanitizedData = sanitizeUser(req.body)
+//         const sanitizedData = sanitizeUser(req.body)
 
-        const user = await UserModel.createUsers(sanitizedData)
+//         const user = await UserModel.createUsers(sanitizedData)
 
-        const token = generateToken(user)
+//         const token = generateToken(user)
 
-        return res.status(201).json({ user, token})
+//         return res.status(201).json({ user, token})
 
-    } catch (error) {
+//     } catch (error) {
 
-        return res.status(500).json({ error: error.message })
-    }
-}
+//         return res.status(500).json({ error: error.message })
+//     }
+// }
 
 async function updateUser(req, res) {
     try {
@@ -140,23 +129,23 @@ async function updateUser(req, res) {
             return res.status(400).json({ error: "ID invalide" })
         }
 
-        // 1. On nettoie les données classiques (name, email, bio...) via le sanitizer de base
+        // clean standard data (name, email, bio...) w/ basic sanitizer
         const sanitizedData = sanitizeUserUpdate(req.body)
 
-        // 2. SÉCURITÉ : Puisqu'on est TRÈS SURS que cette route n'est accessible que par l'admin,
-        // on extrait manuellement 'analyst_verified' du req.body et on l'ajoute direct après le sanitizer
+        // SECURITY: this route is only accessible by the admin,
+        // manually extract 'analyst_verified' from req.body and add it directly after the sanitizer
         if (req.body.analyst_verified !== undefined) {
             sanitizedData.analyst_verified = Number(req.body.analyst_verified) === 1 ? 1 : 0
         }
 
-        // On revérifie si on a des données à mettre à jour
+        // double-check if we have any data to update
         if (Object.keys(sanitizedData).length === 0) {
             return res.status(400).json({
                 error: "Aucune donnée valide"
             })
         }
 
-        // 3. On envoie au modèle (qui lui, sait déjà gérer analyst_verified !)
+        // send to the model (already knows how to handle analyst_verified)
         const user = await UserModel.updateUsers(id, sanitizedData)
 
         return res.status(200).json(user)
@@ -222,19 +211,19 @@ async function deleteUser(req, res) {
     }
 }
 
-async function getAnalystsPagin(req, res) {
-    try {
-        const limit = Math.max(1, Number.parseInt(req.query.limit ?? 5, 10))
-        const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10))
+// async function getAnalystsPagin(req, res) {
+//     try {
+//         const limit = Math.max(1, Number.parseInt(req.query.limit ?? 5, 10))
+//         const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10))
 
-        const data = await UserModel.getAllAnalystsPagin(limit, offset)
+//         const data = await UserModel.getAllAnalystsPagin(limit, offset)
 
-        return res.status(200).json(data);
-    } catch (error) {
-        console.error("ANALYSTS PAGIN ERROR:", error);
-        return res.status(500).json({ error: error.message })
-    }
-}
+//         return res.status(200).json(data);
+//     } catch (error) {
+//         console.error("ANALYSTS PAGIN ERROR:", error);
+//         return res.status(500).json({ error: error.message })
+//     }
+// }
 
 async function getAnalystsById(req, res) {
     try {
@@ -389,10 +378,9 @@ async function unfollowUser(req, res) {
 
 async function checkIfFollowing(req, res) {
     try {
-        const user_id = req.user.id // Récupéré via AuthMiddleware()
+        const user_id = req.user.id // Retrieved via AuthMiddleware()
         const followUser_id = req.params.id
 
-        // Appel de la fonction de ton modèle (qu'on va créer juste après)
         const isFollowing = await UserModel.isFollowing(user_id, followUser_id)
 
         return res.status(200).json({ isFollowing: isFollowing })
@@ -403,13 +391,10 @@ async function checkIfFollowing(req, res) {
 }
 
 export default { 
-    getUser, 
     getUserPagin, 
-    getUserById,
-    createUser, 
+    getUserById, 
     updateUser, 
     deleteUser, 
-    getAnalystsPagin,
     getAnalystsById,
     getAnalystsByType,
     getPendingAnalyst,
@@ -418,9 +403,9 @@ export default {
     unfollowAsset,
     followUser,
     unfollowUser, 
-    getWatchlist, 
     getWatchlistPagin,
     getMe, 
     updateMe,
-    checkIfFollowing
+    checkIfFollowing,
+    getWatchlist
 }

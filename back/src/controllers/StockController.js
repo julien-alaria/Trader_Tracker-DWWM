@@ -46,4 +46,9 @@ async function getCommodities(req, res) {
     }
 }
 
-export default { getStock, getAllStocks, getForex, getCommodities }
+export default { 
+    getStock, 
+    getAllStocks, 
+    getForex, 
+    getCommodities 
+}

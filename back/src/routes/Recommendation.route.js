@@ -12,7 +12,7 @@ RecommendationRouter.get("/", RecommendationController.getRecommendationPagin)
 
 RecommendationRouter.post("/", AuthMiddleware(["analyst", "admin"]), AssetMiddleware(), SpecializationMiddleware(), RecommendationController.createRecommendation)
 
-RecommendationRouter.get("/analyst/:analystId", RecommendationController.getRecommendationsByAnalyst);
+RecommendationRouter.get("/analyst/:analystId", RecommendationController.getRecommendationsByAnalyst)
 
 RecommendationRouter.put("/:id", AuthMiddleware(["analyst", "admin"]), RecommendationController.updateRecommendation)
 

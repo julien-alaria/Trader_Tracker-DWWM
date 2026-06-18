@@ -73,7 +73,7 @@ export async function initAnalystDetail() {
             endpoint: `/recommendations/analyst/${analystId}`,
             limit: 3,
             itemTemplate: (rec) => {
-                const defaultAvatar = "/assets/logo/nasdaq_logo.png"
+                const defaultAvatar = "/assets/logos/nasdaq_logo.png"
                 const imageUrl = rec.ticker ? `/assets/logos/${rec.ticker.toLowerCase()}.svg` : defaultAvatar
 
                 const recoImage = getRecommendationIcon(rec.status)
