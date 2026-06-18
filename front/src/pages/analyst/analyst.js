@@ -130,6 +130,28 @@ export async function initAnalyst() {
     // PAGINATION RENDERING
     // =====================
 
+    // WATCHLIST PAGINATOR
+    watchlistPaginator = createPaginationList({
+      targetSelector: "#watchlist-list-target",
+      prefix: "watchlist",
+      endpoint: "/users/me/watchlist-paginated",
+      itemTemplate: (item) => {
+        const defaultLogo = "/assets/logos/nasdaq_logo.png"
+        const logoUrl = item.ticker
+          ? `/assets/logos/${item.ticker.toLowerCase()}.svg`
+          : defaultLogo
+
+        return `
+          <div class="watchlist-item" data-js-clickable data-ticker="${item.ticker}" data-type="${item.asset_type_id}" style="cursor: pointer; display: flex; align-items: center; gap: 15px; margin-bottom: 8px;">
+              <img src="${logoUrl}" style="width: 50px; height: 50px; object-fit: contain;" alt="analyst-picture" onerror="this.src='${defaultLogo}'" />
+              <span><strong>${item.ticker}</strong></span>
+              <span>${item.name}</span>
+          </div>
+        `
+      },
+      buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`,
+    })
+
     // RECOMMANDATIONS PAGINATOR
     recommendationsPaginator = createPaginationList({
       targetSelector: "#recommendations-list-target",
@@ -168,31 +190,7 @@ export async function initAnalyst() {
           </div>
         `
       },
-      buildUrl: (dataset) =>
-        `#/details?type=${dataset.type}&ticker=${dataset.ticker}`,
-    })
-
-    // WATCHLIST PAGINATOR
-    watchlistPaginator = createPaginationList({
-      targetSelector: "#watchlist-list-target",
-      prefix: "watchlist",
-      endpoint: "/users/me/watchlist-paginated",
-      itemTemplate: (item) => {
-        const defaultLogo = "/assets/logos/nasdaq_logo.png"
-        const logoUrl = item.ticker
-          ? `/assets/logos/${item.ticker.toLowerCase()}.svg`
-          : defaultLogo
-
-        return `
-          <div class="watchlist-item" data-js-clickable data-ticker="${item.ticker}" data-type="${item.asset_type_id}" style="cursor: pointer; display: flex; align-items: center; gap: 15px; margin-bottom: 8px;">
-              <img src="${logoUrl}" style="width: 50px; height: 50px; object-fit: contain;" alt="analyst-picture" onerror="this.src='${defaultLogo}'" />
-              <span><strong>${item.ticker}</strong></span>
-              <span>${item.name}</span>
-          </div>
-        `
-      },
-      buildUrl: (dataset) =>
-        `#/details?type=${dataset.type}&ticker=${dataset.ticker}`,
+      buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`,
     })
 
     // FOLLOW PAGINATOR

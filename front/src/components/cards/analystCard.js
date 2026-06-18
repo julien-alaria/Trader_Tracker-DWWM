@@ -11,14 +11,17 @@ export default function analystCard({ id, name, company, bio, picture } = {}) {
     const displayBio = bio ? bio.substring(0, 50) + '...' : 'No bio available.'
 
     return `
-    <div class="card analyst" data-id="${id ?? ''}">
-        <img class="card-image" src="${imageUrl}" alt="${displayName}">
-        <h2 class="card-title">${displayName}</h2>
-        <p class="card-subtitle">${displayCompany}</p>
-        <p class="card-description">
-            ${displayBio}
-        </p>
-    </div>
+        <div class="card analyst" data-id="${id ?? ''}">
+
+            <img class="card-image" src="${imageUrl}" alt="${displayName}">
+
+            <h2 class="card-title">${displayName}</h2>
+
+            <p class="card-subtitle">${displayCompany}</p>
+
+            <p class="card-description">${displayBio}</p>
+
+        </div>
     `
 }
 
