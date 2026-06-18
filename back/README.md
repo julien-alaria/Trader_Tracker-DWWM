@@ -42,3 +42,5 @@ Asset
  ├── ticker (UNIQUE)  UI / EXTERNAL IDENTIFIER ONLY
  ├── name
  └── asset_type_id
+
+
