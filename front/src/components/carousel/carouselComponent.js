@@ -9,13 +9,13 @@ export function createCarousel({ targetSelector, carouselId, data, cardComponent
         return;
     }
 
-    target.innerHTML = "";
+    target.innerHTML = ""
 
     // "data-bound"
-    const carouselEl = document.createElement("div");
-    carouselEl.className = "carousel";
-    carouselEl.id = carouselId;
-    target.appendChild(carouselEl);
+    const carouselEl = document.createElement("div")
+    carouselEl.className = "carousel"
+    carouselEl.id = carouselId
+    target.appendChild(carouselEl)
 
     enableCarouselWindow({
         selector: `#${carouselId}`,

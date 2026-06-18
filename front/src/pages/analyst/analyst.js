@@ -6,86 +6,86 @@ import analystCard from "../../components/cards/analystCard.js"
 import analystUpdateForm from "../../components/forms/analystUpdateForm.js"
 import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
 import { buildWatchlistData } from "../../utils/assetFormatter.js"
-import { createCarousel } from "../../components/carousel/CarouselComponent.js"
-import { createPaginationList } from "../../components/pagination/PaginationComponent.js"
+import { createCarousel } from "../../components/carousel/carouselComponent.js"
+import { createPaginationList } from "../../components/pagination/paginationComponent.js"
 import { bindRecommendationActions } from "../../utils/actionManager.js"
+import { getRecommendationIcon } from "../../utils/recommendationUtils.js"
 
 // =====================
-// TEMPLATE HTML
+// HTML TEMPLATE 
 // =====================
 const analystPage = `
-<main>
-    <h1>Analyst Page</h1>
+  <main>
+      <h1>Analyst Page</h1>
 
-    <section>
-        <div><img id="analyst_picture" src="" /></div>
-        <div id="analyst_id"></div>
-        <div id="analyst_name"></div>
-        <div id="analyst_email"></div>
-        <div id="analyst_type"></div>
-        <div id="analyst_company"></div>
-        <div id="analyst_bio"></div>
-    </section>
+      <section>
+          <div><img id="analyst_picture" src="" /></div>
+          <div id="analyst_id"></div>
+          <div id="analyst_name"></div>
+          <div id="analyst_email"></div>
+          <div id="analyst_type"></div>
+          <div id="analyst_company"></div>
+          <div id="analyst_bio"></div>
+      </section>
 
-    <section>
-        <h2>Watchlist</h2>
-        <div id="watchlist-carousel-target"></div>
+      <section>
+          <h2>Watchlist</h2>
+          <div id="watchlist-carousel-target"></div>
 
-        <div id="watchlist-list-global">
-            <h2>Watchlist By List</h2>
-            <div id="watchlist-list-target"></div>
-        </div>
-    </section>
+          <div id="watchlist-list-global">
+              <h2>Watchlist By List</h2>
+              <div id="watchlist-list-target"></div>
+          </div>
+      </section>
 
-    <section>
-        <h2>My Recommendations</h2>
-        <div id="recommendations-list-target"></div>
-    </section>
+      <section>
+          <h2>My Recommendations</h2>
+          <div id="recommendations-list-target"></div>
+      </section>
 
-    <section>
-        <h2>Followed Analysts</h2>
-        <div id="follow-carousel-target"></div>
+      <section>
+          <h2>Followed Analysts</h2>
+          <div id="follow-carousel-target"></div>
 
-        <h2>Followed Analysts By List</h2>
-        <div id="follow-list-target"></div>
-    </section>
+          <h2>Followed Analysts By List</h2>
+          <div id="follow-list-target"></div>
+      </section>
 
-    <section>
-        <div class="update-form">
-            ${analystUpdateForm()}
-        </div>
-    </section>
-</main>
-`
+      <section>
+          <div class="update-form">
+              ${analystUpdateForm()}
+          </div>
+      </section>
+  </main>
+  `
 
 export default analystPage
 
-// Variables globales à la page pour stocker les instances de pagination
+// =====================
+// STATE GLOBAL
+// =====================
 let recommendationsPaginator = null
 let watchlistPaginator = null
 let followPaginator = null
 
 // =====================
-// FONCTION CENTRALE D'INITIALISATION
+// INIT
 // =====================
 export async function initAnalyst() {
   try {
-    // --- Vérifications de Sécurité d'accès ---
+    // Access Token Security Checks
     const token = localStorage.getItem("token")
-    if (!token) return;
+    if (!token) return
 
     const payload = decodeToken(token)
     if (!payload) {
       window.location.hash = "/login"
-      return;
+      return
     }
 
-    // Attente de sécurité liée à l'injection asynchrone du routeur
-    await new Promise((resolve) => setTimeout(resolve, 0))
-
-    // --------------------------------------------------
-    // RÉCUPÉRATION CENTRALISÉE DES DONNÉES
-    // --------------------------------------------------
+    // =====================
+    // CENTRAL DATA RECOVERY
+    // =====================
     const [userRes, watchRes, followRes, stocks, forex, commodities] =
       await Promise.all([
         http.get("/users/me"),
@@ -94,7 +94,7 @@ export async function initAnalyst() {
         getStock(),
         getForex(),
         getCommodities(),
-      ]);
+      ])
 
     const user = userRes.result
     renderAnalystInfo(user)
@@ -103,9 +103,12 @@ export async function initAnalyst() {
     const watchlist = buildWatchlistData(watchRes.result, allAssets)
     const followState = followRes.results || []
 
-    // --------------------------------------------------
-    // RENDER DES CARROUSELS (DÉLÉGUÉ AUX COMPOSANTS)
-    // --------------------------------------------------
+    // security waiting before DOM injection
+    await new Promise((resolve) => setTimeout(resolve, 0))
+
+    // =====================
+    // CAROUSSELS RENDERING
+    // =====================
     createCarousel({
       targetSelector: "#watchlist-carousel-target",
       carouselId: "analyst-watchlist-carousel",
@@ -113,7 +116,7 @@ export async function initAnalyst() {
       cardComponent: stockCard,
       buildUrl: (dataset) =>
         `#/details?type=${dataset.type}&ticker=${dataset.ticker}`,
-    });
+    })
 
     createCarousel({
       targetSelector: "#follow-carousel-target",
@@ -121,13 +124,13 @@ export async function initAnalyst() {
       data: followState,
       cardComponent: analystCard,
       buildUrl: (dataset) => `#/analystdetails?id=${dataset.id}`,
-    });
+    })
 
-    // --------------------------------------------------
-    // RENDER DES PAGINATIONS (DÉLÉGUÉ AUX COMPOSANTS)
-    // --------------------------------------------------
+    // =====================
+    // PAGINATION RENDERING
+    // =====================
 
-    // 1. RECOMMANDATIONS PAGINATOR
+    // RECOMMANDATIONS PAGINATOR
     recommendationsPaginator = createPaginationList({
       targetSelector: "#recommendations-list-target",
       prefix: "recommendations",
@@ -136,11 +139,9 @@ export async function initAnalyst() {
         const defaultAvatar = "/assets/logo/nasdaq_logo.png"
         const imageUrl = rec.ticker
           ? `/assets/logos/${rec.ticker.toLowerCase()}.svg`
-          : defaultAvatar;
+          : defaultAvatar
 
-        let recoImage = "/assets/arrows/medium-blue.svg"
-        if (rec.status === "BUY") recoImage = "/assets/arrows/up-green.svg"
-        if (rec.status === "SELL") recoImage = "/assets/arrows/down-red.svg"
+        const recoImage = getRecommendationIcon(rec.status)
 
         const isAuthorized = user && (user.role === "admin" || Number(user.id) === Number(rec.user_id))
 
@@ -165,22 +166,22 @@ export async function initAnalyst() {
                   </form>
               ` : ""}
           </div>
-        `;
+        `
       },
       buildUrl: (dataset) =>
         `#/details?type=${dataset.type}&ticker=${dataset.ticker}`,
-    });
+    })
 
-    // 2. WATCHLIST PAGINATOR
+    // WATCHLIST PAGINATOR
     watchlistPaginator = createPaginationList({
       targetSelector: "#watchlist-list-target",
       prefix: "watchlist",
       endpoint: "/users/me/watchlist-paginated",
       itemTemplate: (item) => {
-        const defaultLogo = "/assets/logo/nasdaq_logo.png";
+        const defaultLogo = "/assets/logo/nasdaq_logo.png"
         const logoUrl = item.ticker
           ? `/assets/logos/${item.ticker.toLowerCase()}.svg`
-          : defaultLogo;
+          : defaultLogo
 
         return `
           <div class="watchlist-item" data-js-clickable data-ticker="${item.ticker}" data-type="${item.asset_type_id}" style="cursor: pointer; display: flex; align-items: center; gap: 15px; margin-bottom: 8px;">
@@ -188,22 +189,22 @@ export async function initAnalyst() {
               <span><strong>${item.ticker}</strong></span>
               <span>${item.name}</span>
           </div>
-        `;
+        `
       },
       buildUrl: (dataset) =>
         `#/details?type=${dataset.type}&ticker=${dataset.ticker}`,
-    });
+    })
 
-    // 3. FOLLOW PAGINATOR
+    // FOLLOW PAGINATOR
     followPaginator = createPaginationList({
       targetSelector: "#follow-list-target",
       prefix: "follow",
       endpoint: "/users/me/follows/users",
       itemTemplate: (a) => {
-        const defaultAvatar = "/assets/analyst/default_analyst.png";
+        const defaultAvatar = "/assets/analyst/default_analyst.png"
         const avatarUrl = a.picture
           ? `${API_BASE_URL}/uploads/${a.picture}`
-          : defaultAvatar;
+          : defaultAvatar
 
         return `
           <div class="follow-item" data-js-clickable data-id="${a.id}" style="cursor: pointer; display: flex; align-items: center; gap: 15px; margin-bottom: 8px;">
@@ -215,18 +216,17 @@ export async function initAnalyst() {
       buildUrl: (dataset) => `#/analystdetails?id=${dataset.id}`,
     })
 
-    // Premier chargement des listes asynchrones
     await recommendationsPaginator.load()
     await watchlistPaginator.load()
     await followPaginator.load()
 
-    // Logique d'affichage d'origine du bloc global Watchlist
+    // display logic of the global Watchlist block
     const globalContainer = document.getElementById("watchlist-list-global")
     if (globalContainer) {
       globalContainer.style.display = watchRes.result.length < 5 ? "none" : "flex"
     }
 
-    // Initialisation des écouteurs de clics (Formulaires, Suppressions et Profil)
+    // Initializing click listeners
     bindRecommendationActions("#recommendations-list-target", recommendationsPaginator)
     initLocalUpdateForm(user)
 
@@ -236,8 +236,10 @@ export async function initAnalyst() {
 }
 
 // =====================
-// FONCTIONS MÉTIERS LOCALES
+// LOCAL FEATURES LOGIC FUNCTIONS
 // =====================
+
+// rendering local user infos
 function renderAnalystInfo(user) {
   const map = {
     analyst_id: user.id,
@@ -249,21 +251,22 @@ function renderAnalystInfo(user) {
   }
 
   Object.entries(map).forEach(([id, value]) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = value ?? "N/A";
+    const el = document.getElementById(id)
+    if (el) el.textContent = value ?? "N/A"
   })
 
-  const imageEl = document.getElementById("analyst_picture");
+  const imageEl = document.getElementById("analyst_picture")
   if (imageEl) {
     imageEl.src = user.picture
       ? `${API_BASE_URL}/uploads/${user.picture}`
-      : "/assets/default_analyst.png";
+      : "/assets/default_analyst.png"
     imageEl.alt = `${user.name || "analyst"}`
   }
 }
 
+// update local form
 function initLocalUpdateForm(user) {
-  const form = document.getElementById("analyst-update-form");
+  const form = document.getElementById("analyst-update-form")
   if (!form) return
 
   const fields = {
@@ -271,7 +274,7 @@ function initLocalUpdateForm(user) {
     "analyst-email": user.email,
     "analyst-company": user.company,
     "analyst-bio": user.bio,
-  };
+  }
 
   Object.entries(fields).forEach(([id, value]) => {
     const el = document.getElementById(id)
@@ -280,9 +283,10 @@ function initLocalUpdateForm(user) {
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault()
+
     const data = new FormData(form)
 
-    const passwordInput = data.get("password");
+    const passwordInput = data.get("password")
     if (!passwordInput || !passwordInput.trim()) {
       data.delete("password")
     }

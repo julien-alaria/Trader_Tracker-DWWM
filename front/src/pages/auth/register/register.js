@@ -1,7 +1,7 @@
-import http from "../../../config/instanceHttp.js";
+import http from "../../../config/instanceHttp.js"
 
 // =====================
-// TEMPLATE HTML
+// HTML TEMPLATE 
 // =====================
 const register = ` 
     <h1>Register</h1>
@@ -20,50 +20,50 @@ const register = `
     </form>
     <p>Register as Analyst ?</p>
     <a href="#/analystregister" class="btn">Register as Analyst</a>
-`;
-export default register;
+    `
+
+export default register
 
 // =====================
-// INIT LOGIC
+// INIT
 // =====================
 export async function initRegister() {
     try {
-        // Attente de sécurité liée à l'injection asynchrone du routeur dans le DOM
-        await new Promise(resolve => setTimeout(resolve, 0));
+        // security waiting before DOM injection
+        await new Promise(resolve => setTimeout(resolve, 0))
 
-        const form = document.querySelector("#register-form");
-        const messageDiv = document.getElementById("message");
+        const form = document.querySelector("#register-form")
+        const messageDiv = document.getElementById("message")
 
-        if (!form || !messageDiv) return;
+        if (!form || !messageDiv) return
 
         form.addEventListener("submit", async function (e) {
-            e.preventDefault();
-            messageDiv.innerText = "";
+            e.preventDefault()
+            messageDiv.innerText = ""
 
-            const data = new FormData(form);
+            const data = new FormData(form)
 
             try {
-                const result = await http.post("/auth/register", data);
-                console.log("REGISTER OK:", result?.token);
+                const result = await http.post("/auth/register", data)
+                console.log("REGISTER OK:", result?.token)
 
                 if (result?.token) {
-                    localStorage.setItem("token", result.token);
-                    messageDiv.innerText = "Registration successful. Redirecting...";
+                    localStorage.setItem("token", result.token)
+                    messageDiv.innerText = "Registration successful. Redirecting..."
 
                     setTimeout(() => {
-                        window.location.hash = "#/"; // Cohérence avec le format de hash standard
+                        window.location.hash = "#/"
                     }, 1000);
                 } else {
-                    messageDiv.innerText = "Account created, but automatic login failed.";
+                    messageDiv.innerText = "Account created, but automatic login failed."
                 }
 
             } catch (error) {
-                // S'adapte à ton instance de requêtes personnalisée
-                messageDiv.innerText = error.message || error.response?.data?.message || "An error occurred during registration.";
-                console.error("Register failed:", error);
+                messageDiv.innerText = error.message || error.response?.data?.message || "An error occurred during registration."
+                console.error("Register failed:", error)
             }
-        });
+        })
     } catch (err) {
-        console.error("INIT REGISTER ERROR:", err);
+        console.error("INIT REGISTER ERROR:", err)
     }
 }

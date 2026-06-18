@@ -11,7 +11,7 @@ export default function stockCard({
   history = []
 } = {}) {
 
-  const finalImage = formatAssetImage(ticker);
+  const finalImage = formatAssetImage(ticker)
 
   return `
     <div class="card stock" data-type="stock" data-ticker="${ticker}">

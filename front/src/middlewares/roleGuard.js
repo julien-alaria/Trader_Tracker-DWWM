@@ -27,14 +27,14 @@ export function roleGuard(allowedRoles = []) {
 
   if (!token) {
     window.location.hash = "/login"
-    return false;
+    return false
   }
 
   const role = getRoleFromToken()
 
   if (!allowedRoles.includes(role)) {
     window.location.hash = "/"
-    return false;
+    return false
   }
 
   return true

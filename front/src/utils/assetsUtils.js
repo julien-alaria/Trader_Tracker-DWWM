@@ -1,12 +1,11 @@
-import http from "../config/instanceHttp.js";
-import { formatMarketCap } from "./format.js";
+import http from "../config/instanceHttp.js"
+import { formatMarketCap } from "./format.js"
 
-/*
-Functions for external API
-*/
+
+// Functions for external API
 async function getStock() {
   try {
-    const data = await http.get("/assets/stocks");
+    const data = await http.get("/assets/stocks")
 
     return data.message.map((stock) => ({
       ticker: stock.ticker,
@@ -17,20 +16,20 @@ async function getStock() {
       high: stock.high,
       low: stock.low,
       history: stock.history
-    }));
+    }))
   } catch (error) {
-    console.error(error.message);
-    return [];
+    console.error(error.message)
+    return []
   }
 }
 
 async function getForex() {
   function formatForexName(ticker) {
-    return ticker.replace("C:", "").replace(/(.{3})(.{3})/, "$1 / $2");
+    return ticker.replace("C:", "").replace(/(.{3})(.{3})/, "$1 / $2")
   }
 
   try {
-    const data = await http.get("/assets/forex");
+    const data = await http.get("/assets/forex")
 
     return data.message.map((forex) => ({
       ticker: forex.ticker,
@@ -39,16 +38,16 @@ async function getForex() {
       low: forex.low,
       close: forex.close,
       history: forex.history
-    }));
+    }))
   } catch (error) {
-    console.error(error.message);
-    return [];
+    console.error(error.message)
+    return []
   }
 }
 
 async function getCommodities() {
   try {
-    const data = await http.get("/assets/commodities");
+    const data = await http.get("/assets/commodities")
 
     return data.message.map((commodity) => ({
       ticker: commodity.ticker,
@@ -58,11 +57,11 @@ async function getCommodities() {
       low: commodity.low,
       close: commodity.close,
       history: commodity.history
-    }));
+    }))
   } catch (error) {
-    console.error(error.message);
-    return [];
+    console.error(error.message)
+    return []
   }
 }
 
-export { getStock, getForex, getCommodities };
+export { getStock, getForex, getCommodities }

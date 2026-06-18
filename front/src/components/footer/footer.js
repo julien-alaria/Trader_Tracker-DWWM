@@ -1,4 +1,4 @@
-import navLink from "../navLinks/navLink.js";
+import navLink from "../navLinks/navLink.js"
 
 export default function footer() {
     return `

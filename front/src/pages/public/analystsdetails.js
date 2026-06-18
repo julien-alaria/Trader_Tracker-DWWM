@@ -2,32 +2,32 @@ import { API_BASE_URL } from "../../config/api.js"
 import http from "../../config/instanceHttp.js"
 import { formatDate } from "../../utils/format.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
-import { createPaginationList } from "../../components/pagination/PaginationComponent.js"
+import { createPaginationList } from "../../components/pagination/paginationComponent.js"
 import { getRecommendationIcon } from "../../utils/recommendationUtils.js"
 
 // =====================
-// TEMPLATE
+// HTML TEMPLATE 
 // =====================
 const analystDetailsPage = `
-<main>
-    <section>
-        <h1>Analyst Detail Page</h1>
-        <div id="analyst-detail"></div>
-    </section>
+    <main>
+        <section>
+            <h1>Analyst Detail Page</h1>
+            <div id="analyst-detail"></div>
+        </section>
 
-    <section id="analyst-recommendation">
-        <h2>This Analyst Recommendations</h2>
-        <div id="analyst-recommendation-target"></div>
-    </section>
-</main>
-`
+        <section id="analyst-recommendation">
+            <h2>This Analyst Recommendations</h2>
+            <div id="analyst-recommendation-target"></div>
+        </section>
+    </main>
+    `
 
 export default analystDetailsPage
 
 // =====================
 // STATE GLOBAL
 // =====================
-let recommendationsPaginator = null;
+let recommendationsPaginator = null
 
 // =====================
 // INIT
@@ -41,24 +41,32 @@ export async function initAnalystDetail() {
             console.error("No analyst ID found")
             return
         }
-
+        // Access Token Security Checks
         const currentUser = decodeToken(localStorage.getItem("token"))
 
+        // =====================
+        // DATA RECOVERY
+        // =====================
         const response = await http.get(`/users/analysts/${analystId}`)
         const analyst = response.results
 
+        // Security expectation related to asynchronous router injection
+        await new Promise(resolve => setTimeout(resolve, 0))
+
         if (currentUser) {
             const checkFollow = await http.get(`/users/me/follows/users/${analystId}/check`)
-            analyst.isFollowing = checkFollow.isFollowing // Injecte true ou false dans l'objet
+            analyst.isFollowing = checkFollow.isFollowing // Injecte true or false in object
         } else {
             analyst.isFollowing = false
         }
 
         renderAnalyst(analyst, currentUser)
 
-        // --------------------------------------------------
-        // APPEL DU COMPOSANT PAGINATION (ENTIÈREMENT DÉLÉGUÉ)
-        // --------------------------------------------------
+        // =====================
+        // PAGINATION RENDERING
+        // =====================
+
+        // RECOMMANDATIONS PAGINATOR
         recommendationsPaginator = createPaginationList({
             targetSelector: "#analyst-recommendation-target",
             prefix: "analyst-reco",
@@ -68,7 +76,7 @@ export async function initAnalystDetail() {
                 const defaultAvatar = "/assets/logo/nasdaq_logo.png"
                 const imageUrl = rec.ticker ? `/assets/logos/${rec.ticker.toLowerCase()}.svg` : defaultAvatar
 
-                const recoImage = getRecommendationIcon(rec.status);
+                const recoImage = getRecommendationIcon(rec.status)
 
                 return `
                     <div class="recommendation" data-js-clickable data-ticker="${rec.ticker}" data-type="asset" style="cursor: pointer; margin-bottom: 12px;">
@@ -79,10 +87,10 @@ export async function initAnalystDetail() {
                         <p>${rec.comment}</p>
                         <p><small>${formatDate(rec.created_at)}</small></p>
                     </div>
-                `;
+                `
             },
             buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`
-        });
+        })
 
         await recommendationsPaginator.load()
 

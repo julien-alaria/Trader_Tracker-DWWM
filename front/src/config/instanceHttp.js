@@ -10,10 +10,10 @@ class InstanceHttp {
         }
 
         if (!(data instanceof FormData)) {
-            headers["Content-Type"] = "application/json";
+            headers["Content-Type"] = "application/json"
         }
 
-        return headers;
+        return headers
     }
 
     async handleResponse(response) {
@@ -24,7 +24,7 @@ class InstanceHttp {
         }
 
         if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
+            const errorData = await response.json().catch(() => ({}))
             throw { response: { data: errorData }, status: response.status } 
         }
 
@@ -40,13 +40,13 @@ class InstanceHttp {
     }
 
     async post(url, data) {
-        // On utilise bien la variable 'body' qui sait gérer le FormData
+        // using the 'body' variable which is capable of handling FormData
         const body = data instanceof FormData ? data : JSON.stringify(data);
 
         const response = await fetch(API_URL + url, {
             method: "POST",
-            headers: this.getHeaders(data),
-            body: body // <-- CORRECTION ICI
+            headers: this.getHeaders(data), // Adding 'data' for the Content-Type
+            body: body
         })
         return this.handleResponse(response)
     }
@@ -56,8 +56,8 @@ class InstanceHttp {
 
         const response = await fetch(API_URL + url, {
             method: "PUT",
-            headers: this.getHeaders(data), // Ajout de 'data' pour le Content-Type
-            body: body // <-- CORRECTION ICI
+            headers: this.getHeaders(data),
+            body: body
         })
         return this.handleResponse(response)
     }
@@ -67,8 +67,8 @@ class InstanceHttp {
 
         const response = await fetch(API_URL + url, {
             method: "PATCH",
-            headers: this.getHeaders(data), // Ajout de 'data' pour le Content-Type
-            body: body // <-- CORRECTION ICI
+            headers: this.getHeaders(data),
+            body: body
         })
         return this.handleResponse(response)
     }

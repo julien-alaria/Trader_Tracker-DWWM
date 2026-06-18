@@ -5,7 +5,7 @@ import stockCard from "../../components/cards/stockCards.js"
 import analystCard from "../../components/cards/analystCard.js"
 import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
 import updateForm from "../../components/forms/userUpdateForm.js"
-import { createCarousel } from "../../components/carousel/CarouselComponent.js"
+import { createCarousel } from "../../components/carousel/carouselComponent.js"
 import { createPaginationList } from "../../components/pagination/paginationComponent.js"
 import { buildWatchlistData } from "../../utils/assetFormatter.js"
 
@@ -13,39 +13,40 @@ import { buildWatchlistData } from "../../utils/assetFormatter.js"
 // HTML TEMPLATE
 // =====================
 const userPage = `
-<main>
-    <h1>User Page</h1>
+    <main>
+        <h1>User Page</h1>
 
-    <section>
-        <div><img id="user_picture" src="" /></div>
-        <div id="user_id"></div>
-        <div id="user_name"></div>
-        <div id="user_email"></div>
-    </section>
+        <section>
+            <div><img id="user_picture" src="" /></div>
+            <div id="user_id"></div>
+            <div id="user_name"></div>
+            <div id="user_email"></div>
+        </section>
 
-    <section>
-        <h2>My Watchlist</h2>
-        <div id="watchlist-carousel-target"></div>
+        <section>
+            <h2>My Watchlist</h2>
+            <div id="watchlist-carousel-target"></div>
 
-        <h2>Watchlist By List</h2>
-        <div id="watchlist-list-target"></div>
-    </section>
+            <h2>Watchlist By List</h2>
+            <div id="watchlist-list-target"></div>
+        </section>
 
-    <section>
-        <h2>Followed Analysts</h2>
-        <div id="follow-carousel-target"></div>
+        <section>
+            <h2>Followed Analysts</h2>
+            <div id="follow-carousel-target"></div>
 
-        <h2>Followed Analysts By List</h2>
-        <div id="follow-list-target"></div>
-    </section>
+            <h2>Followed Analysts By List</h2>
+            <div id="follow-list-target"></div>
+        </section>
 
-    <section>
-        <div class="update-form">
-            ${updateForm()}
-        </div>
-    </section>
-</main>
-`
+        <section>
+            <div class="update-form">
+                ${updateForm()}
+            </div>
+        </section>
+    </main>
+    `
+
 export default userPage
 
 // =====================
@@ -59,7 +60,7 @@ let followPaginator = null
 // =====================
 export async function initUser() {
     try {
-      
+        // Access Token Security Checks
         const token = localStorage.getItem("token")
         if (!token) return
 
@@ -69,12 +70,9 @@ export async function initUser() {
             return;
         }
 
-        // security waiting before DOM injection
-        await new Promise(resolve => setTimeout(resolve, 0))
-
-        // --------------------------------------------------
-        // CENTRALIZED DATA RECOVERY
-        // --------------------------------------------------
+        // =====================
+        // CENTRAL DATA RECOVERY
+        // =====================
         const [userRes, watchRes, followRes, stocks, forex, commodities] = await Promise.all([
             http.get("/users/me"),
             http.get("/users/me/watchlist"),
@@ -91,10 +89,12 @@ export async function initUser() {
         const watchlist = buildWatchlistData(watchRes.result, allAssets)
         const followState = followRes.results || []
 
-        // --------------------------------------------------
-        // RENDER CAROUSSELS
-        // --------------------------------------------------
-        // Déclaration isolée pour permettre le rafraîchissement au clic sur l'action Unfollow
+        // security waiting before DOM injection
+        await new Promise(resolve => setTimeout(resolve, 0))
+
+        // =====================
+        // CAROUSSELS RENDERING
+        // =====================
         const renderWatchlistCarousel = (currentData) => {
             createCarousel({
                 targetSelector: "#watchlist-carousel-target",
@@ -127,9 +127,11 @@ export async function initUser() {
             buildUrl: (dataset) => `#/analystdetails?id=${dataset.id}`
         })
 
-        // --------------------------------------------------
-        // RENDER DES PAGINATIONS (DÉLÉGUÉ AUX COMPOSANTS)
-        // --------------------------------------------------
+        // =====================
+        // PAGINATION RENDERING
+        // =====================
+
+        // WATCHLIST PAGINATOR
         watchlistPaginator = createPaginationList({
             targetSelector: "#watchlist-list-target",
             prefix: "watchlist",
@@ -148,6 +150,7 @@ export async function initUser() {
             buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`
         })
 
+        // FOLLOW PAGINATOR
         followPaginator = createPaginationList({
             targetSelector: "#follow-list-target",
             prefix: "follow",
@@ -166,10 +169,10 @@ export async function initUser() {
             buildUrl: (dataset) => `#/analystdetails?id=${dataset.id}`
         })
 
-        await watchlistPaginator.load();
-        await followPaginator.load();
+        await watchlistPaginator.load()
+        await followPaginator.load()
 
-        initLocalUpdateForm(user);
+        initLocalUpdateForm(user)
 
     } catch (err) {
         console.error("USER INIT ERROR:", err)
@@ -177,8 +180,10 @@ export async function initUser() {
 }
 
 // =====================
-// LOCAL BUSINESS LOGIC
+// LOCAL FEATURES LOGIC FUNCTIONS
 // =====================
+
+// rendering local user infos
 function renderUserInfo(user) {
     document.getElementById("user_id").textContent = `User ID: ${user.id}`
     document.getElementById("user_name").textContent = `User: ${user.name}`
@@ -189,6 +194,7 @@ function renderUserInfo(user) {
     }
 }
 
+// update local form
 function initLocalUpdateForm(user) {
     const form = document.getElementById("user-update-form")
     if (!form) return

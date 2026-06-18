@@ -1,5 +1,5 @@
 import navLink from "../navLinks/navLink.js"
-import { getAuthenticatedUser } from "../../middlewares/roleGuard.js";
+import { getAuthenticatedUser } from "../../middlewares/roleGuard.js"
 
 export default function navbar() {
 
@@ -7,7 +7,6 @@ export default function navbar() {
 
     return `
         <nav>
-
             ${navLink("/", "TRADER TRACKER", "nav-home")}
             ${navLink("/about", "About", "nav-about")}
 
@@ -33,7 +32,7 @@ export function bindNavbarEvents() {
   if (btn) {
     btn.addEventListener("click", () => {
       localStorage.removeItem("token")
-      window.location.hash = "/login"
+      window.location.hash = "/"
     })
   }
 }

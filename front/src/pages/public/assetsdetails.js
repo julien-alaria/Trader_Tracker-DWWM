@@ -8,7 +8,7 @@ import analystCard from "../../components/cards/analystCard.js"
 import recoForm from "../../components/forms/recoForm.js"
 import { enableCarouselWindow } from "../../utils/lazyloading.js"
 import { formatAssetImage } from "../../utils/imageHelper.js"
-import { createPaginationList } from "../../components/pagination/PaginationComponent.js"
+import { createPaginationList } from "../../components/pagination/paginationComponent.js"
 import { getRecommendationIcon } from "../../utils/recommendationUtils.js"
 
 // =====================
@@ -80,6 +80,9 @@ export async function initDetail() {
             return
         }
 
+        // Security expectation related to asynchronous router injection
+        await new Promise((resolve) => setTimeout(resolve, 0))
+
         // =====================
         // STANDARDIZATION OF IMAGE & LOGO LOGIC
         // =====================
@@ -89,6 +92,8 @@ export async function initDetail() {
         // =====================
         // USER & WATCHLIST 
         // =====================
+
+        // Access Token Security Checks
         const token = localStorage.getItem("token")
         const user = token ? decodeToken(token) : null
 

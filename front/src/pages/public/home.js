@@ -2,11 +2,11 @@ import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
 import stockCard from "../../components/cards/stockCards.js"
 import forexCard from "../../components/cards/forexCards.js"
 import commodityCard from "../../components/cards/commodityCards.js"
-import { createCarousel } from "../../components/carousel/CarouselComponent.js"
+import { createCarousel } from "../../components/carousel/carouselComponent.js"
 import { initGenericSearchBar } from "../../components/searchBar/searchBarUtils.js"
 
 // =====================
-// TEMPLATE
+// HTML TEMPLATE 
 // =====================
 const home = `
     <section id="home-top">
@@ -52,7 +52,7 @@ export default home
 export async function initHome() {
     try {
         // =====================
-        // ASSETS FETCHING
+        // CENTRAL DATA RECOVERY
         // =====================
         const [stocks, forex, commodities] = await Promise.all([
             getStock(),
@@ -61,7 +61,7 @@ export async function initHome() {
         ])
         const allData = [...stocks, ...forex, ...commodities]
 
-        // Sécurité asynchrone pour laisser le temps au routeur d'injecter le template HTML
+        // Security expectation related to asynchronous router injection
         await new Promise(resolve => setTimeout(resolve, 0))
 
         // =====================

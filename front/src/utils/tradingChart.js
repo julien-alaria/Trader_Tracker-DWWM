@@ -16,14 +16,14 @@
 
 export function loadTradingViewChart(ticker, historyData = [], isMini = false) {
  
-  const container = document.getElementById(`tv-${ticker}`);
-  if (!container || !historyData.length) return;
+  const container = document.getElementById(`tv-${ticker}`)
+  if (!container || !historyData.length) return
 
   // mapping Polygon Datas (x, o, h, l, c)
   const candlestickData = historyData.map((candle) => ({
     x: candle.x,
     y: [candle.o, candle.h, candle.l, candle.c]
-  }));
+  }))
 
   const options = {
     chart: {
@@ -84,9 +84,9 @@ export function loadTradingViewChart(ticker, historyData = [], isMini = false) {
       enabled: !isMini,
       theme: "dark"
     }
-  };
+  }
 
-  container.innerHTML = '';
-  const chart = new ApexCharts(container, options);
-  chart.render();
+  container.innerHTML = ''
+  const chart = new ApexCharts(container, options)
+  chart.render()
 }

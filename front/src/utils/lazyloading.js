@@ -5,38 +5,38 @@ export function enableCarouselWindow({ selector = ".carousel", getData, cardComp
 const chartObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        const el = entry.target;
+        const el = entry.target
         
-        if (el.dataset.initialized === "true") return;
+        if (el.dataset.initialized === "true") return
         
-        const ticker = el.dataset.ticker;
-        const historyJson = el.dataset.history; 
+        const ticker = el.dataset.ticker
+        const historyJson = el.dataset.history
 
         if (ticker && historyJson) {
             try {
-                const historyData = JSON.parse(historyJson);
+                const historyData = JSON.parse(historyJson)
                 
-                loadTradingViewChart(ticker, historyData, true);
+                loadTradingViewChart(ticker, historyData, true)
                 
-                el.dataset.initialized = "true";
-                observer.unobserve(el);
+                el.dataset.initialized = "true"
+                observer.unobserve(el)
             } catch (e) {
-                console.error("Erreur parsing history pour", ticker, e);
+                console.error("Erreur parsing history pour", ticker, e)
             }
         }
       }
-    });
-  }, { threshold: 0.1 });
+    })
+  }, { threshold: 0.1 })
 
   const carousel = document.querySelector(selector)
-  if (!carousel || carousel.dataset.bound === "true") return;
-  carousel.dataset.bound = "true";
+  if (!carousel || carousel.dataset.bound === "true") return
+  carousel.dataset.bound = "true"
 
   const allAssets = getData(carousel) 
   if (!allAssets?.length) return
 
-  const isFixed = allAssets.length <= 5;
-  const displayAssets = isFixed ? allAssets : [...allAssets].sort(() => 0.5 - Math.random()).slice(0, 30);
+  const isFixed = allAssets.length <= 5
+  const displayAssets = isFixed ? allAssets : [...allAssets].sort(() => 0.5 - Math.random()).slice(0, 30)
 
   carousel.innerHTML = ""
   const track = document.createElement("div")
@@ -67,19 +67,19 @@ const chartObserver = new IntersectionObserver((entries, observer) => {
   render()
 
   // on small list no scroll
-  if (isFixed) return;
+  if (isFixed) return
 
   // infinite scroll for wide lists
   const CARD_WIDTH = 320 + 24
   let currentX = 0 
   let targetX = 0 
   const ease = 0.08
-  let isReorganizing = false;
+  let isReorganizing = false
 
   const updateLoop = () => {
     if (isReorganizing) {
        requestAnimationFrame(updateLoop)
-       return;
+       return
     }
 
     const distance = targetX - currentX
