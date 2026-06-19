@@ -1,7 +1,9 @@
+import http from "../../config/instanceHttp.js"
 import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
 import stockCard from "../../components/cards/stockCards.js"
 import forexCard from "../../components/cards/forexCards.js"
 import commodityCard from "../../components/cards/commodityCards.js"
+import analystCard from "../../components/cards/analystCard.js"
 import { createCarousel } from "../../components/carousel/carouselComponent.js"
 import { initGenericSearchBar } from "../../components/searchBar/searchBarUtils.js"
 
@@ -42,6 +44,12 @@ const home = `
         <p id="home-commodities-text">The largest exchange for metals futures contracts</p>
         <div id="commodities-carousel-target"></div>
     </section>
+
+    <section id="home-analysts">
+        <h2 id="home-analysts-title">Analysts</h2>
+        <p id="home-analysts-text">Our verified analysts</p>
+        <div id="analysts-carousel-target"></div>
+    </section>
 `
 
 export default home
@@ -60,6 +68,8 @@ export async function initHome() {
             getCommodities(),
         ])
         const allData = [...stocks, ...forex, ...commodities]
+
+        const analystRes = await http.get("/users/analysts")
 
         // Security expectation related to asynchronous router injection
         await new Promise(resolve => setTimeout(resolve, 0))
@@ -99,6 +109,14 @@ export async function initHome() {
             carouselId: "commodities",
             data: commodities,
             cardComponent: commodityCard,
+            buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`
+        })
+
+        createCarousel({
+            targetSelector: "#analysts-carousel-target",
+            carouselId: "analysts",
+            data: analystRes,
+            cardComponent: analystCard,
             buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`
         })
 

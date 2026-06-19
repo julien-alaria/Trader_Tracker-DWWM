@@ -225,6 +225,20 @@ async function deleteUser(req, res) {
 //     }
 // }
 
+async function getAnalysts(req, res) {
+    try {
+         const limit = Math.max(1, Number.parseInt(req.query.limit ?? 5, 10))
+         const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10))
+
+         const data = await UserModel.getAllAnalysts(limit, offset)
+
+         return res.status(200).json(data);
+     } catch (error) {
+         console.error("ANALYSTS PAGIN ERROR:", error);
+         return res.status(500).json({ error: error.message })
+     }
+}
+
 async function getAnalystsById(req, res) {
     try {
         const { id } = req.params;
@@ -393,7 +407,8 @@ async function checkIfFollowing(req, res) {
 export default { 
     getUserPagin, 
     getUserById, 
-    updateUser, 
+    updateUser,
+    getAnalysts, 
     deleteUser, 
     getAnalystsById,
     getAnalystsByType,

@@ -11,6 +11,8 @@ const userRouter = express.Router()
 
 //userRouter.get("/analysts", UserController.getAnalystsPagin)
 
+userRouter.get("/analysts", UserController.getAnalysts)
+
 userRouter.get("/analysts/by-type", UserController.getAnalystsByType)
 
 userRouter.get("/analysts/:id", UserController.getAnalystsById)

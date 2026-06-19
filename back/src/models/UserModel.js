@@ -235,6 +235,16 @@ async function deleteUsers(id) {
 //     }
 // }
 
+async function getAllAnalysts() {
+    const db = getConnection()
+
+    const sql = "SELECT id, name, company, bio, picture FROM users WHERE role = 'analyst'"
+
+    const [rows] = await db.query(sql)
+
+    return rows
+}
+
 async function getAnalystsByType(type_id, limit, offset) {
     const db = getConnection();
 
@@ -390,7 +400,7 @@ export default {
     createUsers, 
     updateUsers, 
     deleteUsers, 
-  
+    getAllAnalysts,
     getAnalystsByType,
     getAnalystById,
     getPendingAnalysts,
