@@ -3,7 +3,7 @@ import { decodeToken } from "../middlewares/roleGuard.js"
 
 export function createPaginator({
     endpoint,
-    limit = 3,
+    limit = 5,
     render,
     getPayload = () => decodeToken(localStorage.getItem("token")),
     mapResponse = (res) => res }) {
