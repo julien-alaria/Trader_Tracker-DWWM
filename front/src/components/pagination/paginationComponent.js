@@ -1,21 +1,23 @@
 import { createPaginator } from "../../utils/pagination.js"
 
 export function createPaginationList({ targetSelector, prefix, endpoint, itemTemplate, buildUrl }) {
-  const target = document.querySelector(targetSelector)
-  if (!target) return null
+    const target = document.querySelector(targetSelector)
+    if (!target) return null
 
-  const containerId = `${prefix}-list-container`
-  const paginationId = `${prefix}-pagination`
-  const prevBtnId = `${prefix}-prev-btn`
-  const nextBtnId = `${prefix}-next-btn`
+    const containerId = `${prefix}-list-container`
+    const paginationId = `${prefix}-pagination`
+    const prevBtnId = `${prefix}-prev-btn`
+    const nextBtnId = `${prefix}-next-btn`
 
-  target.innerHTML = `
-      <div id="${containerId}"></div>
-      <div id="${paginationId}" style="display: none; gap: 10px; margin-top: 10px;">
-          <button id="${prevBtnId}">Previous</button>
-          <button id="${nextBtnId}">Next</button>
-      </div>
-  `
+    target.innerHTML = `
+        <div id="${containerId}"></div>
+        <div id="${paginationId}" style="display: none; gap: 10px; margin-top: 10px;">
+            <button class="paginBtn" id="${prevBtnId}">Previous</button>
+            <button class="paginBtn" id="${nextBtnId}">Next</button>
+        </div>
+    `
+    
+    let hasEverBeenPaginated = false
 
     const paginator = createPaginator({
       endpoint: endpoint,
@@ -31,10 +33,29 @@ export function createPaginationList({ targetSelector, prefix, endpoint, itemTem
           container.innerHTML = results.map(item => itemTemplate(item)).join("")
       },
       mapResponse: (res) => {
+        console.log("RES", res)
           const wrapper = document.getElementById(paginationId)
+          const prevBtn = document.getElementById(prevBtnId)
+          const nextBtn = document.getElementById(nextBtnId)
+
+          if (res.hasNext) hasEverBeenPaginated = true
+
+          if (prevBtn) {
+              prevBtn.style.display = (hasEverBeenPaginated && !res.firstPage) ? "block" : "none";
+          }
+
           if (wrapper) {
               wrapper.style.display = (res.results && res.results.length > 0) ? "flex" : "none"
           }
+
+          if (prevBtn) {
+              prevBtn.style.display = (hasEverBeenPaginated && res.results.length > 0) ? "block" : "none";
+          }
+          
+          if (nextBtn) {
+              nextBtn.style.display = res.hasNext ? "block" : "none";
+          }
+
           return { results: res.results, hasNext: res.hasNext }
       }
   })
