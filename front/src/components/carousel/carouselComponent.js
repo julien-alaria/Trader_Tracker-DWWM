@@ -5,8 +5,8 @@ export function createCarousel({ targetSelector, carouselId, data, cardComponent
     if (!target) return
 
     if (!data || data.length === 0) {
-        target.innerHTML = "<p>Aucune donnée disponible</p>"
-        return;
+        target.innerHTML = "<p>No data available</p>"
+        return
     }
 
     target.innerHTML = ""

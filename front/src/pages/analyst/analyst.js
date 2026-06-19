@@ -114,8 +114,7 @@ export async function initAnalyst() {
       carouselId: "analyst-watchlist-carousel",
       data: watchlist,
       cardComponent: stockCard,
-      buildUrl: (dataset) =>
-        `#/details?type=${dataset.type}&ticker=${dataset.ticker}`,
+      buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`,
     })
 
     createCarousel({

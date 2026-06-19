@@ -17,12 +17,18 @@ export function createPaginationList({ targetSelector, prefix, endpoint, itemTem
       </div>
   `
 
-  const paginator = createPaginator({
+    const paginator = createPaginator({
       endpoint: endpoint,
       limit: 5,
       render: (results) => {
-          const container = document.getElementById(containerId);
-          if (container) container.innerHTML = results.map(item => itemTemplate(item)).join("")
+          const container = document.getElementById(containerId)
+          if (!container) return
+          
+          if (results.length === 0) {
+            container.innerHTML = "<p>No data available</p>"
+            return
+          }
+          container.innerHTML = results.map(item => itemTemplate(item)).join("")
       },
       mapResponse: (res) => {
           const wrapper = document.getElementById(paginationId)
