@@ -70,7 +70,7 @@ export async function initHome() {
         const allData = [...stocks, ...forex, ...commodities]
 
         const analystRes = await http.get("/users/analysts")
-
+    
         // Security expectation related to asynchronous router injection
         await new Promise(resolve => setTimeout(resolve, 0))
 
@@ -117,7 +117,7 @@ export async function initHome() {
             carouselId: "analysts",
             data: analystRes,
             cardComponent: analystCard,
-            buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`
+            buildUrl: (dataset) => `#/analystdetails?id=${dataset.id}`
         })
 
     } catch (err) {

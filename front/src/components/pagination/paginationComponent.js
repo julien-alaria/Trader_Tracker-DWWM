@@ -33,7 +33,6 @@ export function createPaginationList({ targetSelector, prefix, endpoint, itemTem
           container.innerHTML = results.map(item => itemTemplate(item)).join("")
       },
       mapResponse: (res) => {
-        console.log("RES", res)
           const wrapper = document.getElementById(paginationId)
           const prevBtn = document.getElementById(prevBtnId)
           const nextBtn = document.getElementById(nextBtnId)
