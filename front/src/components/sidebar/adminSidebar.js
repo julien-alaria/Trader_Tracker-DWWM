@@ -8,9 +8,7 @@ export default function adminSidebar() {
     return `
         <aside class="admin-sidebar">
             <nav class="admin-nav">
-                ${navLink("/about", "About")}
                 ${navLink("/", "home")}
-                ${navLink("/list", "list")}
                 ${user ? `<button id="logout-btn">Logout</button>` : ""}
 
             </nav>

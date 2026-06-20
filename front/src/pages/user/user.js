@@ -13,39 +13,37 @@ import { buildWatchlistData } from "../../utils/assetFormatter.js"
 // HTML TEMPLATE
 // =====================
 const userPage = `
-    <main>
-        <h1>User Page</h1>
+    <h1>User Page</h1>
 
-        <section>
-            <div><img id="user_picture" src="" /></div>
-            <div id="user_id"></div>
-            <div id="user_name"></div>
-            <div id="user_email"></div>
-        </section>
+    <section>
+        <div><img id="user_picture" src="" /></div>
+        <div id="user_id"></div>
+        <div id="user_name"></div>
+        <div id="user_email"></div>
+    </section>
 
-        <section>
-            <h2>My Watchlist</h2>
-            <div id="watchlist-carousel-target"></div>
+    <section>
+        <h2>My Watchlist</h2>
+        <div id="watchlist-carousel-target"></div>
 
-            <h2>Watchlist By List</h2>
-            <div id="watchlist-list-target"></div>
-        </section>
+        <h2>Watchlist By List</h2>
+        <div id="watchlist-list-target"></div>
+    </section>
 
-        <section>
-            <h2>Followed Analysts</h2>
-            <div id="follow-carousel-target"></div>
+    <section>
+        <h2>Followed Analysts</h2>
+        <div id="follow-carousel-target"></div>
 
-            <h2>Followed Analysts By List</h2>
-            <div id="follow-list-target"></div>
-        </section>
+        <h2>Followed Analysts By List</h2>
+        <div id="follow-list-target"></div>
+    </section>
 
-        <section>
-            <div class="update-form">
-                ${updateForm()}
-            </div>
-        </section>
-    </main>
-    `
+    <section>
+        <div class="update-form">
+            ${updateForm()}
+        </div>
+    </section>
+`
 
 export default userPage
 

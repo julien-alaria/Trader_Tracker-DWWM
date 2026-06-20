@@ -15,28 +15,26 @@ import { getRecommendationIcon } from "../../utils/recommendationUtils.js"
 // HTML TEMPLATE 
 // =====================
 const detailsPage = `
-    <main>
-        <section id="detail-section">
-            <div id="asset-detail"></div> 
-        </section>
+    <section id="detail-section">
+        <div id="asset-detail"></div> 
+    </section>
 
-        <section id="recomendations-section">
-            <div id="recommendation-target"></div>
-            <div id="recommendation-form"></div>
-        </section>
+    <section id="recomendations-section">
+        <div id="recommendation-target"></div>
+        <div id="recommendation-form"></div>
+    </section>
 
-        <section id="analyst-carousel-section">
-            <div id="analyst-carousel-container" class="hidden">
-                <h2>Analysts covering this asset</h2>
-                <div class="carousel analyst-carousel"></div>
-            </div>
-        </section>
+    <section id="analyst-carousel-section">
+        <div id="analyst-carousel-container" class="hidden">
+            <h2>Analysts covering this asset</h2>
+            <div class="carousel analyst-carousel"></div>
+        </div>
+    </section>
 
-        <section id="analyst-list-section">
-            <h2>All Analysts</h2>
-            <div id="analyst-list-target"></div>
-        </section>
-    </main>
+    <section id="analyst-list-section">
+        <h2>All Analysts</h2>
+        <div id="analyst-list-target"></div>
+    </section>
 `
 
 export default detailsPage

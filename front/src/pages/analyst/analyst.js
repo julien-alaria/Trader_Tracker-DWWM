@@ -15,49 +15,47 @@ import { getRecommendationIcon } from "../../utils/recommendationUtils.js"
 // HTML TEMPLATE 
 // =====================
 const analystPage = `
-  <main>
-      <h1>Analyst Page</h1>
+    <h1>Analyst Page</h1>
 
-      <section>
-          <div><img id="analyst_picture" src="" /></div>
-          <div id="analyst_id"></div>
-          <div id="analyst_name"></div>
-          <div id="analyst_email"></div>
-          <div id="analyst_type"></div>
-          <div id="analyst_company"></div>
-          <div id="analyst_bio"></div>
-      </section>
+    <section>
+        <div><img id="analyst_picture" src="" /></div>
+        <div id="analyst_id"></div>
+        <div id="analyst_name"></div>
+        <div id="analyst_email"></div>
+        <div id="analyst_type"></div>
+        <div id="analyst_company"></div>
+        <div id="analyst_bio"></div>
+    </section>
 
-      <section>
-          <h2>Watchlist</h2>
-          <div id="watchlist-carousel-target"></div>
+    <section>
+        <h2>Watchlist</h2>
+        <div id="watchlist-carousel-target"></div>
 
-          <div id="watchlist-list-global">
-              <h2>Watchlist By List</h2>
-              <div id="watchlist-list-target"></div>
-          </div>
-      </section>
+        <div id="watchlist-list-global">
+            <h2>Watchlist By List</h2>
+            <div id="watchlist-list-target"></div>
+        </div>
+    </section>
 
-      <section>
-          <h2>My Recommendations</h2>
-          <div id="recommendations-list-target"></div>
-      </section>
+    <section>
+        <h2>My Recommendations</h2>
+        <div id="recommendations-list-target"></div>
+    </section>
 
-      <section>
-          <h2>Followed Analysts</h2>
-          <div id="follow-carousel-target"></div>
+    <section>
+        <h2>Followed Analysts</h2>
+        <div id="follow-carousel-target"></div>
 
-          <h2>Followed Analysts By List</h2>
-          <div id="follow-list-target"></div>
-      </section>
+        <h2>Followed Analysts By List</h2>
+        <div id="follow-list-target"></div>
+    </section>
 
-      <section>
-          <div class="update-form">
-              ${analystUpdateForm()}
-          </div>
-      </section>
-  </main>
-  `
+    <section>
+        <div class="update-form">
+            ${analystUpdateForm()}
+        </div>
+    </section>
+`
 
 export default analystPage
 

@@ -9,18 +9,16 @@ import { getRecommendationIcon } from "../../utils/recommendationUtils.js"
 // HTML TEMPLATE 
 // =====================
 const analystDetailsPage = `
-    <main>
-        <section>
-            <h1>Analyst Detail Page</h1>
-            <div id="analyst-detail"></div>
-        </section>
+    <section>
+        <h1>Analyst Detail Page</h1>
+        <div id="analyst-detail"></div>
+    </section>
 
-        <section id="analyst-recommendation">
-            <h2>This Analyst Recommendations</h2>
-            <div id="analyst-recommendation-target"></div>
-        </section>
-    </main>
-    `
+    <section id="analyst-recommendation">
+        <h2>This Analyst Recommendations</h2>
+        <div id="analyst-recommendation-target"></div>
+    </section>
+`
 
 export default analystDetailsPage
 

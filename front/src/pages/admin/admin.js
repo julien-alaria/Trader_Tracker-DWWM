@@ -8,7 +8,6 @@ import { bindRecommendationActions } from "../../utils/actionManager.js"
 // HTML TEMPLATE 
 // =====================
 const adminPage = `
-  
     <h1>ADMIN PAGE</h1>
 
     <section>
@@ -35,8 +34,7 @@ const adminPage = `
     <section class="update-form">
         ${analystUpdateForm()}
     </section>
-  
-    `
+`
 
 export default adminPage
 

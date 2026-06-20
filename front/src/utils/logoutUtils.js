@@ -6,5 +6,5 @@ export function bindLogoutEvent() {
  
             window.location.reload()
         }
-    }, { once: true }) // 'once: true' avoids listeners duplication
+    })
 }
