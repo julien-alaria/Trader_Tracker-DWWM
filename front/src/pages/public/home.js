@@ -31,12 +31,13 @@ const home = `
 
     <section id="home-forex">
         <h2 id="home-forex-title">Forex</h2>
-        <p id="home-forex-text">Foreign exchange market where currencies from all over the world are traded</p> <div id="forex-carousel-target"></div>
+        <p id="home-forex-text">Foreign exchange market where currencies from all over the world are traded</p> 
+        <div id="forex-carousel-target"></div>
     </section>
 
     <section id="home-middle">
         <p id="home-middle-text">Take control of your investments today</p>
-        <a id="home-top-register" href="#/register">CREATE FREE ACCOUNT</a>
+        <a id="home-middle-register" href="#/register">CREATE FREE ACCOUNT</a>
     </section>
 
     <section id="home-commodities">

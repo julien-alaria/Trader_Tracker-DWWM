@@ -3,9 +3,8 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 const rest = restClient(process.env.POLY_API_KEY)
-/**
- * imports, roads & utils for LOCAL JSON
- */
+
+//imports, roads & utils for LOCAL JSON
 import fs from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -22,11 +21,7 @@ async function readJsonFile(fileName) {
   return JSON.parse(data)
 }
 
-/**
- * 
- * functions for MASSIVE API
- */
-
+// functions for MASSIVE API
 async function getAAPLStock(req, res) {
     return rest.getStocksAggregates(
       {
@@ -153,9 +148,7 @@ async function aggregateMetals() {
   return results
 }
 
-/**
- * functions for LOCAL JSON
- */
+// functions for LOCAL JSON
 async function getAAPLStockJson(req, res) {
 
   const stocks = await readJsonFile('nasdaq.json')
@@ -166,47 +159,19 @@ async function getAAPLStockJson(req, res) {
 }
 
 async function getMultipleAggregatesJson() {
- 
-  const stocks = await readJsonFile('nasdaq.json')
-  // API KEY IS DISPLAY ON WEB WHEN FETCHING
-  const POLYGON_API_KEY = "MY_PRIVATE_API_KEY"
+  const stocks = await readJsonFile('nasdaq.json');
 
-  return stocks.map((stock) => {
-
-    let finalImageUrl = null
-
-    if (stock.image) {
-      const cleanUrl = stock.image.replace("api.massive.com", "api.polygon.io")
-      finalImageUrl = `${cleanUrl}?apiKey=${POLYGON_API_KEY}`
-    } else {
-      finalImageUrl = "/assets/nasdaq_logo.png"
-    }
-
-    const meta = {
-      ticker: stock.ticker,
-      name: stock.name,
-      market_cap: stock.marketCap,
-      image: finalImageUrl
-    }
-
-    const last = {
-      c: stock.price,
-      h: stock.high,
-      l: stock.low
-    }
-
-    return {
-      type: "nasdaq",
-      ticker: meta.ticker,
-      name: meta.name,
-      image: meta.image,
-      marketCap: meta.market_cap,
-      price: last?.c ?? null,
-      high: last?.h ?? null,
-      low: last?.l ?? null,
-      history: stock.history || []
-    }
-  })
+  return stocks.map((stock) => ({
+    type: "nasdaq",
+    ticker: stock.ticker,
+    name: stock.name,
+    marketCap: stock.marketCap,
+    price: stock.price ?? null,
+    high: stock.high ?? null,
+    low: stock.low ?? null,
+    image: stock.image || "/assets/nasdaq_logo.png",
+    history: stock.history || []
+  }));
 }
 
 async function aggregateForexJson() {
@@ -241,4 +206,13 @@ async function aggregateMetalsJson() {
   }))
 }
 
-export default { getAAPLStock,  getMultipleAggregates, aggregateForex, aggregateMetals, getAAPLStockJson,  getMultipleAggregatesJson, aggregateForexJson, aggregateMetalsJson }
+export default { 
+  getAAPLStock,  
+  getMultipleAggregates, 
+  aggregateForex, 
+  aggregateMetals, 
+  getAAPLStockJson,  
+  getMultipleAggregatesJson, 
+  aggregateForexJson, 
+  aggregateMetalsJson 
+}

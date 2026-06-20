@@ -41,7 +41,7 @@ class InstanceHttp {
 
     async post(url, data) {
         // using the 'body' variable which is capable of handling FormData
-        const body = data instanceof FormData ? data : JSON.stringify(data);
+        const body = data instanceof FormData ? data : JSON.stringify(data)
 
         const response = await fetch(API_URL + url, {
             method: "POST",
@@ -52,7 +52,7 @@ class InstanceHttp {
     }
 
     async put(url, data) {
-        const body = data instanceof FormData ? data : JSON.stringify(data);
+        const body = data instanceof FormData ? data : JSON.stringify(data)
 
         const response = await fetch(API_URL + url, {
             method: "PUT",
@@ -63,7 +63,7 @@ class InstanceHttp {
     }
 
     async patch(url, data) {
-        const body = data instanceof FormData ? data : JSON.stringify(data);
+        const body = data instanceof FormData ? data : JSON.stringify(data)
 
         const response = await fetch(API_URL + url, {
             method: "PATCH",

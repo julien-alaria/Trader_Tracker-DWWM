@@ -2,7 +2,7 @@ import { loadTradingViewChart } from "./tradingChart.js"
 
 export function enableCarouselWindow({ selector = ".carousel", getData, cardComponent }) {
  
-const chartObserver = new IntersectionObserver((entries, observer) => {
+  const chartObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const el = entry.target
@@ -21,7 +21,7 @@ const chartObserver = new IntersectionObserver((entries, observer) => {
                 el.dataset.initialized = "true"
                 observer.unobserve(el)
             } catch (e) {
-                console.error("Erreur parsing history pour", ticker, e)
+                console.error("Parsing history error for", ticker, e)
             }
         }
       }
@@ -111,12 +111,12 @@ const chartObserver = new IntersectionObserver((entries, observer) => {
           }
         }
         
-        requestAnimationFrame(() => { isReorganizing = false; })
+        requestAnimationFrame(() => { isReorganizing = false })
       }
       track.style.transform = `translateX(${-currentX}px)`
     }
     requestAnimationFrame(updateLoop)
-  };
+  }
 
   requestAnimationFrame(updateLoop)
 

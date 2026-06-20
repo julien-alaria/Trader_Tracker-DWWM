@@ -25,3 +25,4 @@ export default function analystCard({ id, name, company, bio, picture } = {}) {
     `
 }
 
+                                                                                                                                                        

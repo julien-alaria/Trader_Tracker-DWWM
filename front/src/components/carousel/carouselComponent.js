@@ -22,7 +22,7 @@ export function createCarousel({ targetSelector, carouselId, data, cardComponent
         batchSize: 5,
         getData: () => data,
         cardComponent: cardComponent
-    });
+    })
 
     carouselEl.addEventListener("click", (e) => {
         const actionBtn = e.target.closest(".watch-btn") || e.target.closest(".unfollow-btn")

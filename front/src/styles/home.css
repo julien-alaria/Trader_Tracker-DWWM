@@ -32,6 +32,19 @@
     color: #1a1a1a;  
 }
 
+#home-top-register{
+    border: 1px solid white;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+    background-color: #1a1a1a;
+    font-size: 2rem;
+}
+
+#home-top-register:hover {
+    background-color: orange;
+    color: #1a1a1a;  
+}
+
 #home-search-bar {
     display: flex;
     flex-direction: row;      
