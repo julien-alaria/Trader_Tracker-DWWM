@@ -8,34 +8,34 @@ import { bindRecommendationActions } from "../../utils/actionManager.js"
 // HTML TEMPLATE 
 // =====================
 const adminPage = `
-    <main>
-        <h1>ADMIN PAGE</h1>
+  
+    <h1>ADMIN PAGE</h1>
 
-        <section>
-            <div id="admin_name"></div>
-            <div id="admin_id"></div>
-            <div id="admin_email"></div>
-        </section>
+    <section>
+        <div id="admin_name"></div>
+        <div id="admin_id"></div>
+        <div id="admin_email"></div>
+    </section>
 
-        <section>
-            <h2>ANALYST VALIDATION</h2>
-            <div id="pending-analysts"></div>
-        </section>
+    <section>
+        <h2>ANALYST VALIDATION</h2>
+        <div id="pending-analysts"></div>
+    </section>
 
-        <section>
-            <h2>All Recommendations</h2>
-            <div id="recommendations-list-target"></div>
-        </section>
+    <section>
+        <h2>All Recommendations</h2>
+        <div id="recommendations-list-target"></div>
+    </section>
 
-        <section>
-            <h2 id="admin-users-title">Gestion des Utilisateurs</h2>
-            <div id="users-list-target"></div>
-        </section>
+    <section>
+        <h2 id="admin-users-title">Gestion des Utilisateurs</h2>
+        <div id="users-list-target"></div>
+    </section>
 
-        <section class="update-form">
-            ${analystUpdateForm()}
-        </section>
-    </main>
+    <section class="update-form">
+        ${analystUpdateForm()}
+    </section>
+  
     `
 
 export default adminPage

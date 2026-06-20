@@ -6,7 +6,7 @@ export default function navbar() {
     const user = getAuthenticatedUser()
 
     return `
-        <nav>
+        <nav class="main-navbar">
             ${navLink("/", "TRADER TRACKER", "nav-home")}
             ${navLink("/about", "About", "nav-about")}
 
@@ -21,19 +21,3 @@ export default function navbar() {
         </nav>
     `
 }
-
-export function renderNavbar() {
-  document.getElementById("nav").innerHTML = navbar()
-}
-
-export function bindNavbarEvents() {
-  const btn = document.getElementById("logout-btn")
-
-  if (btn) {
-    btn.addEventListener("click", () => {
-      localStorage.removeItem("token")
-      window.location.hash = "/"
-    })
-  }
-}
-

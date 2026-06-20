@@ -39,3 +39,25 @@
     margin: 1rem;
     justify-content: space-around;
 }
+
+.admin-layout {
+    display: flex;
+    flex-direction: row;
+}
+
+.admin-sidebar {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    min-width: 100px;
+    color: white;
+    background-color: black;
+    min-height: 100vh;
+    margin-right: 10px;
+}

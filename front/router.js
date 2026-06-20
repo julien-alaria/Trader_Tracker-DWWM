@@ -14,8 +14,8 @@ import analystPage, { initAnalyst }  from "./src/pages/analyst/analyst.js"
 import adminPage, { initAdmin } from "./src/pages/admin/admin.js"
 
 import notfound from "./src/pages/public/notfound.js"
-import navbar, { renderNavbar, bindNavbarEvents} from "./src/components/navbar/navbar.js"
-import footer from "./src/components/footer/footer.js"
+import { renderApp } from "./src/utils/layoutManager.js"
+
 
 
 function router() {
@@ -23,6 +23,7 @@ function router() {
 
   let content = ""
   let init = null
+  let layoutType = "default"
 
   switch (hash) {
     case "/":
@@ -74,6 +75,7 @@ function router() {
       if (!roleGuard(["admin"])) return
       content = adminPage
       init = initAdmin 
+      layoutType = "admin"
       break
 
     case "/analyst":
@@ -86,17 +88,12 @@ function router() {
       content = notfound
   }
 
-  document.getElementById("root").innerHTML = content
-
-  renderNavbar()
-  bindNavbarEvents()
+  renderApp(content, layoutType)
 
   if (init) {
     init()
   }
 }
-
-document.getElementById("foot").innerHTML = footer()
 
 window.addEventListener("hashchange", router)
 // all dependencies loaded and ready to use,browser triggers the first display

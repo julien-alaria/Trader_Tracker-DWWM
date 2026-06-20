@@ -37,7 +37,7 @@ main {
     margin: 0;
 }
 
-nav {
+.main-navbar {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
