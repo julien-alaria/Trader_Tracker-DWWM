@@ -20,7 +20,6 @@ export function createPaginator({
 
             const res = await http.get(url)
             const data = mapResponse(res, offset)
-                console.log("DATA", data)
 
             hasNext = data.hasNext ?? false
 
