@@ -5,29 +5,21 @@ import { bindLogoutEvent } from "../utils/logoutUtils.js"
 
 bindLogoutEvent() //Single initialization for all logout events
 
-export function renderApp(content, type = "default") {
-    const headerContainer = document.getElementById("header-container")
+export function renderApp(content, layoutType = "default") {
     const root = document.getElementById("root")
-    const footerContainer = document.getElementById("footer-container")
+    const header = document.getElementById("header-container")
+    const footerCont = document.getElementById("footer-container")
+    const isAdminPage = (layoutType === "admin")
 
-    document.body.className = (type === "admin") ? "admin-mode" : ""
+    document.body.className = isAdminPage ? "admin-mode" : ""
 
-    if (type === "admin") {
-        headerContainer.innerHTML = ""
-    } else {
-        headerContainer.innerHTML = navbar()
-    }
+    header.innerHTML = isAdminPage ? "" : navbar()
+    footerCont.innerHTML = isAdminPage ? "" : footer()
 
-    footerContainer.innerHTML = (type === "admin") ? "" : footer()
-
-    if (type === "admin") {
-        root.innerHTML = `
-            <div class="admin-layout">
-                ${adminSidebar()}
-                <div class="admin-content">${content}</div>
-            </div>
-        `
-    } else {
-        root.innerHTML = content
-    }
+    root.innerHTML = isAdminPage ? `
+        <div class="admin-layout">
+            ${adminSidebar()}
+            <div class="admin-content">${content}</div>
+        </div>
+    ` : content
 }

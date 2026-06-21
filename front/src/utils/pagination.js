@@ -19,7 +19,8 @@ export function createPaginator({
             const url = `${config.endpoint}${separator}limit=${limit}&offset=${offset}`
 
             const res = await http.get(url)
-            const data = mapResponse(res)
+            const data = mapResponse(res, offset)
+                console.log("DATA", data)
 
             hasNext = data.hasNext ?? false
 

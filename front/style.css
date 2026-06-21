@@ -77,3 +77,7 @@ footer {
     border: 2px solid black;
 }
 
+.admin-mode footer#footer-container {
+    display: none;
+}
+

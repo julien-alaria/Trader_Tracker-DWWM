@@ -16,8 +16,6 @@ export function createPaginationList({ targetSelector, prefix, endpoint, itemTem
             <button class="paginBtn" id="${nextBtnId}">Next</button>
         </div>
     `
-    
-    let hasEverBeenPaginated = false
 
     const paginator = createPaginator({
       endpoint: endpoint,
@@ -32,30 +30,25 @@ export function createPaginationList({ targetSelector, prefix, endpoint, itemTem
           }
           container.innerHTML = results.map(item => itemTemplate(item)).join("")
       },
-      mapResponse: (res) => {
+      mapResponse: (res, currentOffset) => {
           const wrapper = document.getElementById(paginationId)
           const prevBtn = document.getElementById(prevBtnId)
           const nextBtn = document.getElementById(nextBtnId)
-
-          if (res.hasNext) hasEverBeenPaginated = true
-
+          
           if (prevBtn) {
-              prevBtn.style.display = (hasEverBeenPaginated && !res.firstPage) ? "block" : "none";
+            prevBtn.style.display = (currentOffset > 0) ? "block" : "none"
+          }
+
+          if (nextBtn) {
+              nextBtn.style.display = res.hasNext ? "block" : "none"
           }
 
           if (wrapper) {
               wrapper.style.display = (res.results && res.results.length > 0) ? "flex" : "none"
           }
 
-          if (prevBtn) {
-              prevBtn.style.display = (hasEverBeenPaginated && res.results.length > 0) ? "block" : "none";
-          }
-          
-          if (nextBtn) {
-              nextBtn.style.display = res.hasNext ? "block" : "none";
-          }
-
-          return { results: res.results, hasNext: res.hasNext }
+        return res
+        
       }
   })
 
