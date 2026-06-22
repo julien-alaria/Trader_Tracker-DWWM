@@ -1,12 +1,33 @@
+/* --- CAROUSEL SECURITY FOR PERFORMANCE--- */
+.carousel, 
+#stocks-carousel-target, 
+#forex-carousel-target, 
+#commodities-carousel-target, 
+#analysts-carousel-target {
+    min-height: 350px;
+    width: 100%;
+    display: block;
+    overflow: hidden; 
+    padding-left: 20px;  
+    padding-right: 20px; 
+    box-sizing: border-box;
+}
+
+#stocks-carousel-target:empty, 
+#forex-carousel-target:empty {
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
 .asset-item {
     display: flex;
-    justify-content: flex-start; /* Aligne tout à gauche pour bloquer les décalages */
+    justify-content: flex-start; 
     align-items: center;
     padding: 15px;
     border-bottom: 1px solid #ddd;
     cursor: pointer;
     transition: background-color 0.2s;
-    gap: 40px;                   /* Fixe un espace strict et immuable entre le logo et le texte */
+    gap: 40px;                   
     width: 100%;
 }
 
@@ -22,7 +43,6 @@
     color: black;
     font-size: 3rem;
     text-decoration: none;
-    /* Sécurise le comportement en ligne du texte */
     display: inline-block;
     white-space: nowrap; 
 }
@@ -32,9 +52,9 @@
 }
 
 #logo-list {
-    width: 80px; 
-    height: 80px; 
+    width: 40px; 
+    height: 40px; 
     margin-right: 10px;
     aspect-ratio: 1 / 1;
-    flex-shrink: 0;             /* Empêche absolument l'image de se déformer */
+    flex-shrink: 0;             
 }

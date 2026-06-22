@@ -1,0 +1,45 @@
+.recommendation, 
+.recommendation-item, 
+.analyst-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.reco-icon, 
+.reco-analyst-pic, 
+.reco-status-icon {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
+}
+
+.analyst-avatar, 
+.analyst-profile-pic {
+    border-radius: 50%;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
+}
+
+.analyst-avatar { 
+    width: 30px; 
+    height: 30px; 
+}
+
+.analyst-profile-pic { 
+    width: 200px; 
+    height: 200px; 
+}
+
+.asset-logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
+}

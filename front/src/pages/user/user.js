@@ -139,8 +139,8 @@ export async function initUser() {
                 const logoUrl = item.ticker ? `/assets/logos/${item.ticker.toLowerCase()}.svg` : defaultLogo
 
                 return `
-                    <div class="watchlist-item" data-js-clickable data-ticker="${item.ticker}" data-type="${item.asset_type_id || item.type}" style="cursor: pointer; display: flex; align-items: center; gap: 15px; margin-bottom: 8px;">
-                        <img src="${logoUrl}" style="width: 40px; height: 40px; object-fit: contain;" alt="asset-logo" onerror="this.src='${defaultLogo}'" />
+                    <div class="watchlist-item" data-js-clickable data-ticker="${item.ticker}" data-type="${item.asset_type_id || item.type}">
+                        <img src="${logoUrl}" width="40" height="40p" alt="asset-logo" onerror="this.src='${defaultLogo}'" />
                         <p><strong>${item.ticker}</strong> - ${item.name}</p>
                     </div>
                 `
@@ -158,8 +158,8 @@ export async function initUser() {
                 const avatarUrl = a.picture ? `${API_BASE_URL}/uploads/${a.picture}` : defaultAvatar
 
                 return `
-                    <div class="follow-item" data-js-clickable data-id="${a.id}" style="cursor: pointer; display: flex; align-items: center; gap: 15px; margin-bottom: 8px;">
-                        <img src="${avatarUrl}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" alt="analyst-avatar" onerror="this.src='${defaultAvatar}'" />
+                    <div class="follow-item" data-js-clickable data-id="${a.id}">
+                        <img src="${avatarUrl}" width="40" height="40" alt="analyst-avatar" onerror="this.src='${defaultAvatar}'" />
                         <p><strong>${a.name}</strong> - ${a.company ?? "Unknown"}</p>
                     </div>
                 `

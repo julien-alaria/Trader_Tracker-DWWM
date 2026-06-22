@@ -94,7 +94,7 @@ export function loadTradingViewChart(ticker, historyData = [], isMini = false) {
   chart.render()
 }
 
-//Mini Sparline Chart for cards
+//Mini Sparkline Chart for cards
 export function loadMiniChart(ticker, historyData = []) {
   const container = document.getElementById(`tv-${ticker}`)
   if (!container || !historyData.length) return

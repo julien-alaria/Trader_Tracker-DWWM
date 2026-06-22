@@ -18,7 +18,7 @@ export default function stockCard({
 
         <div class="chart" id="tv-${ticker}" data-ticker="${ticker}" data-history='${JSON.stringify(history)}'></div>
 
-        <img class="card-image" src="${finalImage}" alt="${ticker}" onerror="this.onerror=null; this.src='/assets/nasdaq_logo.png'">
+        <img class="card-image" src="${finalImage}" width="259" height="259" alt="${ticker}" onerror="this.onerror=null; this.src='/assets/nasdaq_logo.png'">
 
         <h2 class="card-title">${name}</h2>
 

@@ -19,7 +19,7 @@ const detailsPage = `
         <div id="asset-detail"></div> 
     </section>
 
-    <section id="recomendations-section">
+    <section id="recomendations-section" class="hidden">
         <div id="recommendation-target"></div>
         <div id="recommendation-form"></div>
     </section>
@@ -106,10 +106,7 @@ export async function initDetail() {
             <button onclick="history.back()" class="btn-back">Back</button>
             
             <div class="asset-header">
-                <img class="asset-logo" 
-                     src="${finalImage}" 
-                     alt="${asset.ticker}" 
-                     onerror="this.onerror=null; this.src='${fallbackImage}';">
+                <img class="asset-logo" src="${finalImage}" width="100" height="100" alt="${asset.ticker}" onerror="this.onerror=null; this.src='${fallbackImage}';">
                 <div class="asset-title-container">
                     <h1 class="asset-name">${asset.name}</h1>
                     <span class="asset-ticker">${asset.ticker}</span>
@@ -175,11 +172,11 @@ export async function initDetail() {
                     const recoImage = getRecommendationIcon(rec.status)
 
                     return `
-                        <div class="recommendation" data-js-clickable data-analyst-id="${rec.user_id}" style="cursor: pointer;">
-                            <img src="${recoImage}" style="width: 50px; height: 50px; object-fit: contain;" alt="reco-image" />
+                        <div class="recommendation" data-js-clickable data-analyst-id="${rec.user_id}">
+                            <img src="${recoImage}" width="50" height="50" alt="reco-image" />
                             <strong>${rec.status}</strong>
                             <p>${rec.comment}</p>
-                            <img src="${imageUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
+                            <img src="${imageUrl}" width="30" height="30" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
                             <p>Analyst: ${rec.analyst_name ?? "unknown"}</p>
                             <p>Published on ${formatDate(rec.created_at)}</p>
                         </div>
@@ -239,8 +236,8 @@ export async function initDetail() {
                 const imageUrl = a.picture ? `${API_BASE_URL}/uploads/${a.picture}` : defaultAvatar
 
                 return `
-                    <div class="analyst-item" data-js-clickable data-id="${a.id}" style="cursor: pointer;">
-                        <img src="${imageUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
+                    <div class="analyst-item" data-js-clickable data-id="${a.id}">
+                        <img src="${imageUrl}" width="30" height="30" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
                         <p><strong>${a.name}</strong> - ${a.company}</p>
                     </div>
                 `

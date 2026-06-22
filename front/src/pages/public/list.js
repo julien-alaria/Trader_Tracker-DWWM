@@ -48,11 +48,8 @@ export async function initList() {
                 const finalImage = formatAssetImage(item.ticker)
 
                 return `
-                    <div class="asset-item" data-js-clickable data-ticker="${item.ticker}" data-type="${item.type}" style="cursor: pointer;">
-                        <img id="logo-list" 
-                             src="${finalImage}" 
-                             alt="${item.name} logo" 
-                             onerror="this.onerror=null; this.src='/assets/nasdaq_logo.png';">
+                    <div class="asset-item" data-js-clickable data-ticker="${item.ticker}" data-type="${item.type}">
+                        <img id="logo-list" src="${finalImage}" width=80" height=80" alt="${item.name} logo" onerror="this.onerror=null; this.src='/assets/nasdaq_logo.png';">
                         <span><strong>${item.ticker}</strong></span>
                         <span>${item.name}</span>
                     </div>

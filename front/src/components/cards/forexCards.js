@@ -11,7 +11,7 @@ export default function forexCard({ ticker, name, high, low, close, image } = {}
   return `
     <div class="card forex" data-type="forex" data-ticker="${ticker}" >
 
-      <img class="card-image" src="${finalImage}" alt="${ticker}">
+      <img class="card-image" src="${finalImage}" width="259" height="259" alt="${ticker}">
 
       <h2 class="card-title">${name}</h2>
 

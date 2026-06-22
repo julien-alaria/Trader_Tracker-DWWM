@@ -13,7 +13,7 @@ export default function analystCard({ id, name, company, bio, picture } = {}) {
     return `
         <div class="card analyst" data-id="${id ?? ''}">
 
-            <img class="card-image" src="${imageUrl}" alt="${displayName}">
+            <img class="card-image" src="${imageUrl}" width="259" height="259" alt="${displayName}">
 
             <h2 class="card-title">${displayName}</h2>
 

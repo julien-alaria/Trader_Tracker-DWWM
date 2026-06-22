@@ -134,13 +134,11 @@ export async function initAnalyst() {
       endpoint: "/users/me/watchlist-paginated",
       itemTemplate: (item) => {
         const defaultLogo = "/assets/logos/nasdaq_logo.png"
-        const logoUrl = item.ticker
-          ? `/assets/logos/${item.ticker.toLowerCase()}.svg`
-          : defaultLogo
+        const logoUrl = item.ticker ? `/assets/logos/${item.ticker.toLowerCase()}.svg`: defaultLogo
 
         return `
-          <div class="watchlist-item" data-js-clickable data-ticker="${item.ticker}" data-type="${item.asset_type_id}" style="cursor: pointer; display: flex; align-items: center; gap: 15px; margin-bottom: 8px;">
-              <img src="${logoUrl}" style="width: 50px; height: 50px; object-fit: contain;" alt="analyst-picture" onerror="this.src='${defaultLogo}'" />
+          <div class="watchlist-item" data-js-clickable data-ticker="${item.ticker}" data-type="${item.asset_type_id}">
+              <img src="${logoUrl}" width="50" height="50" alt="${item.ticker}onerror="this.src='${defaultLogo}'" />
               <span><strong>${item.ticker}</strong></span>
               <span>${item.name}</span>
           </div>
@@ -156,19 +154,17 @@ export async function initAnalyst() {
       endpoint: "/recommendations/me",
       itemTemplate: (rec) => {
         const defaultAvatar = "/assets/logos/nasdaq_logo.png"
-        const imageUrl = rec.ticker
-          ? `/assets/logos/${rec.ticker.toLowerCase()}.svg`
-          : defaultAvatar
+        const imageUrl = rec.ticker ? `/assets/logos/${rec.ticker.toLowerCase()}.svg` : defaultAvatar
 
         const recoImage = getRecommendationIcon(rec.status)
 
         const isAuthorized = user && (user.role === "admin" || Number(user.id) === Number(rec.user_id))
 
         return `
-          <div class="recommendation" data-js-clickable data-id="${rec.id}" data-ticker="${rec.ticker}" data-type="${rec.asset_type_id ?? 'asset'}" style="cursor: pointer; margin-bottom: 12px;">
-              <img src="${recoImage}" style="width: 50px; height: 50px; object-fit: contain;" alt="reco-image" />
+          <div class="recommendation" data-js-clickable data-id="${rec.id}" data-ticker="${rec.ticker}" data-type="${rec.asset_type_id ?? 'asset'}">
+              <img src="${recoImage}" width="50" height="50" alt="reco-image" />
               <strong>${rec.status}</strong>
-              <img src="${imageUrl}" style="width: 50px; height: 50px; object-fit: contain;" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
+              <img src="${imageUrl}" width="50" height="50" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
               <p>${rec.ticker}</p>
               <p>${rec.comment}</p>
               <small>${new Date(rec.created_at).toLocaleDateString()}</small>
@@ -197,13 +193,11 @@ export async function initAnalyst() {
       endpoint: "/users/me/follows/users",
       itemTemplate: (a) => {
         const defaultAvatar = "/assets/analyst/default_analyst.png"
-        const avatarUrl = a.picture
-          ? `${API_BASE_URL}/uploads/${a.picture}`
-          : defaultAvatar
+        const avatarUrl = a.picture ? `${API_BASE_URL}/uploads/${a.picture}` : defaultAvatar
 
         return `
-          <div class="follow-item" data-js-clickable data-id="${a.id}" style="cursor: pointer; display: flex; align-items: center; gap: 15px; margin-bottom: 8px;">
-               <img src="${avatarUrl}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
+          <div class="follow-item" data-js-clickable data-id="${a.id}">
+               <img src="${avatarUrl}" width="30" height="30" alt="${a.name}"onerror="this.src='${defaultAvatar}'" />
                <p><strong>${a.name}</strong> - ${a.company ?? "Unknown"}</p>
           </div>
         `

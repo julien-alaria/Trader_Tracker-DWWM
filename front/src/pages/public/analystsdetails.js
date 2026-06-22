@@ -77,10 +77,10 @@ export async function initAnalystDetail() {
                 const recoImage = getRecommendationIcon(rec.status)
 
                 return `
-                    <div class="recommendation" data-js-clickable data-ticker="${rec.ticker}" data-type="asset" style="cursor: pointer; margin-bottom: 12px;">
-                        <img src="${recoImage}" style="width: 50px; height: 50px; object-fit: contain;" alt="reco-image" />
+                    <div class="recommendation" data-js-clickable data-ticker="${rec.ticker}" data-type="asset">
+                        <img src="${recoImage}" width="50" height="50" alt="reco-image" />
                         <strong>${rec.status}</strong>
-                        <img src="${imageUrl}" style="width: 50px; height: 50px; object-fit: contain;" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
+                        <img src="${imageUrl}" class="reco-analyst-pic" width="50" height="50" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
                         <p>${rec.name}</p>
                         <p>${rec.comment}</p>
                         <p><small>${formatDate(rec.created_at)}</small></p>
@@ -160,7 +160,7 @@ function bindFollowButton(analystId) {
             }
         } catch (err) {
             console.error("Follow/Unfollow error:", err)
-            alert("Impossible de mettre à jour le suivi.")
+            alert("Unable to update folow feature")
         } finally {
             btn.disabled = false
         }

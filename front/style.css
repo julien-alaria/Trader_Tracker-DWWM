@@ -1,8 +1,11 @@
 @import "./src/styles/home.css";
 @import "./src/styles/cards.css";
-@import "./src/styles/details.css";
+@import "./src//styles//assetsdetails.css";
 @import "./src/styles/admin.css";
 @import "./src/styles/list.css";
+@import "./src/styles/analyst.css";
+@import "./src/styles/analystdetails.css";
+@import "./src/styles/user.css";
 
 * {
   box-sizing: border-box;
@@ -84,6 +87,18 @@ a {
     text-decoration: none;
     font-size: 1rem;
     color: white;
+}
+
+img {
+    height: auto;
+    max-width: 100%; /* Empêche l'image de déborder */
+    box-sizing: border-box;
+    display: block;  /* Évite les espaces vides sous les images */
+}
+
+/* Force les images spécifiques à respecter leur ratio */
+img[width], img[height] {
+    height: auto; 
 }
 
 .admin-mode footer#footer-container {

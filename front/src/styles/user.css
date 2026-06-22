@@ -1,0 +1,31 @@
+/* --- COMPOSANTS LISTES UTILISATEUR --- */
+.watchlist-item, 
+.follow-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+/* Cible les images de ces listes spécifiquement */
+.watchlist-item img, 
+.follow-item img {
+    width: 40px; 
+    height: 40px;
+    object-fit: contain; /* ou cover pour les avatars */
+    flex-shrink: 0;
+}
+
+.follow-item img {
+    border-radius: 50%; /* Arrondi pour les analystes */
+    object-fit: cover;
+}
+
+/* Image de profil utilisateur en haut de page */
+#user_picture {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}

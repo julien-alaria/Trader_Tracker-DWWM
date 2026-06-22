@@ -5,7 +5,7 @@ body {
     margin: 0;
 }
 
-/* Force le conteneur de tes vues (home, list, etc.) à prendre tout l'espace disponible */
+/* Forces view containers (home, list, etc.) to take up all available space for performances*/
 #app, main, #main-content {
     display: flex;
     flex-direction: column;
@@ -13,7 +13,7 @@ body {
     width: 100%;
 }
 
-/* Bloque le footer au sol, même si la liste est vide (en cours de chargement) */
+/* Locks the footer to the ground, even if the list is empty (loading) for performance*/
 #footer-container {
     margin-top: auto;
     flex-shrink: 0;
@@ -125,17 +125,9 @@ body {
   font-size: 3rem;
 }
 
-#home-middle {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    background-color: navy;
-    color: white;
-    padding: 10px;
-    min-height: 50vh;
-    box-sizing: border-box;
-    gap: 30px;
+#home-top, #home-middle {
+    display: flex; flex-direction: column; align-items: center; justify-content: space-around;
+    background-color: navy; color: white; padding: 20px; min-height: 30vh;
 }
 
 #home-middle-text {
@@ -159,13 +151,11 @@ body {
 }
 
 .carousel {
-    width: 95%;
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 20px 10px;
-    overflow: hidden; 
-    position: relative;
-    min-height: 250px;
+    width: 100%; 
+    padding: 0 20px; 
+    box-sizing: border-box;
+    min-height: 350px; 
+    overflow: hidden;
 }
 
 /* most important for moving */
