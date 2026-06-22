@@ -223,7 +223,7 @@ async function loadPendingAnalysts() {
 
     } catch (err) {
         console.error("LOAD PENDING ANALYSTS ERROR:", err)
-        container.innerHTML = `<p style="color: red;">Error loading requests.</p>`;
+        container.innerHTML = `<p style="color: red;">Error loading requests.</p>`
     }
 }
 
@@ -243,7 +243,7 @@ function bindRecommendationEvents() {
         } catch (err) {
             console.error("DELETE ERROR:", err)
         }
-    });
+    })
 
     container.addEventListener("submit", async (e) => {
         if (!e.target.classList.contains("edit-form")) return
@@ -261,7 +261,7 @@ function bindRecommendationEvents() {
         } catch (err) {
             console.error("UPDATE ERROR:", err)
         }
-    });
+    })
 }
 
 // =====================

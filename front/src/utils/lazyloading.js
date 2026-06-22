@@ -96,7 +96,7 @@ export function enableCarouselWindow({ selector = ".carousel", getData, cardComp
             currentX -= CARD_WIDTH
             targetX -= CARD_WIDTH
             
-            // OPTIMISATION : On décale l'observation pour éviter le forced reflow synchrone
+            // OPTIMIZATION: shift the observation to avoid synchronous forced reflow
             const chartEl = firstCard.querySelector(".chart")
             if (chartEl && !chartEl.dataset.initialized) {
                 setTimeout(() => chartObserver.observe(chartEl), 0)
@@ -109,7 +109,7 @@ export function enableCarouselWindow({ selector = ".carousel", getData, cardComp
             currentX += CARD_WIDTH
             targetX += CARD_WIDTH
             
-            // OPTIMISATION : Idem ici
+            // OPTIMISATION : Idem here
             const chartEl = lastCard.querySelector(".chart")
             if (chartEl && !chartEl.dataset.initialized) {
                 setTimeout(() => chartObserver.observe(chartEl), 0)

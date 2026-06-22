@@ -123,7 +123,7 @@ async function importFile(type, file) {
     
     let name = item.name ?? item.label
     if (!name && type === "forex" && ticker) {
-      // Nettoie le "C:" si présent pour faire un nom plus propre (ex: "EURUSD Forex")
+      // Clean up the "C:" if present to create a cleaner name (e.g., "EURUSD Forex")
       const cleanTicker = ticker.replace("C:", "")
       name = `${cleanTicker} Forex`
     }
@@ -133,19 +133,19 @@ async function importFile(type, file) {
       continue
     }
 
-    // 1. VÉRIFICATION : On regarde si l'asset existe déjà via son ticker unique
+    // 1. VERIFICATION: check if the asset already exists via its unique ticker
     const [existing] = await db.execute(
       "SELECT id FROM assets WHERE ticker = ?",
       [ticker]
     )
 
     if (existing.length > 0) {
-      // L'asset existe déjà : on n'y touche ABSOLUMENT PAS (l'id reste intact)
+      // The asset already exists: absolutely do NOT touch it (the ID remains intact)
       skippedCount++
       continue
     }
 
-    // 2. INSERTION : Uniquement s'il est vraiment nouveau
+    // 2. INSERTION: Only if it is truly new
     await db.execute(
       `
       INSERT INTO assets (ticker, name, asset_type_id)
@@ -170,7 +170,7 @@ async function run() {
   } catch (err) {
     console.error("[ERR] ERROR:", err.message)
   } finally {
-    // Optionnel : ferme la connexion si ton script ne s'arrête pas tout seul
+    // Optional: close the connection if your script doesn't stop automatically
     // await db.end() 
   }
 }

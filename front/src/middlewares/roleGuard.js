@@ -7,7 +7,7 @@ export function decodeToken(token) {
     
     return JSON.parse(atob(token.split(".")[1]))
   } catch (e) {
-    console.error("Token invalide :", e)
+    console.error("Invalid token :", e)
     return null
   }
 }

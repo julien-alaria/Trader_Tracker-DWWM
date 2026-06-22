@@ -27,8 +27,8 @@ body {
 main {
     margin: 0;
     padding: 0;
-    flex: 1 0 auto;       /* Occupe tout l'espace restant dans le body */
-    display: flex;        /* Devient un conteneur Flexbox pour son enfant (#root) */
+    flex: 1 0 auto;       /* Occupies all the remaining space in the body */
+    display: flex;       
     flex-direction: column;
     width: 100%;
 }

@@ -94,36 +94,32 @@ export function loadTradingViewChart(ticker, historyData = [], isMini = false) {
   chart.render()
 }
 
-/**
- * Génère un mini graphique Sparkline ultra-stylisé (Style TradingView / Premium)
- * avec dégradé de couleur et adaptation dynamique (Vert/Rouge selon la tendance)
- */
+//Mini Sparline Chart for cards
 export function loadMiniChart(ticker, historyData = []) {
   const container = document.getElementById(`tv-${ticker}`)
   if (!container || !historyData.length) return
 
-  // 1. Isoler les 15 derniers points
+  // Isolate the last 15 points
   const limitedHistory = historyData.slice(-15)
 
-  // 2. Normalisation des données
+  // Data Normalization
   const cleanData = limitedHistory.map((point) => {
     if (point === null || point === undefined) return 0
     if (typeof point === 'number') return point
     return point.c ?? point.close ?? point.price ?? point.value ?? point.y ?? 0
   })
 
-  // 3. Calcul de la tendance (Est-ce que le dernier prix est supérieur au premier ?)
+  // Calculating the trend (Is the latest price higher than the first?)
   const firstPrice = cleanData[0] || 0
   const lastPrice = cleanData[cleanData.length - 1] || 0
   const isPositive = lastPrice >= firstPrice
 
-  // Couleur dynamique : Vert TradingView (#089981) ou Rouge Crash (#f23645)
   const chartColor = isPositive ? "#089981" : "#f23645"
 
-  // 4. Configuration graphique avancée (Area avec dégradé néon)
+  // graphics configuration (Area with neon gradient)
   const options = {
     chart: {
-      type: "area", // Changement en 'area' pour avoir le remplissage sous la courbe
+      type: "area", 
       height: 80,
       sparkline: {
         enabled: true
@@ -142,19 +138,19 @@ export function loadMiniChart(ticker, historyData = []) {
         left: 0,
         blur: 4,
         color: chartColor,
-        opacity: 0.15 // Effet de lueur diffuse sous la ligne
+        opacity: 0.15
       }
     },
     stroke: {
-      curve: "smooth", // Courbe fluide très esthétique
-      width: 2.5       // Ligne légèrement plus épaisse pour ressortir du fond
+      curve: "smooth",
+      width: 2.5      
     },
     fill: {
       type: "gradient",
       gradient: {
         shadeIntensity: 1,
-        opacityFrom: 0.45, // Plus opaque en haut
-        opacityTo: 0.0,   // Totalement invisible en bas
+        opacityFrom: 0.45,
+        opacityTo: 0.0,
         stops: [0, 90, 100]
       }
     },
@@ -162,7 +158,7 @@ export function loadMiniChart(ticker, historyData = []) {
       name: ticker,
       data: cleanData
     }],
-    colors: [chartColor], // Applique le vert ou le rouge calculé
+    colors: [chartColor], 
     tooltip: {
       enabled: false
     }

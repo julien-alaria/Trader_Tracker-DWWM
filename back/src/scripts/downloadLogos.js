@@ -1,102 +1,104 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import fs from "fs"
+import path from "path"
+import { fileURLToPath } from "url"
 
-// Configuration des chemins (on s'aligne par rapport à back/src/scripts)
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Configuration of paths (align with back/src/scripts)
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
-// 1. Chemin vers ton fichier JSON de données dans le Back
-const jsonPath = path.resolve(__dirname, "../data/nasdaq.json");
+// Path to JSON data file in the Back
+const jsonPath = path.resolve(__dirname, "../data/nasdaq.json")
 
-// 2. Chemin vers le dossier de destination dans le Front
-const outputDir = path.resolve(__dirname, "../../../front/public/assets/logos");
+// Path to the destination folder in the Front
+const outputDir = path.resolve(__dirname, "../../../front/public/assets/logos")
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 async function downloadLogos() {
     try {
-        // Sécurité : On vérifie que le dossier public du Front existe, sinon on le crée
+        // Security: check the Front's public folder exists; if not, create it.
         if (!fs.existsSync(outputDir)) {
-            fs.mkdirSync(outputDir, { recursive: true });
+            fs.mkdirSync(outputDir, { recursive: true })
         }
 
-        // Lecture du fichier JSON
+        // Reading the JSON file
         if (!fs.existsSync(jsonPath)) {
-            throw new Error(`Le fichier JSON est introuvable à l'emplacement : ${jsonPath}`);
+            throw new Error(`The JSON file could not be found at the following location: ${jsonPath}`)
         }
-        const rawData = fs.readFileSync(jsonPath, "utf-8");
-        const assets = JSON.parse(rawData);
+        const rawData = fs.readFileSync(jsonPath, "utf-8")
+        const assets = JSON.parse(rawData)
 
-        console.log(`[START] Lecture du JSON. ${assets.length} actifs à analyser...`);
+        console.log(`[START] Reading the JSON. ${assets.length} assets to analyze...`)
 
-        let downloaded = 0;
-        let skipped = 0;
+        let downloaded = 0
+        let skipped = 0
 
         for (const asset of assets) {
-            // Sécurité au cas où une ligne du JSON n'aurait pas de ticker
+            // Security in case a line of the JSON doesn't have a ticker
             if (!asset.ticker) continue;
 
-            const filename = `${asset.ticker.toLowerCase()}.svg`;
-            const filePath = path.join(outputDir, filename);
+            const filename = `${asset.ticker.toLowerCase()}.svg`
+            const filePath = path.join(outputDir, filename)
 
-            // Si l'image existe déjà dans le Front, on l'ignore (gain de temps + pas de spam API)
+            // If the image already exists in the front end, ignore it (saves time + avoids API spam)
             if (fs.existsSync(filePath)) {
-                skipped++;
-                continue;
+                skipped++
+                continue
             }
 
-            // On vérifie que l'actif possède bien une URL d'image de branding
+            // We check that the asset has a branded image URL
             if (!asset.image) {
-                console.log(`[-] Aucun lien image pour ${asset.ticker}, ignoré.`);
-                continue;
+                console.log(`[-] No image link for ${asset.ticker}, ignored.`)
+                continue
             }
 
             try {
-                console.log(`Téléchargement du logo pour : ${asset.ticker}...`);
+                console.log(`Download the logo for: ${asset.ticker}...`)
 
-                // On injecte ta clé API Polygon à la fin de l'URL existante de ton JSON
-                const urlWithKey = `${asset.image}?apiKey=REDACTED_API_KEY`;
+                // We inject your Polygon API key at the end of your existing JSON URL
+                const urlWithKey = `${asset.image}?apiKey=REDACTED_API_KEY`
 
-                const res = await fetch(urlWithKey);
+                const res = await fetch(urlWithKey)
 
                 if (res.status === 429) {
-                    console.warn(" [429] Limite de l'API atteinte ! Pause de 30 secondes...");
-                    await sleep(30000);
-                    // On réduit l'index pour retenter cet actif au prochain tour de boucle
-                    continue;
+                    console.warn(" // On[429] API limit reached. 30-second pause... inject your Polygon API key at the end of your existing JSON URL")
+                    await sleep(30000)
+                    // reduce the index to try this asset again on the next loop iteration
+                    continue
                 }
 
                 if (!res.ok) {
-                    console.warn(` [SKIP] Impossible de récupérer le logo de ${asset.ticker} (HTTP ${res.status})`);
-                    await sleep(2000);
-                    continue;
+                    console.warn(` [SKIP] Impossible de récupérer le logo de ${asset.ticker} (HTTP ${res.status})`)
+                    await sleep(2000)
+                    continue
                 }
 
-                // Récupération et écriture du fichier physique dans le Front
-                const arrayBuffer = await res.arrayBuffer();
-                const buffer = Buffer.from(arrayBuffer);
+                // Retrieving and writing the physical file to the Front End
+                const arrayBuffer = await res.arrayBuffer()
+                const buffer = Buffer.from(arrayBuffer)
 
-                fs.writeFileSync(filePath, buffer);
-                console.log(` [OK] Enregistré dans le Front : ${filename}`);
-                downloaded++;
+                fs.writeFileSync(filePath, buffer)
+                console.log(` [OK] Saved in the Front : 
+                ${filename}`)
+                downloaded++
 
-                // RESPECT DU RATE LIMIT (Important : max 5 requêtes par minute !)
-                // On attend ~13 secondes avant de passer au prochain ticker
-                await sleep(13000);
+                // RATE LIMIT RESPECTED (Important: max 5 requests per minute)
+                // waiting ~13 seconds before moving to the next ticker
+                await sleep(13000)
 
             } catch (err) {
-                console.error(` [ERR] Erreur réseau pour ${asset.ticker}:`, err.message);
-                await sleep(2000);
+                console.error(` [ERR] Network error for ${asset.ticker}:`, err.message)
+                await sleep(2000)
             }
         }
 
-        console.log(`\n[DONE] Fin du téléchargement des logos !`);
-        console.log(`Nouveaux fichiers sauvegardés dans le Front : ${downloaded}`);
-        console.log(`Fichiers déjà présents (ignorés) : ${skipped}`);
+        console.log(`\n[DONE] Logo upload complete!`);
+        console.log(`New files saved in the Front : 
+        ${downloaded}`);
+        console.log(`Files already present (ignored): ${skipped}`);
 
     } catch (globalErr) {
-        console.error("ERREUR CRITIQUE DU SCRIPT :", globalErr.message);
+        console.error("CRITICAL SCRIPT ERROR:", globalErr.message);
     }
 }
 

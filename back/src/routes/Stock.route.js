@@ -9,7 +9,7 @@ stockRouter.get("/stocks", StockController.getAllStocks)
 stockRouter.get("/forex", StockController.getForex)
 stockRouter.get("/commodities", StockController.getCommodities)
 
-// Light data for Home.js
+// Light data for home.js
 stockRouter.get("/home/stocks", StockController.getHomeStocks)
 stockRouter.get("/home/forex", StockController.getHomeForex)
 stockRouter.get("/home/commodities", StockController.getHomeCommodities)

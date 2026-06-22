@@ -6,19 +6,19 @@ import dotenv from 'dotenv'
 dotenv.config()
 const rest = restClient(process.env.POLY_API_KEY)
 
-// TOP 300 - NASDAQ & SOCIÉTÉS TECHNOLOGIQUES MAJEURES
+// TOP 300 - NASDAQ & MAJOR TECHNOLOGY COMPANIES
 const TICKERS = [
-  // --- LES GÉANTS ET BIG TECH (Mégacaps) ---
+  // --- GIANTS AND BIG TECH (Megacaps) ---
   "MSFT", "AAPL", "NVDA", "AMZN", "GOOGL", "META", "TSLA", "AVGO", "ASML", "AMD",
   "NFLX", "ADBE", "CSCO", "QCOM", "TMUS", "INTU", "AMAT", "ISRG", "TXN", "MU",
   
-  // --- LOGICIELS, CLOUD & SAAS ---
+  // --- SOFTWARE, CLOUD & SAAS ---
   "ORACLE", "CRM", "NOW", "SAP", "INTC", "IBM", "PANW", "SNOW", "SHOP", "TEAM",
   "WDAY", "PLTR", "DDOG", "MDB", "NET", "CRWD", "ZS", "OKTA", "DOCU", "ZM",
   "HUBS", "SPLK", "NOW", "ADSK", "ANSS", "PTC", "CDNS", "SNPS", "DATA", "TWLO",
   "ZEN", "PAYC", "PCTY", "U", "MSTR", "BILL", "PATH", "DT", "DYAT", "APP",
 
-  // --- MATÉRIEL, SEMI-CONDUCTEURS & INFRASTRUCTURE ---
+  // --- HARDWARE, SEMICONDUCTORS & INFRASTRUCTURE ---
   "ARM", "DELL", "HPQ", "HPE", "LRCX", "KLAC", "ADI", "NXPI", "MRVL", "MCHP",
   "ON", "MPWR", "SMCI", "STV", "VRT", "WDC", "STX", "ANET", "JNPR", "CIEN",
   "FSLR", "ENPH", "SEDG", "COHR", "IPG", "LITE", "VIAV", "CCCS", "TER", "TOELY",
@@ -28,48 +28,48 @@ const TICKERS = [
   "UBER", "LYFT", "GRUB", "DASH", "PINS", "SNAP", "TTD", "ROKU", "MTCH", "IAC",
   "EXPE", "BKNG", "TRIP", "ABNB", "CHWY", "ETS", "CVNA", "W", "RVMD", "UPST",
 
-  // --- JEUX VIDÉO, DIVERTISSEMENT & MÉDIAS ---
+  // --- VIDEO GAMES, ENTERTAINMENT and MEDIA ---
   "SONY", "NTDOY", "EA", "TTWO", "ATVI", "SEGA", "UBSFY", "NCMSF", "CCOEY", "WCG",
   "SPOT", "LYV", "RBLX", "DIS", "PARA", "WBD", "FOXA", "NFLX", "IQ", "HUYA",
 
-  // --- CYBERSÉCURITÉ & RÉSEAU ---
+  // --- CYBERSECURITY & NETWORK ---
   "FTNT", "CHKP", "QLYS", "TENB", "RAPID", "VRNS", "SAIL", "PING", "FORG", "SCWX",
   "BB", "FFIV", "NET", "AKAM", "FSLY", "LLNW", "ALTR", "LUNA", "EXTR", "NETGEAR",
 
-  // --- BIOTECH, SANTÉ CONNECTÉE & MEDTECH ---
+  // --- BIOTECH, CONNECTED HEALTH & MEDTECH ---
   "AMGN", "REGN", "VRTX", "GILD", "BIIB", "ILMN", "ALGN", "DXCM", "PODD", "TNDM",
   "TDOC", "LVGO", "OMCL", "HQY", "CERE", "SGEN", "MRNA", "BNTX", "NVAX", "AZN",
 
-  // --- AUTOMOBILE CONNECTÉE, IA & ROBOTIQUE ---
+  // --- CONNECTED CARS, AI & ROBOTICS ---
   "RIVN", "LCID", "NIO", "XPEV", "LI", "FSR", "NKLA", "QS", "INVZ", "LAZR",
   "OUST", "VLDR", "MVIS", "JOBY", "ACHR", "BLDE", "AAV", "BOTZ", "IRBT", "AI",
 
-  // --- TÉLÉCOMS, SATELLITE & IOT ---
+  // --- TELECOMS, SATELLITE & IOT ---
   "VZ", "T", "S", "CHTR", "CMCSA", "LBRDK", "FYBR", "IRDM", "SATL", "ORBK",
   "GOGO", "VSAT", "LRLCY", "SIMO", "GLW", "COMM", "HLIT", "SATS", "DISH", "ASTS",
 
-  // --- INDUSTRIE TECH, AUTOMATISATION & DRONES ---
+  // --- INDUSTRY TECH, AUTOMATION & DRONES ---
   "HON", "GE", "ROK", "AME", "KEYS", "TER", "NATI", "METT", "A", "FTV",
   "AVT", "ARROW", "TDY", "HEI", "BWXT", "EH", "UAVS", "AMRC", "BLDP", "FCEL",
 
-  // --- COMPOSANTS ET MATÉRIAUX AVANCÉS ---
+  // --- ADVANCED COMPONENTS AND MATERIALS ----
   "CREE", "WOLF", "IIVI", "ROG", "CABO", "CNSL", "BAND", "SHEN", "LICT", "CNSX",
   "ATNI", "SPOK", "ECOV", "ALGM", "POWI", "PI", "INDI", "NVTS", "CEVA", "PXLW",
 
-  // --- AUTRES COMPAGNIES MAJEURES DU NASDAQ ---
+  // --- OTHER MAJOR NASDAQ COMPANIES ---
   "COST", "PEP", "CSX", "PDCO", "FAST", "PAYX", "CTAS", "IDXX", "KDP", "EXC",
   "MELI", "MAR", "ORLY", "CTSH", "MNST", "MDLZ", "KLAC", "SNPS", "CDNS", "ASML",
   "AAL", "FAST", "VRSK", "SIRI", "DLTR", "EBAY", "ANSS", "ALGN", "ALXN", "VRSN",
 
-  // --- TECH SECONDAIRES, DATA & ANALYTICS ---
+  // --- SECONDARY TECH, DATA & ANALYTICS ---
   "NEWR", "SUMO", "ESTC", "FORR", "GART", "SNDR", "RAMP", "MAXR", "BCOV", "QMCO",
   "TCX", "DPRO", "MVIS", "KE", "SCPL", "MKTX", "SEI", "ENV", "SSNC", "TYL",
 
-  // --- SERVICES DE CONSULTING & INTÉGRATION ---
+  // --- CONSULTING & INTEGRATION SERVICES ---
   "ACN", "INFY", "WIT", "CTSH", "EPAM", "GLOB", "GIB", "CACI", "LDOS", "SAIC",
   "EXLS", "WNS", "TTEC", "CNXC", "TASK", "SCSC", "EPLUS", "PCYO", "HCKT", "BBAI",
 
-  // --- DISTRIBUTEURS ET COMPOSANTS ---
+  // --- DISTRIBUTORS AND COMPONENTS --
   "TD SYNNEX", "SNX", "IM", "GTT", "EGOV", "PRFT", "DAVA", "GRID", "MTEK", "KVHI",
   "AEY", "KRNT", "ITI", "RELL", "BELFA", "SGA", "IESC", "MTRX", "TAYD", "POWL"
 ]

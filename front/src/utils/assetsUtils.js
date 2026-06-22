@@ -1,8 +1,13 @@
 import http from "../config/instanceHttp.js"
 import { formatMarketCap } from "./format.js"
 
-
+// ==========================================
 // Functions for external API
+// ==========================================
+
+// ==========================================
+// FUNCTIONS WITH FULL DATA FOR CHARTS ON assetDetails.js
+// ==========================================
 async function getStock() {
   try {
     const data = await http.get("/assets/stocks")
@@ -64,10 +69,12 @@ async function getCommodities() {
   }
 }
 
-// Functions for Light Datas in External API
+// ==========================================
+// FUNCTIONS WITH LIGHT DATA FOR CHARTS ON home.js
+// ==========================================
 async function getStockLight() {
   try {
-    const data = await http.get("/assets/home/stocks") // Cible la route light
+    const data = await http.get("/assets/home/stocks") 
 
     return data.message.map((stock) => ({
       ticker: stock.ticker,
@@ -77,7 +84,7 @@ async function getStockLight() {
       price: stock.price,
       high: stock.high,
       low: stock.low,
-      history: stock.history // Contient les 15 points
+      history: stock.history // Contains 15 points for light chart
     }))
   } catch (error) {
     console.error(error.message)
@@ -91,7 +98,7 @@ async function getForexLight() {
   }
 
   try {
-    const data = await http.get("/assets/home/forex") // Cible la route light
+    const data = await http.get("/assets/home/forex")
 
     return data.message.map((forex) => ({
       ticker: forex.ticker,
@@ -99,7 +106,7 @@ async function getForexLight() {
       high: forex.high,
       low: forex.low,
       close: forex.close,
-      history: forex.history // Contient les 15 points
+      history: forex.history
     }))
   } catch (error) {
     console.error(error.message)
@@ -109,7 +116,7 @@ async function getForexLight() {
 
 async function getCommoditiesLight() {
   try {
-    const data = await http.get("/assets/home/commodities") // Cible la route light
+    const data = await http.get("/assets/home/commodities")
 
     return data.message.map((commodity) => ({
       ticker: commodity.ticker,
@@ -118,7 +125,7 @@ async function getCommoditiesLight() {
       high: commodity.high,
       low: commodity.low,
       close: commodity.close,
-      history: commodity.history // Contient les 15 points
+      history: commodity.history
     }))
   } catch (error) {
     console.error(error.message)
@@ -126,7 +133,9 @@ async function getCommoditiesLight() {
   }
 }
 
-// For list.js
+// ==========================================
+// FUNCTIONS WITH SUPER LIGHT DATA FOR LIST ON list.js
+// ==========================================
 async function getBriefStocks() {
   try {
     const data = await http.get("/assets/brief/stocks");

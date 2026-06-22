@@ -280,17 +280,14 @@ async function getAnalystById(id) {
 
     const sql = "SELECT id, name, company, bio, picture FROM users WHERE role = 'analyst' AND id = ?"
 
-    // db.execute retourne un tableau [rows, fields]
     const [rows] = await db.execute(sql, [id])
 
-    // Retourne le premier élément (l'analyste) ou null si aucun trouvé
     return rows.length > 0 ? rows[0] : null
 }
 
 async function getPendingAnalysts() {
     const db = getConnection()
 
-    // On ne prend que les analystes ET ceux dont le statut est à 0
     const [rows] = await db.query(
         "SELECT id, name, email, role, analyst_type_id, analyst_verified, company, bio, picture FROM users WHERE role = 'analyst' AND analyst_verified = 0"
     )
@@ -386,7 +383,7 @@ async function isFollowing(user_id, followUser_id) {
     const sql = "SELECT 1 FROM user_follows WHERE follower_id = ? AND followed_id = ? LIMIT 1"
     const [rows] = await db.execute(sql, [user_id, followUser_id])
 
-    // Si rows.length > 0, la relation existe, donc true, sinon false
+    // If rows.length > 0, the relationship exists, therefore true, otherwise false
     return rows.length > 0
 }
 
