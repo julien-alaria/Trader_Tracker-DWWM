@@ -47,6 +47,11 @@ main {
     box-sizing: border-box;
 }
 
+/* Dans ton CSS global */
+.admin-content, .card-chart-container {
+    min-height: 350px; /* Ou la hauteur que tu utilises pour tes charts */
+}
+
 footer {
     margin-top: auto;    
     min-height: 50vh;

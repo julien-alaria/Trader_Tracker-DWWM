@@ -7,6 +7,7 @@ bindLogoutEvent() //Single initialization for all logout events
 
 export function renderApp(content, layoutType = "default") {
     const root = document.getElementById("root")
+    root.style.opacity = "0"
     const header = document.getElementById("header-container")
     const footerCont = document.getElementById("footer-container")
     const isAdminPage = (layoutType === "admin")

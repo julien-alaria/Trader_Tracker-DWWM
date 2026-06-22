@@ -17,8 +17,10 @@ import notfound from "./src/pages/public/notfound.js"
 import { renderApp } from "./src/utils/layoutManager.js"
 
 
+async function router() {
+  // return to the top of page
+  window.scrollTo(0, 0)
 
-function router() {
   const hash = (window.location.hash.slice(1) || "/").split("?")[0]
 
   let content = ""
@@ -91,8 +93,15 @@ function router() {
   renderApp(content, layoutType)
 
   if (init) {
-    init()
+    try {
+      // synchronous waiting for smooth rendering
+      await init()
+    } catch (err) {
+      console.error("Error during initialization :", err);
+    }
   }
+  // from renderApp
+  document.getElementById("root").style.opacity = "1"
 }
 
 window.addEventListener("hashchange", router)
