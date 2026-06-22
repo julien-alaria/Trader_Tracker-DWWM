@@ -25,16 +25,32 @@ body {
 }
 
 main {
-    padding: 0;
     margin: 0;
-    flex: 1;
     padding: 0;
-    display: block;
+    flex: 1 0 auto;       /* Occupe tout l'espace restant dans le body */
+    display: flex;        /* Devient un conteneur Flexbox pour son enfant (#root) */
+    flex-direction: column;
+    width: 100%;
 }
 
-#root{
-    padding: 0;
+#root {
     margin: 0;
+    padding: 0;
+    flex: 1 0 auto;      
+    display: flex;        
+    flex-direction: column;
+    width: 100%;
+    min-height: 70vh;    
+    box-sizing: border-box;
+}
+
+footer {
+    margin-top: auto;    
+    min-height: 50vh;
+    background-color: navy;
+    color: white;
+    border: 2px solid black;
+    flex-shrink: 0;      
 }
 
 .main-navbar {
@@ -68,13 +84,6 @@ a {
     text-decoration: none;
     font-size: 1rem;
     color: white;
-}
-
-footer {
-    min-height: 50vh;
-    background-color: navy;
-    color: white;
-    border: 2px solid black;
 }
 
 .admin-mode footer#footer-container {

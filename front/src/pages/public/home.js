@@ -1,5 +1,5 @@
 import http from "../../config/instanceHttp.js"
-import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
+import { getStock, getForex, getCommodities, getStockLight, getForexLight, getCommoditiesLight } from "../../utils/assetsUtils.js"
 import stockCard from "../../components/cards/stockCards.js"
 import forexCard from "../../components/cards/forexCards.js"
 import commodityCard from "../../components/cards/commodityCards.js"
@@ -64,9 +64,9 @@ export async function initHome() {
         // CENTRAL DATA RECOVERY
         // =====================
         const [stocks, forex, commodities] = await Promise.all([
-            getStock(),
-            getForex(),
-            getCommodities(),
+            getStockLight(),
+            getForexLight(),
+            getCommoditiesLight(),
         ])
         const allData = [...stocks, ...forex, ...commodities]
 

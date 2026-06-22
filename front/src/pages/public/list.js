@@ -1,4 +1,4 @@
-import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
+import { getBriefStocks, getBriefForex, getBriefCommodities } from "../../utils/assetsUtils.js"
 import { formatAssetImage } from "../../utils/imageHelper.js"
 import { createLocalPaginationList } from "../../components/pagination/paginationComponent.js"
 
@@ -26,7 +26,7 @@ export async function initList() {
         // DATA RECOVERY
         // =====================
         const [stocks, forex, commodities] = await Promise.all([
-            getStock(), getForex(), getCommodities()
+            getBriefStocks(), getBriefForex(), getBriefCommodities()
         ])
         
         const allAssets = [...stocks, ...forex, ...commodities];

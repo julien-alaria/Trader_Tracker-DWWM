@@ -1,3 +1,24 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Force le conteneur de tes vues (home, list, etc.) à prendre tout l'espace disponible */
+#app, main, #main-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto; 
+    width: 100%;
+}
+
+/* Bloque le footer au sol, même si la liste est vide (en cours de chargement) */
+#footer-container {
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
 #home-top{
     display: flex;
     flex-direction: column;

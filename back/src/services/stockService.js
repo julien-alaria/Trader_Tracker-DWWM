@@ -148,7 +148,14 @@ async function aggregateMetals() {
   return results
 }
 
+// ==========================================
 // functions for LOCAL JSON
+// ==========================================
+
+// ==========================================
+// ANCIENNES FONCTIONS LOURDES D'ORIGINE
+// ==========================================
+
 async function getAAPLStockJson(req, res) {
 
   const stocks = await readJsonFile('nasdaq.json')
@@ -206,6 +213,71 @@ async function aggregateMetalsJson() {
   }))
 }
 
+// ==========================================
+// FONCTIONS LIGHT POUR HOME.JS (Sans reduceHistory)
+// ==========================================
+
+async function getMultipleAggregatesJsonLight() {
+    const stocks = await readJsonFile('nasdaq.json')
+   
+    return stocks.map((stock) => ({
+        type: "nasdaq",
+        ticker: stock.ticker,
+        name: stock.name,
+        marketCap: stock.marketCap,
+        price: stock.price ?? null,
+        high: stock.high ?? null,
+        low: stock.low ?? null,
+        image: stock.image || "/assets/nasdaq_logo.png",
+        history: Array.isArray(stock.history) ? stock.history.slice(-15) : []
+    }))
+}
+
+async function aggregateForexJsonLight() {
+    const forex = await readJsonFile('forex.json')
+    return forex.map((agg) => ({
+        type: "forex",
+        ticker: agg.ticker,
+        high: agg.high ?? null,
+        low: agg.low ?? null,
+        close: agg.close ?? null,
+        history: Array.isArray(agg.history) ? agg.history.slice(-15) : []
+    }))
+}
+
+async function aggregateMetalsJsonLight() {
+    const commodities = await readJsonFile('commodities.json')
+    return commodities.map((agg) => ({
+        type: "commodity",
+        ticker: agg.ticker,
+        name: agg.name,
+        price: agg.price ?? null,
+        high: agg.high ?? null,
+        low: agg.low ?? null,
+        close: agg.close ?? null,
+        history: Array.isArray(agg.history) ? agg.history.slice(-15) : []
+    }))
+}
+
+// ==========================================
+// FONCTIONS BRIEF POUR LIST.JS
+// ==========================================
+
+async function getBriefStocksJson() {
+    const stocks = await readJsonFile('nasdaq.json');
+    return stocks.map(s => ({ type: "nasdaq", ticker: s.ticker, name: s.name }))
+}
+
+async function getBriefForexJson() {
+    const forex = await readJsonFile('forex.json');
+    return forex.map(f => ({ type: "forex", ticker: f.ticker, name: f.ticker.replace("C:", "").replace("EUR", "EUR / ") }))
+}
+
+async function getBriefCommoditiesJson() {
+    const commodities = await readJsonFile('commodities.json');
+    return commodities.map(c => ({ type: "commodity", ticker: c.ticker, name: c.name }))
+}
+
 export default { 
   getAAPLStock,  
   getMultipleAggregates, 
@@ -214,5 +286,11 @@ export default {
   getAAPLStockJson,  
   getMultipleAggregatesJson, 
   aggregateForexJson, 
-  aggregateMetalsJson 
+  aggregateMetalsJson,
+  getMultipleAggregatesJsonLight,
+  aggregateForexJsonLight,
+  aggregateMetalsJsonLight,
+  getBriefStocksJson,
+  getBriefForexJson,
+  getBriefCommoditiesJson
 }

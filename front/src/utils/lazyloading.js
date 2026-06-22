@@ -1,4 +1,4 @@
-import { loadTradingViewChart } from "./tradingChart.js"
+import { loadMiniChart } from "./tradingChart.js"
 
 export function enableCarouselWindow({ selector = ".carousel", getData, cardComponent }) {
  
@@ -16,7 +16,7 @@ export function enableCarouselWindow({ selector = ".carousel", getData, cardComp
             try {
                 const historyData = JSON.parse(historyJson)
                 
-                loadTradingViewChart(ticker, historyData, true)
+                loadMiniChart(ticker, historyData)
                 
                 el.dataset.initialized = "true"
                 observer.unobserve(el)
@@ -95,9 +95,12 @@ export function enableCarouselWindow({ selector = ".carousel", getData, cardComp
             track.appendChild(firstCard)
             currentX -= CARD_WIDTH
             targetX -= CARD_WIDTH
-            // CRUCIAL : Re-observation on hidden moved card
+            
+            // OPTIMISATION : On décale l'observation pour éviter le forced reflow synchrone
             const chartEl = firstCard.querySelector(".chart")
-            if (chartEl && !chartEl.dataset.initialized) chartObserver.observe(chartEl)
+            if (chartEl && !chartEl.dataset.initialized) {
+                setTimeout(() => chartObserver.observe(chartEl), 0)
+            }
           }
         } else {
           const lastCard = track.lastElementChild
@@ -105,9 +108,12 @@ export function enableCarouselWindow({ selector = ".carousel", getData, cardComp
             track.insertBefore(lastCard, track.firstElementChild)
             currentX += CARD_WIDTH
             targetX += CARD_WIDTH
-            // CRUCIAL : Re-observation on moved card
+            
+            // OPTIMISATION : Idem ici
             const chartEl = lastCard.querySelector(".chart")
-            if (chartEl && !chartEl.dataset.initialized) chartObserver.observe(chartEl)
+            if (chartEl && !chartEl.dataset.initialized) {
+                setTimeout(() => chartObserver.observe(chartEl), 0)
+            }
           }
         }
         

@@ -1,21 +1,33 @@
 .asset-item {
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start; /* Aligne tout à gauche pour bloquer les décalages */
     align-items: center;
-    align-content: start;
     padding: 15px;
     border-bottom: 1px solid #ddd;
     cursor: pointer;
     transition: background-color 0.2s;
+    gap: 40px;                   /* Fixe un espace strict et immuable entre le logo et le texte */
+    width: 100%;
 }
 
-#assets-list-container .asset-item a {
+#assets-list-target {
+    min-height: 70vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#assets-list-target .asset-item a {
     color: black;
     font-size: 3rem;
     text-decoration: none;
+    /* Sécurise le comportement en ligne du texte */
+    display: inline-block;
+    white-space: nowrap; 
 }
 
-#assets-list-container .asset-item a:hover {
+#assets-list-target .asset-item a:hover {
     color: #333;
 }
 
@@ -23,4 +35,6 @@
     width: 80px; 
     height: 80px; 
     margin-right: 10px;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;             /* Empêche absolument l'image de se déformer */
 }

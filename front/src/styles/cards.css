@@ -22,21 +22,25 @@
 }
 
 .card.stock .card-image {
-  width: 90%;
-  height: 40px;
+  width: 259px;
+  height: 259px;
   margin: 10px 0px;
   object-fit: contain;
+  aspect-ratio: 1 / 1; 
 }
 
 .card.forex .card-image {
-  width: 90%;
-  height: 85px;
+  width: 259px;
+  height: 259px;
   object-fit: cover;
+  aspect-ratio: 1 / 1; 
 }
 
 .card.commodity .card-image {
-  width: 90%;
+  width: 259px;
+  height: 259px;
   object-fit: cover;
+  aspect-ratio: 1 / 1; 
 }
 
 .card-description {
