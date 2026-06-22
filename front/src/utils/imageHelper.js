@@ -1,13 +1,13 @@
 const commodityImages = {
-    "C:XAUUSD": "/assets/gold.png",
-    "C:XAGUSD": "/assets/silver.png",
-    "C:XPTUSD": "/assets/platinum.png",
-    "C:COPPERUSD": "/assets/copper.png",
-    "C:XPDUSD": "/assets/palladium.png"
+    "C:XAUUSD": "/assets/gold.webp",
+    "C:XAGUSD": "/assets/silver.webp",
+    "C:XPTUSD": "/assets/platinum.webp",
+    "C:COPPERUSD": "/assets/copper.webp",
+    "C:XPDUSD": "/assets/palladium.webp"
 }
 
 export function formatAssetImage(ticker) {
-    if (!ticker) return "/assets/nasdaq_logo.png"
+    if (!ticker) return "/assets/nasdaq_logo.webp"
     
     const cleanTicker = String(ticker).replace(/[\s\r\n]/g, "").toUpperCase()
     
@@ -24,7 +24,7 @@ export function formatAssetImage(ticker) {
         const base = fileName.substring(0, 3)
         const quote = fileName.substring(3, 6)
        
-        return `/assets/${base}_${quote}.jpeg`
+        return `/assets/${base}_${quote}.webp`
     }
     
     return `/assets/logos/${fileName}.svg`

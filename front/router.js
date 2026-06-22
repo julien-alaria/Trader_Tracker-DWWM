@@ -1,18 +1,4 @@
-import home, { initHome } from "./src/pages/public/home.js"
-import list, { initList } from "./src/pages/public/list.js"
-import about from "./src/pages/public/about.js"
-import register, { initRegister } from "./src/pages/auth/register/register.js"
-import analystRegister, { initAnalystRegister } from "./src/pages/auth/register/analystRegister.js"
-import login, { initLogin } from "./src/pages/auth/login.js"
-import detailsPage, { initDetail} from "./src/pages/public/assetsdetails.js"
-import analystdetails, { initAnalystDetail } from "./src/pages/public/analystsdetails.js"
-
 import { roleGuard } from "./src/middlewares/roleGuard.js"
-
-import userPage, { initUser } from "./src/pages/user/user.js"
-import analystPage, { initAnalyst }  from "./src/pages/analyst/analyst.js"
-import adminPage, { initAdmin } from "./src/pages/admin/admin.js"
-
 import notfound from "./src/pages/public/notfound.js"
 import { renderApp } from "./src/utils/layoutManager.js"
 
@@ -29,61 +15,72 @@ async function router() {
 
   switch (hash) {
     case "/":
-      content = home
-      init = initHome
+      const home = await import("./src/pages/public/home.js")
+      content = home.default
+      init = home.initHome
       break
     
     case "/list":
-      content =list
-      init = initList
+      const list = await import("./src/pages/public/list.js")
+      content = list.default
+      init = list.initList
       break
 
     case "/details":
-      content = detailsPage
-      init = initDetail
+      const detailsPage = await import("./src/pages/public/assetsdetails.js")
+      content = detailsPage.default
+      init = detailsPage.initDetail
       break
 
     case "/analystdetails":
-      content = analystdetails
-      init = initAnalystDetail
+      const analystdetails = await import("./src/pages/public/analystsdetails.js")
+      content = analystdetails.default
+      init = analystdetails.initAnalystDetail
       break
 
     case "/about":
-      content = about
+      const about = await import("./src/pages/public/about.js")
+      content = about.default
       break
 
     case "/register":
-      content = register
-      init = initRegister
+      const register = await import("./src/pages/auth/register/register.js")
+      content = register.default
+      init = register.initRegister
       break
 
     case "/analystregister":
-      content = analystRegister
-      init = initAnalystRegister
+      const analystRegister = await import("./src/pages/auth/register/analystRegister.js")
+      content = analystRegister.default
+      init = analystRegister.initAnalystRegister
       break
 
     case "/login":
-      content = login
-      init = initLogin
+      const login = await import("./src/pages/auth/login.js")
+      content = login.default
+      init = login.initLogin
       break
 
     case "/user":
       if (!roleGuard(["user"])) return
+      const userPage = await import("./src/pages/user/user.js")
       content = userPage
-      init = initUser
+      init = userPage.initUser
       break
 
     case "/admin":
       if (!roleGuard(["admin"])) return
-      content = adminPage
-      init = initAdmin 
+      const adminPage = await import("./src/pages/admin/admin.js")
+      content = adminPage.default
+      init = adminPage.initAdmin
       layoutType = "admin"
       break
 
     case "/analyst":
       if (!roleGuard(["analyst"])) return
+      const analystPage = await import("./src/pages/analyst/analyst.js")
       content = analystPage
-      init = initAnalyst
+      init = analystPage.initAnalyst
       break
 
     default:

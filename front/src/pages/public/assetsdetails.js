@@ -85,7 +85,7 @@ export async function initDetail() {
         // STANDARDIZATION OF IMAGE & LOGO LOGIC
         // =====================
         const finalImage = formatAssetImage(asset.ticker)
-        const fallbackImage = "/assets/nasdaq_logo.png"
+        const fallbackImage = "/assets/nasdaq_logo.webp"
 
         // =====================
         // USER & WATCHLIST 

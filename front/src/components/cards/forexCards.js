@@ -1,7 +1,7 @@
 const forexImages = {
-  'C:EURJPY': "/assets/eur_jpy.jpeg",
-  'C:EURUSD': "/assets/eur_usd.jpeg",
-  'C:EURCHF': "/assets/eur_chf.jpeg"
+  'C:EURJPY': "/assets/eur_jpy.webp",
+  'C:EURUSD': "/assets/eur_usd.webp",
+  'C:EURCHF': "/assets/eur_chf.webp"
 }
 
 export default function forexCard({ ticker, name, high, low, close, image } = {}) {

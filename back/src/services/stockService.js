@@ -176,7 +176,7 @@ async function getMultipleAggregatesJson() {
     price: stock.price ?? null,
     high: stock.high ?? null,
     low: stock.low ?? null,
-    image: stock.image || "/assets/nasdaq_logo.png",
+    image: stock.image || "/assets/nasdaq_logo.webp",
     history: stock.history || []
   }));
 }
@@ -228,7 +228,7 @@ async function getMultipleAggregatesJsonLight() {
         price: stock.price ?? null,
         high: stock.high ?? null,
         low: stock.low ?? null,
-        image: stock.image || "/assets/nasdaq_logo.png",
+        image: stock.image || "/assets/nasdaq_logo.webp",
         history: Array.isArray(stock.history) ? stock.history.slice(-15) : []
     }))
 }
