@@ -176,7 +176,7 @@ export async function initDetail() {
                             <img src="${recoImage}" width="50" height="50" alt="reco-image" />
                             <strong>${rec.status}</strong>
                             <p>${rec.comment}</p>
-                            <img src="${imageUrl}" width="30" height="30" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
+                            <img src="${imageUrl}" width="30" height="30" class="analyst-picture"  alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
                             <p>Analyst: ${rec.analyst_name ?? "unknown"}</p>
                             <p>Published on ${formatDate(rec.created_at)}</p>
                         </div>
@@ -237,7 +237,7 @@ export async function initDetail() {
 
                 return `
                     <div class="analyst-item" data-js-clickable data-id="${a.id}">
-                        <img src="${imageUrl}" width="30" height="30" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
+                        <img src="${imageUrl}" width="30" height="30" class="analyst-picture" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
                         <p><strong>${a.name}</strong> - ${a.company}</p>
                     </div>
                 `

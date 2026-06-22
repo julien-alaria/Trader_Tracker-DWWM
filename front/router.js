@@ -64,7 +64,7 @@ async function router() {
     case "/user":
       if (!roleGuard(["user"])) return
       const userPage = await import("./src/pages/user/user.js")
-      content = userPage
+      content = userPage.default
       init = userPage.initUser
       break
 
@@ -79,7 +79,7 @@ async function router() {
     case "/analyst":
       if (!roleGuard(["analyst"])) return
       const analystPage = await import("./src/pages/analyst/analyst.js")
-      content = analystPage
+      content = analystPage.default
       init = analystPage.initAnalyst
       break
 
