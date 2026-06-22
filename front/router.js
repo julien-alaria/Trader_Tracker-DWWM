@@ -1,5 +1,4 @@
 import { roleGuard } from "./src/middlewares/roleGuard.js"
-import notfound from "./src/pages/public/notfound.js"
 import { renderApp } from "./src/utils/layoutManager.js"
 
 
@@ -84,7 +83,8 @@ async function router() {
       break
 
     default:
-      content = notfound
+      const notfound = await import("./src/pages/public/notfound.js")
+      content = notfound.default
   }
 
   renderApp(content, layoutType)
