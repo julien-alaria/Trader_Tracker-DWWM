@@ -227,9 +227,9 @@ body {
 .carousel-track {
     display: flex;
     gap: 24px;
-    /* Empêche le navigateur de recalculer tout le layout à chaque frame */
+    /* Prevents the browser from recalculating the entire layout on every frame */
     will-change: transform; 
-    /* Force le rendu sur le GPU */
+    /* Forces rendering on the GPU */
     transform: translateZ(0);
 }
 

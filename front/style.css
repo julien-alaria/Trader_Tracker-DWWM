@@ -47,9 +47,8 @@ main {
     box-sizing: border-box;
 }
 
-/* Dans ton CSS global */
 .admin-content, .card-chart-container {
-    min-height: 350px; /* Ou la hauteur que tu utilises pour tes charts */
+    min-height: 350px;
 }
 
 footer {
@@ -96,12 +95,11 @@ a {
 
 img {
     height: auto;
-    max-width: 100%; /* Empêche l'image de déborder */
+    max-width: 100%;
     box-sizing: border-box;
-    display: block;  /* Évite les espaces vides sous les images */
+    display: block;
 }
 
-/* Force les images spécifiques à respecter leur ratio */
 img[width], img[height] {
     height: auto; 
 }
