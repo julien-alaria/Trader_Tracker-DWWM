@@ -46,8 +46,10 @@ const analystPage = `
         <h2>Followed Analysts</h2>
         <div id="follow-carousel-target"></div>
 
-        <h2>Followed Analysts By List</h2>
-        <div id="follow-list-target"></div>
+        <div id="follow-list-global">
+            <h2>Followed Analysts By List</h2>
+            <div id="follow-list-target"></div>
+        </div>
     </section>
 
     <section>
@@ -208,12 +210,6 @@ export async function initAnalyst() {
     await recommendationsPaginator.load()
     await watchlistPaginator.load()
     await followPaginator.load()
-
-    // display logic of the global Watchlist block
-    const globalContainer = document.getElementById("watchlist-list-global")
-    if (globalContainer) {
-      globalContainer.style.display = watchRes.result.length < 5 ? "none" : "flex"
-    }
 
     // Initializing click listeners
     bindRecommendationActions("#recommendations-list-target", recommendationsPaginator)

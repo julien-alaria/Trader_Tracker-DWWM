@@ -31,7 +31,7 @@ const detailsPage = `
         </div>
     </section>
 
-    <section id="analyst-list-section">
+    <section id="analyst-list-global">
         <h2>All Analysts</h2>
         <div id="analyst-list-target"></div>
     </section>
@@ -229,7 +229,7 @@ export async function initDetail() {
         // =====================
         analystPaginator = createPaginationList({
             targetSelector: "#analyst-list-target",
-            prefix: "analyst-list",
+            prefix: "analyst",
             endpoint: `/users/analysts/by-type?type_id=${dbAsset.asset_type_id}`,
             itemTemplate: (a) => {
                 const defaultAvatar = "/assets/analyst/default_analyst.png"

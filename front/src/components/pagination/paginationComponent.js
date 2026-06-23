@@ -37,26 +37,27 @@ export function createPaginationList({
           }
           container.innerHTML = results.map(item => itemTemplate(item)).join("")
       },
-      mapResponse: (res, currentOffset) => {
-          const wrapper = document.getElementById(paginationId)
-          const prevBtn = document.getElementById(prevBtnId)
-          const nextBtn = document.getElementById(nextBtnId)
-          
-          if (prevBtn) {
-            prevBtn.style.display = (currentOffset > 0) ? "block" : "none"
-          }
+    mapResponse: (res, currentOffset) => {
+        const wrapper = document.getElementById(paginationId);
+        if (!wrapper) return res;
 
-          if (nextBtn) {
-              nextBtn.style.display = res.hasNext ? "block" : "none"
-          }
-
-          if (wrapper) {
-              wrapper.style.display = (res.results && res.results.length > 0) ? "flex" : "none"
-          }
-
-        return res
+        const globalContainer = document.getElementById(`${prefix}-list-global`);
         
-      }
+        const show = (res.results.length >= 5 || currentOffset > 0 || res.hasNext);
+
+        wrapper.style.display = show ? "flex" : "none";
+
+        if (globalContainer) {
+            globalContainer.style.display = show ? "flex" : "none";
+        }
+
+        const prevBtn = document.getElementById(prevBtnId);
+        const nextBtn = document.getElementById(nextBtnId);
+        if (prevBtn) prevBtn.style.display = (currentOffset > 0) ? "block" : "none";
+        if (nextBtn) nextBtn.style.display = res.hasNext ? "block" : "none";
+
+        return res;
+    }
   })
 
   target.addEventListener("click", (e) => {

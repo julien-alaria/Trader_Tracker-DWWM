@@ -26,16 +26,20 @@ const userPage = `
         <h2>My Watchlist</h2>
         <div id="watchlist-carousel-target"></div>
 
-        <h2>Watchlist By List</h2>
-        <div id="watchlist-list-target"></div>
+        <div id="watchlist-list-global">
+            <h2>Watchlist By List</h2>
+            <div id="watchlist-list-target"></div>
+        </div>
     </section>
 
     <section>
         <h2>Followed Analysts</h2>
         <div id="follow-carousel-target"></div>
 
-        <h2>Followed Analysts By List</h2>
-        <div id="follow-list-target"></div>
+        <div id="follow-list-global">
+            <h2>Followed Analysts By List</h2>
+            <div id="follow-list-target"></div>
+        </div>
     </section>
 
     <section>

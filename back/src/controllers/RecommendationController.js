@@ -39,17 +39,20 @@ async function getRecommendationPagin(req, res) {
 async function getMyRecommendation(req, res) {
     try {
         const userId = req.user.id
-        const limit = Math.max(1, Number.parseInt(req.query.limit ?? 2, 10))
+        const limit = Math.max(1, Number.parseInt(req.query.limit ?? 10, 10))
         const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10))
 
-        const results = await RecommendationModel.getMyRecommendationsPaginated(userId, limit, offset)
+        const results = await RecommendationModel.getMyRecommendationsPaginated(userId, limit + 1, offset)
         
-        // On vérifie la page suivante pour le bouton "Next"
-        const nextPage = await RecommendationModel.getMyRecommendationsPaginated(userId, 1, offset + limit)
-        const hasNext = nextPage.length > 0
+        const hasNext = results.length > limit
+        
+        if (hasNext) {
+            results.pop()
+        }
 
         return res.status(200).json({ results, hasNext })
     } catch (error) {
+        console.error("RECOMMENDATION PAGIN ERROR:", error)
         return res.status(500).json({ message: error.message })
     }
 }
