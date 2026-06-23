@@ -70,6 +70,7 @@
     width: 100%;
     background: white;
     border-radius: 15px;
+    margin: 5px;
     border: 1px solid black;
     overflow: hidden;
     position: relative;
@@ -155,16 +156,7 @@
 
 
 
-/* Specific stock chart size */
-.card.stock .chart {
-    height: 80px;
-    margin: 15px 0;
-}
 
-/* Generic chart default size */
-.card .chart {
-    height: 200px;
-}
 
 /* ==========================================================================
    COMPOSANTS DIVERS
