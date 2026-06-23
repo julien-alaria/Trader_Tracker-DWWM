@@ -15,9 +15,7 @@ stockRouter.get("/home/forex", StockController.getHomeForex)
 stockRouter.get("/home/commodities", StockController.getHomeCommodities)
 
 // Super light data for list.js
-stockRouter.get("/brief/stocks", StockController.getBriefStocks)
-stockRouter.get("/brief/forex", StockController.getBriefForex)
-stockRouter.get("/brief/commodities", StockController.getBriefCommodities)
+stockRouter.get("/brief/all", StockController.getCombinedBriefAssets)
 
 stockRouter.get("/details/:ticker", getAssetDetails)
 

@@ -166,6 +166,16 @@ async function getBriefCommodities() {
   }
 }
 
+async function getBriefAssets() {
+  try {
+    const data = await http.get("/assets/brief/all")
+    return data.message || []
+  } catch (error) {
+    console.error(error.message)
+    return []
+  }
+}
+
 export { 
   getStock, 
   getForex, 
@@ -173,5 +183,8 @@ export {
   getStockLight,
   getForexLight,
   getCommoditiesLight,
-  getBriefStocks, getBriefForex, getBriefCommodities
+  getBriefStocks, 
+  getBriefForex, 
+  getBriefCommodities,
+  getBriefAssets
  }

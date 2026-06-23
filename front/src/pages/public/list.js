@@ -1,6 +1,5 @@
-import { getBriefStocks, getBriefForex, getBriefCommodities } from "../../utils/assetsUtils.js"
+import { createPaginationList } from "../../components/pagination/paginationComponent.js"
 import { formatAssetImage } from "../../utils/imageHelper.js"
-import { createLocalPaginationList } from "../../components/pagination/paginationComponent.js"
 
 // =====================
 // HTML TEMPLATE 
@@ -15,41 +14,27 @@ export default list
 // =====================
 // STATE GLOBAL
 // =====================
-let assetsPaginator = null
+let listPaginator
 
 // =====================
 // INIT
 // =====================
 export async function initList() {
+    // =====================
+    // LIST PAGINATION
+    // =====================
     try {
-        // =====================
-        // DATA RECOVERY
-        // =====================
-        const [stocks, forex, commodities] = await Promise.all([
-            getBriefStocks(), getBriefForex(), getBriefCommodities()
-        ])
-        
-        const allAssets = [...stocks, ...forex, ...commodities];
-
-        // Security expectation related to asynchronous router injection
-        await new Promise(resolve => setTimeout(resolve, 0))
-
-        // =====================
-        // PAGINATION RENDERING
-        // =====================
-
-        // ASSETS PAGINATOR
-        assetsPaginator = createLocalPaginationList({
+        listPaginator = createPaginationList({
             targetSelector: "#assets-list-target",
             prefix: "assets",
-            data: allAssets,
-            limit: 10,
+            endpoint: "/assets/brief/all", 
+            limit: 15,
             itemTemplate: (item) => {
                 const finalImage = formatAssetImage(item.ticker)
-
                 return `
                     <div class="asset-item" data-js-clickable data-ticker="${item.ticker}" data-type="${item.type}">
-                        <img id="logo-list" src="${finalImage}" width=80" height=80" alt="${item.name} logo" onerror="this.onerror=null; this.src='/assets/nasdaq_logo.png';">
+                        <img src="${finalImage}" width="80" height="80" alt="${item.name} logo" 
+                             onerror="this.onerror=null; this.src='/assets/nasdaq_logo.webp';">
                         <span><strong>${item.ticker}</strong></span>
                         <span>${item.name}</span>
                     </div>
@@ -58,11 +43,10 @@ export async function initList() {
             buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`
         })
 
-        if (assetsPaginator) {
-            await assetsPaginator.load()
-        }
+        await listPaginator.load()
 
     } catch (err) {
         console.error("LIST INIT ERROR:", err)
+        document.getElementById("assets-list-target").innerHTML = "<p>Failed to load assets.</p>"
     }
 }
