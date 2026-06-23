@@ -1,12 +1,13 @@
 /* ==========================================================================
    STRUCTURE DES CARTES & CARROUSEL
    ========================================================================== */
-
 .carousel-track {
     display: flex;
     gap: 24px;
+    margin: 10px;
     will-change: transform;
     transform: translateZ(0);
+    margin: 30px;
 }
 
 .carousel-track.is-fixed {
@@ -50,24 +51,82 @@
    TYPES DE CARTES (Stock, Forex, Analyst, etc.)
    ========================================================================== */
 
+/*STOCK CARD*/
 .card.stock {
-    background: red;
-    color: black;
+    background: lightgray;
+    color: grey;
+    border: 2px solid black;
+    box-shadow: #1a1a1a;
 }
 
+.card-image-stock {
+    max-width: 80px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+}
+
+.chart {
+    width: 100%;
+    background: white;
+    border-radius: 15px;
+    border: 1px solid black;
+    overflow: hidden;
+    position: relative;
+    pointer-events: none;
+    transform: translateZ(0);
+}
+
+/*FOREX CARD*/
 .card.forex {
-    background: grey;
-    color: black;
+    width: auto;
+    background: lightgray;
+    color: grey;
+    border: 2px solid black;
+    box-shadow: #1a1a1a;
 }
 
+.card-image-forex {
+    max-width: 120px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    border-radius: 15px;
+    border: 1px solid black;
+}
+
+/*COMMODITY CARD*/
 .card.commodity {
-    background: paleturquoise;
-    color: palegoldenrod;
+    background: rgba(124, 122, 122, 0.938);
+    color: grey;
+    border: 2px solid rgba(0, 0, 0, 0.619);
+    box-shadow: #1a1a1a;
 }
 
+.card-image-commodity {
+    max-width: 250px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+}
+
+/*ANALYST CARD*/
 .card.analyst {
-    background: purple;
+    width: auto;
+    background: rgb(84, 82, 84);
     color: black;
+    min-height: 450px;
+    border: 2px solid black;
+    box-shadow: #1a1a1a;
+}
+
+.card-image-analyst {
+    width: 230px;
+    height: 200px;
+    object-fit: fill;
+    border-radius: 15px;
+    border: 1px solid black;
+    margin-bottom: 15px;
 }
 
 
@@ -79,7 +138,7 @@
     font-size: 1.4rem;
     margin: 5px 0;
     text-align: center;
-    color: yellow;
+    color: black;
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
@@ -87,22 +146,14 @@
 }
 
 .card-description { 
-    color: greenyellow; 
+    color: black; 
 }
 
 .card-text {
-    color: blue;
+    color: black;
 }
 
-.chart {
-    width: 100%;
-    background: white;
-    border-radius: 15px;
-    overflow: hidden;
-    position: relative;
-    pointer-events: none;
-    transform: translateZ(0);
-}
+
 
 /* Specific stock chart size */
 .card.stock .chart {

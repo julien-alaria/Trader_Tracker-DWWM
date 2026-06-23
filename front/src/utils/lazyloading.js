@@ -35,7 +35,7 @@ export function enableCarouselWindow({ selector = ".carousel", getData, cardComp
   const allAssets = getData(carousel) 
   if (!allAssets?.length) return
 
-  const isFixed = allAssets.length <= 1
+  const isFixed = allAssets.length <= 2
   const displayAssets = isFixed ? allAssets : [...allAssets].sort(() => 0.5 - Math.random()).slice(0, 30)
 
   carousel.innerHTML = ""
