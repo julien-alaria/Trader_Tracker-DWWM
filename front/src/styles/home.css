@@ -76,6 +76,24 @@ body {
     margin: 20px 0;          
 }
 
+#search-container {
+    position: relative; 
+    height: 0;        
+    z-index: 10;
+    margin-bottom: 2rem;
+}
+
+.search-results-container {
+    position: absolute; 
+    top: 45px;        
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
 #search-bar-text {
     font-size: 2rem;
     padding: 0;             
@@ -169,74 +187,4 @@ body {
 
 .carousel-track.is-fixed {
     justify-content: center;
-}
-
-.card {
-    flex: 0 0 320px;
-    max-width: 320px;
-    border-radius: 15px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    transform: translateZ(0);
-}
-
-.card:hover {
-    transform: scale(1.02);
-}
-
-.chart {
-    width: 100%;
-    height: 200px;
-    min-height: 200px;
-    background: #f8f8f8;
-}
-#search-container {
-    position: relative; 
-    height: 0;        
-    z-index: 10;
-    margin-bottom: 2rem;
-}
-
-.search-results-container {
-    position: absolute; 
-    top: 45px;        
-    left: 0;
-    right: 0;
-    z-index: 9999;
-    background: white;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-#commodities {
-    width: 100%;
-    min-height: 100px;
-    overflow: hidden;
-}
-
-#all-assets-btn {
-  font-size: 3rem;
-  color: #1a1a1a;
-}
-
-.carousel-track.is-fixed {
-    justify-content: center;
-}
-
-.carousel-track {
-    display: flex;
-    gap: 24px;
-    /* Prevents the browser from recalculating the entire layout on every frame */
-    will-change: transform; 
-    /* Forces rendering on the GPU */
-    transform: translateZ(0);
-}
-
-.chart {
-    border-radius: 15px; 
-    overflow: hidden;   
-    background: white;  
-    position: relative;
-    transform: translateZ(0); 
 }

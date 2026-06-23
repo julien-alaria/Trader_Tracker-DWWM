@@ -93,17 +93,6 @@ a {
     color: white;
 }
 
-img {
-    height: auto;
-    max-width: 100%;
-    box-sizing: border-box;
-    display: block;
-}
-
-img[width], img[height] {
-    height: auto; 
-}
-
 .admin-mode footer#footer-container {
     display: none;
 }

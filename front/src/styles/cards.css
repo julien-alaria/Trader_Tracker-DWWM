@@ -1,111 +1,162 @@
-.card {
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
-  border-radius: 12px;
-  background: #1e1e1e;
-  color: white;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  cursor: pointer;
-  box-sizing: border-box; 
-  height: 100%;           
+/* ==========================================================================
+   STRUCTURE DES CARTES & CARROUSEL
+   ========================================================================== */
+
+.carousel-track {
+    display: flex;
+    gap: 24px;
+    will-change: transform;
+    transform: translateZ(0);
 }
+
+.carousel-track.is-fixed {
+    justify-content: center;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 0 0 320px;
+    max-width: 320px;
+    height: 100%;
+    padding: 1rem;
+    border-radius: 15px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #1e1e1e;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    transition: transform 0.2s ease;
+    transform: translateZ(0);
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.card-image {
+    max-width: 259px;
+    height: auto;
+    margin: 10px 0;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+}
+
+
+
+/* ==========================================================================
+   TYPES DE CARTES (Stock, Forex, Analyst, etc.)
+   ========================================================================== */
 
 .card.stock {
-  background: #b5aeae;
-  color: black;
-  background-color: rgba(0, 0, 0, 0.11)
+    background: red;
+    color: black;
 }
 
-.card.stock .card-description { 
-  color: #333; 
+.card.forex {
+    background: grey;
+    color: black;
 }
 
-.card.stock .card-image {
-  width: 259px;
-  height: 259px;
-  margin: 10px 0px;
-  object-fit: contain;
-  aspect-ratio: 1 / 1; 
+.card.commodity {
+    background: paleturquoise;
+    color: palegoldenrod;
 }
 
-.card.forex .card-image {
-  width: 259px;
-  height: 259px;
-  object-fit: cover;
-  aspect-ratio: 1 / 1; 
+.card.analyst {
+    background: purple;
+    color: black;
 }
 
-.card.commodity .card-image {
-  width: 259px;
-  height: 259px;
-  object-fit: cover;
-  aspect-ratio: 1 / 1; 
-}
 
-.card-description {
-  color: #ccc;
-}
+/* ==========================================================================
+   ÉLÉMENTS INTERNES (Textes, Graphiques)
+   ========================================================================== */
 
 .card-title {
     font-size: 1.4rem;
     margin: 5px 0;
     text-align: center;
-    color: #1a1a1a;
-    /* Forces the display on a single line */
-    width: 100%;               
-    white-space: nowrap;      
-    overflow: hidden;          
+    color: yellow;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.result-item  {
-  display: flex;
-  flex-direction: column;
-  width: 20%;
-  padding: 1rem;
-  border-radius: 12px;
-  background: #1e1e1e;
-  color: white;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+.card-description { 
+    color: greenyellow; 
+}
+
+.card-text {
+    color: blue;
 }
 
 .chart {
-  pointer-events: none;
-}
-
-.card.stock .chart {
     width: 100%;
-    height: 80px;
-    min-height: 80px;
-    margin-top: 15px;    
-    margin-bottom: 15px; 
+    background: white;
+    border-radius: 15px;
     overflow: hidden;
+    position: relative;
     pointer-events: none;
+    transform: translateZ(0);
 }
 
-.card.analyst {
-    cursor: pointer;
-    border: 1px solid #ddd;
+/* Specific stock chart size */
+.card.stock .chart {
+    height: 80px;
+    margin: 15px 0;
+}
+
+/* Generic chart default size */
+.card .chart {
+    height: 200px;
+}
+
+/* ==========================================================================
+   COMPOSANTS DIVERS
+   ========================================================================== */
+
+.result-item {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
     padding: 1rem;
-    transition: transform 0.2s;
-}
-
-.card.analyst:hover {
-    transform: scale(1.02);
-}
-
-.card.analyst .card-title {
-    color: white; 
-    margin-bottom: 0.5rem;
-}
-
-.card.analyst .card-subtitle {
-    font-weight: bold;
+    border-radius: 12px;
+    background: #1e1e1e;
     color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.card.analyst .card-description {
-    font-size: 0.9rem;
-    color: white;
+#all-assets-btn {
+    font-size: 3rem;
+    color: #1a1a1a;
+}
+
+@media (max-width: 480px) {
+    .card {
+        flex: 0 0 160px;
+        max-width: 160px;
+        height: 320px;      /* Laisse la hauteur s'adapter au contenu réduit */
+        padding: 0.5rem;   /* Réduit le padding global de la carte */
+        gap: 2px;          /* Réduit l'espace entre les éléments dans la carte */
+    }
+
+    .card-image {
+        width: 80px;       /* Réduit encore la taille pour laisser respirer */
+        height: 80px;
+        margin: 2px;
+    }
+
+    .card-title {
+        font-size: 1.1rem; /* Réduit la taille du titre */
+        margin: 2px 0;     /* Élimine les marges verticales inutiles */
+    }
+
+    .card-text {
+        font-size: 0.8rem; /* Réduit la taille des textes secondaires */
+        margin: 1px 0;     /* Compacte les marges entre les lignes de texte */
+    }
 }

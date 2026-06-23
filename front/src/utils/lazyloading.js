@@ -35,7 +35,7 @@ export function enableCarouselWindow({ selector = ".carousel", getData, cardComp
   const allAssets = getData(carousel) 
   if (!allAssets?.length) return
 
-  const isFixed = allAssets.length <= 5
+  const isFixed = allAssets.length <= 1
   const displayAssets = isFixed ? allAssets : [...allAssets].sort(() => 0.5 - Math.random()).slice(0, 30)
 
   carousel.innerHTML = ""
@@ -70,58 +70,63 @@ export function enableCarouselWindow({ selector = ".carousel", getData, cardComp
   if (isFixed) return
 
   // infinite scroll for wide lists
-  const CARD_WIDTH = 320 + 24
-  let currentX = 0 
-  let targetX = 0 
-  const ease = 0.08
-  let isReorganizing = false
+ const getCardWidth = () => {
+    const firstCard = track.firstElementChild;
+    if (!firstCard) return 324; // Fallback par défaut (300 + 24)
+    const style = window.getComputedStyle(firstCard);
+    return firstCard.offsetWidth + parseInt(style.marginRight || 0) + parseInt(style.marginLeft || 0);
+  };
+
+  let currentX = 0;
+  let targetX = 0;
+  const ease = 0.08;
+  let isReorganizing = false;
+  let cardWidth = getCardWidth(); // Calculé au chargement
+
+  // Recalcule si l'utilisateur redimensionne la fenêtre
+  window.addEventListener('resize', () => { cardWidth = getCardWidth(); });
 
   const updateLoop = () => {
-    if (isReorganizing) {
-       requestAnimationFrame(updateLoop)
-       return
-    }
-
-    const distance = targetX - currentX
+    if (isReorganizing) { requestAnimationFrame(updateLoop); return; }
+    
+    const distance = targetX - currentX;
     if (Math.abs(distance) > 0.05) {
-      currentX += distance * ease
+      currentX += distance * ease;
       
-      if (currentX >= CARD_WIDTH || currentX <= 0) {
-        isReorganizing = true
+      // On utilise cardWidth (dynamique) au lieu de CARD_WIDTH (fixe)
+      if (currentX >= cardWidth || currentX <= 0) {
+        isReorganizing = true;
         
-        if (currentX >= CARD_WIDTH) {
-          const firstCard = track.firstElementChild
+        if (currentX >= cardWidth) {
+          const firstCard = track.firstElementChild;
           if (firstCard) {
-            track.appendChild(firstCard)
-            currentX -= CARD_WIDTH
-            targetX -= CARD_WIDTH
+            track.appendChild(firstCard);
+            currentX -= cardWidth;
+            targetX -= cardWidth;
             
-            // OPTIMIZATION: shift the observation to avoid synchronous forced reflow
-            const chartEl = firstCard.querySelector(".chart")
+            const chartEl = firstCard.querySelector(".chart");
             if (chartEl && !chartEl.dataset.initialized) {
-                setTimeout(() => chartObserver.observe(chartEl), 0)
+                setTimeout(() => chartObserver.observe(chartEl), 0);
             }
           }
         } else {
-          const lastCard = track.lastElementChild
+          const lastCard = track.lastElementChild;
           if (lastCard) {
-            track.insertBefore(lastCard, track.firstElementChild)
-            currentX += CARD_WIDTH
-            targetX += CARD_WIDTH
+            track.insertBefore(lastCard, track.firstElementChild);
+            currentX += cardWidth;
+            targetX += cardWidth;
             
-            // OPTIMISATION : Idem here
-            const chartEl = lastCard.querySelector(".chart")
+            const chartEl = lastCard.querySelector(".chart");
             if (chartEl && !chartEl.dataset.initialized) {
-                setTimeout(() => chartObserver.observe(chartEl), 0)
+                setTimeout(() => chartObserver.observe(chartEl), 0);
             }
           }
         }
-        
-        requestAnimationFrame(() => { isReorganizing = false })
+        requestAnimationFrame(() => { isReorganizing = false; });
       }
-      track.style.transform = `translateX(${-currentX}px)`
+      track.style.transform = `translateX(${-currentX}px)`;
     }
-    requestAnimationFrame(updateLoop)
+    requestAnimationFrame(updateLoop);
   }
 
   requestAnimationFrame(updateLoop)

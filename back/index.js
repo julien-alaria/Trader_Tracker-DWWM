@@ -24,13 +24,13 @@ app.get('/', (req, res) => {
 async function startServer() {
     try {
         await getConnection()
-        console.log("Connexion database OK")
+        console.log("Database connection ON")
 
         app.listen(PORT, () => {
-        console.log(`En écoute sur le port ${PORT}`)
+        console.log(`Listening at the port ${PORT}`)
         })
     } catch (error) {
-        console.error("Erreur de connexion à la base de données:", error.message)
+        console.error("Database connection error:", error.message)
     }
 }
 
