@@ -6,7 +6,7 @@ body {
 }
 
 /* Forces view containers (home, list, etc.) to take up all available space for performances*/
-#app, main, #main-content {
+main {
     display: flex;
     flex-direction: column;
     flex: 1 0 auto; 
@@ -40,7 +40,8 @@ body {
     font-size: 3rem;
 }
 
-#home-top-register{
+#home-top-register,
+#home-middle-register{
     border: 1px solid white;
     padding: 8px 16px;
     transition: all 0.3s ease;
@@ -48,20 +49,8 @@ body {
     font-size: 2rem;
 }
 
-#home-top-register:hover {
-    background-color: orange;
-    color: #1a1a1a;  
-}
-
-#home-top-register{
-    border: 1px solid white;
-    padding: 8px 16px;
-    transition: all 0.3s ease;
-    background-color: #1a1a1a;
-    font-size: 2rem;
-}
-
-#home-top-register:hover {
+#home-top-register:hover,
+#home-middle-register:hover {
     background-color: orange;
     color: #1a1a1a;  
 }
@@ -119,7 +108,7 @@ body {
 }
 
 #home-stocks-title {
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
 #home-stocks-text {
@@ -187,4 +176,103 @@ body {
 
 .carousel-track.is-fixed {
     justify-content: center;
+}
+
+@media (max-width: 430px) {
+
+    #home-top {
+        background: navy;
+        padding: 50px;
+        text-align: center;
+    }
+
+    #home-top-title {
+        font-size: 4rem;
+    }
+
+    #home-top-text {
+        font-size: 2rem;
+    }
+
+    #home-top-register {
+        padding: 4px 8px;
+        font-size: 1.6rem;
+    }
+
+    #home-search-bar {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        gap: 5px;
+    }
+
+    #search-bar-text {
+        font-size: 1.5rem;
+    }
+
+    #home-stocks-title {
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        text-decoration: underline;
+    }
+
+    #home-stocks-text {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    #all-assets-btn {
+        background-color: lightgrey;
+        padding: 0.3rem;
+        border: 2px solid black;
+        border-radius: 16px;
+    }
+
+    #home-forex-title {
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        text-decoration: underline;
+    }
+
+    #home-forex-text {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    #forex-carousel-target {
+        height: auto;
+    }
+
+    #home-middle {
+        background: navy;
+        padding: 50px;
+        text-align: center;
+    }
+
+    #home-middle-register {
+        padding: 4px 8px;
+        font-size: 1.6rem;
+    }
+
+    #home-commodities-title {
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        text-decoration: underline;
+    }
+
+    #home-commodities-text {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    #home-analysts-title {
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        text-decoration: underline;
+    }
+
+    #home-analysts-text {
+        font-size: 1.5rem;
+        text-align: center;
+    }
 }

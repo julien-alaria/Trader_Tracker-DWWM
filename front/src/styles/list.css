@@ -4,7 +4,7 @@
 #forex-carousel-target, 
 #commodities-carousel-target, 
 #analysts-carousel-target {
-    min-height: 350px;
+    min-height: auto;
     width: 100%;
     display: block;
     overflow: hidden; 

@@ -14,6 +14,10 @@
     justify-content: center;
 }
 
+#analysts-carousel-target {
+    height: auto;
+}
+
 .card {
     display: flex;
     flex-direction: column;
@@ -116,7 +120,7 @@
     width: auto;
     background: rgb(84, 82, 84);
     color: black;
-    min-height: 450px;
+    min-height: auto;
     border: 2px solid black;
     box-shadow: #1a1a1a;
 }
@@ -178,28 +182,195 @@
     color: #1a1a1a;
 }
 
-@media (max-width: 480px) {
-    .card {
-        flex: 0 0 160px;
-        max-width: 160px;
-        height: 320px;      /* Laisse la hauteur s'adapter au contenu réduit */
-        padding: 0.5rem;   /* Réduit le padding global de la carte */
-        gap: 2px;          /* Réduit l'espace entre les éléments dans la carte */
+@media (max-width: 430px) {
+ 
+
+    /*STOCK CARD*/
+    .card.stock {
+        height: 340px;
+        max-width: 200px;
+        background: lightgrey;
+        color: grey;
+        border: 2px solid black;
+        box-shadow: #1a1a1a;
     }
 
-    .card-image {
-        width: 80px;       /* Réduit encore la taille pour laisser respirer */
+    .card-stock-image {
+        max-width: 80px;
         height: 80px;
-        margin: 2px;
+        aspect-ratio: 1 / 1;
+        object-fit: contain;
     }
 
-    .card-title {
-        font-size: 1.1rem; /* Réduit la taille du titre */
-        margin: 2px 0;     /* Élimine les marges verticales inutiles */
+    .card-stock-title {
+        font-size: 1rem;
+        text-align: center;
+        color: black;
+        width: 100%;
     }
 
-    .card-text {
-        font-size: 0.8rem; /* Réduit la taille des textes secondaires */
-        margin: 1px 0;     /* Compacte les marges entre les lignes de texte */
+    .card-stock-description {
+        display: none;
     }
+
+    .card-stock-market {
+        display: none;
+    }
+
+    .card-stock-price {
+        font-size: 1rem;
+        color: black;
+    }
+
+    .card-stock-low{
+        display: none;
+    }
+
+    .card-stock-high{
+        display:none;
+    }
+
+    .card-text-stock-price{
+        font-size: 1rem;
+        text-align: center;
+        color: black;
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .chart {
+        width: 100%;
+        background: white;
+        border-radius: 15px;
+        margin: 2 5px;
+        border: 1px solid black;
+        overflow: hidden;
+        position: relative;
+        pointer-events: none;
+        transform: translateZ(0);
+    }
+
+    /*FOREX CARD*/
+    .card.forex {
+        height: auto;
+        max-width: 150px;
+        background: lightgrey;
+        color: grey;
+        border: 2px solid black;
+        box-shadow: #1a1a1a;
+    }
+
+    .card-image-forex {
+        max-width: 80px;
+        height: 80px;
+        aspect-ratio: 1 / 1;
+        object-fit: contain;
+    }
+
+    .card-title-forex {
+        font-size: 1rem;
+        text-align: center;
+        color: black;
+        width: 100%;
+    }
+
+    .card-forex-ticker {
+        display: none;
+    }
+
+    .card-text-stock-market {
+        display: none;
+    }
+
+    .card-forex-price {
+        font-size: 1rem;
+        color: black;
+    }
+
+    .card-forex-high {
+        display: none;
+    }
+
+    .card-forex-low {
+        display:none;
+    }
+
+    /*COMMODITY CARD*/
+    .card.commodity {
+        height: auto;
+        max-width: 150px;
+        background: lightgrey;
+        color: grey;
+        border: 2px solid black;
+        box-shadow: #1a1a1a;
+    }
+
+    .card-commodity-image {
+        max-width: 80px;
+        height: 80px;
+        aspect-ratio: 1 / 1;
+        object-fit: contain;
+    }
+
+    .card-commodity-title{
+        font-size: 1rem;
+        text-align: center;
+        color: black;
+        width: 100%;
+    }
+
+    .card-commodity-ticker {
+        display: none;
+    }
+
+    .card-commodity-price {
+        font-size: 1rem;
+        color: black;
+    }
+
+    .card-commodity-high {
+        display: none;
+    }
+
+    .card-commodity-low {
+        display:none;
+    }
+
+    /*ANALYST CARD*/
+    .card.analyst {
+        height: auto;
+        max-width: 150px;
+        background: lightgrey;
+        color: grey;
+        border: 2px solid black;
+        box-shadow: #1a1a1a;
+    }
+
+    .card-analyst-image {
+        max-width: 80px;
+        height: 80px;
+        aspect-ratio: 1 / 1;
+        object-fit: contain;
+    }
+
+    .card-analyst-title {
+        font-size: 1rem;
+        text-align: center;
+        color: black;
+        width: 100%;
+    }
+
+    .card-analyst-company {
+        font-size: 1rem;
+        text-align: center;
+        color: black;
+        width: 100%;
+    }
+
+    .card-analyst-bio {
+        display: none;
+    }
+
 }

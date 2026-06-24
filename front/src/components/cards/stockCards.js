@@ -18,19 +18,19 @@ export default function stockCard({
 
         <div class="chart" id="tv-${ticker}" data-ticker="${ticker}" data-history='${JSON.stringify(history)}'></div>
 
-        <img class="card-image-stock" src="${finalImage}" alt="${ticker}" onerror="this.onerror=null; this.src='/assets/nasdaq_logo.webp'">
+        <img class="card-stock-image" src="${finalImage}" alt="${ticker}" onerror="this.onerror=null; this.src='/assets/nasdaq_logo.webp'">
 
-        <h2 class="card-title">${name}</h2>
+        <h2 class="card-stock-title">${name}</h2>
 
-        <p class="card-description">${ticker}</p>
+        <p class="card-stock-description">${ticker}</p>
 
-        <p class="card-text">Market Cap: ${marketCap}</p>
+        <p class="card-stock-market">Market Cap: ${marketCap}</p>
 
-        <p class="card-text">Price: ${price}</p>
+        <p class="card-stock-price">Price: ${price}</p>
 
-        <p class="card-text">High: ${high}</p>
+        <p class="card-stock-high">High: ${high}</p>
 
-        <p class="card-text">Low: ${low}</p>
+        <p class="card-stock-low">Low: ${low}</p>
 
     </div>
   `
