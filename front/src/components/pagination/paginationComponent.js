@@ -18,7 +18,7 @@ export function createPaginationList({
 
     target.innerHTML = `
         <div id="${containerId}"></div>
-        <div id="${paginationId}" style="display: none; gap: 10px; margin-top: 10px;">
+        <div id="${paginationId}">
             <button class="paginBtn" id="${prevBtnId}">Previous</button>
             <button class="paginBtn" id="${nextBtnId}">Next</button>
         </div>

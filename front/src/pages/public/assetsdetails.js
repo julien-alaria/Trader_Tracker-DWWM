@@ -106,7 +106,7 @@ export async function initDetail() {
             <button onclick="history.back()" class="btn-back">Back</button>
             
             <div class="asset-header">
-                <img class="asset-logo" src="${finalImage}" width="100" height="100" alt="${asset.ticker}" onerror="this.onerror=null; this.src='${fallbackImage}';">
+                <img class="asset-logo" src="${finalImage}" alt="${asset.ticker}" onerror="this.onerror=null; this.src='${fallbackImage}';">
                 <div class="asset-title-container">
                     <h1 class="asset-name">${asset.name}</h1>
                     <span class="asset-ticker">${asset.ticker}</span>
@@ -173,12 +173,12 @@ export async function initDetail() {
 
                     return `
                         <div class="recommendation" data-js-clickable data-analyst-id="${rec.user_id}">
-                            <img src="${recoImage}" width="50" height="50" alt="reco-image" />
-                            <strong>${rec.status}</strong>
-                            <p>${rec.comment}</p>
-                            <img src="${imageUrl}" width="30" height="30" class="analyst-picture"  alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
-                            <p>Analyst: ${rec.analyst_name ?? "unknown"}</p>
-                            <p>Published on ${formatDate(rec.created_at)}</p>
+                            <img src="${recoImage}" alt="reco-image" class="reco-image"/>
+                            <strong class="reco-status">${rec.status}</strong>
+                            <p class="reco-comment">${rec.comment}</p>
+                            <img src="${imageUrl}" class="analyst-picture"  alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
+                            <p class="reco-name">${rec.analyst_name ?? "unknown"}</p>
+                            <p class="reco-publish">${formatDate(rec.created_at)}</p>
                         </div>
                     `
                 },
@@ -237,7 +237,7 @@ export async function initDetail() {
 
                 return `
                     <div class="analyst-item" data-js-clickable data-id="${a.id}">
-                        <img src="${imageUrl}" width="30" height="30" class="analyst-picture" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
+                        <img src="${imageUrl}" class="analyst-picture" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
                         <p><strong>${a.name}</strong> - ${a.company}</p>
                     </div>
                 `

@@ -6,6 +6,7 @@
 @import "./src/styles/analyst.css";
 @import "./src/styles/analystdetails.css";
 @import "./src/styles/user.css";
+@import "./src//styles/footer.css";
 
 * {
   box-sizing: border-box;
@@ -25,6 +26,7 @@ body {
     padding: 0;
     font-size: 16px;
     background-color: whitesmoke;
+    font-family: 'Montserrat', 'Inter', sans-serif;
 }
 
 main {
@@ -104,12 +106,16 @@ a {
     }
 
     #nav-about {
-        font-size: 1rem;
+        display: none;
+    }
+
+    #nav-login {
+        font-size: 0.8rem;
     }
 
     #nav-register {
-        font-size: 0.5rem;
+        font-size: 0.6rem;
+        padding: 4px 8px;
     }
-
 }
 

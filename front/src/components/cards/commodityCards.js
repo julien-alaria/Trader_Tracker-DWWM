@@ -13,7 +13,7 @@ export default function commodityCard({ name, ticker, price, high, low, image } 
 
       <p class="card-commodity-ticker">Ticker: ${ticker}</p>
 
-      <p class="card-commodity-price">Price: ${price}</p>
+      <p class="card-commodity-price">$${price}</p>
 
       <p class="card-commodity-high">High: ${high}</p>
 

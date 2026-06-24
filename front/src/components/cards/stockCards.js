@@ -26,7 +26,7 @@ export default function stockCard({
 
         <p class="card-stock-market">Market Cap: ${marketCap}</p>
 
-        <p class="card-stock-price">Price: ${price}</p>
+        <p class="card-stock-price">${price} USD</p>
 
         <p class="card-stock-high">High: ${high}</p>
 

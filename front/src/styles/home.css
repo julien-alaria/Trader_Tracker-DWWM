@@ -30,6 +30,7 @@ main {
     min-height: 30vh;
     box-sizing: border-box;
     gap: 30px;
+    border: 2px solid black;
 }
 
 #home-top-title {
@@ -112,7 +113,7 @@ main {
 }
 
 #home-stocks-text {
-  font-size: 3rem;
+  font-size: 2rem;
 
 }
 
@@ -125,20 +126,27 @@ main {
 }
 
 #home-forex-title {
-  font-size: 3rem;
+   font-size: 2rem;
 }
 
 #home-stocks-text {
-  font-size: 3rem;
+   font-size: 2rem;
 }
 
 #home-top, #home-middle {
-    display: flex; flex-direction: column; align-items: center; justify-content: space-around;
-    background-color: navy; color: white; padding: 20px; min-height: 30vh;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: space-around;
+    background-color: navy; 
+    color: white; 
+    padding: 20px; 
+    min-height: 40vh;
+    border: 2px solid black;
 }
 
 #home-middle-text {
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
 #home-commodities {
@@ -150,11 +158,27 @@ main {
 }
 
 #home-commodities-title {
-  font-size: 3rem;
+   font-size: 2rem;
 }
 
 #home-commodities-text {
   font-size: 3rem;
+}
+
+#home-analysts-title {
+    font-size: 2rem;
+}
+
+#home-analysts-text {
+    font-size: 2rem;
+}
+
+#all-assets-btn {
+    font-size: 2rem;
+    background-color: whitesmoke;
+    padding: 15px;
+    color: #1a1a1a;
+    text-decoration: underline;
 }
 
 .carousel {
@@ -187,7 +211,7 @@ main {
     }
 
     #home-top-title {
-        font-size: 4rem;
+        font-size: 3rem;
     }
 
     #home-top-text {
@@ -196,7 +220,7 @@ main {
 
     #home-top-register {
         padding: 4px 8px;
-        font-size: 1.6rem;
+        font-size: 1rem;
     }
 
     #home-search-bar {
@@ -211,6 +235,7 @@ main {
     }
 
     #home-stocks-title {
+        color: navy;
         margin-top: 1rem;
         margin-bottom: 0.5rem;
         text-decoration: underline;
@@ -221,14 +246,8 @@ main {
         text-align: center;
     }
 
-    #all-assets-btn {
-        background-color: lightgrey;
-        padding: 0.3rem;
-        border: 2px solid black;
-        border-radius: 16px;
-    }
-
     #home-forex-title {
+        color: navy;
         margin-top: 1rem;
         margin-bottom: 0.5rem;
         text-decoration: underline;
@@ -251,10 +270,11 @@ main {
 
     #home-middle-register {
         padding: 4px 8px;
-        font-size: 1.6rem;
+        font-size: 1rem;
     }
 
     #home-commodities-title {
+        color: navy;
         margin-top: 1rem;
         margin-bottom: 0.5rem;
         text-decoration: underline;
@@ -266,6 +286,9 @@ main {
     }
 
     #home-analysts-title {
+        text-align: center;
+        color: navy;
+        font-size: 2rem;
         margin-top: 1rem;
         margin-bottom: 0.5rem;
         text-decoration: underline;

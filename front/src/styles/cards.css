@@ -72,7 +72,7 @@
 
 .chart {
     width: 100%;
-    background: white;
+    background: black;
     border-radius: 15px;
     margin: 5px;
     border: 1px solid black;
@@ -125,7 +125,7 @@
     box-shadow: #1a1a1a;
 }
 
-.card-image-analyst {
+.card-analyst-image {
     width: 230px;
     height: 200px;
     object-fit: fill;
@@ -158,10 +158,6 @@
     color: black;
 }
 
-
-
-
-
 /* ==========================================================================
    COMPOSANTS DIVERS
    ========================================================================== */
@@ -177,27 +173,33 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-#all-assets-btn {
-    font-size: 3rem;
-    color: #1a1a1a;
-}
-
 @media (max-width: 430px) {
  
 
     /*STOCK CARD*/
     .card.stock {
-        height: 340px;
-        max-width: 200px;
-        background: lightgrey;
-        color: grey;
+        height: auto;
+        max-width: 160px;
+        background: light;
         border: 2px solid black;
         box-shadow: #1a1a1a;
     }
 
+    .chart {
+        width: 100%;
+        background: lightgray;
+        border-radius: none;
+        margin: 1px;
+        border: none;
+        overflow: hidden;
+        position: relative;
+        pointer-events: none;
+        transform: translateZ(0);
+    }
+
     .card-stock-image {
-        max-width: 80px;
-        height: 80px;
+        max-width: auto;
+        height: 70px;
         aspect-ratio: 1 / 1;
         object-fit: contain;
     }
@@ -207,6 +209,10 @@
         text-align: center;
         color: black;
         width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-decoration: underline;
     }
 
     .card-stock-description {
@@ -240,18 +246,6 @@
         text-overflow: ellipsis;
     }
 
-    .chart {
-        width: 100%;
-        background: white;
-        border-radius: 15px;
-        margin: 2 5px;
-        border: 1px solid black;
-        overflow: hidden;
-        position: relative;
-        pointer-events: none;
-        transform: translateZ(0);
-    }
-
     /*FOREX CARD*/
     .card.forex {
         height: auto;
@@ -274,6 +268,7 @@
         text-align: center;
         color: black;
         width: 100%;
+        text-decoration: underline;
     }
 
     .card-forex-ticker {
@@ -319,6 +314,7 @@
         text-align: center;
         color: black;
         width: 100%;
+        text-decoration: underline;
     }
 
     .card-commodity-ticker {
@@ -352,7 +348,7 @@
         max-width: 80px;
         height: 80px;
         aspect-ratio: 1 / 1;
-        object-fit: contain;
+        object-fit: fill;
     }
 
     .card-analyst-title {
@@ -360,6 +356,7 @@
         text-align: center;
         color: black;
         width: 100%;
+        text-decoration: underline;
     }
 
     .card-analyst-company {
@@ -367,6 +364,9 @@
         text-align: center;
         color: black;
         width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .card-analyst-bio {
