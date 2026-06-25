@@ -1,35 +1,100 @@
-.main-footer {
-    background-color: navy;
-    color: white;
-    padding: 30px 20px;
+/* ==========================================================================
+   1. STRUCTURE DU FOOTER (Styles communs par défaut - Desktop)
+   ========================================================================== */
+footer.main-footer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: auto;
-    gap: 20px;
+    width: 100%;
+    min-height: 40vh;
+    background-color: #03034B; /* Bleu nuit exact de la maquette */
+    color: #ffffff;
+    box-sizing: border-box;
+    padding: 60px 40px;
+    margin-top: auto;          /* Maintient le footer en bas */
 }
 
-.footer-nav {
+/* Positionnement des icônes de réseaux sociaux en haut */
+.footer-socials {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 25px;
-    flex-wrap: wrap; 
+    width: 100%;
+    max-width: 1200px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Ligne de séparation fine */
+    margin-bottom: 40px;
 }
 
-.footer-nav a {
-    color: white;
-    text-decoration: none;
-    font-size: 0.95rem;
-    font-weight: 500;
+.footer-socials a {
+    color: #ffffff;
+    font-size: 1.5rem;
     transition: opacity 0.2s ease;
 }
 
-.footer-nav a:hover {
-    opacity: 0.8; 
+.footer-socials a:hover {
+    opacity: 0.8;
 }
 
-.footer-copyright {
-    margin: 0;
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.6);
+/* Ciblage de votre bloc de navigation d'origine */
+.footer-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+/* Style des liens générés par navLink (ABOUT) */
+.footer-nav a {
+    color: #ffffff !important;
+    font-size: 1.1rem;
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #ffffff; /* Effet de soulignement décalé */
+}
+
+/* Ciblage du copyright d'origine */
+.footer-bottom {
+    width: 100%;
+    text-align: center;
+    font-size: 0.8rem;
+    opacity: 0.5;
+    padding-top: 15px;
+}
+
+
+/* ==========================================================================
+   2. ADAPTATION RESPONSIVE MOBILE (@media max-width: 430px)
+   ========================================================================== */
+@media (max-width: 430px) {
+    footer.main-footer {
+        padding: 40px 20px;
+        min-height: auto;
+    }
+
+    .footer-socials {
+        gap: 20px;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+    }
+
+    .footer-socials a {
+        font-size: 1.3rem;
+    }
+
+    .footer-nav {
+        margin-bottom: 30px;
+    }
+
+    .footer-nav a {
+        font-size: 1rem;
+    }
+
+    .footer-bottom {
+        font-size: 0.75rem;
+    }
 }

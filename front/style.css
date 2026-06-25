@@ -7,10 +7,8 @@
 @import "./src/styles/analystdetails.css";
 @import "./src/styles/user.css";
 @import "./src//styles/footer.css";
+@import "./src//styles/auth.css";
 
-* {
-  box-sizing: border-box;
-}
 
 html, body {
   height: 100%;
@@ -53,14 +51,6 @@ main {
     min-height: 350px;
 }
 
-footer {
-    margin-top: auto;    
-    min-height: 50vh;
-    background-color: navy;
-    color: white;
-    border: 2px solid black;
-    flex-shrink: 0;      
-}
 
 .main-navbar {
     display: flex;
@@ -72,6 +62,7 @@ footer {
     background-color: black; 
     color: white;
     height: 10vh;
+    min-width: 0;             /* Permet à la navbar de fléchir sans forcer le body */
 }
 
 #nav-register {
@@ -99,7 +90,19 @@ a {
     display: none;
 }
 
+/* ==========================================================================
+   TON MEDIA-QUERY MOBILE CORRIGÉ
+   ========================================================================== */
 @media (max-width: 430px) {
+
+    /* Correction majeure : On libère la hauteur fixe de la navbar pour éviter le chevauchement 
+       et on lui permet de respirer sans pousser les bords de l'écran */
+    .main-navbar {
+        height: auto;
+        padding: 15px 5px;
+        flex-wrap: wrap;       /* Les éléments passent à la ligne si l'écran est trop étroit */
+        gap: 10px;
+    }
 
     #nav-home {
         font-size: 1rem;

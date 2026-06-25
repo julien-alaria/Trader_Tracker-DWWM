@@ -1,0 +1,346 @@
+/* ==========================================================================
+   1. STYLES DE BASE & RÉINITIALISATION (Communs à tous les formulaires)
+   ========================================================================== */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #ffffff;
+    color: #000000;
+}
+
+/* Accessibilité : Masque les labels textuels classiques pour le Login, Register et Analyst Form */
+.input-group label, 
+#analyst-form > label,
+#register-form > label {
+
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.input-group {
+    width: 100%;
+}
+
+/* Base uniforme de tous les champs de saisie (Inputs, Textarea et Files) */
+#email, #password, #name, #company, #bio, input[type="file"] {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #000000;
+    border-radius: 12px;
+    font-size: 1.5rem;
+    padding: 16px 20px;
+    background-color: #ffffff;
+    outline: none;
+    font-family: inherit;
+}
+
+#email::placeholder, #password::placeholder, #name::placeholder, #company::placeholder {
+    color: #333333;
+    font-weight: 400;
+}
+
+/* Spécificités du formulaire Analyste (Textarea & Fichiers) */
+#bio {
+    resize: vertical;
+    min-height: 120px;
+}
+
+#bio::placeholder {
+    color: #333333;
+    font-weight: 400;
+}
+
+input[type="file"] {
+    font-size: 1rem;
+    padding: 12px 20px;
+    cursor: pointer;
+}
+
+/* Gestion du Fieldset (Sélection du type d'actif pour l'analyste) */
+fieldset {
+    width: 100%;
+    border: 1px solid #000000;
+    border-radius: 12px;
+    padding: 15px 20px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+}
+
+fieldset p {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #000000;
+}
+
+fieldset div {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+}
+
+fieldset input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #03034B;
+    margin: 0;
+    cursor: pointer;
+}
+
+fieldset label {
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+/* Lien de récupération de mot de passe */
+.forgot-password {
+    align-self: flex-start;
+    color: #03034B;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-decoration: none;
+    margin-bottom: 5px;
+}
+
+/* Élément séparateur de texte "OR" */
+.separator {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    margin: 20px 0;
+}
+
+.separator .line {
+    flex: 1;
+    height: 1px;
+    background-color: #000000;
+}
+
+.separator .text {
+    padding: 0 15px;
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+#message {
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+
+/* ==========================================================================
+   2. DESIGN COMPORTEMENT MOBILE (@media max-width: 430px)
+   ========================================================================== */
+@media (max-width: 430px) {
+    
+    /* Application du style mobile aux trois formulaires */
+    #login-form, 
+    #analyst-form,
+    #register-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 320px;
+        padding: 1rem;
+        box-sizing: border-box;
+        gap: 20px;
+   
+        top: 48%; 
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    #analyst-form {
+        gap: 16px; 
+    }
+
+    .form-title {
+        font-size: 1.1rem;
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        text-decoration: underline;
+        text-underline-offset: 6px;
+        font-weight: 500;
+    }
+
+    /* Redimensionnement des champs pour mobile */
+    #email, #password, #name, #company, #bio, input[type="file"] {
+        font-size: 1rem;
+        padding: 12px 16px;
+        border-radius: 8px;
+    }
+
+    fieldset {
+        border-radius: 8px;
+        padding: 12px;
+    }
+
+    fieldset p {
+        font-size: 1rem;
+    }
+
+    fieldset div {
+        gap: 12px;
+    }
+
+    fieldset label {
+        font-size: 0.95rem;
+    }
+
+    /* Boutons de validation (SIGN IN / SUBMIT) Bleu */
+    #login-form input[type="submit"],
+    #analyst-form input[type="submit"],
+    #register-form input[type="submit"] {
+        width: 100%;
+        background-color: #03034B;
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        padding: 12px;
+        cursor: pointer;
+        text-transform: uppercase;
+    }
+
+    .separator {
+        margin: 10px 0;
+    }
+
+    .separator .text {
+        font-size: 1rem;
+    }
+
+    /* Bouton CREATE FREE ACCOUNT Noir */
+    #home-middle-register {
+        display: block;
+        width: 100%;
+        background-color: #000000;
+        color: #ffffff;
+        text-decoration: none;
+        text-align: center;
+        font-size: 1rem;
+        font-weight: 400;
+        padding: 12px 15px;
+        border-radius: 6px;
+        box-sizing: border-box;
+    }
+
+    .form-footer {
+        width: 100%;
+    }
+}
+
+
+/* ==========================================================================
+   3. DESIGN COMPORTEMENT DESKTOP (@media min-width: 1024px)
+   ========================================================================== */
+@media (min-width: 1024px) {
+    
+    #login-form, 
+    #analyst-form,
+    #register-form  {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        padding: 40px;
+        border: 1px solid #cccccc;
+        background-color: #ffffff;
+        box-sizing: border-box;
+        gap: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+ 
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    /* Largeurs adaptées au contenu respectif sur grand écran */
+    #login-form {
+        max-width: 400px;
+    }
+
+    /* Ajusté pour un rendu harmonieux sur Desktop */
+    #analyst-form,
+    #register-form  {
+        max-width: 460px;
+    }
+
+    .form-title {
+        font-size: 1rem;
+        margin: 0 0 10px 0;
+        text-decoration: underline;
+        text-underline-offset: 6px;
+        font-weight: 500;
+    }
+
+    /* Inputs affinés pour Desktop */
+    #email, #password, #name, #company, #bio, input[type="file"] {
+        font-size: 1.1rem;
+        padding: 12px 15px;
+        border-radius: 8px;
+    }
+
+    /* Correction des sélecteurs pour les boutons bleus Desktop */
+    #login-form input[type="submit"],
+    #analyst-form input[type="submit"],
+    #register-form input[type="submit"]  {
+        width: 100%;
+        background-color: #03034B;
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        padding: 12px;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: background-color 0.2s ease;
+    }
+
+    #login-form input[type="submit"]:hover,
+    #analyst-form input[type="submit"]:hover,
+    #register-form input[type="submit"]:hover {
+        background-color: #02022d;
+    }
+
+    .separator {
+        margin: 10px 0;
+    }
+
+    .separator .text {
+        font-size: 1rem;
+    }
+
+    #home-middle-register {
+        display: block;
+        width: 100%;
+        background-color: #000000;
+        color: #ffffff;
+        text-decoration: none;
+        text-align: center;
+        font-size: 1.1rem;
+        padding: 10px 15px;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .form-footer {
+        width: 100%;
+    }
+}

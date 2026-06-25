@@ -8,7 +8,6 @@ export default function navbar() {
     return `
         <nav class="main-navbar">
             ${navLink("/", "TRADER TRACKER", "nav-home")}
-            ${navLink("/about", "About", "nav-about")}
 
             ${user ? "" : navLink("/login", "Sign In |", "nav-login")}
             ${user ? "" : navLink("/register", "CREATE FREE ACCOUNT", "nav-register")}
