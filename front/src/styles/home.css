@@ -114,7 +114,6 @@ main {
 
 #home-stocks-text {
   font-size: 3rem;
-
 }
 
 #home-forex {
@@ -283,5 +282,59 @@ main {
     #home-analysts-text {
         font-size: 1.5rem;
         text-align: center;
+    }
+}
+
+/* ==========================================================================
+   TABLETTE (431px à 1023px)
+   ========================================================================== */
+@media (min-width: 431px) and (max-width: 1023px) {
+    #home-top-title {
+        font-size: 5rem;
+    }
+    
+    #home-top-text, 
+    #home-middle-text, 
+    #home-stocks-text, 
+    #home-forex-text, 
+    #home-commodities-text {
+        font-size: 2rem;
+    }
+
+    .search-input {
+        width: 40vw; /* Plus large sur tablette */
+    }
+}
+
+/* ==========================================================================
+   DESKTOP (À partir de 1024px)
+   ========================================================================== */
+@media (min-width: 1024px) {
+    
+    /* On conserve tes tailles originales pour le Desktop */
+    #home-top-title {
+        font-size: 7rem;
+    }
+
+    #home-top-text, 
+    #home-middle-text, 
+    #home-stocks-text, 
+    #home-forex-text, 
+    #home-commodities-text {
+        font-size: 3rem;
+    }
+
+    #home-search-bar {
+        justify-content: center; /* Centrage naturel sur grand écran */
+    }
+
+    .search-input {
+        width: 20vw; /* Taille fixe pour garder la mise en page originale */
+    }
+
+    /* Optimisation du carrousel pour éviter qu'il soit trop étiré sur très large écran */
+    .carousel {
+        max-width: 1400px;
+        margin: 0 auto;
     }
 }

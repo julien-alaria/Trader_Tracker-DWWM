@@ -1,12 +1,12 @@
 #asset-detail {
-    width: 80vw;
+    width: 100vw;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 1rem;
 }
 
 .tv-chart {
     width: 100%;
-    height: 120px; 
+    height: auto; 
     margin-top: 20px;
 }
 
@@ -87,6 +87,11 @@
     font-weight: bold;
 }
 
+#follow-toggle-btn {
+    background-color: lightgray;
+    border: 1px solid black;
+}
+
 .analyst-picture {
     border-radius: 50%;
 } 
@@ -100,6 +105,11 @@
 #reco-title {
     text-align: center;
     font-size: 1.8rem;
+}
+
+#reco-pagination {
+    justify-content: center;
+    align-items: center;
 }
 
 .recommendation {
@@ -117,4 +127,152 @@
 #login-btn {
     font-size: 1.5rem;
 }
+
+@media (max-width: 430px) {
+
+    .asset-header {
+        margin: 0;
+        gap: 10px;
+    }
+
+    .asset-name {
+        margin: 0;
+        font-size: 1.5rem;
+        padding: 0 0.5rem;
+    }
+
+    .asset-info {
+        margin: 20px;
+    }
+
+    .login-message {
+        text-align: center;
+        font-size: 1rem;
+        margin: 20px;
+        text-decoration: underline;
+    }
+
+    #login-btn {
+        font-size: 0.6rem;
+    }
+
+    #reco-list-container {
+        font-size: 0.5rem;
+        height: 200px;
+    }
+
+    .recommendation {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 1px;
+        width: 100%;
+    }
+
+    .reco-image {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+    }
+
+    .reco-status {
+        font-size: 0.75rem;
+        flex-shrink: 0;
+    }
+
+    .reco-comment {
+        font-size: 0.5rem;
+        max-width: 35%;
+        margin-left: auto;
+        white-space: normal; 
+        word-break: break-word;
+    }
+
+    .analyst-picture {
+        width: 25px;
+        height: 25px;
+        margin-left: auto;
+        flex-shrink: 0;
+    }
+
+    .reco-name {
+        font-size: 0.5rem;
+        font-weight: bold;
+        max-width: 15%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex-shrink: 0;
+    }
+
+    .reco-publish {
+        font-size: 0.5rem;
+        text-align: right;
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+
+    #reco-pagination {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .paginBtn {
+        font-size: 0.8rem;
+    }
+
+    #analyst-carousel-container {
+        text-align: center;
+        font-size: 0.8rem;
+    }
+
+    h2 {
+        text-align: center;
+        text-decoration: underline;
+        font-size: 0.8rem;
+    }
+
+    #analyst-list-global {
+        display: flex;
+        flex-direction: column;
+        margin: 10px;
+    }
+
+    #analyst-list-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        width: 100%;
+        height: 200px;
+    }
+
+    .analyst-item {
+        display: flex;
+        flex-direction: row; 
+        justify-content: flex-start;
+        align-items: center;
+        text-align: center;
+        font-size: 0.5rem;
+        width: 100%;
+        gap: 10px;          
+    }
+
+    .analyst-item p {
+        margin: 10px;
+        text-align: justify;
+        display: block;
+        width: 100%;
+    }
+
+    #analyst-pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+    }
+}
+
 

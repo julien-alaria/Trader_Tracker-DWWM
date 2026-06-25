@@ -374,3 +374,64 @@
     }
 
 }
+
+/* ==========================================================================
+   TABLETTE (431px à 1023px) : Augmentation du ratio
+   ========================================================================== */
+@media (min-width: 431px) and (max-width: 1023px) {
+
+    /* Augmentation de la taille des cartes (ratio intermédiaire) */
+    .card.stock, 
+    .card.forex, 
+    .card.commodity, 
+    .card.analyst {
+        max-width: 250px;
+    }
+
+    /* Augmentation du ratio des images (passage de 80px à 150px) */
+    .card-stock-image,
+    .card-image-forex,
+    .card-commodity-image,
+    .card-analyst-image {
+        max-width: 150px;
+        height: 150px;
+    }
+
+    /* Ajustement de la typo */
+    .card-stock-title,
+    .card-title-forex,
+    .card-commodity-title,
+    .card-analyst-title {
+        font-size: 1.2rem;
+    }
+}
+
+/* ==========================================================================
+   DESKTOP (À partir de 1024px) : Ratio maximum (Original)
+   ========================================================================== */
+@media (min-width: 1024px) {
+
+    /* Retour aux valeurs pleines */
+    .card.stock, 
+    .card.forex, 
+    .card.commodity, 
+    .card.analyst {
+        max-width: 320px;
+    }
+
+    /* Ratio maximum pour les images */
+    .card-stock-image,
+    .card-image-forex,
+    .card-commodity-image,
+    .card-analyst-image {
+        max-width: 250px;
+        height: 250px;
+    }
+
+    .card-stock-title,
+    .card-title-forex,
+    .card-commodity-title,
+    .card-analyst-title {
+        font-size: 1.4rem;
+    }
+}

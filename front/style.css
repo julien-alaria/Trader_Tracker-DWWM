@@ -6,6 +6,8 @@
 @import "./src/styles/analyst.css";
 @import "./src/styles/analystdetails.css";
 @import "./src/styles/user.css";
+@import "./src//styles/footer.css";
+@import "./src/styles/auth.css";
 
 * {
   box-sizing: border-box;
@@ -51,14 +53,6 @@ main {
     min-height: 350px;
 }
 
-footer {
-    margin-top: auto;    
-    min-height: 50vh;
-    background-color: navy;
-    color: white;
-    border: 2px solid black;
-    flex-shrink: 0;      
-}
 
 .main-navbar {
     display: flex;

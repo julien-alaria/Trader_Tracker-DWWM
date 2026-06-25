@@ -1,48 +1,14 @@
-#users-list {
-    display: flex;
-    flex-direction: column;
-}
-
-#admin-users-title {
-    text-align: start;
-    font-size: 1.8rem;
-}
-
-.user-item{
-    display: flex;
-    flex-direction: row;
-    align-items: start;
-    margin: 1rem;
-    justify-content: space-between;
-
-}
-
-.update-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    align-items: start;
-    justify-content: space-around;
-}
-
-.recommendation p {
-    width: 20%;               
-    white-space: nowrap;      
-    overflow: hidden;          
-    text-overflow: ellipsis;
-}
-
-.watchlist-item{
- display: flex;
-    flex-direction: row;
-    align-items: start;
-    margin: 1rem;
-    justify-content: space-around;
-}
-
+/* ==================================================
+   SECURED OVERALL STRUCTURE AND SIDE PANEL
+   ================================================== */
 .admin-layout {
     display: flex;
     flex-direction: row;
+    width: 100%;
+    background-color: #e5ecef; 
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #000000;
 }
 
 .admin-sidebar {
@@ -55,9 +21,252 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    min-width: 100px;
+    flex: 0 0 auto; 
+    min-width: 150px;
     color: white;
-    background-color: black;
+    background-color: #c4c9cd; 
+    border-right: 2px solid #000000;
     min-height: 100vh;
-    margin-right: 10px;
+    margin-right: 15px;
+    box-sizing: border-box;
 }
+
+.admin-layout main, 
+.admin-layout #admin-content {
+    flex: 1;            
+    width: 100%;
+    flex-grow: 1;
+    padding: 30px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.admin-layout #admin-users-title, 
+.admin-layout section h2 {
+    text-align: left;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #03034B;
+    background-color: #ffffff;
+    margin: 0 0 -2px 0;
+    padding: 10px 15px;
+    border: 2px solid #000000;
+    display: inline-block;
+    width: max-content;
+}
+
+.admin-layout section {
+    background-color: #ffffff;
+    border: 2px solid #000000;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+    box-sizing: border-box;
+    border-radius: 0;
+}
+
+.admin-layout #users-list, 
+.admin-layout #pending-analysts, 
+.admin-layout #recommendations-list-target, 
+.admin-layout #watchlist-list-target {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 15px;
+}
+
+
+/* ========================================================
+   Clean horizontal Flexbox restyling of the rows
+   ======================================================== */
+
+.admin-layout .user-item, 
+.admin-layout .recommendation, 
+.admin-layout .watchlist-item,
+.admin-layout #pending-analysts > div:not(.header-row) { 
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
+    justify-content: space-between;
+    padding: 12px 15px;
+    margin: 0; 
+    border-bottom: 1px solid #e3e6ec;
+    gap: 20px; 
+}
+
+.admin-layout #pending-analysts > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-layout .user-item > span,
+.admin-layout .user-item > div,
+.admin-layout .recommendation > div {
+    font-size: 0.95rem;
+}
+
+.admin-layout .recommendation p {
+    width: 100%;            
+    white-space: nowrap;      
+    overflow: hidden;          
+    text-overflow: ellipsis;
+    margin: 0;
+    font-weight: 500;
+}
+
+.admin-layout .recommendation form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-layout .recommendation select,
+.admin-layout .recommendation input[type="text"] {
+    padding: 5px 8px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+
+/* ===========================
+   BUTTON DESIGN
+   =========================== */
+
+.admin-layout .user-item button:first-of-type,
+.admin-layout .btn-update,
+.admin-layout .recommendation button.edit-btn,
+.admin-layout .recommendation input[type="submit"] {
+    background-color: #dbe02c; 
+    color: #000000;
+    border: 1px solid #a3a815;
+    border-radius: 20px; 
+    padding: 5px 25px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.admin-layout .user-item button:last-of-type, 
+.admin-layout .recommendation button:last-of-type,
+.admin-layout .btn-delete {
+    background-color: #ff0000; 
+    color: #ffffff;
+    border: none;
+    border-radius: 4px; 
+    padding: 6px 18px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.admin-layout #pending-analysts button,
+.admin-layout .btn-approve {
+    background-color: #ffffff;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.admin-layout button#next, 
+.admin-layout .recommendation + button,
+.admin-layout #users-list + button {
+    background-color: #ffffff;
+    border: 1px solid #000000;
+    padding: 5px 15px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    margin-top: 15px;
+    align-self: flex-start;
+}
+
+
+/* =========================================
+   PROFILE UPDATE FORM
+   ========================================= */
+
+.admin-layout .update-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+    background-color: #ffffff;
+    border: 2px solid #000000;
+    padding: 25px;
+    margin-top: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.admin-layout .update-form h2 {
+    border: none;
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+.admin-layout .update-form input[type="text"],
+.admin-layout .update-form input[type="email"],
+.admin-layout .update-form input[type="password"],
+.admin-layout .update-form textarea {
+    width: 100%;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    padding: 12px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+/* ========================
+   MOBILE-RESPONSIVE
+   ======================== */
+@media (max-width: 850px) { /* Seuil plus large pour inclure les tablettes */
+    
+    .admin-layout {
+        flex-direction: column;
+    }
+
+    .admin-nav {
+        flex-direction: row;
+        width: 100%;
+        min-height: auto;
+        overflow-x: auto;
+        border-right: none;
+        border-bottom: 2px solid #000000;
+    }
+
+    /* Les lignes deviennent des colonnes uniquement quand l'espace manque */
+    .admin-layout .user-item, 
+    .admin-layout .recommendation, 
+    .admin-layout .watchlist-item,
+    .admin-layout #pending-analysts > div {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    /* On laisse les éléments s'étirer naturellement */
+    .admin-layout button,
+    .admin-layout .btn-delete,
+    .admin-layout .btn-update {
+        width: 100%; /* Plus facile à toucher sur mobile */
+    }
+}
+
+@media (min-width: 851px) {
+    /* Sur grand écran, on force le retour à la ligne pour le confort */
+    .admin-layout .user-item, 
+    .admin-layout .recommendation, 
+    .admin-layout .watchlist-item {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+
+

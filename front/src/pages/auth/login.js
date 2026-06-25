@@ -5,18 +5,36 @@ import { getRoleFromToken } from "../../middlewares/roleGuard.js"
 // HTML TEMPLATE 
 // =====================
 const login = `  
-    <h1>Log In</h1>
     <form id="login-form">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required autocomplete="on">
+        <h2 class="form-title">Sign In</h2>
+        
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="enter your email..." required autocomplete="on">
+        </div>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required autocomplete="off">
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="enter your password..." required autocomplete="off">
+        </div>
 
-        <input type="submit" value="submit">
+        <a href="#/forgot" class="forgot-password">Forgot Password?</a>
+
+        <input type="submit" value="SIGN IN">
+        
         <div id="message"></div>
+
+        <div class="separator">
+            <span class="line"></span>
+            <span class="text">OR</span>
+            <span class="line"></span>
+        </div>
+
+        <div class="form-footer">
+            <a id="home-middle-register" href="#/register">CREATE FREE ACCOUNT</a>
+        </div>
     </form>
-    `
+`
 
 // =====================
 // INIT
