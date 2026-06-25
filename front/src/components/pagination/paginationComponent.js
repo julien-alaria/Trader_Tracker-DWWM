@@ -32,7 +32,7 @@ export function createPaginationList({
           if (!container) return
           
           if (results.length === 0) {
-            container.innerHTML = "<p>No data available</p>"
+            container.innerHTML = '<p id="p-text">No recommendations yet</p>'
             return
           }
           container.innerHTML = results.map(item => itemTemplate(item)).join("")

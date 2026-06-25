@@ -79,11 +79,78 @@
     margin-top: 1.5rem;
 }
 
+.recommendation img {
+    width: 50px;
+    height: 50px;
+}
+
 #watchlist-list-target,
 #follow-list-target {
     display: flex;
     flex-direction: column;
     width: 100%;
+}
+
+/* Lignes de la liste — width/height retirés du HTML, gérés ici */
+.watchlist-item,
+.follow-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #e3e6ec;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.watchlist-item img,
+.follow-item img {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+
+.follow-item img {
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.watchlist-item span,
+.follow-item p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #1a1a1a;
+    word-break: break-word;
+}
+
+/* Centrage horizontal uniquement — display/gap/margin-top gérés par paginationComponent.js */
+#watchlist-pagination,
+#follow-pagination {
+    justify-content: center;
+    align-items: center;
+}
+
+.paginBtn {
+    background-color: #f8f9fa;
+    color: #1a1a1a;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.paginBtn:hover {
+    background-color: #e9ecef;
+    border-color: #b8daff;
+}
+
+.paginBtn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
 .update-form {
@@ -145,6 +212,63 @@
 }
 
 /* =============================
+   MOBILE LARGE (431px - 600px)
+   ============================= */
+@media (min-width: 431px) and (max-width: 600px) {
+
+    #analyst_picture {
+        width: 120px;
+        height: 120px;
+    }
+
+    #analyst_name {
+        font-size: 1.75rem;
+    }
+
+    #analyst_email,
+    #analyst_type,
+    #analyst_company {
+        font-size: 1.05rem;
+    }
+
+    #analyst_bio {
+        font-size: 1.05rem;
+    }
+
+    #watchlist-carousel-target,
+    #follow-carousel-target {
+        padding-bottom: 18px;
+        margin-bottom: 24px;
+    }
+
+    #watchlist-carousel-target .carousel-track,
+    #follow-carousel-target .carousel-track {
+        gap: 18px;
+    }
+
+    .watchlist-item img,
+    .follow-item img {
+        width: 56px;
+        height: 56px;
+    }
+
+    .watchlist-item span,
+    .follow-item p {
+        font-size: 1rem;
+    }
+
+    .update-form {
+        max-width: 450px;
+        margin: 0 auto;
+    }
+
+    .update-form input[type="submit"],
+    .update-form button {
+        font-size: 1.15rem;
+    }
+}
+
+/* =============================
    TABLETTE / INTERMÉDIAIRE (600px - 1023px) 
    ============================= */
 @media (min-width: 600px) and (max-width: 1023px) {
@@ -171,6 +295,17 @@
     #analyst_type, 
     #analyst_company {
         text-align: left;
+    }
+
+    .watchlist-item img,
+    .follow-item img {
+        width: 62px;
+        height: 62px;
+    }
+
+    .watchlist-item span,
+    .follow-item p {
+        font-size: 1.05rem;
     }
 
     /* Le formulaire de mise à jour devient un peu plus compact */
@@ -269,6 +404,17 @@
     #analyst_id {
         margin: 0;
         order: -1; 
+    }
+
+    .watchlist-item img,
+    .follow-item img {
+        width: 68px;
+        height: 68px;
+    }
+
+    .watchlist-item span,
+    .follow-item p {
+        font-size: 1.1rem;
     }
 
     #watchlist-carousel-target .carousel-track,

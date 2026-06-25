@@ -140,7 +140,7 @@ export async function initAnalyst() {
 
         return `
           <div class="watchlist-item" data-js-clickable data-ticker="${item.ticker}" data-type="${item.asset_type_id}">
-              <img src="${logoUrl}" width="50" height="50" alt="${item.ticker}onerror="this.src='${defaultLogo}'" />
+              <img src="${logoUrl}" alt="${item.ticker}onerror="this.src='${defaultLogo}'" />
               <span><strong>${item.ticker}</strong></span>
               <span>${item.name}</span>
           </div>
@@ -164,9 +164,9 @@ export async function initAnalyst() {
 
         return `
           <div class="recommendation" data-js-clickable data-id="${rec.id}" data-ticker="${rec.ticker}" data-type="${rec.asset_type_id ?? 'asset'}">
-              <img src="${recoImage}" width="50" height="50" alt="reco-image" />
+              <img src="${recoImage}" alt="reco-image" />
               <strong>${rec.status}</strong>
-              <img src="${imageUrl}" width="50" height="50" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
+              <img src="${imageUrl}" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
               <p>${rec.ticker}</p>
               <p>${rec.comment}</p>
               <small>${new Date(rec.created_at).toLocaleDateString()}</small>
@@ -199,7 +199,7 @@ export async function initAnalyst() {
 
         return `
           <div class="follow-item" data-js-clickable data-id="${a.id}">
-               <img src="${avatarUrl}" width="30" height="30" alt="${a.name}"onerror="this.src='${defaultAvatar}'" />
+               <img src="${avatarUrl}" alt="${a.name}"onerror="this.src='${defaultAvatar}'" />
                <p><strong>${a.name}</strong> - ${a.company ?? "Unknown"}</p>
           </div>
         `

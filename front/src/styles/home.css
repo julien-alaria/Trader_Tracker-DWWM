@@ -50,6 +50,7 @@ main {
     font-size: 2rem;
 }
 
+#nav-register,
 #home-top-register:hover,
 #home-middle-register:hover {
     background-color: orange;
@@ -166,6 +167,13 @@ main {
     font-size: 2rem;
 }
 
+#home-stocks-title,
+#home-forex-title,
+#home-commodities-title,
+#home-analysts-title {
+    color: navy;
+}
+
 .carousel {
     width: 100%; 
     padding: 0 20px; 
@@ -178,7 +186,7 @@ main {
 .carousel-track {
     display: flex;
     flex-wrap: nowrap;
-    gap: 24px;
+    gap: 1rem;
     will-change: transform;
     transform: translate3d(0, 0, 0);
 }

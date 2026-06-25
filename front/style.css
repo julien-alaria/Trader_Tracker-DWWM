@@ -8,6 +8,7 @@
 @import "./src/styles/user.css";
 @import "./src//styles/footer.css";
 @import "./src/styles/auth.css";
+@import "./src/styles/navbar.css";
 
 * {
   box-sizing: border-box;
@@ -16,6 +17,8 @@
 html, body {
   height: 100%;
   margin: 0;
+  max-width: 100%;
+    overflow-x: hidden;
 }
 
 body {
@@ -53,71 +56,8 @@ main {
     min-height: 350px;
 }
 
-
-.main-navbar {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    border: 2px solid black;
-    text-decoration: none;
-    background-color: navy; 
-    height: 10vh;
-}
-
-#nav-home,
-#nav-login,
-#nav-register{
-    font-size: 2rem;
-    color: black;
-}
-
-#nav-register {
-    border: 1px solid black;
-    padding: 8px 16px;
-    transition: all 0.3s ease;
-    color: black;
-}
-
-#nav-register:hover {
-    background-color: orange;
-    color: #1a1a1a;       
-}
-
-ul {
-    list-style-type: none;
-}
-
-a {
-    text-decoration: none;
-    font-size: 1rem;
-    color: white;
-}
-
 .admin-mode footer#footer-container {
     display: none;
 }
 
-@media (max-width: 430px) {
-
-    #nav-home,
-    #nav-login,
-    #nav-register {
-        font-size: 1rem;
-    }
-
-    #nav-about {
-        font-size: 1rem;
-    }
-
-    #nav-register {
-        font-size: 0.5rem;
-    }
-
-    #home-top-register,
-    #home-middle-register {
-        font-size: 1rem;
-    }
-
-}
 

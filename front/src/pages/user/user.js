@@ -144,7 +144,7 @@ export async function initUser() {
 
                 return `
                     <div class="watchlist-item" data-js-clickable data-ticker="${item.ticker}" data-type="${item.asset_type_id || item.type}">
-                        <img src="${logoUrl}" width="40" height="40p" alt="asset-logo" onerror="this.src='${defaultLogo}'" />
+                        <img src="${logoUrl}" alt="asset-logo" onerror="this.src='${defaultLogo}'" />
                         <p><strong>${item.ticker}</strong> - ${item.name}</p>
                     </div>
                 `
@@ -163,7 +163,7 @@ export async function initUser() {
 
                 return `
                     <div class="follow-item" data-js-clickable data-id="${a.id}">
-                        <img src="${avatarUrl}" width="40" height="40" alt="analyst-avatar" onerror="this.src='${defaultAvatar}'" />
+                        <img src="${avatarUrl}" alt="analyst-avatar" onerror="this.src='${defaultAvatar}'" />
                         <p><strong>${a.name}</strong> - ${a.company ?? "Unknown"}</p>
                     </div>
                 `
