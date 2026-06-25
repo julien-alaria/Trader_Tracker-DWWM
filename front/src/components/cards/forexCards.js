@@ -13,7 +13,7 @@ export default function forexCard({ ticker, name, high, low, close, image } = {}
 
       <p class="card-forex-ticker">Ticker: ${ticker}</p>
 
-      <p class="card-forex-price">${close}</p>
+      <p class="card-forex-price">Price: ${close}</p>
 
       <p class="card-forex-high">High: ${high}</p>
 

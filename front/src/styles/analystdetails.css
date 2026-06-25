@@ -1,317 +1,44 @@
-/* ==========================================================================
-   1. STRUCTURE DE BASE & COMMUNE (Mobile First par défaut)
-   ========================================================================== */
-
-#analyst-detail {
-    width: 100vw;
-    margin: 0 auto;
-    padding: 1rem;
-    box-sizing: border-box;
-}
-
-/* En-tête du profil de l'analyste */
-.analyst-header {
+.recommendation, 
+.recommendation-item, 
+.analyst-item {
     display: flex;
     align-items: center;
-    gap: 30px;
-    margin-top: 25px;
-    margin-bottom: 25px;
+    gap: 15px;
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+.reco-icon, 
+.reco-analyst-pic, 
+.reco-status-icon {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
 }
 
 .analyst-avatar {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
     border-radius: 50%;
-    border: 3px solid #03034B;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
 }
 
-.analyst-title-container {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+.analyst-avatar { 
+    width: 30px; 
+    height: 30px; 
 }
 
-.analyst-main-name {
-    margin: 0;
-    font-size: 2.5rem;
-    line-height: 1.2;
-    font-weight: bold;
+.analyst-profile-pic { 
+    width: 200px; 
+    height: 200px; 
 }
 
-.analyst-meta-type {
-    font-size: 1.2rem;
-    color: #888;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-/* Biographie / Informations textuelles */
-.analyst-info-bio {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    line-height: 1.6;
-    font-size: 1rem;
-    color: #333333;
-}
-
-/* Bouton de suivi dynamique copié sur le style de detail-btn */
-.follow-toggle-btn {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 6px 12px;
-    background-color: #f8f9fa;
-    color: #333333;
-    border: 1px solid #cccccc;
-    border-radius: 3px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: background-color 0.1s ease, border-color 0.1s ease;
-}
-
-.follow-toggle-btn:hover {
-    background-color: #e9ecef;
-    border-color: #b8daff;
-}
-
-/* État suivi (True) */
-.follow-toggle-btn[data-followed="true"] {
-    background-color: #e8f0fe;
-    color: #1a73e8;
-    border-color: #1a73e8;
-}
-
-.follow-toggle-btn[data-followed="true"]:hover {
-    background-color: #d2e3fc;
-}
-
-.follow-icon {
-    font-size: 14px;
-    line-height: 1;
-    font-weight: bold;
-}
-
-/* Liste des Recommandations de cet Analyste */
-#recommendations-container {
-    display: flex;
-    flex-direction: column;
-    margin: 4rem 2rem;
-}
-
-#reco-title {
-    text-align: center;
-    font-size: 1.8rem;
-    color: #03034B;
-    font-weight: bold;
-}
-
-.recommendation-item {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-    padding: 10px 0;
-    border-bottom: 1px solid #e3e6ec;
-}
-
-/* Messages d'authentification */
-.login-message {
-    font-size: 1.8rem;
-    margin: 4rem 2rem;
-    text-align: center;
-}
-
-#login-btn {
-    font-size: 1.5rem;
-}
-
-
-/* ==========================================================================
-   2. ADAPTATION EXCLUSIVE GRAND ÉCRAN (Desktop - 1024px et plus)
-   ========================================================================== */
-@media (min-width: 1024px) {
-    #analyst-detail {
-        width: 100%;
-        max-width: 1200px; 
-        padding: 2rem;
-    }
-
-    .analyst-avatar {
-        width: 140px;
-        height: 140px;
-    }
-
-    .analyst-info-bio {
-        max-width: 800px; 
-    }
-
-    .recommendation-item {
-        padding: 12px 0;
-    }
-
-    /* Structure globale alignée en colonne pour les listes de recos */
-    #recommendations-list-global {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        margin: 4rem 0;
-    }
-
-    #recommendations-list-global h2 {
-        text-align: center;
-        width: 100%;
-        margin-bottom: 2rem;
-    }
-
-    /* Conteneur de la liste calé proprement à gauche */
-    #recommendations-list-container {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        width: 100%;
-        max-width: 800px;        
-        margin-left: 2rem;       
-        height: auto;            
-    }
-
-    /* Structure des lignes horizontales sur PC */
-    .recommendation-item {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        width: 100%;
-        gap: 20px;
-    }
-
-    .recommendation-item p {
-        margin: 0;
-        text-align: left;        
-    }
-
-    /* Centre la pagination en bas de page */
-    #reco-pagination, #recommendations-pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        margin-top: 2.5rem;
-        gap: 10px;
-    }
-}
-
-
-/* ==========================================================================
-   3. ADAPTATION DESIGN MOBILE (Smartphone - Max 430px)
-   ========================================================================== */
-@media (max-width: 430px) {
-
-    .analyst-header {
-        margin: 0;
-        gap: 15px;
-    }
-
-    .analyst-avatar {
-        width: 80px;
-        height: 80px;
-    }
-
-    .analyst-main-name {
-        margin: 0;
-        font-size: 1.6rem;
-        padding: 0 0.2rem;
-    }
-
-    .analyst-meta-type {
-        font-size: 1rem;
-    }
-
-    .analyst-info-bio {
-        margin: 20px;
-        font-size: 0.9rem;
-        text-align: justify;
-    }
-
-    .login-message {
-        text-align: center;
-        font-size: 1rem;
-        margin: 20px;
-        text-decoration: underline;
-    }
-
-    #login-btn {
-        font-size: 0.8rem;
-    }
-
-    #recommendations-list-container {
-        font-size: 0.5rem;
-        height: 230px;
-    }
-
-    /* Alignements compacts et sécurisés pour les lignes mobiles */
-    .recommendation-item {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 8px;
-        width: 100%;
-        font-size: 0.65rem;
-    }
-
-    .reco-asset-logo {
-        width: 25px;
-        height: 25px;
-        flex-shrink: 0;
-        object-fit: contain;
-    }
-
-    .reco-status-badge {
-        font-size: 0.75rem;
-        font-weight: bold;
-        flex-shrink: 0;
-    }
-
-    .reco-text-comment {
-        font-size: 0.6rem;
-        max-width: 40%;
-        margin-left: auto;
-        white-space: normal; 
-        word-break: break-word;
-    }
-
-    .reco-asset-ticker {
-        font-size: 0.65rem;
-        font-weight: bold;
-        max-width: 20%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        flex-shrink: 0;
-    }
-
-    .reco-date-publish {
-        font-size: 0.55rem;
-        text-align: right;
-        margin-right: 5px;
-        flex-shrink: 0;
-        color: #666666;
-    }
-
-    #reco-pagination, #recommendations-pagination {
-        display: flex;
-        gap: 10px;
-        margin-top: 15px;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .paginBtn {
-        font-size: 0.8rem;
-        padding: 4px 8px;
-    }
+.asset-logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
 }

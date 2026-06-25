@@ -1,14 +1,48 @@
-/* ==========================================================================
-   1. STRUCTURE GLOBAL ET PANNEAU LATÉRAL SÉCURISÉS
-   ========================================================================== */
+#users-list {
+    display: flex;
+    flex-direction: column;
+}
+
+#admin-users-title {
+    text-align: start;
+    font-size: 1.8rem;
+}
+
+.user-item{
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    margin: 1rem;
+    justify-content: space-between;
+
+}
+
+.update-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: start;
+    justify-content: space-around;
+}
+
+.recommendation p {
+    width: 20%;               
+    white-space: nowrap;      
+    overflow: hidden;          
+    text-overflow: ellipsis;
+}
+
+.watchlist-item{
+ display: flex;
+    flex-direction: row;
+    align-items: start;
+    margin: 1rem;
+    justify-content: space-around;
+}
 
 .admin-layout {
     display: flex;
     flex-direction: row;
-    background-color: #e5ecef; 
-    min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    color: #000000;
 }
 
 .admin-sidebar {
@@ -21,213 +55,9 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    min-width: 200px; 
+    min-width: 100px;
     color: white;
-    background-color: #c4c9cd; 
-    border-right: 2px solid #000000;
+    background-color: black;
     min-height: 100vh;
-    margin-right: 15px;
-    box-sizing: border-box;
-}
-
-/* Zone principale de contenu */
-.admin-layout main, 
-.admin-layout #admin-content {
-    flex-grow: 1;
-    padding: 30px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
-
-/* En-tête de section (Le titre encadré en haut à gauche de la table) */
-.admin-layout #admin-users-title, 
-.admin-layout section h2 {
-    text-align: left;
-    font-size: 1.1rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #03034B;
-    background-color: #ffffff;
-    margin: 0 0 -2px 0; /* Évite le décalage avec la bordure du tableau */
-    padding: 10px 15px;
-    border: 2px solid #000000;
-    display: inline-block; /* Pour coller au design de ta boîte */
-    width: max-content;
-}
-
-/* Les conteneurs principaux (Les grands blocs blancs de la capture) */
-.admin-layout section {
-    background-color: #ffffff;
-    border: 2px solid #000000;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
-    box-sizing: border-box;
-    border-radius: 0;
-}
-
-/* Wrapper interne si tu as des divs de listes spécifiques */
-.admin-layout #users-list, 
-.admin-layout #pending-analysts, 
-.admin-layout #recommendations-list-target, 
-.admin-layout #watchlist-list-target {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin-top: 15px;
-}
-
-
-/* ==========================================================================
-   2. RE-STYLISATION DES RANGÉES EN FLEXBOX HORIZONTAL NET
-   ========================================================================== */
-
-/* Structure commune pour aligner les textes et boutons sur une seule ligne */
-.admin-layout .user-item, 
-.admin-layout .recommendation, 
-.admin-layout .watchlist-item,
-.admin-layout #pending-analysts > div:not(.header-row) { 
-    display: flex;
-    flex-direction: row;
-    align-items: center; 
-    justify-content: space-between;
-    padding: 12px 15px;
-    margin: 0; 
-    border-bottom: 1px solid #e3e6ec;
-    gap: 20px; /* Espace de sécurité entre les blocs de texte */
-}
-
-/* Gestion spécifique de la grille de validation d'analyste (si structure texte brute) */
-.admin-layout #pending-analysts > div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Force les textes à se répartir équitablement ou à respirer */
-.admin-layout .user-item > span,
-.admin-layout .user-item > div,
-.admin-layout .recommendation > div {
-    font-size: 0.95rem;
-}
-
-/* Limitation et nettoyage des textes de recommandations pour éviter les collisions */
-.admin-layout .recommendation p {
-    max-width: 250px;               
-    white-space: nowrap;      
-    overflow: hidden;          
-    text-overflow: ellipsis;
-    margin: 0;
-    font-weight: 500;
-}
-
-/* Gestion des mini-formulaires de modification en ligne dans "All Recommendations" */
-.admin-layout .recommendation form {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-}
-
-.admin-layout .recommendation select,
-.admin-layout .recommendation input[type="text"] {
-    padding: 5px 8px;
-    border: 1px solid #cccccc;
-    border-radius: 4px;
-    font-size: 0.85rem;
-}
-
-
-/* ==========================================================================
-   3. DESIGN DES BOUTONS (Fidèle à ton souhait de couleurs)
-   ========================================================================== */
-
-/* Boutons jaunes de modification / Éditer */
-.admin-layout .user-item button:first-of-type,
-.admin-layout .btn-update,
-.admin-layout .recommendation button.edit-btn,
-.admin-layout .recommendation input[type="submit"] {
-    background-color: #dbe02c; 
-    color: #000000;
-    border: 1px solid #a3a815;
-    border-radius: 20px; 
-    padding: 5px 25px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    font-weight: 500;
-}
-
-/* Boutons rouges de suppression / Supprimer */
-.admin-layout .user-item button:last-of-type, 
-.admin-layout .recommendation button:last-of-type,
-.admin-layout .btn-delete {
-    background-color: #ff0000; 
-    color: #ffffff;
-    border: none;
-    border-radius: 4px; 
-    padding: 6px 18px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-/* Boutons d'approbation (Validation Analyste) */
-.admin-layout #pending-analysts button,
-.admin-layout .btn-approve {
-    background-color: #ffffff;
-    border: 1px solid #000000;
-    border-radius: 4px;
-    padding: 4px 12px;
-    cursor: pointer;
-    font-size: 0.85rem;
-}
-
-/* Boutons de pagination "Next" en bas des tables */
-.admin-layout button#next, 
-.admin-layout .recommendation + button,
-.admin-layout #users-list + button {
-    background-color: #ffffff;
-    border: 1px solid #000000;
-    padding: 5px 15px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    margin-top: 15px;
-    align-self: flex-start;
-}
-
-
-/* ==========================================================================
-   4. FORMULAIRE DE MISE À JOUR DE PROFIL (Bas de page)
-   ========================================================================== */
-
-.admin-layout .update-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    align-items: stretch; /* Occupe toute la largeur du conteneur */
-    background-color: #ffffff;
-    border: 2px solid #000000;
-    padding: 25px;
-    margin-top: 10px;
-    max-width: 500px;
-    box-sizing: border-box;
-}
-
-.admin-layout .update-form h2 {
-    border: none;
-    padding: 0;
-    margin-bottom: 10px;
-}
-
-.admin-layout .update-form input[type="text"],
-.admin-layout .update-form input[type="email"],
-.admin-layout .update-form input[type="password"],
-.admin-layout .update-form textarea {
-    width: 100%;
-    border: 1px solid #000000;
-    border-radius: 4px;
-    padding: 12px;
-    box-sizing: border-box;
-    font-size: 1rem;
+    margin-right: 10px;
 }

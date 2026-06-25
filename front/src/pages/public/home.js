@@ -30,7 +30,7 @@ const home = `
     </section>
 
     <section id="home-forex">
-        <h2 id="home-forex-title">FOREX</h2>
+        <h2 id="home-forex-title">Forex</h2>
         <p id="home-forex-text">Foreign exchange market where currencies from all over the world are traded</p> 
         <div id="forex-carousel-target"></div>
     </section>
@@ -41,13 +41,13 @@ const home = `
     </section>
 
     <section id="home-commodities">
-        <h2 id="home-commodities-title">COMEX</h2>
+        <h2 id="home-commodities-title">Comex</h2>
         <p id="home-commodities-text">The largest exchange for metals futures contracts</p>
         <div id="commodities-carousel-target"></div>
     </section>
 
     <section id="home-analysts">
-        <h2 id="home-analysts-title">ANALYSTS</h2>
+        <h2 id="home-analysts-title">Analysts</h2>
         <p id="home-analysts-text">Our verified analysts</p>
         <div id="analysts-carousel-target"></div>
     </section>

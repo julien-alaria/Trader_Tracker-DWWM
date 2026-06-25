@@ -17,7 +17,7 @@
 }*/
 
 // For use of ApexCharts
-export function loadTradingViewChart(ticker, historyData = []) {
+export function loadTradingViewChart(ticker, historyData = [], isMini = false) {
  
   const container = document.getElementById(`tv-${ticker}`)
   if (!container || !historyData.length) return
@@ -31,24 +31,19 @@ export function loadTradingViewChart(ticker, historyData = []) {
   const options = {
     chart: {
       type: "candlestick",
-      height: "100%", 
-      width: "100%",  
-      responsive: [{  
-        breakpoint: 1000,
-        options: {},
-      }],
+      height: isMini ? 80 : 350,
       sparkline: {
-        enabled: false
+        enabled: isMini
       },
       toolbar: {
         show: false
       },
       zoom: {
-        enabled: true
+        enabled: !isMini
       },
       background: "transparent",
       animations: {
-        enabled: true 
+        enabled: !isMini 
       }
     },
 
@@ -72,14 +67,14 @@ export function loadTradingViewChart(ticker, historyData = []) {
     xaxis: {
       type: "datetime",
       labels: {
-        show: true
+        show: !isMini
       }
     },
 
     yaxis: {
-      show: true,
+      show: !isMini,
       tooltip: {
-        enabled: true
+        enabled: !isMini
       }
     },
 
@@ -89,7 +84,7 @@ export function loadTradingViewChart(ticker, historyData = []) {
     },
 
     tooltip: {
-      enabled: true,
+      enabled: !isMini,
       theme: "dark"
     }
   }

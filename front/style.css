@@ -6,9 +6,10 @@
 @import "./src/styles/analyst.css";
 @import "./src/styles/analystdetails.css";
 @import "./src/styles/user.css";
-@import "./src//styles/footer.css";
-@import "./src//styles/auth.css";
 
+* {
+  box-sizing: border-box;
+}
 
 html, body {
   height: 100%;
@@ -24,7 +25,6 @@ body {
     padding: 0;
     font-size: 16px;
     background-color: whitesmoke;
-    font-family: 'Montserrat', 'Inter', sans-serif;
 }
 
 main {
@@ -51,6 +51,14 @@ main {
     min-height: 350px;
 }
 
+footer {
+    margin-top: auto;    
+    min-height: 50vh;
+    background-color: navy;
+    color: white;
+    border: 2px solid black;
+    flex-shrink: 0;      
+}
 
 .main-navbar {
     display: flex;
@@ -59,16 +67,22 @@ main {
     align-items: center;
     border: 2px solid black;
     text-decoration: none;
-    background-color: black; 
-    color: white;
+    background-color: navy; 
     height: 10vh;
-    min-width: 0;             /* Permet à la navbar de fléchir sans forcer le body */
+}
+
+#nav-home,
+#nav-login,
+#nav-register{
+    font-size: 2rem;
+    color: black;
 }
 
 #nav-register {
-    border: 1px solid white;
+    border: 1px solid black;
     padding: 8px 16px;
     transition: all 0.3s ease;
+    color: black;
 }
 
 #nav-register:hover {
@@ -90,35 +104,26 @@ a {
     display: none;
 }
 
-/* ==========================================================================
-   TON MEDIA-QUERY MOBILE CORRIGÉ
-   ========================================================================== */
 @media (max-width: 430px) {
 
-    /* Correction majeure : On libère la hauteur fixe de la navbar pour éviter le chevauchement 
-       et on lui permet de respirer sans pousser les bords de l'écran */
-    .main-navbar {
-        height: auto;
-        padding: 15px 5px;
-        flex-wrap: wrap;       /* Les éléments passent à la ligne si l'écran est trop étroit */
-        gap: 10px;
-    }
-
-    #nav-home {
+    #nav-home,
+    #nav-login,
+    #nav-register {
         font-size: 1rem;
     }
 
     #nav-about {
-        display: none;
-    }
-
-    #nav-login {
-        font-size: 0.8rem;
+        font-size: 1rem;
     }
 
     #nav-register {
-        font-size: 0.6rem;
-        padding: 4px 8px;
+        font-size: 0.5rem;
     }
+
+    #home-top-register,
+    #home-middle-register {
+        font-size: 1rem;
+    }
+
 }
 

@@ -113,7 +113,8 @@ main {
 }
 
 #home-stocks-text {
-  font-size: 2rem;
+  font-size: 3rem;
+
 }
 
 #home-forex {
@@ -125,23 +126,20 @@ main {
 }
 
 #home-forex-title {
-   font-size: 2rem;
+  font-size: 3rem;
+}
+
+#home-stocks-text {
+  font-size: 3rem;
 }
 
 #home-top, #home-middle {
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: space-around;
-    background-color: navy; 
-    color: white; 
-    padding: 20px; 
-    min-height: 40vh;
-    border: 2px solid black;
+    display: flex; flex-direction: column; align-items: center; justify-content: space-around;
+    background-color: navy; color: white; padding: 20px; min-height: 30vh;
 }
 
 #home-middle-text {
-  font-size: 2rem;
+  font-size: 3rem;
 }
 
 #home-commodities {
@@ -153,27 +151,20 @@ main {
 }
 
 #home-commodities-title {
-   font-size: 2rem;
+  font-size: 3rem;
 }
 
 #home-commodities-text {
   font-size: 3rem;
 }
 
+#home-stocks-title,
+#home-forex-title,
+#home-commodities-title,
 #home-analysts-title {
+    display: flex;
+    justify-content: center;
     font-size: 2rem;
-}
-
-#home-analysts-text {
-    font-size: 2rem;
-}
-
-#all-assets-btn {
-    font-size: 2rem;
-    background-color: whitesmoke;
-    padding: 15px;
-    color: #1a1a1a;
-    text-decoration: underline;
 }
 
 .carousel {
@@ -197,54 +188,6 @@ main {
     justify-content: center;
 }
 
-/* ==========================================================================
-    CONFIGURATION GRAND ÉCRAN (Par défaut)
-   ========================================================================== */
-
-#home-top, #home-middle {
-    background: navy;
-    padding: 80px 10%; 
-    text-align: center;
-}
-
-#home-search-bar {
-    display: flex;
-    flex-direction: row; 
-    justify-content: center;
-    align-items: center;
-    gap: 15px; 
-    margin: 20px 0;
-}
-
-#home-stocks-title, 
-#home-forex-title, 
-#home-commodities-title, 
-#home-analysts-title {
-    color: navy;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    text-decoration: underline;
-    font-size: 2.5rem; 
-    text-align: center;
-}
-
-#home-stocks-text, 
-#home-forex-text, 
-#home-commodities-text, 
-#home-analysts-text {
-    font-size: 1.4rem; 
-    text-align: center;
-    max-width: 800px;  
-    margin: 0 auto;    
-}
-
-#forex-carousel-target {
-    height: 400px; 
-}
-
-/* ==========================================================================
-    CONFIGURATION MOBILE (max-width: 430px)
-   ========================================================================== */
 @media (max-width: 430px) {
 
     #home-top {
@@ -254,7 +197,7 @@ main {
     }
 
     #home-top-title {
-        font-size: 3rem;
+        font-size: 4rem;
     }
 
     #home-top-text {
@@ -263,7 +206,7 @@ main {
 
     #home-top-register {
         padding: 4px 8px;
-        font-size: 1rem;
+        font-size: 1.6rem;
     }
 
     #home-search-bar {
@@ -278,7 +221,6 @@ main {
     }
 
     #home-stocks-title {
-        color: navy;
         margin-top: 1rem;
         margin-bottom: 0.5rem;
         text-decoration: underline;
@@ -289,8 +231,13 @@ main {
         text-align: center;
     }
 
+    #all-assets-btn {
+        font-size: 1.5rem;
+        padding: 0.3rem;
+        text-decoration: underline;
+    }
+
     #home-forex-title {
-        color: navy;
         margin-top: 1rem;
         margin-bottom: 0.5rem;
         text-decoration: underline;
@@ -313,11 +260,10 @@ main {
 
     #home-middle-register {
         padding: 4px 8px;
-        font-size: 1rem;
+        font-size: 1.6rem;
     }
 
     #home-commodities-title {
-        color: navy;
         margin-top: 1rem;
         margin-bottom: 0.5rem;
         text-decoration: underline;
@@ -329,9 +275,6 @@ main {
     }
 
     #home-analysts-title {
-        text-align: center;
-        color: navy;
-        font-size: 2rem;
         margin-top: 1rem;
         margin-bottom: 0.5rem;
         text-decoration: underline;

@@ -1,16 +1,12 @@
-/* ==========================================================================
-   1. VOTRE CODE DE BASE ORIGINAL (Inchangé)
-   ========================================================================== */
-
 #asset-detail {
-    width: 100vw;
+    width: 80vw;
     margin: 0 auto;
-    padding: 1rem;
+    padding: 2rem;
 }
 
 .tv-chart {
     width: 100%;
-    height: auto; 
+    height: 120px; 
     margin-top: 20px;
 }
 
@@ -54,7 +50,7 @@
     line-height: 1.6;
 }
 
-.detail-btn {
+.detail-btn{
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-size: 13px;
     font-weight: 500;
@@ -91,11 +87,6 @@
     font-weight: bold;
 }
 
-#follow-toggle-btn {
-    background-color: lightgray;
-    border: 1px solid black;
-}
-
 .analyst-picture {
     border-radius: 50%;
 } 
@@ -109,11 +100,6 @@
 #reco-title {
     text-align: center;
     font-size: 1.8rem;
-}
-
-#reco-pagination {
-    justify-content: center;
-    align-items: center;
 }
 
 .recommendation {
@@ -132,235 +118,3 @@
     font-size: 1.5rem;
 }
 
-
-/* ==========================================================================
-   2. ADAPTATION EXCLUSIVE GRAND ÉCRAN (Mise en page Analystes corrigée)
-   ========================================================================== */
-@media (min-width: 1024px) {
-    #asset-detail {
-        width: 100%;
-        max-width: 1200px; 
-        padding: 2rem;
-    }
-
-    .tv-chart {
-        height: 550px; 
-    }
-
-    .asset-info {
-        max-width: 800px; 
-    }
-
-    .analyst-picture {
-        width: 50px;  
-        height: 50px;
-        object-fit: cover;
-    }
-
-    .recommendation {
-        padding: 12px 0;
-    }
-
-    /* Structure globale alignée en colonne (Titre centré en haut -> Liste -> Pagination) */
-    #analyst-list-global {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        margin: 4rem 0;
-    }
-
-    /* Centre uniquement le titre h2 sur PC */
-    #analyst-list-global h2 {
-        text-align: center;
-        width: 100%;
-        margin-bottom: 2rem;
-    }
-
-    /* Aligne le conteneur de la liste sur la gauche avec une légère marge */
-    #analyst-list-container {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        width: 100%;
-        max-width: 800px;        /* Limite la largeur sur PC pour un rendu propre à gauche */
-        margin-left: 2rem;       /* Légère marge à gauche */
-        height: auto;            /* Laisse la liste respirer en hauteur sur PC */
-    }
-
-    /* Structure des lignes d'analystes sur PC */
-    .analyst-item {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        width: 100%;
-        gap: 20px;
-        padding: 12px 0;
-    }
-
-    .analyst-item p {
-        margin: 0;
-        text-align: left;        /* Aligné à gauche pour correspondre au conteneur */
-    }
-
-    /* Centre parfaitement la pagination des analystes en bas */
-    #analyst-pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        margin-top: 2.5rem;
-    }
-}
-
-
-/* ==========================================================================
-   3. VOTRE CODE MOBILE ORIGINAL (Strictement inchangé)
-   ========================================================================== */
-@media (max-width: 430px) {
-
-    .asset-header {
-        margin: 0;
-        gap: 10px;
-    }
-
-    .asset-name {
-        margin: 0;
-        font-size: 1.5rem;
-        padding: 0 0.5rem;
-    }
-
-    .asset-info {
-        margin: 20px;
-    }
-
-    .login-message {
-        text-align: center;
-        font-size: 1rem;
-        margin: 20px;
-        text-decoration: underline;
-    }
-
-    #login-btn {
-        font-size: 0.6rem;
-    }
-
-    #reco-list-container {
-        font-size: 0.5rem;
-        height: 200px;
-    }
-
-    .recommendation {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 1px;
-        width: 100%;
-    }
-
-    .reco-image {
-        width: 20px;
-        height: 20px;
-        flex-shrink: 0;
-    }
-
-    .reco-status {
-        font-size: 0.75rem;
-        flex-shrink: 0;
-    }
-
-    .reco-comment {
-        font-size: 0.5rem;
-        max-width: 35%;
-        margin-left: auto;
-        white-space: normal; 
-        word-break: break-word;
-    }
-
-    .analyst-picture {
-        width: 25px;
-        height: 25px;
-        margin-left: auto;
-        flex-shrink: 0;
-    }
-
-    .reco-name {
-        font-size: 0.5rem;
-        font-weight: bold;
-        max-width: 15%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        flex-shrink: 0;
-    }
-
-    .reco-publish {
-        font-size: 0.5rem;
-        text-align: right;
-        margin-right: 10px;
-        flex-shrink: 0;
-    }
-
-    #reco-pagination {
-        display: flex;
-        gap: 10px;
-        margin-top: 10px;
-    }
-
-    .paginBtn {
-        font-size: 0.8rem;
-    }
-
-    #analyst-carousel-container {
-        text-align: center;
-        font-size: 0.8rem;
-    }
-
-    h2 {
-        text-align: center;
-        text-decoration: underline;
-        font-size: 0.8rem;
-    }
-
-    #analyst-list-global {
-        display: flex;
-        flex-direction: column;
-        margin: 10px;
-    }
-
-    #analyst-list-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        width: 100%;
-        height: 200px;
-    }
-
-    .analyst-item {
-        display: flex;
-        flex-direction: row; 
-        justify-content: flex-start;
-        align-items: center;
-        text-align: center;
-        font-size: 0.5rem;
-        width: 100%;
-        gap: 10px;          
-    }
-
-    .analyst-item p {
-        margin: 10px;
-        text-align: justify;
-        display: block;
-        width: 100%;
-    }
-
-    #analyst-pagination {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.8rem;
-    }
-}
