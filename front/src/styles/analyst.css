@@ -79,8 +79,8 @@
     margin-top: 1.5rem;
 }
 
-/* Taille d'image manquante depuis le retrait de width/height du HTML */
-.recommendation img {
+/* Taille d'image manquante depuis le retrait de width/height du HTML — scopé pour ne pas affecter assetsdetails.js */
+#recommendations-list-target .recommendation img {
     width: 50px;
     height: 50px;
     flex-shrink: 0;
@@ -218,7 +218,7 @@
 /* =============================
    MOBILE LARGE (431px - 600px)
    ============================= */
-@media (max-width: 600px) {
+@media (min-width: 431px) and (max-width: 600px) {
 
     #analyst_picture {
         width: 120px;
@@ -261,7 +261,7 @@
         font-size: 1rem;
     }
 
-    .recommendation {
+    #recommendations-list-target .recommendation {
         display: flex;
         flex-direction: column;
         gap: 8px;
@@ -273,24 +273,24 @@
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
     }
 
-    .recommendation img:first-of-type {
+    #recommendations-list-target .recommendation img:first-of-type {
         width: 22px;
         height: 22px;
     }
 
-    .recommendation img:nth-of-type(2) {
+    #recommendations-list-target .recommendation img:nth-of-type(2) {
         width: 24px;
         height: 24px;
         border-radius: 4px;
         object-fit: contain;
     }
 
-    .recommendation strong {
+    #recommendations-list-target .recommendation strong {
         font-size: 0.9rem;
         order: -1;
     }
 
-    .recommendation p {
+    #recommendations-list-target .recommendation p {
         margin: 0;
         font-size: 0.85rem;
         color: #555555;
@@ -299,25 +299,25 @@
         order: 5;
     }
 
-    .recommendation p:first-of-type {
+    #recommendations-list-target .recommendation p:first-of-type {
         font-weight: bold;
         color: #1a1a1a;
         order: 4;
     }
 
-    .recommendation small {
+    #recommendations-list-target .recommendation small {
         margin-left: auto;
         font-size: 0.75rem;
         color: #888888;
         order: 3;
     }
 
-    .recommendation .delete-btn,
-    .recommendation .edit-form {
+    #recommendations-list-target .recommendation .delete-btn,
+    #recommendations-list-target .recommendation .edit-form {
         order: 6;
     }
 
-    .recommendation .edit-form {
+    #recommendations-list-target .recommendation .edit-form {
         display: flex;
         flex-direction: row;
         gap: 8px;
@@ -325,12 +325,12 @@
         margin-top: 4px;
     }
 
-    .recommendation .edit-form select {
+    #recommendations-list-target .recommendation .edit-form select {
         flex: 1;
         min-width: 0;
     }
 
-    .recommendation .edit-form input[type="text"] {
+    #recommendations-list-target .recommendation .edit-form input[type="text"] {
         flex: 1;
         min-width: 0;
     }

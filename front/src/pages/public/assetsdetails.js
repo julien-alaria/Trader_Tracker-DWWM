@@ -32,7 +32,7 @@ const detailsPage = `
     </section>
 
     <section id="analyst-list-global">
-        <h2 id="analyst-list-title">All Analysts</h2>
+        <h2 id="analyst-list-title">All Related Analysts</h2>
         <div id="analyst-list-target"></div>
     </section>
 `
@@ -178,11 +178,11 @@ export async function initDetail() {
 
                     return `
                         <div class="recommendation" data-js-clickable data-analyst-id="${rec.user_id}">
-                            <img src="${recoImage}" alt="reco-image" />
+                            <img id="reco-image" src="${recoImage}" alt="reco-image" />
                             <strong>${rec.status}</strong>
                             <p>${rec.comment}</p>
                             <img src="${imageUrl}" class="analyst-picture"  alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
-                            <p>Analyst: ${rec.analyst_name ?? "unknown"}</p>
+                            <p><b>${rec.analyst_name ?? "unknown"}</b></p>
                             <p>Published on ${formatDate(rec.created_at)}</p>
                         </div>
                     `

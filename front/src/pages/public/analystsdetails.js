@@ -78,7 +78,7 @@ export async function initAnalystDetail() {
 
                 return `
                     <div class="recommendation" data-js-clickable data-ticker="${rec.ticker}" data-type="asset">
-                        <img src="${recoImage}" alt="reco-image" />
+                        <img id="reco-image"src="${recoImage}" alt="reco-image" />
                         <strong>${rec.status}</strong>
                         <img src="${imageUrl}" class="reco-analyst-pic" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
                         <p>${rec.name}</p>

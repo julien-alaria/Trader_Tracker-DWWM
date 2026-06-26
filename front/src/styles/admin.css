@@ -14,6 +14,7 @@
 .admin-sidebar {
     display: flex;
     flex-direction: column;
+    align-self: stretch;
 }
 
 .admin-nav {
@@ -23,23 +24,25 @@
     align-items: center;
     flex: 0 0 auto; 
     min-width: 150px;
+    height: 100%;
     color: white;
     background-color: #c4c9cd; 
     border-right: 2px solid #000000;
-    min-height: 100vh;
     margin-right: 15px;
     box-sizing: border-box;
 }
 
 .admin-layout main, 
 .admin-layout #admin-content {
-    flex: 1;            
+    flex: 1 0 0;
     width: 100%;
-    flex-grow: 1;
+    max-width: 800px;
+    margin: 0 auto;
     padding: 30px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 30px;
 }
 
@@ -65,6 +68,8 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
     box-sizing: border-box;
     border-radius: 0;
+    width: 100%;
+    max-width: 800px;
 }
 
 .admin-layout #users-list, 
@@ -100,6 +105,64 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.admin-layout .admin-table {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-layout .admin-table thead {
+    display: none;
+}
+
+.admin-layout .admin-table tbody {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+}
+
+.admin-layout .admin-table tr {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #e3e6ec;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    box-sizing: border-box;
+}
+
+.admin-layout .admin-table td {
+    text-align: left;
+    padding: 0;
+    border: none;
+    font-size: 0.95rem;
+}
+
+.admin-layout .admin-table td:first-child {
+    order: -2;
+    font-size: 1rem;
+}
+
+.admin-layout .admin-table td:last-child {
+    order: -1;
+    align-self: flex-end;
+    margin-bottom: 4px;
+}
+
+.admin-layout .admin-table .approve-btn {
+    background-color: #ffffff;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
 }
 
 .admin-layout .user-item > span,
@@ -229,6 +292,7 @@
     
     .admin-layout {
         flex-direction: column;
+        align-items: center;
     }
 
     .admin-nav {
@@ -267,6 +331,3 @@
         justify-content: space-between;
     }
 }
-
-
-
