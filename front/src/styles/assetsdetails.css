@@ -265,7 +265,7 @@
 
     h2 {
         text-align: center;
-        text-decoration: underline;
+        /*text-decoration: underline;*/
         font-size: 0.8rem;
     }
 
@@ -421,7 +421,7 @@
 
     h2 {
         text-align: center;
-        text-decoration: underline;
+        /*text-decoration: underline;*/
         font-size: 1rem;
     }
 

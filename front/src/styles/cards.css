@@ -366,7 +366,7 @@
         max-width: 80px;
         height: 80px;
         aspect-ratio: 1 / 1;
-        object-fit: contain;
+        object-fit: cover;
     }
 
     .card-analyst-title {
@@ -395,12 +395,95 @@
 @media (min-width: 431px) and (max-width: 1023px) {
 
     /* Augmentation de la taille des cartes (ratio intermédiaire) */
-    .card.stock, 
-    .card.forex, 
-    .card.commodity, 
+    .card.stock {
+        max-width: 250px;
+        height: 400px;
+    }
+
+    .card-stock-description {
+        display: none;
+    }
+
+    .card-stock-market {
+        display: none;
+    }
+
+    .card-stock-price {
+        font-size: 1rem;
+        color: black;
+    }
+
+    .card-stock-low{
+        display: none;
+    }
+
+    .card-stock-high{
+        display:none;
+    }
+
+    .card.forex {
+        max-width: 250px;
+        height: 300px;
+    }
+
+    .card-forex-ticker {
+        display: none;
+    }
+
+    .card-text-stock-market {
+        display: none;
+    }
+
+    .card-forex-price {
+        font-size: 1rem;
+        color: black;
+    }
+
+    .card-forex-high {
+        display: none;
+    }
+
+    .card-forex-low {
+        display:none;
+    }
+
+    .card.commodity {
+        max-width: 250px;
+        height: 300px;
+        text-align: center;
+    }
+
+    .card-commodity-title{
+        color: black;
+        width: 100%;
+    }
+
+    .card-commodity-ticker {
+        display: none;
+    }
+
+    .card-commodity-price {
+        font-size: 1rem;
+        color: black;
+    }
+
+    .card-commodity-high {
+        display: none;
+    }
+
+    .card-commodity-low {
+        display:none;
+    }
+
     .card.analyst {
         max-width: 250px;
+        height: 300px;
     }
+
+    .card-analyst-bio {
+        display: none;
+    }
+
 
     /* Augmentation du ratio des images (passage de 80px à 150px) */
     .card-stock-image,
@@ -426,20 +509,18 @@
 @media (min-width: 1024px) {
 
     /* Retour aux valeurs pleines */
-    .card.stock, 
-    .card.forex, 
     .card.commodity, 
     .card.analyst {
         max-width: 320px;
+        height: 300px;
     }
 
     /* Ratio maximum pour les images */
     .card-stock-image,
-    .card-image-forex,
     .card-commodity-image,
     .card-analyst-image {
-        max-width: 250px;
-        height: 250px;
+        max-width: 150px;
+        height: 150px;
     }
 
     .card-stock-title,
@@ -447,5 +528,52 @@
     .card-commodity-title,
     .card-analyst-title {
         font-size: 1.4rem;
+    }
+
+    .card.stock {
+        max-width: 250px;
+        height: 550px;
+    }
+
+    .card-stock-description {
+        display: none;
+    }
+
+    .card-stock-market {
+        display: none;
+    }
+
+    .card.forex {
+        max-width: 320px;
+        height: 300px;
+
+    }
+
+    .card-image-forex {
+        max-width: 80px;
+        height: 80px;
+
+    }
+
+     .card-commodity-title{
+        color: black;
+        width: 100%;
+    }
+
+    .card-commodity-ticker {
+        display: none;
+    }
+
+    .card-commodity-price {
+        font-size: 1rem;
+        color: black;
+    }
+
+    .card-commodity-high {
+        display: none;
+    }
+
+    .card-commodity-low {
+        display:none;
     }
 }
