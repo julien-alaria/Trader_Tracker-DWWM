@@ -19,7 +19,6 @@ const analystPage = `
 
     <section>
         <div><img id="analyst_picture" src="" /></div>
-        <div id="analyst_id"></div>
         <div id="analyst_name"></div>
         <div id="analyst_email"></div>
         <div id="analyst_type"></div>
@@ -227,7 +226,6 @@ export async function initAnalyst() {
 // rendering local user infos
 function renderAnalystInfo(user) {
   const map = {
-    analyst_id: user.id,
     analyst_name: user.name,
     analyst_email: user.email,
     analyst_type: user.analyst_type_id,

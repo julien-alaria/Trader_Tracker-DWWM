@@ -26,7 +26,6 @@ const home = `
         <h2 id="home-stocks-title">NASDAQ</h2>
         <p id="home-stocks-text">Nasdaq is a US stock market for new companies with high growth potential, particularly in the high-tech sector.</p>
         <div id="stocks-carousel-target"></div>
-        <a href="#/list" class="btn" id="all-assets-btn">All Assets By List</a>
     </section>
 
     <section id="home-forex">
@@ -48,8 +47,16 @@ const home = `
 
     <section id="home-analysts">
         <h2 id="home-analysts-title">Analysts</h2>
-        <p id="home-analysts-text">Our verified analysts</p>
+        <p id="home-analysts-text">Follow our expert analysts for commentary and buy/sell recommendations based on market trends.</p>
         <div id="analysts-carousel-target"></div>
+    </section>
+
+    <section id="home-allassets">
+        <div id="home-allassets-link">
+            <h2 id="home-allassets-link-title">All Assets</h2>
+            <p id="home-allassets-text">Discover all our available financial assets.</p>
+            <a href="#/list" class="btn" id="all-assets-btn">All Assets By List</a>
+        </div>
     </section>
 `
 

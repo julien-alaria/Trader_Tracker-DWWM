@@ -17,7 +17,6 @@ const userPage = `
 
     <section>
         <div><img id="user_picture" src="" /></div>
-        <div id="user_id"></div>
         <div id="user_name"></div>
         <div id="user_email"></div>
     </section>
@@ -187,8 +186,7 @@ export async function initUser() {
 
 // rendering local user infos
 function renderUserInfo(user) {
-    document.getElementById("user_id").textContent = `User ID: ${user.id}`
-    document.getElementById("user_name").textContent = `User: ${user.name}`
+    document.getElementById("user_name").textContent = `${user.name}`
     document.getElementById("user_email").textContent = `Email: ${user.email}`
     const imageEl = document.getElementById("user_picture")
     if (imageEl) {

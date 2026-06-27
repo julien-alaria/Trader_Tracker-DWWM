@@ -178,12 +178,12 @@ export async function initDetail() {
 
                     return `
                         <div class="recommendation" data-js-clickable data-analyst-id="${rec.user_id}">
-                            <img id="reco-image" src="${recoImage}" alt="reco-image" />
-                            <strong>${rec.status}</strong>
-                            <p>${rec.comment}</p>
-                            <img src="${imageUrl}" class="analyst-picture"  alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
-                            <p><b>${rec.analyst_name ?? "unknown"}</b></p>
-                            <p>Published on ${formatDate(rec.created_at)}</p>
+                            <img class="reco-image" src="${recoImage}" alt="reco-image" />
+                            <strong class="reco-status">${rec.status}</strong>
+                            <img src="${imageUrl}" class="analyst-picture" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
+                            <p class="reco-name"><b>${rec.analyst_name ?? "unknown"}</b></p>
+                            <p class="reco-comment">${rec.comment}</p>
+                            <p class="reco-publish">Published on ${formatDate(rec.created_at)}</p>
                         </div>
                     `
                 },

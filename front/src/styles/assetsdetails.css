@@ -130,6 +130,9 @@
     font-size: 2rem;
 }
 
+/* min-height (et non height) : le conteneur doit pouvoir s'étirer pour
+   contenir toutes les recommandations, sinon le contenu déborde
+   silencieusement et chevauche les éléments placés après (ex: #recommendation-form). */
 #reco-list-container {
     margin-left: 1rem;
     margin-right: 1rem;
@@ -228,6 +231,55 @@
     transform: translateY(0);
 }
 
+.recommendation {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: flex-start;
+    justify-content: flex-start;
+    gap: 0.3rem 8px;
+    width: 100%;
+    max-width: 500px;
+    margin: 5px auto;
+    margin-left: 1rem;
+    font-size: 0.8rem;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.reco-image {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+}
+
+.reco-analyst-picture {
+    width: 2.5rem;
+    height: 2.5rem;
+    flex-shrink: 0;
+}
+
+.reco-name,
+.reco-comment,
+.reco-publish {
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+.reco-comment,
+.reco-publish {
+    flex-basis: 100%;
+    max-width: 100%;
+}
+
+/* Centre les cartes de recommandation horizontalement dans leur conteneur */
+#reco-list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
 @media (max-width: 430px) {
 
     .asset-header {
@@ -258,7 +310,7 @@
 
     #reco-list-container {
         font-size: 0.8rem;
-        height: 15rem;
+        min-height: 15rem;
     }
 
     .recommendation {
@@ -292,7 +344,7 @@
     .analyst-picture {
         width: 25px;
         height: 25px;
-        margin-left: auto;
+        margin-left: 1rem;
         flex-shrink: 0;
     }
 
@@ -308,8 +360,8 @@
 
     .reco-publish {
         font-size: 0.5rem;
-        text-align: right;
-        margin-right: 10px;
+        text-align: left;
+        margin-right: 1rem;
         flex-shrink: 0;
     }
 
@@ -409,7 +461,7 @@
 
     #reco-list-container {
         font-size: 0.7rem;
-        height: 250px;
+        min-height: 250px;
     }
 
     .recommendation {
@@ -421,12 +473,11 @@
         width: 100%;
     }
 
-     #reco-image {
+    #reco-image {
         width: 2rem;
         height: 2rem;
         flex-shrink: 0;
     }
-
 
     .reco-status {
         font-size: 0.9rem;
@@ -557,7 +608,7 @@
 
     #reco-list-container {
         font-size: 0.85rem;
-        height: 280px;
+        min-height: 280px;
         margin-bottom: 3rem;
     }
 
@@ -572,29 +623,43 @@
         flex-shrink: 0;
     }
 
-
     .reco-status {
-        font-size: 1rem;
+        font-size: 0.9rem;
+        flex-shrink: 0;
     }
 
     .reco-comment {
-        font-size: 0.85rem;
-        max-width: 30%;
+        font-size: 0.7rem;
+        max-width: 35%;
+        margin-left: auto;
+        white-space: normal;
+        word-break: break-word;
     }
 
     .analyst-picture {
-        width: 40px;
-        height: 40px;
+        width: 32px;
+        height: 32px;
+        margin-left: auto;
+        flex-shrink: 0;
     }
 
     .reco-name {
-        font-size: 0.85rem;
-        max-width: 20%;
+        font-size: 0.7rem;
+        font-weight: bold;
+        max-width: 18%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex-shrink: 0;
     }
 
     .reco-publish {
-        font-size: 0.85rem;
+        font-size: 0.7rem;
+        text-align: right;
+        margin-right: 10px;
+        flex-shrink: 0;
     }
+
 
     #analyst-carousel-container {
         font-size: 1rem;
@@ -648,30 +713,56 @@
     }
 
     #reco-list-container {
-        height: 320px;
+        min-height: 320px;
         margin-bottom: 5rem;
     }
 
-    .recommendation {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-around;
-        margin: 32px;
-        gap: 5px;
-        width: 100%;
+    .reco-status {
+        font-size: 2rem;
+        flex-shrink: 0;
     }
 
-    #reco-image {
+    .reco-comment {
+        font-size: 2rem;
+        max-width: 50%;
+        margin-left: auto;
+        white-space: normal;
+    }
+
+    .analyst-picture {
+        width: 64px;
+        height: 64px;
+        margin-left: auto;
+        flex-shrink: 0;
+    }
+
+    .reco-name {
+        font-size: 2rem;
+        font-weight: bold;
+        max-width: 50%;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .reco-publish {
+        font-size: 1.5rem;
+        text-align: left;
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+
+    .reco-image {
         width: 3rem;
         height: 3rem;
         flex-shrink: 0;
     }
 
+    .login-message p {
+        font-size: 3rem;
+    }
 
-    .analyst-picture {
-        width: 48px;
-        height: 48px;
+    #login-btn {
+        padding: 15px 32px;
     }
 
     #analyst-list-global {
@@ -688,6 +779,7 @@
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
+        align-items: flex-start;
         margin: 32px;
         gap: 5px;
         width: 100%;
@@ -717,5 +809,3 @@
         max-width: 220px;
     }  
 }
-
-

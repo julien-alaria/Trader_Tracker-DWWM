@@ -9,12 +9,10 @@ const login = `
         <h2 class="form-title">Sign In</h2>
         
         <div class="input-group">
-            <label for="email">Email</label>
             <input type="email" id="email" name="email" placeholder="enter your email..." required autocomplete="on">
         </div>
 
         <div class="input-group">
-            <label for="password">Password</label>
             <input type="password" id="password" name="password" placeholder="enter your password..." required autocomplete="off">
         </div>
 

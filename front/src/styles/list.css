@@ -1,27 +1,3 @@
-/* ==========================
-   CODE BASE ORIGINAL
-   ========================== */
-
-.carousel, 
-#stocks-carousel-target, 
-#forex-carousel-target, 
-#commodities-carousel-target, 
-#analysts-carousel-target {
-    min-height: auto;
-    width: 100%;
-    display: block;
-    overflow: hidden; 
-    padding-left: 20px;  
-    padding-right: 20px; 
-    box-sizing: border-box;
-}
-
-#stocks-carousel-target:empty, 
-#forex-carousel-target:empty {
-    background: #f9f9f9;
-    border-radius: 8px;
-}
-
 .asset-item {
     display: flex;
     justify-content: flex-start; 
@@ -32,6 +8,17 @@
     transition: background-color 0.2s;
     gap: 40px;                   
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.asset-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    flex-shrink: 0;
+    aspect-ratio: 1 / 1;
 }
 
 #assets-list-target {
@@ -40,6 +27,8 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 #assets-list-target .asset-item a {
@@ -54,6 +43,34 @@
     color: #333;
 }
 
+/* Tous les <span> de la ligne (ticker + nom) doivent pouvoir rétrécir :
+   min-width: 0 est indispensable, sinon un flex-item garde sa largeur de
+   contenu naturelle et force le débordement du parent. */
+.asset-item span {
+    min-width: 0;
+}
+
+/* Le span du ticker (1er span, contient <strong>) : doit rester compact
+   et ne jamais se faire écraser par le span du nom. */
+.asset-item span:first-of-type {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+/* Le span du nom (2e span) : prend l'espace restant, tronque sur 2 lignes
+   avec ellipsis si le texte est trop long. */
+.asset-item span:nth-of-type(2) {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    text-overflow: ellipsis;
+    word-break: break-word;
+}
+
 #logo-list {
     width: 40px; 
     height: 40px; 
@@ -64,9 +81,107 @@
 
 
 /* ============================
-   DESKTOP (1024px)
+   MOBILE (max-width: 430px)
    ============================ */
-@media (min-width: 1024px) {
+@media (max-width: 430px) {
+
+    h1 {
+        text-align: center;
+        width: 100%;
+    }
+
+    #assets-list-target {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .asset-item {
+        gap: 12px;
+        padding: 10px;
+    }
+
+    .asset-item img {
+        width: 40px;
+        height: 40px;
+    }
+
+    #assets-list-target .asset-item a {
+        font-size: 1.5rem;
+    }
+
+    #logo-list {
+        width: 40px;            
+        height: 40px;
+        object-fit: contain;
+    }
+
+    #list-pagination,
+    .list-buttons-container,
+    #assets-list-target > *:last-child {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+        gap: 10px;
+        margin-top: 20px;
+        padding: 15px 0;
+    }
+}
+
+
+/* ============================
+   431px - 600px (Mobile large)
+   ============================ */
+@media (min-width: 431px) and (max-width: 600px) {
+
+    h1 {
+        text-align: center;
+        width: 100%;
+    }
+
+    #assets-list-target {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .asset-item {
+        gap: 16px;
+        padding: 12px;
+    }
+
+    .asset-item img {
+        width: 48px;
+        height: 48px;
+    }
+
+    #assets-list-target .asset-item a {
+        font-size: 1.8rem;
+    }
+
+    #logo-list {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+    }
+
+    #list-pagination,
+    .list-buttons-container,
+    #assets-list-target > *:last-child {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+        gap: 12px;
+        margin-top: 20px;
+        padding: 15px 0;
+    }
+}
+
+
+/* ============================
+   601px - 768px (Tablette)
+   ============================ */
+@media (min-width: 601px) and (max-width: 768px) {
 
     h1 {
         text-align: center;
@@ -75,13 +190,63 @@
     }
 
     #assets-list-target {
-        height: 100vh;
-        min-height: 100vh;
-        max-height: 100vh;
-        overflow-y: auto;       
         display: flex;
         flex-direction: column;
-        justify-content: space-between; 
+    }
+
+    .asset-item {
+        gap: 24px;
+        padding: 14px;
+    }
+
+    .asset-item img {
+        width: 56px;
+        height: 56px;
+    }
+
+    #assets-list-target .asset-item a {
+        font-size: 2.2rem;
+    }
+
+    #logo-list {
+        width: 56px;
+        height: 56px;
+        object-fit: contain;
+    }
+
+    #list-pagination,
+    .list-buttons-container,
+    #assets-list-target > *:last-child {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        gap: 16px;
+        margin-top: 20px;
+        padding: 18px 0;
+    }
+}
+
+
+/* ============================
+   DESKTOP (min-width: 769px)
+   ============================ */
+@media (min-width: 769px) {
+
+    h1 {
+        text-align: center;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    #assets-list-target {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .asset-item img {
+        width: 50px;
+        height: 50px;
     }
 
     #logo-list {
@@ -99,47 +264,7 @@
         align-items: center;
         width: 100%;
         gap: 20px;
-        margin-top: auto;       
+        margin-top: 20px;
         padding: 20px 0;
-    }
-}
-
-
-/* ============================
-   MOBILE (max-width: 430px)
-   ============================ */
-@media (max-width: 430px) {
-
-    h1 {
-        text-align: center;
-        width: 100%;
-    }
-
-    #assets-list-target {
-        height: 100vh;          
-        min-height: 100vh;
-        max-height: 100vh;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    #logo-list {
-        width: 40px;            
-        height: 40px;
-        object-fit: contain;
-    }
-
-    #list-pagination,
-    .list-buttons-container,
-    #assets-list-target > *:last-child {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        width: 100% !important;
-        gap: 10px;
-        margin-top: auto;       
-        padding: 15px 0;
     }
 }

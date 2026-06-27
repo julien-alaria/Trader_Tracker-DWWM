@@ -9,6 +9,7 @@
 @import "./src//styles/footer.css";
 @import "./src/styles/auth.css";
 @import "./src/styles/navbar.css";
+@import "./src/utils/pagination.js";
 
 * {
   box-sizing: border-box;
@@ -50,6 +51,13 @@ main {
     width: 100%;
     min-height: 70vh;    
     box-sizing: border-box;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
 }
 
 .admin-content, .card-chart-container {

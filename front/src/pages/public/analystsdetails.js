@@ -76,13 +76,13 @@ export async function initAnalystDetail() {
                 const recoImage = getRecommendationIcon(rec.status)
 
                 return `
-                    <div class="recommendation" data-js-clickable data-ticker="${rec.ticker}" data-type="asset">
-                        <img id="reco-image"src="${recoImage}" alt="reco-image" />
+                    <div class="analyst-recommendation" data-js-clickable data-ticker="${rec.ticker}" data-type="asset">
+                        <img class="reco-image" src="${recoImage}" alt="reco-image" />
                         <strong>${rec.status}</strong>
                         <img src="${imageUrl}" class="reco-analyst-pic" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
-                        <p>${rec.name}</p>
-                        <p>${rec.comment}</p>
-                        <p><small>${formatDate(rec.created_at)}</small></p>
+                        <p class="reco-company">${rec.name}</p>
+                        <p class="reco-comment">${rec.comment}</p>
+                        <p class="reco-date"><small>${formatDate(rec.created_at)}</small></p>
                     </div>
                 `
             },
@@ -105,7 +105,7 @@ function renderAnalyst(analyst, currentUser) {
 
     const isSelf = currentUser && Number(currentUser.id) === Number(analyst.id)
     
-    const initialText = analyst.isFollowing ? "Unfollow Analyst" : "Follow Analyst"
+    const initialText = analyst.isFollowing ? "Unfollow" : "Follow"
 
     const defaultAvatar = "/assets/analyst/default_analyst.png"
     const imageUrl = analyst.picture ? `${API_BASE_URL}/uploads/${analyst.picture}` : defaultAvatar

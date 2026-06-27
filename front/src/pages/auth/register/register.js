@@ -6,14 +6,11 @@ import http from "../../../config/instanceHttp.js"
 const register = ` 
     <h1>Register</h1>
     <form id="register-form">
-        <label for="name">Nom:</label>
-        <input type="text" id="name" name="name" placeholder="Nom" minlength="2" maxlength="50" required autocomplete="on">
+        <input type="text" id="name" name="name" placeholder="enter your name..." minlength="2" maxlength="50" required autocomplete="on">
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" placeholder="Email" required autocomplete="on">
+        <input type="email" id="email" name="email" placeholder="enter your email..." required autocomplete="on">
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" placeholder="Password" minlength="6" maxlength="20" required autocomplete="on">
+        <input type="password" id="password" name="password" placeholder="enter your password..." minlength="6" maxlength="20" required autocomplete="on">
 
         <input type="submit" value="submit">
         <div id="message"></div>

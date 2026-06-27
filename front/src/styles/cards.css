@@ -4,10 +4,9 @@
 .carousel-track {
     display: flex;
     gap: 24px;
-    margin: 10px;
     will-change: transform;
     transform: translateZ(0);
-    margin: 30px;
+    margin: 30px 0;
 }
 
 .carousel-track.is-fixed {
@@ -99,6 +98,14 @@
     border: 1px solid black;
 }
 
+.card-title-forex {
+    text-decoration: underline;
+}
+
+.card-forex-price {
+    text-decoration: underline;
+}
+
 /*COMMODITY CARD*/
 .card.commodity {
     background: rgba(124, 122, 122, 0.938);
@@ -122,6 +129,10 @@
     object-fit: contain;
 }
 
+.card-commodity-title {
+    text-decoration: underline;
+}
+    
 /*ANALYST CARD*/
 .card.analyst {
     width: auto;
@@ -139,6 +150,10 @@
     border-radius: 15px;
     border: 1px solid black;
     margin-bottom: 15px;
+}
+
+.card-analyst-company {
+    text-decoration: underline;
 }
 
 
@@ -172,16 +187,34 @@
 .result-item {
     display: flex;
     flex-direction: column;
-    width: 20%;
-    padding: 1rem;
-    border-radius: 12px;
-    background: #1e1e1e;
-    color: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    padding: 0.6rem 1rem;
+    background: white;
+    color: #1a1a1a;
+    border-bottom: 1px solid #eee;
+    transition: background 0.15s ease;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-item:hover {
+    background: #f3f4f6;
+}
+
+.result-item strong {
+    font-size: 1rem;
+}
+
+.result-item p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
 }
 
 #all-assets-btn {
-    font-size: 3rem;
+    font-size: 2rem;
     color: #1a1a1a;
 }
 

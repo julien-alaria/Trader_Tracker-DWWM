@@ -9,7 +9,7 @@ export default function updateForm() {
         <input type="email" id="user-email" name="email" autocomplete="on">
 
         <label for="password">Password:</label>
-        <input type="password" id="user-password" name="password" minlength="6" maxlength="20" autocomplete="on">
+        <input type="password" id="user-password" name="password" placeholder="new password..." minlength="6" maxlength="20" autocomplete="on">
 
         <label for="picture">Profile Picture (Image):</label>
         <input type="file" id="picture" name="picture" accept="image/*" />

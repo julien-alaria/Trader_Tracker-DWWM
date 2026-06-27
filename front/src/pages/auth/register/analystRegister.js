@@ -4,21 +4,17 @@ import http from "../../../config/instanceHttp.js"
 // HTML TEMPLATE 
 // =====================
 const analystRegister = `
+    <h1>Register as Analyst</h1>
     <form method="post" id="analyst-form" enctype="multipart/form-data">
         
-        <label for="name">Analyst Name:</label>
-        <input type="text" id="name" name="name" placeholder="Analyst Name" required minlength="2" maxlength="50" autocomplete="on">
+        <input type="text" id="name" name="name" placeholder="enter your name..." required minlength="2" maxlength="50" autocomplete="on">
 
-        <label for="email">Analyst Email:</label>
-        <input type="email" id="email" name="email" placeholder="Analyst Email" required autocomplete="on">
+        <input type="email" id="email" name="email" placeholder="enter your email..." required autocomplete="on">
 
-        <label for="password">Analyst Password:</label>
-        <input type="password" id="password" name="password" placeholder="Analyst Password" minlength="6" maxlength="20" required autocomplete="on">
+        <input type="password" id="password" name="password" placeholder="enter your password..." minlength="6" maxlength="20" required autocomplete="on">
 
-        <label for="company">Analyst Company:</label>
-        <input type="text" id="company" name="company" placeholder="Company / Organization" maxlength="1000" autocomplete="on">
+        <input type="text" id="company" name="company" placeholder="your Company / Organization" maxlength="1000" autocomplete="on">
 
-        <label for="bio">Analyst Biography:</label>
         <textarea id="bio" name="bio" rows="5" cols="33" maxlength="100" placeholder="Tell us about your background..."></textarea>
 
         <input type="hidden" id="role" name="role" value="analyst" />

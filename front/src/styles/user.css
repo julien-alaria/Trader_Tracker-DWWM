@@ -1,54 +1,121 @@
 /* ==========================================================================
-   1. STYLES SÉCURISÉS PAR DÉFAUT (Mobile First)
-   S'applique uniquement aux IDs uniques de la page profil pour éviter les effets de bord
+   USER — mobile-first, responsive, SANS cartes
+   --------------------------------------------------------------------------
+   Même principe que analyst.css : une échelle typographique uniforme en rem,
+   centralisée dans des variables et ajustée d'un cran à chaque breakpoint.
+   Mise en page simple (une colonne, profil centré) identique à toutes les
+   tailles ; seules les tailles évoluent, de façon cohérente.
    ========================================================================== */
 
+:root {
+    /* Échelle typographique (rem) — base mobile */
+    --u-fs-name: 1.5rem;
+    --u-fs-text: 1rem;
+    --u-fs-small: 0.85rem;
+    --u-fs-list: 0.95rem;
+
+    /* Prêtes si tu ajoutes une classe sur les titres plus tard */
+    --u-fs-h1: 1.875rem;
+    --u-fs-h2: 1.25rem;
+
+    /* Tailles d'images (rem) */
+    --u-pic: 6.5rem;
+    --u-list-img: 3rem;
+}
+
+/* Tablette : on monte l'échelle d'un cran */
+@media (min-width: 48rem) {
+    :root {
+        --u-fs-name: 1.875rem;
+        --u-fs-text: 1.0625rem;
+        --u-fs-small: 0.9rem;
+        --u-fs-list: 1.05rem;
+
+        --u-fs-h1: 2.25rem;
+        --u-fs-h2: 1.5rem;
+
+        --u-pic: 7.5rem;
+        --u-list-img: 3.5rem;
+    }
+}
+
+/* Desktop : un cran de plus */
+@media (min-width: 64rem) {
+    :root {
+        --u-fs-name: 2.25rem;
+        --u-fs-text: 1.125rem;
+        --u-fs-small: 0.95rem;
+        --u-fs-list: 1.15rem;
+
+        --u-fs-h1: 2.75rem;
+        --u-fs-h2: 1.75rem;
+
+        --u-pic: 8.5rem;
+        --u-list-img: 4rem;
+    }
+}
+
+/* ==========================================================================
+   TITRES
+   --------------------------------------------------------------------------
+   Les titres (h1 « User Page », h2 des sections) n'ont pas de classe dans le
+   HTML : on les laisse au style par défaut pour ne pas toucher les autres
+   pages. Pour les styliser, ajoute une classe (ex. class="page-title") et
+   cible-la simplement.
+   ========================================================================== */
+
+/* ==========================================================================
+   PROFIL — centré à toutes les tailles
+   ========================================================================== */
 #user_picture {
-    width: 110px;
-    height: 110px;
+    display: block;
+    width: var(--u-pic);
+    height: var(--u-pic);
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid #ffffff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    margin: 0 auto display;
+    margin: 0 auto;
 }
 
 #user_name {
-    font-size: 1.6rem;
+    font-size: var(--u-fs-name);
     font-weight: bold;
     color: #1a1a1a;
     text-align: center;
-    margin-bottom: 5px;
+    margin-bottom: 0.3rem;
 }
 
 #user_email {
-    font-size: 1rem;
+    font-size: var(--u-fs-text);
     color: #555555;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 0.625rem;
 }
 
 #user_id {
-    font-size: 0.85rem;
+    font-size: var(--u-fs-small);
     color: #777777;
     font-family: monospace;
     background-color: #e9ecef;
-    padding: 4px 10px;
-    border-radius: 6px;
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.375rem;
     display: block;
     width: max-content;
     margin: 0 auto;
 }
 
-/* Gestion propre des carrousels sur mobile */
+/* ==========================================================================
+   CARROUSELS (watchlist / follow)
+   ========================================================================== */
 #watchlist-carousel-target,
 #follow-carousel-target {
     width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: thin;
-    padding-bottom: 15px;
-    margin-bottom: 20px;
+    padding-bottom: 0.9375rem;
+    margin-bottom: 1.25rem;
 }
 
 #watchlist-carousel-target .carousel-track,
@@ -57,9 +124,12 @@
     flex-direction: row;
     flex-wrap: nowrap;
     width: max-content;
-    gap: 16px;
+    gap: 1rem;
 }
 
+/* ==========================================================================
+   LISTES — colonnes simples
+   ========================================================================== */
 #watchlist-list-global,
 #follow-list-global,
 #recommendations-list-target {
@@ -76,14 +146,13 @@
     width: 100%;
 }
 
-/* Lignes de la liste — remplace l'ancien style inline (50px) retiré du JS */
 .watchlist-item,
 .follow-item {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 12px;
-    padding: 10px 0;
+    gap: 0.75rem;
+    padding: 0.625rem 0;
     border-bottom: 1px solid #e3e6ec;
     width: 100%;
     box-sizing: border-box;
@@ -91,8 +160,8 @@
 
 .watchlist-item img,
 .follow-item img {
-    width: 50px;
-    height: 50px;
+    width: var(--u-list-img);
+    height: var(--u-list-img);
     flex-shrink: 0;
     object-fit: contain;
 }
@@ -105,12 +174,14 @@
 .watchlist-item p,
 .follow-item p {
     margin: 0;
-    font-size: 0.95rem;
+    font-size: var(--u-fs-list);
     color: #1a1a1a;
     word-break: break-word;
 }
 
-/* Centrage horizontal uniquement — display/gap/margin-top gérés par paginationComponent.js */
+/* ==========================================================================
+   PAGINATION
+   ========================================================================== */
 #watchlist-pagination,
 #follow-pagination {
     justify-content: center;
@@ -121,9 +192,9 @@
     background-color: #f8f9fa;
     color: #1a1a1a;
     border: 1px solid #cccccc;
-    border-radius: 6px;
-    padding: 8px 16px;
-    font-size: 0.9rem;
+    border-radius: 0.375rem;
+    padding: 0.5rem 1rem;
+    font-size: var(--u-fs-list);
     cursor: pointer;
     transition: background-color 0.15s ease, border-color 0.15s ease;
 }
@@ -138,17 +209,21 @@
     cursor: not-allowed;
 }
 
-/* Formulaire de mise à jour sur mobile */
+/* ==========================================================================
+   FORMULAIRE DE MISE À JOUR
+   ========================================================================== */
 .update-form {
     width: 100%;
-    padding: 10px;
+    max-width: 37.5rem;
+    margin: 0 auto;
+    padding: 0.625rem;
     box-sizing: border-box;
 }
 
 .update-form form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 1rem;
 }
 
 .update-form input[type="text"],
@@ -157,10 +232,16 @@
     width: 100%;
     box-sizing: border-box;
     border: 1px solid #cccccc;
-    border-radius: 8px;
-    font-size: 1rem;
-    padding: 12px 16px;
+    border-radius: 0.5rem;
+    font-size: var(--u-fs-text);
+    padding: 0.75rem 1rem;
     outline: none;
+}
+
+.update-form input[type="text"]:focus,
+.update-form input[type="email"]:focus,
+.update-form input[type="password"]:focus {
+    border-color: #03034B;
 }
 
 .update-form input[type="submit"],
@@ -169,203 +250,16 @@
     background-color: #03034B;
     color: #ffffff;
     border: none;
-    border-radius: 8px;
-    font-size: 1.1rem;
+    border-radius: 0.5rem;
+    font-size: var(--u-fs-text);
     font-weight: bold;
-    padding: 14px;
+    padding: 0.875rem;
     cursor: pointer;
     text-transform: uppercase;
 }
 
-/* =============================
-   MOBILE LARGE (431px - 600px)
-   ============================= */
-@media (min-width: 431px) and (max-width: 600px) {
-
-    #user_picture {
-        width: 120px;
-        height: 120px;
-    }
-
-    #user_name {
-        font-size: 1.75rem;
-    }
-
-    #user_email {
-        font-size: 1.05rem;
-    }
-
-    #watchlist-carousel-target,
-    #follow-carousel-target {
-        padding-bottom: 18px;
-        margin-bottom: 24px;
-    }
-
-    #watchlist-carousel-target .carousel-track,
-    #follow-carousel-target .carousel-track {
-        gap: 18px;
-    }
-
-    .watchlist-item img,
-    .follow-item img {
-        width: 56px;
-        height: 56px;
-    }
-
-    .watchlist-item p,
-    .follow-item p {
-        font-size: 1rem;
-    }
-
-    .update-form {
-        max-width: 450px;
-        margin: 0 auto;
-    }
-
-    .update-form input[type="submit"],
-    .update-form button {
-        font-size: 1.15rem;
-    }
-}
-
-/* =============================
-   TABLETTE / INTERMÉDIAIRE (600px - 1023px)
-   ============================= */
-@media (min-width: 600px) and (max-width: 1023px) {
-
-    /* Section profil structurée en ligne, comme sur analyst.css */
-    h1:has(+ section) ~ section:first-of-type {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 20px;
-        padding: 20px;
-    }
-
-    #user_picture {
-        width: 100px;
-        height: 100px;
-        margin: 0;
-    }
-
-    #user_name,
-    #user_email {
-        text-align: left;
-    }
-
-    .watchlist-item img,
-    .follow-item img {
-        width: 62px;
-        height: 62px;
-    }
-
-    .watchlist-item p,
-    .follow-item p {
-        font-size: 1.05rem;
-    }
-
-    .update-form {
-        max-width: 500px;
-        margin: 0 auto;
-    }
-
-    #user_name {
-        font-size: 1.8rem;
-    }
-}
-
-
-/* ==========================================================================
-   2. DESIGN GRAND ÉCRAN (PC / Desktop - 1024px et plus)
-   C'est ICI qu'on prend un maximum de largeur en toute sécurité
-   ========================================================================== */
-@media (min-width: 1024px) {
-
-    /* Ciblage ultra-précis du h1 et des sections uniquement s'ils sont dans la page Profil */
-    h1:has(+ section) {
-        text-align: center;
-        color: #03034B;
-        margin-top: 30px;
-        margin-bottom: 20px;
-        font-size: 2.5rem;
-    }
-
-    /* Prise de largeur maximale (98% / 1600px) exclusive au Desktop */
-    h1:has(+ section) ~ section {
-        background-color: #ffffff;
-        border-radius: 12px;
-        padding: 30px 40px;
-        margin: 25px auto;
-        width: 98%;                 /* Prend le maximum d'espace sur PC */
-        max-width: 1600px;          /* Limite propre sur les écrans ultra-larges */
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        border: 1px solid #e3e6ec;
-        box-sizing: border-box;
-    }
-
-    h1:has(+ section) ~ section h2 {
-        font-size: 1.8rem;
-        color: #03034B;
-        border-bottom: 2px solid #03034B;
-        padding-bottom: 8px;
-        display: inline-block;
-    }
-
-    /* Section Infos : Repasse en ligne (Row) sur PC */
-    h1:has(+ section) ~ section:first-of-type {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 40px;
-    }
-
-    #user_picture {
-        width: 130px;
-        height: 130px;
-        margin: 0;
-    }
-
-    #user_name {
-        font-size: 2.2rem;
-        text-align: left;
-    }
-
-    #user_email {
-        font-size: 1.2rem;
-        text-align: left;
-    }
-
-    #user_id {
-        margin: 0;
-    }
-
-    .watchlist-item img,
-    .follow-item img {
-        width: 68px;
-        height: 68px;
-    }
-
-    .watchlist-item p,
-    .follow-item p {
-        font-size: 1.1rem;
-    }
-
-    /* Formulaire centré et propre sur PC */
-    .update-form {
-        max-width: 600px;
-        margin: 0 auto;
-    }
-
-    .update-form input[type="text"]:focus,
-    .update-form input[type="email"]:focus,
-    .update-form input[type="password"]:focus {
-        border-color: #03034B;
-    }
-
-    .update-form input[type="submit"]:hover,
-    .update-form button:hover {
-        background-color: orange;
-        color: #1a1a1a;
-    }
+.update-form input[type="submit"]:hover,
+.update-form button:hover {
+    background-color: orange;
+    color: #1a1a1a;
 }
