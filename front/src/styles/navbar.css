@@ -108,7 +108,7 @@ a {
     }
 }
 
-/* ===== 601px à 768px - Tablette ===== */
+/* ===== 601px à 768px - Tablet ===== */
 @media (min-width: 601px) and (max-width: 768px) {
 
     .main-navbar {

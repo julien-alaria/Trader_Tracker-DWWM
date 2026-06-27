@@ -1,12 +1,3 @@
-/* ==========================================================================
-   ANALYST DETAILS — mobile-first, responsive, SANS cartes
-   --------------------------------------------------------------------------
-   Même principe que analyst.css / user.css : échelle typographique uniforme
-   en rem, centralisée dans des variables, montée d'un cran à chaque
-   breakpoint. En-tête centré, recommandations en lignes simples.
-   Tout est scopé à cette page pour ne pas déborder sur les autres.
-   ========================================================================== */
-
 :root {
     --ad-fs-name: 1.5rem;
     --ad-fs-h2: 1.25rem;
@@ -37,9 +28,7 @@
     }
 }
 
-/* ==========================================================================
-   EN-TÊTE ANALYSTE — centré (scopé à #analyst-detail)
-   ========================================================================== */
+/* analyst header */
 #analyst-detail {
     margin: 1rem;
 }
@@ -124,9 +113,7 @@
     cursor: not-allowed;
 }
 
-/* ==========================================================================
-   TITRE DE SECTION
-   ========================================================================== */
+/* SECTION */
 #analyst-reco-t {
     text-align: center;
     font-size: var(--ad-fs-h2);
@@ -134,12 +121,7 @@
     margin: 1.5rem 0 1rem;
 }
 
-/* ==========================================================================
-   RECOMMANDATIONS — lignes simples (pas de cartes)
-   ligne 1 = icône + statut + photo + nom de l'actif
-   ligne 2 = commentaire
-   ligne 3 = date
-   ========================================================================== */
+/* RECOMMENDATIONS  */
 #analyst-reco-list-container {
     display: flex;
     flex-direction: column;
@@ -208,9 +190,7 @@
     font-size: inherit;
 }
 
-/* ==========================================================================
-   PAGINATION (cette page uniquement)
-   ========================================================================== */
+/* PAGINATION */
 #analyst-reco-pagination {
     justify-content: center;
     align-items: center;

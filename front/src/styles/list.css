@@ -43,22 +43,15 @@
     color: #333;
 }
 
-/* Tous les <span> de la ligne (ticker + nom) doivent pouvoir rétrécir :
-   min-width: 0 est indispensable, sinon un flex-item garde sa largeur de
-   contenu naturelle et force le débordement du parent. */
 .asset-item span {
     min-width: 0;
 }
 
-/* Le span du ticker (1er span, contient <strong>) : doit rester compact
-   et ne jamais se faire écraser par le span du nom. */
 .asset-item span:first-of-type {
     flex-shrink: 0;
     white-space: nowrap;
 }
 
-/* Le span du nom (2e span) : prend l'espace restant, tronque sur 2 lignes
-   avec ellipsis si le texte est trop long. */
 .asset-item span:nth-of-type(2) {
     flex: 1 1 auto;
     min-width: 0;
@@ -80,9 +73,7 @@
 }
 
 
-/* ============================
-   MOBILE (max-width: 430px)
-   ============================ */
+/* MOBILE  */
 @media (max-width: 430px) {
 
     h1 {
@@ -129,9 +120,7 @@
 }
 
 
-/* ============================
-   431px - 600px (Mobile large)
-   ============================ */
+/* 431px - 600px (Mobile large) */
 @media (min-width: 431px) and (max-width: 600px) {
 
     h1 {
@@ -178,9 +167,7 @@
 }
 
 
-/* ============================
-   601px - 768px (Tablette)
-   ============================ */
+/* tablets  */
 @media (min-width: 601px) and (max-width: 768px) {
 
     h1 {
@@ -228,9 +215,7 @@
 }
 
 
-/* ============================
-   DESKTOP (min-width: 769px)
-   ============================ */
+/* DESKTOP  */
 @media (min-width: 769px) {
 
     h1 {

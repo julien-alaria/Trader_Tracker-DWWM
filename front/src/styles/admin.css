@@ -1,6 +1,4 @@
-/* ==================================================
-   SECURED OVERALL STRUCTURE AND SIDE PANEL
-   ================================================== */
+/* SECURED OVERALL STRUCTURE AND SIDE PANEL */
 .admin-layout {
     display: flex;
     flex-direction: row;
@@ -83,9 +81,7 @@
 }
 
 
-/* ========================================================
-   Clean horizontal Flexbox restyling of the rows
-   ======================================================== */
+/* Clean horizontal Flexbox restyling of the rows */
 
 .admin-layout .user-item, 
 .admin-layout .recommendation, 
@@ -196,9 +192,7 @@
 }
 
 
-/* ===========================
-   BUTTON DESIGN
-   =========================== */
+/* BUTTON DESIGN */
 
 .admin-layout .user-item button:first-of-type,
 .admin-layout .btn-update,
@@ -250,9 +244,7 @@
 }
 
 
-/* =========================================
-   PROFILE UPDATE FORM
-   ========================================= */
+/* PROFILE UPDATE FORM */
 
 .admin-layout .update-form {
     display: flex;
@@ -285,10 +277,8 @@
     font-size: 1rem;
 }
 
-/* ========================
-   MOBILE-RESPONSIVE
-   ======================== */
-@media (max-width: 850px) { /* Seuil plus large pour inclure les tablettes */
+/* MOBILE-RESPONSIVE */
+@media (max-width: 850px) { /* with tablets */
     
     .admin-layout {
         flex-direction: column;

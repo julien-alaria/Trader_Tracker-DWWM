@@ -1,6 +1,4 @@
-/* ==========================================================================
-   STRUCTURE DES CARTES & CARROUSEL
-   ========================================================================== */
+/* CARDS & CARROUSEL */
 .carousel-track {
     display: flex;
     gap: 24px;
@@ -48,9 +46,7 @@
     object-fit: contain;
 }
 
-/* ==========================================================================
-   TYPES DE CARTES (Stock, Forex, Analyst, etc.)
-   ========================================================================== */
+/* CARDS */
 
 /*STOCK CARD*/
 .card.stock {
@@ -60,7 +56,6 @@
     box-shadow: #1a1a1a;
 }
 
-/* Règle de base manquante — classe réellement utilisée par stockCard.js */
 .card-stock-image {
     max-width: 80px;
     height: auto;
@@ -121,7 +116,6 @@
     object-fit: contain;
 }
 
-/* Règle de base manquante — classe réellement utilisée par commodityCard.js */
 .card-commodity-image {
     max-width: 250px;
     height: auto;
@@ -157,9 +151,7 @@
 }
 
 
-/* ==========================================================================
-   ÉLÉMENTS INTERNES (Textes, Graphiques)
-   ========================================================================== */
+/* ELEMENTS  */
 
 .card-title {
     font-size: 1.4rem;
@@ -180,9 +172,7 @@
     color: black;
 }
 
-/* ==========================================================================
-   COMPOSANTS DIVERS
-   ========================================================================== */
+/* COMPONENTS  */
 
 .result-item {
     display: flex;
@@ -422,12 +412,9 @@
 
 }
 
-/* ==========================================================================
-   TABLETTE (431px à 1023px) : Augmentation du ratio
-   ========================================================================== */
+/* TABLET (431px à 1023px) */
 @media (min-width: 431px) and (max-width: 1023px) {
 
-    /* Augmentation de la taille des cartes (ratio intermédiaire) */
     .card.stock {
         max-width: 250px;
         height: 400px;
@@ -517,8 +504,6 @@
         display: none;
     }
 
-
-    /* Augmentation du ratio des images (passage de 80px à 150px) */
     .card-stock-image,
     .card-image-forex,
     .card-commodity-image,
@@ -527,7 +512,6 @@
         height: 150px;
     }
 
-    /* Ajustement de la typo */
     .card-stock-title,
     .card-title-forex,
     .card-commodity-title,
@@ -536,19 +520,15 @@
     }
 }
 
-/* ==========================================================================
-   DESKTOP (À partir de 1024px) : Ratio maximum (Original)
-   ========================================================================== */
+/* DESKTOP */
 @media (min-width: 1024px) {
 
-    /* Retour aux valeurs pleines */
     .card.commodity, 
     .card.analyst {
         max-width: 320px;
         height: 300px;
     }
 
-    /* Ratio maximum pour les images */
     .card-stock-image,
     .card-commodity-image,
     .card-analyst-image {

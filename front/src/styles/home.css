@@ -254,9 +254,7 @@ main {
     border-radius: 8px;
 }
 
-/* ==========================================================================
-   MOBILE
-   ========================================================================== */
+/* MOBILE */
 @media (max-width: 430px) {
 
     #home-top {
@@ -361,9 +359,7 @@ main {
     }
 }
 
-/* ==========================================================================
-   TABLETS
-   ========================================================================== */
+/* TABLETS */
 @media (min-width: 431px) and (max-width: 1023px) {
     #home-top-title {
         font-size: 5rem;
@@ -388,16 +384,13 @@ main {
     }
 
     .search-input {
-        width: 40vw; /* Plus large sur tablette */
+        width: 40vw; 
     }
 }
 
-/* ==========================================================================
-   DESKTOP
-   ========================================================================== */
+/* DESKTOP */
 @media (min-width: 1024px) {
     
-    /* On conserve tes tailles originales pour le Desktop */
     #home-top-title {
         font-size: 7rem;
     }
@@ -423,14 +416,13 @@ main {
     }
 
     #home-search-bar {
-        justify-content: center; /* Centrage naturel sur grand écran */
+        justify-content: center; 
     }
 
     .search-input {
-        width: 20vw; /* Taille fixe pour garder la mise en page originale */
+        width: 20vw; 
     }
 
-    /* Optimisation du carrousel pour éviter qu'il soit trop étiré sur très large écran */
     .carousel {
         max-width: 1400px;
         margin: 0 auto;

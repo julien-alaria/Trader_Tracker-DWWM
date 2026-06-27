@@ -1,14 +1,6 @@
-/* ==========================================================================
-   ANALYST — mobile-first, responsive, SANS cartes
-   --------------------------------------------------------------------------
-   Échelle typographique uniforme en rem, centralisée dans des variables et
-   ajustée d'un cran à chaque breakpoint. La mise en page ne change pas :
-   une seule colonne, profil centré, lignes simples. Seules les tailles
-   évoluent, de façon cohérente sur toute la page.
-   ========================================================================== */
 
 :root {
-    /* Échelle typographique (rem) — base mobile */
+    /* font sizes (rem) */
     --an-fs-h1: 1.875rem;
     --an-fs-h2: 1.25rem;
     --an-fs-name: 1.5rem;
@@ -16,12 +8,12 @@
     --an-fs-small: 0.85rem;
     --an-fs-list: 0.95rem;
 
-    /* Tailles d'images (rem) */
+    /* images sizes (rem) */
     --an-pic: 6.5rem;
     --an-list-img: 3rem;
 }
 
-/* Tablette : on monte l'échelle d'un cran */
+/* Tablet */
 @media (min-width: 48rem) {
     :root {
         --an-fs-h1: 2.25rem;
@@ -36,7 +28,7 @@
     }
 }
 
-/* Desktop : un cran de plus */
+/* Desktop */
 @media (min-width: 64rem) {
     :root {
         --an-fs-h1: 2.75rem;
@@ -51,18 +43,7 @@
     }
 }
 
-/* ==========================================================================
-   TITRES
-   --------------------------------------------------------------------------
-   Les titres (h1 « Analyst Page », h2 des sections) n'ont pas de classe dans
-   le HTML, donc on les laisse au style par défaut du navigateur pour éviter
-   de toucher toutes les autres pages. Si tu veux les styliser (ex. navy
-   centré), ajoute une classe dans le HTML et on la cible simplement.
-   ========================================================================== */
-
-/* ==========================================================================
-   PROFIL — centré à toutes les tailles
-   ========================================================================== */
+/* PROFIL */
 #analyst_picture {
     width: var(--an-pic);
     height: var(--an-pic);
@@ -112,9 +93,7 @@
     margin: 0 auto 0.625rem auto;
 }
 
-/* ==========================================================================
-   CARROUSELS (watchlist / follow)
-   ========================================================================== */
+/* CARROUSELS (watchlist / follow) */
 #watchlist-carousel-target,
 #follow-carousel-target {
     width: 100%;
@@ -134,9 +113,7 @@
     gap: 1rem;
 }
 
-/* ==========================================================================
-   LISTES (recommandations / watchlist / follow) — colonnes simples
-   ========================================================================== */
+/* LISTS */
 #watchlist-list-global,
 #follow-list-global,
 #recommendations-list-target {
@@ -146,15 +123,13 @@
     margin-top: 1.5rem;
 }
 
-/* ==========================================================================
-   RECOMMANDATIONS — lignes simples (pas de cartes)
-   ========================================================================== */
+/* RECOMMENDATIONS= */
 .recommendation {
     padding: 0.625rem 0;
     border-bottom: 1px solid #e3e6ec;
 }
 
-/* Images masquées dans les recommandations */
+/* hidden img */
 .recommendation img {
     display: none;
 }
@@ -188,9 +163,7 @@
     border-radius: 5px;
 }
 
-/* ==========================================================================
-   LIGNES watchlist / follow
-   ========================================================================== */
+/* watchlist / follow */
 #watchlist-list-target,
 #follow-list-target {
     display: flex;
@@ -231,9 +204,7 @@
     word-break: break-word;
 }
 
-/* ==========================================================================
-   PAGINATION
-   ========================================================================== */
+/* PAGINATION */
 #watchlist-pagination,
 #follow-pagination {
     justify-content: center;
@@ -261,9 +232,7 @@
     cursor: not-allowed;
 }
 
-/* ==========================================================================
-   FORMULAIRE DE MISE À JOUR
-   ========================================================================== */
+/* UPDATE FORM */
 .update-form {
     position: relative;
     width: 100%;

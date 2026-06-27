@@ -128,9 +128,7 @@ input[type="submit"] {
     }
 }
 
-/* ===== 431px à 600px - Mobile large ===== 
-   (déjà couvert par la règle existante min-width: 431px,
-   on ajoute juste un palier intermédiaire pour le footer/séparateur) */
+/* ===== 431px à 600px - Mobile large ===== */
 @media (min-width: 431px) and (max-width: 600px) {
 
     #login-form, #analyst-form, #register-form {
@@ -144,7 +142,7 @@ input[type="submit"] {
     }
 }
 
-/* ===== 601px à 768px - Tablette ===== */
+/* ===== 601px à 768px - Tablet ===== */
 @media (min-width: 601px) and (max-width: 768px) {
 
     #login-form, #analyst-form, #register-form {
@@ -206,7 +204,7 @@ input[type="submit"] {
     }
 }
 
-/* ===== 1024px+ - Desktop large (existant, légèrement enrichi) ===== */
+/* ===== 1024px+ - Desktop large ===== */
 @media (min-width: 1024px) {
     #login-form, #analyst-form, #register-form {
         max-width: 480px;

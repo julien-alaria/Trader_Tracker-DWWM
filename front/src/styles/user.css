@@ -1,29 +1,20 @@
-/* ==========================================================================
-   USER — mobile-first, responsive, SANS cartes
-   --------------------------------------------------------------------------
-   Même principe que analyst.css : une échelle typographique uniforme en rem,
-   centralisée dans des variables et ajustée d'un cran à chaque breakpoint.
-   Mise en page simple (une colonne, profil centré) identique à toutes les
-   tailles ; seules les tailles évoluent, de façon cohérente.
-   ========================================================================== */
-
 :root {
-    /* Échelle typographique (rem) — base mobile */
+   
     --u-fs-name: 1.5rem;
     --u-fs-text: 1rem;
     --u-fs-small: 0.85rem;
     --u-fs-list: 0.95rem;
 
-    /* Prêtes si tu ajoutes une classe sur les titres plus tard */
+
     --u-fs-h1: 1.875rem;
     --u-fs-h2: 1.25rem;
 
-    /* Tailles d'images (rem) */
+   
     --u-pic: 6.5rem;
     --u-list-img: 3rem;
 }
 
-/* Tablette : on monte l'échelle d'un cran */
+/* Tablet */
 @media (min-width: 48rem) {
     :root {
         --u-fs-name: 1.875rem;
@@ -39,7 +30,7 @@
     }
 }
 
-/* Desktop : un cran de plus */
+/* Desktop */
 @media (min-width: 64rem) {
     :root {
         --u-fs-name: 2.25rem;
@@ -55,18 +46,7 @@
     }
 }
 
-/* ==========================================================================
-   TITRES
-   --------------------------------------------------------------------------
-   Les titres (h1 « User Page », h2 des sections) n'ont pas de classe dans le
-   HTML : on les laisse au style par défaut pour ne pas toucher les autres
-   pages. Pour les styliser, ajoute une classe (ex. class="page-title") et
-   cible-la simplement.
-   ========================================================================== */
-
-/* ==========================================================================
-   PROFIL — centré à toutes les tailles
-   ========================================================================== */
+/* PROFIL  */
 #user_picture {
     display: block;
     width: var(--u-pic);
@@ -105,9 +85,7 @@
     margin: 0 auto;
 }
 
-/* ==========================================================================
-   CARROUSELS (watchlist / follow)
-   ========================================================================== */
+/* CARROUSELS (watchlist / follow) */
 #watchlist-carousel-target,
 #follow-carousel-target {
     width: 100%;
@@ -127,9 +105,7 @@
     gap: 1rem;
 }
 
-/* ==========================================================================
-   LISTES — colonnes simples
-   ========================================================================== */
+/* LISTS */
 #watchlist-list-global,
 #follow-list-global,
 #recommendations-list-target {
@@ -179,9 +155,7 @@
     word-break: break-word;
 }
 
-/* ==========================================================================
-   PAGINATION
-   ========================================================================== */
+/* PAGINATION */
 #watchlist-pagination,
 #follow-pagination {
     justify-content: center;
@@ -209,9 +183,7 @@
     cursor: not-allowed;
 }
 
-/* ==========================================================================
-   FORMULAIRE DE MISE À JOUR
-   ========================================================================== */
+/* UPDATE FORM */
 .update-form {
     width: 100%;
     max-width: 37.5rem;
