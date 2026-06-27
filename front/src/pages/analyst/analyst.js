@@ -163,14 +163,12 @@ export async function initAnalyst() {
 
         return `
           <div class="recommendation" data-js-clickable data-id="${rec.id}" data-ticker="${rec.ticker}" data-type="${rec.asset_type_id ?? 'asset'}">
-              <img src="${recoImage}" alt="reco-image" />
+              <img src="${recoImage}" alt="reco-image" class="analyst-reco-img"/>
               <strong>${rec.status}</strong>
-              <img src="${imageUrl}" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
-              <p>${rec.ticker}</p>
-              <p>${rec.comment}</p>
+              <img src="${imageUrl}" class="analyst-logo-picture"  alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
+              <p class="recommendation-comment">${rec.comment}</p>
               <small>${new Date(rec.created_at).toLocaleDateString()}</small>
               ${isAuthorized ? `
-                  <button class="delete-btn" data-id="${rec.id}">DELETE</button>
                   <form class="edit-form hidden" data-id="${rec.id}">
                       <select name="status">
                           <option value="BUY">BUY</option>
@@ -179,6 +177,7 @@ export async function initAnalyst() {
                       </select>
                       <input name="comment" placeholder="comment" />
                       <button type="submit">EDIT</button>
+                      <button class="delete-btn" data-id="${rec.id}">DELETE</button>
                   </form>
               ` : ""}
           </div>

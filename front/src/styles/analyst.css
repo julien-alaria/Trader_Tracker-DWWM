@@ -129,9 +129,20 @@
     border-bottom: 1px solid #e3e6ec;
 }
 
-/* hidden img */
-.recommendation img {
-    display: none;
+.analyst-reco-img {
+    height: 1rem;
+    width: 1rem;
+}
+
+.analyst-logo-picture {
+    height: 2rem;
+    width: 2rem;
+
+}
+
+.recommendation-comment {
+    width: 100%;
+    margin-top: .5rem;
 }
 
 #recommendations-list-target .recommendation strong {
@@ -154,6 +165,7 @@
 .delete-btn {
     color: white;
     background-color: #03034B;
+    border: 1px solid white;
     border-radius: 5px;
 }
 

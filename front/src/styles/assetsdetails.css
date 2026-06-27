@@ -130,9 +130,6 @@
     font-size: 2rem;
 }
 
-/* min-height (et non height) : le conteneur doit pouvoir s'étirer pour
-   contenir toutes les recommandations, sinon le contenu déborde
-   silencieusement et chevauche les éléments placés après (ex: #recommendation-form). */
 #reco-list-container {
     margin-left: 1rem;
     margin-right: 1rem;
@@ -172,21 +169,23 @@
 }
 
 #recommendation-form {
-    max-width: 700px;
-    margin: 3rem auto;
-    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    padding: 1rem;
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
 #recommendation-form h2 {
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 #rec-form {
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 1rem;
 }
 
 #rec-form select,
@@ -197,9 +196,9 @@
     font-size: 1rem;
     font-family: inherit;
     border: 2px solid #1d3557;
-    border-radius: 8px;
+    border-radius: 5px;
     background: #fff;
-    color: #333;
+    color: navy;
     transition: all 0.25s ease;
     box-sizing: border-box;
 }
@@ -215,11 +214,12 @@
     font-size: 1rem;
     font-weight: 600;
     color: white;
-    background: #1d3557;
+    background: navy;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.25s ease;
+    width: 100%;
 }
 
 #rec-form button:hover {
@@ -322,7 +322,7 @@
         width: 100%;
     }
 
-    #reco-image {
+    .reco-image {
         width: 1rem;
         height: 1rem;
         flex-shrink: 0;
@@ -473,7 +473,7 @@
         width: 100%;
     }
 
-    #reco-image {
+    .reco-image {
         width: 2rem;
         height: 2rem;
         flex-shrink: 0;
@@ -617,7 +617,7 @@
         justify-content: space-around;
     }
 
-    #reco-image {
+    .reco-image {
         width: 2rem;
         height: 2rem;
         flex-shrink: 0;
