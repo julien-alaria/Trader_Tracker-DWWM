@@ -71,6 +71,16 @@ input[type="submit"] {
     text-transform: uppercase;
 }
 
+#register-text a {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5rem;
+    text-align: center;
+    color: black;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 @media (max-width: 430px) {
     #login-form, #analyst-form, #register-form {
         margin: 20px auto;

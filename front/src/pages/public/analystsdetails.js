@@ -10,12 +10,11 @@ import { getRecommendationIcon } from "../../utils/recommendationUtils.js"
 // =====================
 const analystDetailsPage = `
     <section>
-        <h1>Analyst Detail Page</h1>
         <div id="analyst-detail"></div>
     </section>
 
     <section id="analyst-recommendation">
-        <h2>This Analyst Recommendations</h2>
+        <h2 id="analyst-reco-t">This Analyst Recommendations</h2>
         <div id="analyst-recommendation-target"></div>
     </section>
 `
@@ -119,9 +118,9 @@ function renderAnalyst(analyst, currentUser) {
                 <img src="${imageUrl}" alt="Photo de ${analyst.name}" class="analyst-profile-pic" />
             </div>
             
-            <h1>${analyst.name}</h1>
-            <p>Company: ${analyst.company}</p>
-            <p>Biographie: ${analyst.bio}</p>
+            <h1 id="analyst-name">${analyst.name}</h1>
+            <p id="analyst-co">Company: ${analyst.company}</p>
+            <p id="analyst-bio">Biographie: ${analyst.bio}</p>
 
             <button id="follow-btn" ${isSelf ? "disabled" : ""} data-followed="${analyst.isFollowing}">
                 ${isSelf ? "Your Profile" : initialText}

@@ -18,8 +18,9 @@ const register = `
         <input type="submit" value="submit">
         <div id="message"></div>
     </form>
-    <p>Register as Analyst ?</p>
-    <a href="#/analystregister" class="btn">Register as Analyst</a>
+    <div id="register-text">
+        <a href="#/analystregister" class="btn">Register as Analyst?</a>
+    </div>
     `
 
 export default register

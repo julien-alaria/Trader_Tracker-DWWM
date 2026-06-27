@@ -169,11 +169,63 @@
 }
 
 #recommendation-form {
-    margin-top: 3rem;
+    max-width: 700px;
+    margin: 3rem auto;
+    padding: 2rem;
+    text-align: center;
+    font-size: 1.2rem;
 }
 
 #recommendation-form h2 {
-    font-size: 1.5rem;
+    font-size: 2rem;
+}
+
+#rec-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+#rec-form select,
+#rec-form textarea,
+#rec-form input {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    font-size: 1rem;
+    font-family: inherit;
+    border: 2px solid #1d3557;
+    border-radius: 8px;
+    background: #fff;
+    color: #333;
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+}
+
+#rec-form textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+#rec-form button {
+    align-self: center;
+    padding: 0.9rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    background: #1d3557;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+#rec-form button:hover {
+    background: orange;
+    transform: translateY(-2px);
+}
+
+#rec-form button:active {
+    transform: translateY(0);
 }
 
 @media (max-width: 430px) {
@@ -273,12 +325,6 @@
 
     #analyst-carousel-container {
         text-align: center;
-        font-size: 0.8rem;
-    }
-
-    h2 {
-        text-align: center;
-        /*text-decoration: underline;*/
         font-size: 0.8rem;
     }
 
