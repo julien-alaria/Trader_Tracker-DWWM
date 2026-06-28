@@ -3,7 +3,7 @@ import AssetModel from "../models/AssetModel.js"
 import { sanitizeRecommendation, sanitizeRecommendationUpdate } from "../utils/sanitizer.js"
 
 // GET
-async function getRecommendationPagin(req, res) {
+async function getRecommendationPagin(req, res, next) {
     try {
         const { ticker } = req.query
 
@@ -32,11 +32,11 @@ async function getRecommendationPagin(req, res) {
         return res.status(200).json({ results, hasNext })
 
     } catch (error) {
-        return res.status(500).json({ message: error.message })
+        next(error)
     }
 }
 
-async function getMyRecommendation(req, res) {
+async function getMyRecommendation(req, res, next) {
     try {
         const userId = req.user.id
         const limit = Math.max(1, Number.parseInt(req.query.limit ?? 10, 10))
@@ -52,13 +52,12 @@ async function getMyRecommendation(req, res) {
 
         return res.status(200).json({ results, hasNext })
     } catch (error) {
-        console.error("RECOMMENDATION PAGIN ERROR:", error)
-        return res.status(500).json({ message: error.message })
+        next(error)
     }
 }
 
 // POST
-async function createRecommendation(req, res) {
+async function createRecommendation(req, res, next) {
     try {
         if (!req.asset) {
             return res.status(400).json({ message: "Asset not resolved" })
@@ -87,14 +86,12 @@ async function createRecommendation(req, res) {
         return res.status(201).json({ recommendation })
 
     } catch (error) {
-        console.error("CREATE ERROR:", error)
-
-        return res.status(500).json({ message: error.message })
+        next(error)
     }
 }
 
 // PUT /recommendations/:id
-async function updateRecommendation(req, res) {
+async function updateRecommendation(req, res, next) {
     try {
         const id = Number(req.params.id)
 
@@ -124,12 +121,12 @@ async function updateRecommendation(req, res) {
         return res.status(200).json({ recommendation })
 
     } catch (error) {
-        return res.status(500).json({ message: error.message })
+        next(error)
     }
 }
 
 // DELETE /recommendations/:id
-async function deleteRecommendation(req, res) {
+async function deleteRecommendation(req, res, next) {
     try {
         const id = Number(req.params.id)
 
@@ -153,11 +150,11 @@ async function deleteRecommendation(req, res) {
         return res.status(200).json({ message: "delete ok" })
 
     } catch (error) {
-        return res.status(500).json({ message: error.message })
+        next(error)
     }
 }
 
-async function getRecommendationsByAnalyst(req, res) {
+async function getRecommendationsByAnalyst(req, res, next) {
     try {
         const { analystId } = req.params;
         const limit = Math.max(1, Number.parseInt(req.query.limit ?? 10, 10));
@@ -170,7 +167,7 @@ async function getRecommendationsByAnalyst(req, res) {
 
         return res.status(200).json({ results, hasNext });
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        next(error);
     }
 }
 

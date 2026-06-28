@@ -1,4 +1,5 @@
 import getConnection from "../db/connection.js"
+import AppError from "../utils/AppError.js"
 
 // async function getRecommendations(){
 //     const db = getConnection()
@@ -222,7 +223,7 @@ async function updateRecommendations(id, data){
     }
 
     if (fields.length === 0) {
-        throw new Error("No fields to update")
+        throw new AppError("No fields to update")
     }
 
     values.push(id)
@@ -232,7 +233,7 @@ async function updateRecommendations(id, data){
     const [result] = await db.execute(sql, values)
 
     if (result.affectedRows === 0) {
-        throw new Error("Recommendation not found")
+        throw new AppError("Recommendation not found")
     }
 
     return result
@@ -242,7 +243,7 @@ async function deleteRecommendations(id){
     const db = getConnection()
 
     if (!Number.isInteger(Number(id))) {
-        throw new Error("Invalid ID")
+        throw new AppError("Invalid ID")
     }
 
     const sql = 'DELETE FROM recommendations WHERE id = ?'
@@ -250,7 +251,7 @@ async function deleteRecommendations(id){
     const [result] = await db.execute(sql, [id])
 
     if (result.affectedRows === 0) {
-        throw new Error("Recommendation not found")
+        throw new AppError("Recommendation not found")
     }
 
     return result

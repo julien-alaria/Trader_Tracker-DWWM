@@ -1,10 +1,11 @@
 import { validateName, validateEmail, validatePassword, validateBio, validateCompany, safeRole, safePublicRole, validateAnalystType, validateComment, validateRecommendationStatus } from "../utils/validators.js"
+import AppError from "./AppError.js"
 
 export function sanitizeUser(data) {
     const { name, email, password, role, analyst_type_id, company, bio } = data
 
     if (!name || !email || !password) {
-        throw new Error("Missing required fields")
+        throw new AppError("Missing required fields")
     }
 
     const cleanName = validateName(name)
@@ -69,7 +70,7 @@ export function sanitizeLogin(data) {
     const { email, password } = data
 
     if (!email || !password) {
-        throw new Error("Missing credentials")
+        throw new AppError("Missing credentials")
     }
 
     const cleanEmail = validateEmail(email)
@@ -84,13 +85,13 @@ export function sanitizeRecommendation(data) {
     const { status, comment, asset_id } = data
 
     if (!status || !asset_id) {
-        throw new Error("Missing required fields")
+        throw new AppError("Missing required fields")
     }
 
     const assetId = Number(asset_id)
     
     if (!Number.isInteger(assetId) || assetId <= 0) {
-        throw new Error("Invalid asset id")
+        throw new AppError("Invalid asset id")
     }
 
     const sanitizedData = {

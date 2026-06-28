@@ -2,7 +2,7 @@ import UserModel from "../models/UserModel.js"
 import generateToken from "../services/authTokenService.js"
 import { sanitizeUser, sanitizeUserUpdate } from "../utils/sanitizer.js"
 
-async function getUserPagin(req, res) {
+async function getUserPagin(req, res, next) {
     try {
         const limit = Math.max(1, Number.parseInt(req.query.limit ?? 10, 10))
         const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10))
@@ -19,12 +19,11 @@ async function getUserPagin(req, res) {
         })
 
     } catch (error) {
-        console.error("USER PAGIN ERROR:", error)
-        return res.status(500).json({ error: error.message })
+        next(error)
     }
 }
 
-async function getMe(req, res) {
+async function getMe(req, res, next) {
     try {
         const user_id = req.user.id
 
@@ -41,11 +40,11 @@ async function getMe(req, res) {
         return res.status(200).json({ result })
 
     } catch (error) {
-        return res.status(500).json({ error: error.message })
+        next(error)
     }
 }
 
-async function getUserById(req, res) {
+async function getUserById(req, res, next) {
     try {
         const id = Number(req.params.id)
 
@@ -62,12 +61,11 @@ async function getUserById(req, res) {
         res.status(200).json({ result })
 
     }catch (error) {
-
-        res.status(500).json({ error: error.message })
+        next(error)
     }
 }
 
-async function getWatchlist(req, res) {
+async function getWatchlist(req, res, next) {
     try {
         const user_id = req.user.id
 
@@ -76,12 +74,11 @@ async function getWatchlist(req, res) {
         return res.status(200).json({ result })
 
     } catch (error) {
-        
-        return res.status(500).json({ error: error.message })
+        next(error)
     }
 }
 
-async function getWatchlistPagin(req, res) {
+async function getWatchlistPagin(req, res, next) {
     try {
         const user_id = req.user.id 
         const limit = Math.max(1, Number.parseInt(req.query.limit ?? 10, 10))
@@ -99,8 +96,7 @@ async function getWatchlistPagin(req, res) {
         })
 
     } catch (error) {
-        console.error("WATCHLIST PAGIN ERROR:", error)
-        return res.status(500).json({ error: error.message })
+        next(error)
     }
 }
 
@@ -121,7 +117,7 @@ async function getWatchlistPagin(req, res) {
 //     }
 // }
 
-async function updateUser(req, res) {
+async function updateUser(req, res, next) {
     try {
         const id = Number(req.params.id)
 
@@ -151,11 +147,11 @@ async function updateUser(req, res) {
         return res.status(200).json(user)
 
     } catch (error) {
-        return res.status(500).json({ error: error.message })
+        next(error)
     }
 }
 
-async function updateMe(req, res) {
+async function updateMe(req, res, next) {
     try {
         const id = req.user.id
 
@@ -181,11 +177,11 @@ async function updateMe(req, res) {
         res.status(200).json({ message: "Profil mis à jour avec succès", result })
 
     } catch (error) {
-        res.status(500).json({ error: error.message })
+        next(error)
     }
 }
 
-async function deleteUser(req, res) {
+async function deleteUser(req, res, next) {
     try {
         const id = Number(req.params.id)
 
@@ -206,8 +202,7 @@ async function deleteUser(req, res) {
         res.status(200).json({ message : "delete ok" })
 
     } catch (error) {
-
-        res.status(500).json({ error: error.message })
+        next(error)
     }
 }
 
@@ -225,21 +220,20 @@ async function deleteUser(req, res) {
 //     }
 // }
 
-async function getAnalysts(req, res) {
+async function getAnalysts(req, res, next) {
     try {
-         const limit = Math.max(1, Number.parseInt(req.query.limit ?? 5, 10))
-         const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10))
+        const limit = Math.max(1, Number.parseInt(req.query.limit ?? 5, 10))
+        const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10))
 
-         const data = await UserModel.getAllAnalysts(limit, offset)
+        const data = await UserModel.getAllAnalysts(limit, offset)
 
-         return res.status(200).json(data);
-     } catch (error) {
-         console.error("ANALYSTS PAGIN ERROR:", error);
-         return res.status(500).json({ error: error.message })
-     }
+        return res.status(200).json(data);
+    } catch (error) {
+        next(error)
+    }
 }
 
-async function getAnalystsById(req, res) {
+async function getAnalystsById(req, res, next) {
     try {
         const { id } = req.params;
 
@@ -251,16 +245,16 @@ async function getAnalystsById(req, res) {
 
         res.status(200).json({ results: analyst})
     } catch (error) {
-        res.status(500).json({ message: error.message })
+        next(error)
     }
 }
 
-async function getAnalystsByType(req, res) {
+async function getAnalystsByType(req, res, next) {
     try {
-        const { type_id } = req.query;
+        const { type_id } = req.query
 
         if (!type_id) {
-            return res.status(400).json({ message: "Missing type_id parameter" });
+            return res.status(400).json({ message: "Missing type_id parameter" })
         }
 
         const limit = Math.max(1, Number.parseInt(req.query.limit ?? 10, 10))
@@ -269,24 +263,23 @@ async function getAnalystsByType(req, res) {
    
         const data = await UserModel.getAnalystsByType(type_id, limit, offset)
 
-        return res.status(200).json(data);
+        return res.status(200).json(data)
 
     } catch (error) {
-        console.error("ANALYSTS BY TYPE PAGIN ERROR:", error);
-        return res.status(500).json({ message: error.message })
+        next(error)
     }
 }
 
-async function getPendingAnalyst(req, res) {
+async function getPendingAnalyst(req, res, next) {
     try {
         const results = await UserModel.getPendingAnalysts()
         return res.status(200).json({ results })
     } catch (error) {
-        return res.status(500).json({ error: error.message })
+        next(error)
     }
 }
 
-async function followAsset(req, res) {
+async function followAsset(req, res, next) {
     try {
         const user_id = req.user.id
         const asset_id = req.asset_id
@@ -304,14 +297,11 @@ async function followAsset(req, res) {
                 error: "Asset already followed"
             })
         } 
-        console.error("FOLLOW ERROR:", error)
-        return res.status(500).json({
-            error: error.message
-        })
+        next(error)
     }
 }
 
-async function unfollowAsset(req, res) {
+async function unfollowAsset(req, res, next) {
     try {
         const user_id = req.user.id
         const asset_id = req.asset_id
@@ -323,31 +313,29 @@ async function unfollowAsset(req, res) {
         })
 
     } catch (error) {
-        console.error("UNFOLLOW ERROR:", error)
-        return res.status(500).json({ error: error.message })
+        next(error)
     }
 }
 
-async function getFollowedUser(req, res) {
+async function getFollowedUser(req, res, next) {
     try {
-        const limit = Math.max(1, Number.parseInt(req.query.limit ?? 10, 10));
-        const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10));
+        const limit = Math.max(1, Number.parseInt(req.query.limit ?? 10, 10))
+        const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10))
 
         const data = await UserModel.getFollowedUsers(
             req.user.id,
             limit,
             offset
-        );
+        )
 
-        return res.status(200).json(data);
+        return res.status(200).json(data)
 
     } catch (error) {
-        console.error("USER FOLLOWED PAGIN ERROR:", error);
-        return res.status(500).json({ error: error.message });
+        next(error)
     }
 }
 
-async function followUser(req, res) {
+async function followUser(req, res, next) {
     try {
         const user_id = req.user.id
         const followUser_id = Number(req.params.id)
@@ -367,15 +355,11 @@ async function followUser(req, res) {
             error: "User already followed"
             })
         } 
-        console.error("FOLLOW ERROR:", error)
-        return res.status(500).json({
-            error: error.message
-        })
-
+        next(error)
     }
 }
 
-async function unfollowUser(req, res) {
+async function unfollowUser(req, res, next) {
     try {
         const user_id = req.user.id
         const followUser_id = req.params.id
@@ -385,12 +369,11 @@ async function unfollowUser(req, res) {
         return res.status(200).json({ message: "user unfollowed successfully"})
 
     } catch (error) {
-        console.error("UNFOLLOW USER ERROR:", error)
-        return res.status(500).json({ error: error.message })
+        next(error)
     }
 }
 
-async function checkIfFollowing(req, res) {
+async function checkIfFollowing(req, res, next) {
     try {
         const user_id = req.user.id // Retrieved via AuthMiddleware()
         const followUser_id = req.params.id
@@ -400,7 +383,7 @@ async function checkIfFollowing(req, res) {
         return res.status(200).json({ isFollowing: isFollowing })
     } catch (error) {
         console.error("CHECK FOLLOWING ERROR:", error)
-        return res.status(500).json({ error: error.message })
+        next(error)
     }
 }
 

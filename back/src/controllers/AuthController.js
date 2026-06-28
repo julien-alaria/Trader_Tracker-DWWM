@@ -3,7 +3,7 @@ import { sanitizeUser, sanitizeLogin } from "../utils/sanitizer.js"
 import { comparePassword } from "../utils/password.js"
 import generateToken from "../services/authTokenService.js"
 
-async function login(req, res) {
+async function login(req, res, next) {
     try {
         const { email, password } = sanitizeLogin(req.body)
         const user = await UserModel.getUsersByEmail(email) 
@@ -23,12 +23,11 @@ async function login(req, res) {
         res.status(200).json({ message: "authorized connexion", token })
 
     } catch (error) {
-
-        res.status(500).json({ message: error.message })
+        next(error)
     }
 }
 
-async function register(req, res) {
+async function register(req, res, next) {
     try {
 
         const sanitizedData = sanitizeUser(req.body)
@@ -53,9 +52,7 @@ async function register(req, res) {
         res.status(201).json({ user, token })
         
     } catch (error) {
-
-        console.error("REGISTER ERROR:", error)
-        res.status(500).json({ message: error.message })
+        next(error)
     }
 } 
 

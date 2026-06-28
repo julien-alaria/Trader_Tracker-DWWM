@@ -1,5 +1,6 @@
 import getConnection from "../db/connection.js"
 import { hashPassword } from "../utils/password.js"
+import AppError from "../utils/AppError.js"
 
 // async function getUsers() {
 //     const db = getConnection()
@@ -81,7 +82,7 @@ async function createUsers(data) {
 
     const [existingEmail] = await db.execute("SELECT id FROM users WHERE email = ?",[email])
 
-    if (existingEmail.length > 0) {throw new Error("Email already used")}
+    if (existingEmail.length > 0) {throw new AppError("Email already used")}
 
     const hashedPassword = await hashPassword(password)
 
@@ -89,7 +90,7 @@ async function createUsers(data) {
         const [assetType] = await db.execute("SELECT id FROM assets_types WHERE id = ?", [analyst_type_id])
 
         if (assetType.length === 0) {
-            throw new Error("Invalid asset type")
+            throw new AppError("Invalid asset type")
         }
     }
 
@@ -145,7 +146,7 @@ async function updateUsers(id, data) {
         )
 
         if (assetType.length === 0) {
-            throw new Error("Invalid analyst type")
+            throw new AppError("Invalid analyst type")
         }
 
         fields.push("analyst_type_id = ?")
@@ -169,7 +170,7 @@ async function updateUsers(id, data) {
     }
 
     if (fields.length === 0) {
-        throw new Error("No fields to update")
+        throw new AppError("No fields to update")
     }
 
     if (data.picture !== undefined) {
@@ -178,7 +179,7 @@ async function updateUsers(id, data) {
     }
 
     if (fields.length === 0) {
-        throw new Error("No fields to update")
+        throw new AppError("No fields to update")
     }
 
     values.push(id)
@@ -188,7 +189,7 @@ async function updateUsers(id, data) {
     const [result] = await db.execute(sql, values)
 
     if (result.affectedRows === 0) {
-        throw new Error("User not found")
+        throw new AppError("User not found")
     }
 
     return result
@@ -198,7 +199,7 @@ async function deleteUsers(id) {
     const db = getConnection()
 
     if (!Number.isInteger(Number(id))) {
-        throw new Error("Invalid ID")
+        throw new AppError("Invalid ID")
     }
 
     const sql = 'DELETE FROM users WHERE id = ?'
@@ -206,7 +207,7 @@ async function deleteUsers(id) {
     const [result] = await db.execute(sql, [id])
 
     if (result.affectedRows === 0) {
-        throw new Error("User not found")
+        throw new AppError("User not found")
     }
 
     return result
@@ -299,7 +300,7 @@ async function userFollowAsset(user_id, asset_id) {
     const db = getConnection()
 
     if (!Number.isInteger(user_id) || !Number.isInteger(asset_id)) {
-        throw new Error("Invalid ID")
+        throw new AppError("Invalid ID")
     }
 
     const sql = "INSERT INTO users_assets_follow (user_id, asset_id) VALUES (?, ?)"

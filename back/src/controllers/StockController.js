@@ -1,112 +1,73 @@
 import stockService from "../services/stockService.js"
 
-async function getStock(req, res) {
+async function getStock(req, res, next) {
     try {
         const response = await stockService.getAAPLStock()
 
         res.status(200).json({ message: response })
     } catch (error) {
-        console.error("Erreur:", error)
-
-        res.status(500).json({ message: "Failed to fetch stock data" })
+        next(error)
     }
 }
 
-async function getAllStocks(req, res) {
+async function getAllStocks(req, res, next) {
     try {
         const response = await stockService.getMultipleAggregatesJson()
         
         res.status(200).json({ message: response })
     } catch (error) {
-        console.error("Erreur:", error)
-
-        res.status(500).json({ message: "Failed to fetch stock data" })
+        next(error)
     }
 }
 
-async function getForex(req, res) {
+async function getForex(req, res, next) {
     try {
         const response = await stockService.aggregateForexJson()
         res.status(200).json({ message: response })
     } catch (error) {
-        console.error("Erreur:", error)
-
-        res.status(500).json({ message: "Failed to fetch forex data" })
+        next(error)
     }
 }
 
-async function getCommodities(req, res) {
+async function getCommodities(req, res, next) {
     try {
         const response = await stockService.aggregateMetalsJson()
         res.status(200).json({ message: response })
     } catch (error) {
-        console.error("Erreur:", error)
-
-        res.status(500).json({ message: "Failed to fetch forex data" })
+        next(error)
     }
 }
 
 // Light datas for Home.js
-async function getHomeStocks(req, res) {
+async function getHomeStocks(req, res, next) {
     try {
         const response = await stockService.getMultipleAggregatesJsonLight()
         res.status(200).json({ message: response })
     } catch (error) {
-        console.error("Erreur Home Stocks:", error)
-        res.status(500).json({ message: "Failed to fetch home stocks" })
+        next(error)
     }
 }
 // Light datas for Home.js
-async function getHomeForex(req, res) {
+async function getHomeForex(req, res, next) {
     try {
         const response = await stockService.aggregateForexJsonLight()
         res.status(200).json({ message: response })
     } catch (error) {
-        console.error("Erreur Home Forex:", error)
-        res.status(500).json({ message: "Failed to fetch home forex" })
+        next(error)
     }
 }
 // Light datas for Home.js
-async function getHomeCommodities(req, res) {
+async function getHomeCommodities(req, res, next) {
     try {
         const response = await stockService.aggregateMetalsJsonLight()
         res.status(200).json({ message: response })
     } catch (error) {
-        console.error("Erreur Home Commodities:", error)
-        res.status(500).json({ message: "Failed to fetch home commodities" })
+        next(error)
     }
 }
 
-// Light datas for list.js
-// async function getBriefStocks(req, res) {
-//     try {
-//         const response = await stockService.getBriefStocksJson()
-//         res.status(200).json({ message: response })
-//     } catch (error) {
-//         res.status(500).json({ message: "Error" })
-//     }
-// }
-
-// async function getBriefForex(req, res) {
-//     try {
-//         const response = await stockService.getBriefForexJson()
-//         res.status(200).json({ message: response })
-//     } catch (error) {
-//         res.status(500).json({ message: "Error" })
-//     }
-// }
-
-// async function getBriefCommodities(req, res) {
-//     try {
-//         const response = await stockService.getBriefCommoditiesJson()
-//         res.status(200).json({ message: response })
-//     } catch (error) {
-//         res.status(500).json({ message: "Error" })
-//     }
-// }
-
 // AGGREGATES FOR LIST.JS
-export async function getCombinedBriefAssets(req, res) {
+export async function getCombinedBriefAssets(req, res, next) {
     try {
         const limit = Math.max(1, Number.parseInt(req.query.limit ?? 10, 10))
         const offset = Math.max(0, Number.parseInt(req.query.offset ?? 0, 10))
@@ -132,8 +93,7 @@ export async function getCombinedBriefAssets(req, res) {
                 hasNext
             })
     } catch (error) {
-        console.error("ASSETS PAGIN ERROR:", error)
-        return res.status(500).json({ error: error.message })
+        next(error)
     }
 }
 

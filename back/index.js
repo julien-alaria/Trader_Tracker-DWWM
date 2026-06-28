@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 import getConnection from "./src/db/connection.js"
 import routes from "./src/routes/index.js"
 import securityHeaders from "./src/middlewares/securityHeadersMiddleware.js"
+import errorHandler from "./src/middlewares/errorHandler.js"
 
 dotenv.config()
 
@@ -35,6 +36,8 @@ app.use('/uploads', express.static('uploads'))
 app.get('/', (req, res) => {
     res.send('Welcome to DWWM Project!')
 })
+
+app.use(errorHandler)
 
 async function startServer() {
     try {
