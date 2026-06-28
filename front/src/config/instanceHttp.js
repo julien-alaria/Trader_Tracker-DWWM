@@ -12,20 +12,18 @@ class InstanceHttp {
         if (!(data instanceof FormData)) {
             headers["Content-Type"] = "application/json"
         }
-
         return headers
     }
 
     async handleResponse(response) {
-        if (response.status === 401) {
-            localStorage.removeItem("token")
-            window.location.hash = "/login"
-            throw new Error("Unauthorized")
-        }
-
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}))
-            throw { response: { data: errorData }, status: response.status } 
+
+            if (response.status === 401) {
+                localStorage.removeItem("token")
+                window.location.hash = "/login"
+            }
+            throw { response: { data: errorData }, status: response.status }
         }
 
         return response.json()
