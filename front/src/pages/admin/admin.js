@@ -3,6 +3,7 @@ import { decodeToken } from "../../middlewares/roleGuard.js"
 import analystUpdateForm from "../../components/forms/analystUpdateForm.js"
 import { createPaginationList } from "../../components/pagination/paginationComponent.js"
 import { bindRecommendationActions } from "../../utils/actionManager.js"
+import { escapeHtml } from "../../utils/format.js"
 
 // =====================
 // HTML TEMPLATE 
@@ -84,7 +85,7 @@ export async function initAdmin() {
                 return `
                 <div class="recommendation" data-id="${rec.id}">
                     <strong>${rec.status}</strong>
-                    <p>${rec.comment}</p>
+                    <p>${escapeHtml(rec.comment)}</p>
 
                     <div class="meta">
                         <span>Analyst: <strong>${rec.analyst_name}</strong></span>
@@ -104,7 +105,7 @@ export async function initAdmin() {
                             <option value="HOLD" ${rec.status === "HOLD" ? "selected" : ""}>HOLD</option>
                         </select>
 
-                        <input name="comment" value="${rec.comment}" required />
+                        <input name="comment" value="${escapeHtml(rec.comment)}" required />
 
                         <button type="submit">EDIT</button>
                     </form>
@@ -172,7 +173,7 @@ async function loadPendingAnalysts() {
         const pendingAnalysts = res.results
 
         if (!pendingAnalysts || pendingAnalysts.length === 0) {
-            container.innerHTML = `<p class="no-data">🎉 Aucun analyste en attente de validation.</p>`
+            container.innerHTML = `<p class="no-data"> No analysts awaiting validation.</p>`
             return
         }
 

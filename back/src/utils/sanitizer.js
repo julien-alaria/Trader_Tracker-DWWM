@@ -1,4 +1,4 @@
-import { validateName, validateEmail, validatePassword, validateBio, validateCompany, safeRole, validateAnalystType, validateComment, validateRecommendationStatus } from "../utils/validators.js"
+import { validateName, validateEmail, validatePassword, validateBio, validateCompany, safeRole, safePublicRole, validateAnalystType, validateComment, validateRecommendationStatus } from "../utils/validators.js"
 
 export function sanitizeUser(data) {
     const { name, email, password, role, analyst_type_id, company, bio } = data
@@ -12,7 +12,7 @@ export function sanitizeUser(data) {
     const cleanPassword = validatePassword(password)
     const cleanBioValue = validateBio(bio)
     const cleanCompanyValue = validateCompany(company)
-    const safeRoleValue = safeRole(role)
+    const safeRoleValue = safePublicRole(role)
     const analystId = validateAnalystType(safeRoleValue, analyst_type_id)
 
     return {

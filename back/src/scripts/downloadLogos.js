@@ -1,6 +1,9 @@
 import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
+import dotenv from "dotenv"
+
+dotenv.config()
 
 // Configuration of paths (align with back/src/scripts)
 const __filename = fileURLToPath(import.meta.url)
@@ -56,7 +59,7 @@ async function downloadLogos() {
                 console.log(`Download the logo for: ${asset.ticker}...`)
 
                 // We inject your Polygon API key at the end of your existing JSON URL
-                const urlWithKey = `${asset.image}?apiKey=REDACTED_API_KEY`
+                 const urlWithKey = `${asset.image}?apiKey=${process.env.POLY_API_KEY}`
 
                 const res = await fetch(urlWithKey)
 

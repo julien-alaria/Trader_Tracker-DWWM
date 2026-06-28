@@ -1,15 +1,24 @@
 import multer from "multer"
 import path from "path"
 
+// SECURITY: maps an ALLOWED mimetype to a fixed, safe extension.
+const MIME_TO_EXT = {
+    "image/jpeg": ".jpg",
+    "image/png": ".png",
+    "image/webp": ".webp",
+    "application/pdf": ".pdf"
+}
+
 // Storage configuration
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/')// The folder where the images will be saved
+        cb(null, 'uploads/')
     }, 
     filename: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-        const ext = path.extname(file.originalname)
-        
+        // SECURITY: extension comes from the validated mimetype
+        const ext = MIME_TO_EXT[file.mimetype] || ""
+
         // retrieve the email from the request, remove the special characters and spaces
         const userEmail = req.body.email 
             ? req.body.email.replace(/[@.]/g, '-').toLowerCase() 
@@ -20,11 +29,24 @@ const storage = multer.diskStorage({
     }
 })
 
-// Optional but recommended: Filter files (accept only images)-
+// Filter files: only allow real images/PDF, checked on BOTH the extension
+// AND the declared mimetype, both fully anchored (^...$)
+const ALLOWED_EXT = /^\.(jpe?g|png|webp|pdf)$/i
+const ALLOWED_MIME = /^(image\/(jpeg|png|webp)|application\/pdf)$/i
+
+// KNOWN LIMITATION: this filter trusts the mimetype declared by the
+// client (multer/the browser), which is itself usually derived from
+// the file's extension - not from its actual binary content. A plain
+// text file renamed to ".jpg" will pass this check, because nothing
+// here reads the real file bytes (the "magic bytes"/file signature).
+// This does not allow code execution in this Node/Express setup (the
+// file is only ever served statically via express.static), but a
+// stricter version would verify the actual file signature after
+// upload. Documented here as a deliberate trade-off for this project's
+// risk level; left for future hardening if needed.
 const fileFilter = (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|webp|pdf/
-    const extName = allowedTypes.test(path.extname(file.originalname).toLowerCase())
-    const mimeType = allowedTypes.test(file.mimetype)
+    const extName = ALLOWED_EXT.test(path.extname(file.originalname))
+    const mimeType = ALLOWED_MIME.test(file.mimetype)
 
     if (extName && mimeType) {
         return cb(null, true)

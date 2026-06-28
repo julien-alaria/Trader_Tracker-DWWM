@@ -58,8 +58,17 @@ export function validateCompany(company) {
     return clean
 }
 
+// Used for ADMIN-ONLY routes (e.g. PUT /users/:id), where an admin
+// is allowed to promote/demote any user, including to "admin".
 export function safeRole(role) {
     const allowed = ["user", "analyst", "admin"]
+    return allowed.includes(role) ? role : "user"
+}
+
+// Used for PUBLIC self-registration (POST /auth/register).
+// "admin" is intentionally excluded
+export function safePublicRole(role) {
+    const allowed = ["user", "analyst"]
     return allowed.includes(role) ? role : "user"
 }
 

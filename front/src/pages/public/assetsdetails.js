@@ -3,7 +3,7 @@ import { getStock, getForex, getCommodities } from "../../utils/assetsUtils.js"
 import { loadTradingViewChart } from "../../utils/tradingChart.js"
 import http from "../../config/instanceHttp.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
-import { formatChartId, formatMarketCap, formatDate } from "../../utils/format.js"
+import { formatChartId, formatMarketCap, formatDate, escapeHtml } from "../../utils/format.js"
 import analystCard from "../../components/cards/analystCard.js"
 import recoForm from "../../components/forms/recoForm.js"
 import { enableCarouselWindow } from "../../utils/lazyloading.js"
@@ -182,7 +182,7 @@ export async function initDetail() {
                             <strong class="reco-status">${rec.status}</strong>
                             <img src="${imageUrl}" class="analyst-picture" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
                             <p class="reco-name"><b>${rec.analyst_name ?? "unknown"}</b></p>
-                            <p class="reco-comment">${rec.comment}</p>
+                            <p class="reco-comment">${escapeHtml(rec.comment)}</p>
                             <p class="reco-publish">Published on ${formatDate(rec.created_at)}</p>
                         </div>
                     `
@@ -243,7 +243,7 @@ export async function initDetail() {
                 return `
                     <div class="analyst-item" data-js-clickable data-id="${a.id}">
                         <img src="${imageUrl}" class="analyst-picture" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
-                        <p><strong>${a.name}</strong> - ${a.company}</p>
+                        <p><strong>${escapeHtml(a.name)}</strong> - ${escapeHtml(a.company)}</p>
                     </div>
                 `
             },

@@ -8,6 +8,7 @@ import updateForm from "../../components/forms/userUpdateForm.js"
 import { createCarousel } from "../../components/carousel/carouselComponent.js"
 import { createPaginationList } from "../../components/pagination/paginationComponent.js"
 import { buildWatchlistData } from "../../utils/assetFormatter.js"
+import { escapeHtml } from "../../utils/format.js"
 
 // =====================
 // HTML TEMPLATE
@@ -163,7 +164,7 @@ export async function initUser() {
                 return `
                     <div class="follow-item" data-js-clickable data-id="${a.id}">
                         <img src="${avatarUrl}" alt="analyst-avatar" onerror="this.src='${defaultAvatar}'" />
-                        <p><strong>${a.name}</strong> - ${a.company ?? "Unknown"}</p>
+                        <p><strong>${escapeHtml(a.name)}</strong> - ${escapeHtml(a.company ?? "Unknown")}</p>
                     </div>
                 `
             },

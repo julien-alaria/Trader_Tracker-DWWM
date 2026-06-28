@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "../../config/api.js"
 import http from "../../config/instanceHttp.js"
-import { formatDate } from "../../utils/format.js"
+import { formatDate, escapeHtml } from "../../utils/format.js"
 import { decodeToken } from "../../middlewares/roleGuard.js"
 import { createPaginationList } from "../../components/pagination/paginationComponent.js"
 import { getRecommendationIcon } from "../../utils/recommendationUtils.js"
@@ -81,7 +81,7 @@ export async function initAnalystDetail() {
                         <strong>${rec.status}</strong>
                         <img src="${imageUrl}" class="reco-analyst-pic" alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
                         <p class="reco-company">${rec.name}</p>
-                        <p class="reco-comment">${rec.comment}</p>
+                        <p class="reco-comment">${escapeHtml(rec.comment)}</p>
                         <p class="reco-date"><small>${formatDate(rec.created_at)}</small></p>
                     </div>
                 `
@@ -119,8 +119,8 @@ function renderAnalyst(analyst, currentUser) {
             </div>
             
             <h1 id="analyst-name">${analyst.name}</h1>
-            <p id="analyst-co">Company: ${analyst.company}</p>
-            <p id="analyst-bio">Biographie: ${analyst.bio}</p>
+            <p id="analyst-co">Company: ${escapeHtml(analyst.company)}</p>
+            <p id="analyst-bio">Biographie: ${escapeHtml(analyst.bio)}</p>
 
             <button id="follow-btn" ${isSelf ? "disabled" : ""} data-followed="${analyst.isFollowing}">
                 ${isSelf ? "Your Profile" : initialText}

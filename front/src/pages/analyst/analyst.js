@@ -10,6 +10,7 @@ import { createCarousel } from "../../components/carousel/carouselComponent.js"
 import { createPaginationList } from "../../components/pagination/paginationComponent.js"
 import { bindRecommendationActions } from "../../utils/actionManager.js"
 import { getRecommendationIcon } from "../../utils/recommendationUtils.js"
+import { escapeHtml } from "../../utils/format.js"
 
 // =====================
 // HTML TEMPLATE 
@@ -166,7 +167,7 @@ export async function initAnalyst() {
               <img src="${recoImage}" alt="reco-image" class="analyst-reco-img"/>
               <strong>${rec.status}</strong>
               <img src="${imageUrl}" class="analyst-logo-picture"  alt="analyst-picture" onerror="this.src='${defaultAvatar}'" />
-              <p class="recommendation-comment">${rec.comment}</p>
+              <p class="recommendation-comment">${escapeHtml(rec.comment)}</p>
               <small>${new Date(rec.created_at).toLocaleDateString()}</small>
               ${isAuthorized ? `
                   <form class="edit-form hidden" data-id="${rec.id}">
@@ -198,7 +199,7 @@ export async function initAnalyst() {
         return `
           <div class="follow-item" data-js-clickable data-id="${a.id}">
                <img src="${avatarUrl}" alt="${a.name}"onerror="this.src='${defaultAvatar}'" />
-               <p><strong>${a.name}</strong> - ${a.company ?? "Unknown"}</p>
+               <p><strong>${escapeHtml(a.name)}</strong> - ${escapeHtml(a.company ?? "Unknown")}</p>
           </div>
         `
       },
