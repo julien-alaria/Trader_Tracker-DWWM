@@ -38,6 +38,7 @@
 .carousel-track {
     display: flex;
     gap: 1.5rem;
+    justify-content: safe center;
     will-change: transform;
     transform: translateZ(0);
     margin: 1.875rem 0;
@@ -51,7 +52,7 @@
     height: auto;
 }
 
-/* CARTE (base commune à tous les types) */
+/* CARD (base common to all types) */
 .card {
     display: flex;
     flex-direction: column;
@@ -76,7 +77,6 @@
     transform: scale(1.02);
 }
 
-/* Couleurs par type (inchangées) */
 .card.stock,
 .card.forex {
     background: lightgray;
@@ -166,8 +166,6 @@
     line-clamp: 2;
     overflow: hidden;
 }
-
-
 
 /* PRICE */
 .card-stock-price,

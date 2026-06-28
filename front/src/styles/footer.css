@@ -6,7 +6,6 @@
     --f-bottom: 0.8rem;
 }
 
-/* Tablet */
 @media (min-width: 48rem) {
     :root {
         --f-title: 1.75rem;
@@ -16,7 +15,6 @@
     }
 }
 
-/* Desktop */
 @media (min-width: 64rem) {
     :root {
         --f-title: 2rem;
@@ -32,7 +30,7 @@ footer.main-footer {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    background-color: #03034B;
+    background-color: var(--color-navy-500, #020233);
     color: #ffffff;
     box-sizing: border-box;
     padding: 2.5rem 1.25rem;
@@ -70,7 +68,7 @@ footer.main-footer {
     opacity: 0.8;
 }
 
-/* Main */
+/* MAIN */
 .footer-main {
     display: flex;
     flex-direction: column;
