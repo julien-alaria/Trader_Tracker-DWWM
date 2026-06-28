@@ -1,224 +1,206 @@
-#login-form, 
-#analyst-form, 
-#register-form {
-    /* "static" positioning properties (default) to remain in the flow */
+/* TYPOGRAPHIC SCALE */
+:root {
+    --au-title: 1.5rem;
+    --au-text: 1rem;
+    --au-btn: 1.1rem;
+    --au-maxw: 25rem;
+    --au-margin: 2.5rem;
+    --au-pad: 1.25rem;
+}
+
+/* Tablet */
+@media (min-width: 48rem) {
+    :root {
+        --au-title: 1.625rem;
+        --au-text: 1.0625rem;
+        --au-btn: 1.15rem;
+        --au-maxw: 27.5rem;
+        --au-margin: 3.5rem;
+        --au-pad: 1.75rem;
+    }
+}
+
+/* Desktop */
+@media (min-width: 64rem) {
+    :root {
+        --au-title: 1.75rem;
+        --au-text: 1.125rem;
+        --au-btn: 1.2rem;
+        --au-maxw: 30rem;
+        --au-margin: 5rem;
+        --au-pad: 2.1875rem;
+    }
+}
+
+/* FORMULAIRES */
+#login-form,
+#register-form,
+#analyst-form {
     position: static;
     display: flex;
     flex-direction: column;
     width: 90%;
-    max-width: 400px;
-    margin: 40px auto; 
-    padding: 25px;
-    gap: 20px;
+    max-width: var(--au-maxw);
+    margin: var(--au-margin) auto;
+    padding: var(--au-pad);
+    gap: 1.25rem;
+    box-sizing: border-box;
 }
 
-/* Ensure that nothing in the form breaks out of the flow */
-#login-form *, #analyst-form *, #register-form * {
+/* Nothing leaves the flow */
+#login-form *,
+#register-form *,
+#analyst-form * {
     position: static;
 }
 
 .form-title {
     text-align: center;
     text-decoration: underline;
+    font-size: var(--au-title);
     margin-bottom: 1rem;
-
 }
 
+/* Inputs */
+#login-form input[type="email"],
+#login-form input[type="password"],
+#register-form input[type="text"],
+#register-form input[type="email"],
+#register-form input[type="password"],
+#analyst-form input[type="text"],
+#analyst-form input[type="email"],
+#analyst-form input[type="password"],
+#analyst-form input[type="file"],
+#analyst-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #000000;
+    border-radius: 0.5rem;
+    font-size: var(--au-text);
+    padding: 0.75rem 0.9375rem;
+    font-family: inherit;
+}
+
+#analyst-form textarea {
+    resize: vertical;
+    min-height: 6rem;
+}
+
+#login-form input:focus,
+#register-form input:focus,
+#analyst-form input:focus,
+#analyst-form textarea:focus {
+    outline: none;
+    border-color: #03034B;
+}
+
+/* Submit Button */
+#login-form input[type="submit"],
+#register-form input[type="submit"],
+#analyst-form input[type="submit"] {
+    width: 100%;
+    background-color: #03034B;
+    color: #ffffff;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.875rem;
+    font-size: var(--au-btn);
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+#login-form input[type="submit"]:hover,
+#register-form input[type="submit"]:hover,
+#analyst-form input[type="submit"]:hover {
+    background-color: orange;
+    color: #1a1a1a;
+}
+
+/* ANALYST FORM */
+#analyst-form fieldset {
+    border: 1px solid #cccccc;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 0;
+}
+
+#analyst-form fieldset p {
+    margin: 0 0 0.5rem;
+    font-size: var(--au-text);
+}
+
+#analyst-form fieldset div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+}
+
+#analyst-form fieldset input[type="radio"] {
+    width: auto;
+    margin: 0;
+}
+
+#analyst-form fieldset label {
+    margin-right: 0.5rem;
+    font-size: var(--au-text);
+}
+
+#analyst-form > label {
+    font-size: var(--au-text);
+    font-weight: bold;
+}
+
+/* COMMON ELEMENTS (forgot, séparateur, footer, lien analyst) */
 .forgot-password {
     color: #03034B;
+    font-size: var(--au-text);
 }
 
 .separator {
     display: flex;
-    justify-content: center; 
-    align-items: center;     
-    gap: 10px;               
-    margin: 20px auto;       
-    width: 100%;            
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+    width: 100%;
+    margin: 1.25rem auto;
 }
 
 .separator .line {
-    flex: 1;                
+    flex: 1;
     height: 1px;
-    background-color: #ccc;  
+    background-color: #cccccc;
 }
 
 .form-footer {
     display: flex;
-    justify-content: center; 
-    margin-top: 20px;  
+    justify-content: center;
+    width: 100%;
+    margin-top: 1.25rem;
 }
 
-.form-footer a, 
+.form-footer a,
 .form-footer button {
     display: inline-block;
     text-align: center;
 }
 
-#email, #password, #name, #company, #bio, input[type="file"] {
-    width: 100%;
-    box-sizing: border-box;
-    border: 1px solid #000000;
-    border-radius: 8px;
-    font-size: 1rem;
-    padding: 12px 15px;
-    font-family: inherit;
-    margin-bottom: 1rem;
-}
-
-input[type="submit"] {
-    width: 100%;
-    background-color: #03034B;
-    color: #ffffff;
-    border: none;
-    border-radius: 6px;
-    padding: 12px;
-    cursor: pointer;
-    font-weight: bold;
-    text-transform: uppercase;
+#register-text {
+    text-align: center;
 }
 
 #register-text a {
-    display: flex;
-    flex-direction: column;
-    font-size: 1.5rem;
-    text-align: center;
+    display: inline-block;
+    font-size: var(--au-title);
     color: black;
     font-weight: bold;
     text-decoration: underline;
     margin-bottom: 2rem;
 }
 
-@media (max-width: 430px) {
-    #login-form, #analyst-form, #register-form {
-        margin: 20px auto;
-        padding: 15px;
-        width: 95%;
-    }
+#message {
+    text-align: center;
+    font-size: var(--au-text);
 }
-
-@media (min-width: 431px) {
-    
-    .form-footer {
-        width: 100%;
-        margin-top: 15px;
-        text-align: center;
-    }
-
-    #login-form input[type="submit"] {
-        padding: 15px;
-        font-size: 1.2rem;
-        cursor: pointer;
-    }
-
-    #separator{
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-    }
-
-    #home-middle-register {
-        font-size: 1.5rem;
-    }
-}
-
-@media (min-width: 1024px) {
-    #login-form, #analyst-form, #register-form {
-        margin: 80px auto;
-    }
-}
-
-/* ===== 431px à 600px - Mobile large ===== */
-@media (min-width: 431px) and (max-width: 600px) {
-
-    #login-form, #analyst-form, #register-form {
-        margin: 30px auto;
-        padding: 20px;
-        width: 92%;
-    }
-
-    .separator {
-        margin: 18px auto;
-    }
-}
-
-/* ===== 601px à 768px - Tablet ===== */
-@media (min-width: 601px) and (max-width: 768px) {
-
-    #login-form, #analyst-form, #register-form {
-        max-width: 440px;
-        margin: 50px auto;
-        padding: 28px;
-        gap: 22px;
-    }
-
-    #email, #password, #name, #company, #bio, input[type="file"] {
-        font-size: 1.05rem;
-        padding: 13px 16px;
-    }
-
-    input[type="submit"] {
-        padding: 14px;
-        font-size: 1.1rem;
-    }
-
-    .separator {
-        margin: 22px auto;
-    }
-
-    .form-footer {
-        margin-top: 18px;
-    }
-
-    #home-middle-register {
-        font-size: 1.65rem;
-    }
-}
-
-/* ===== 769px à 1023px - Desktop standard ===== */
-@media (min-width: 769px) and (max-width: 1023px) {
-
-    #login-form, #analyst-form, #register-form {
-        max-width: 460px;
-        margin: 60px auto;
-        padding: 30px;
-        gap: 24px;
-    }
-
-    #email, #password, #name, #company, #bio, input[type="file"] {
-        font-size: 1.05rem;
-        padding: 14px 16px;
-    }
-
-    input[type="submit"] {
-        padding: 15px;
-        font-size: 1.2rem;
-    }
-
-    .separator {
-        margin: 24px auto;
-    }
-
-    #home-middle-register {
-        font-size: 1.7rem;
-    }
-}
-
-/* ===== 1024px+ - Desktop large ===== */
-@media (min-width: 1024px) {
-    #login-form, #analyst-form, #register-form {
-        max-width: 480px;
-        margin: 80px auto;
-        padding: 35px;
-        gap: 26px;
-    }
-
-    .separator {
-        margin: 26px auto;
-    }
-
-    #home-middle-register {
-        font-size: 1.8rem;
-    }
-}
-

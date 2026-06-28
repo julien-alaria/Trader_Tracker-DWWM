@@ -1,72 +1,123 @@
+/* TYPOGRAPHIC SCALE */
+:root {
+    --de-fs-name: 1.75rem;
+    --de-fs-h2: 1.25rem;
+    --de-fs-text: 1rem;
+    --de-fs-small: 0.85rem;
+    --de-fs-list: 0.95rem;
+    --de-logo: 6rem;
+    --de-list-img: 3rem;
+    --de-card: 10rem;
+}
+
+/* Tablet */
+@media (min-width: 48rem) {
+    :root {
+        --de-fs-name: 2.25rem;
+        --de-fs-h2: 1.5rem;
+        --de-fs-text: 1.0625rem;
+        --de-fs-small: 0.9rem;
+        --de-fs-list: 1.05rem;
+        --de-logo: 7.5rem;
+        --de-list-img: 3.5rem;
+        --de-card: 11rem;
+    }
+}
+
+/* Desktop */
+@media (min-width: 64rem) {
+    :root {
+        --de-fs-name: 2.75rem;
+        --de-fs-h2: 1.75rem;
+        --de-fs-text: 1.125rem;
+        --de-fs-small: 0.95rem;
+        --de-fs-list: 1.15rem;
+        --de-logo: 9rem;
+        --de-list-img: 4rem;
+        --de-card: 12rem;
+    }
+}
+
+/* ASSET HEADER */
 #asset-detail {
     width: 100%;
     padding: 1rem;
     box-sizing: border-box;
 }
 
-.tv-chart {
-    width: 100%;
-    height: auto; 
-    margin-top: 20px;
+.btn-back {
+    background-color: #f8f9fa;
+    color: #1a1a1a;
+    border: 1px solid #cccccc;
+    border-radius: 0.375rem;
+    padding: 0.4rem 0.9rem;
+    font-size: var(--de-fs-small);
+    cursor: pointer;
+    transition: background-color 0.15s ease;
 }
 
-.asset-header {
+.btn-back:hover {
+    background-color: #e9ecef;
+}
+
+#asset-detail .asset-header {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 30px;
-    margin-top: 25px;
-    margin-bottom: 25px;
-}
-
-.asset-logo {
-    width: 9rem;
-    height: 9rem;
-    object-fit: contain;
-    background-color: transparent;
+    text-align: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
 }
 
 .asset-title-container {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 10px;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.asset-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .asset-name {
     margin: 0;
-    font-size: 2.5rem;
+    font-size: var(--de-fs-name);
     line-height: 1.2;
 }
 
 .asset-ticker {
-    font-size: 1.2rem;
-    color: #888;
+    font-size: var(--de-fs-text);
+    color: #888888;
     font-weight: bold;
     text-transform: uppercase;
 }
 
-.asset-info {
-    margin-top: 1rem;
-    margin-bottom: 2rem;
-    line-height: 1.6;
+.asset-logo {
+    width: var(--de-logo);
+    height: var(--de-logo);
+    object-fit: contain;
+    background-color: transparent;
 }
 
-.detail-btn{
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-size: 13px;
+/* "Track / Remove"  Button*/
+.detail-btn {
+    font-size: var(--de-fs-small);
     font-weight: 500;
-    padding: 6px 12px;
+    padding: 0.4rem 0.9rem;
     background-color: #f8f9fa;
     color: #333333;
     border: 1px solid #cccccc;
-    border-radius: 3px;
+    border-radius: 0.375rem;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    transition: background-color 0.1s ease, border-color 0.1s ease;
+    gap: 0.4rem;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .detail-btn:hover {
@@ -85,101 +136,121 @@
 }
 
 .follow-icon {
-    font-size: 14px;
+    font-size: 0.9rem;
     line-height: 1;
     font-weight: bold;
 }
 
 #follow-toggle-btn {
-    background-color: lightgray;
-    border: 1px solid black;
     margin-bottom: 1rem;
 }
 
-.analyst-picture {
-    border-radius: 50%;
-} 
-
-#recommendation-container {
-    display: flex;
-    flex-direction: column;
-    margin: 4rem 2rem;
+.asset-info {
+    margin: 1rem 0 2rem;
+    line-height: 1.6;
+    font-size: var(--de-fs-text);
 }
 
-#reco-title {
+.tv-chart {
+    width: 100%;
+    height: auto;
+    margin-top: 1.25rem;
+}
+
+/* RECOMMENDATIONS */
+#reco-list-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 1rem 3rem;
+    box-sizing: border-box;
+}
+
+#reco-list-container .recommendation {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem 0.5rem;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0.625rem 0;
+    border-bottom: 1px solid #e3e6ec;
+    font-size: var(--de-fs-text);
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+#reco-list-container .reco-image {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+}
+
+#reco-list-container .analyst-picture {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+#reco-list-container .reco-status {
+    color: #03034B;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+#reco-list-container .reco-name {
+    font-weight: bold;
+    color: #1a1a1a;
+}
+
+#reco-list-container .reco-name,
+#reco-list-container .reco-comment,
+#reco-list-container .reco-publish {
+    margin: 0;
+    font-size: var(--de-fs-text);
+}
+
+#reco-list-container .reco-comment,
+#reco-list-container .reco-publish {
+    flex-basis: 100%;
+    max-width: 100%;
+}
+
+#reco-list-container .reco-comment {
+    color: #555555;
+    word-break: break-word;
+}
+
+#reco-list-container .reco-publish {
+    font-size: var(--de-fs-small);
+    color: #888888;
+}
+
+#p-text {
+    font-size: var(--de-fs-text);
     text-align: center;
-    font-size: 1.8rem;
 }
 
 #reco-pagination {
     justify-content: center;
     align-items: center;
+    gap: 0.5rem;
 }
 
-.recommendation {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    margin-bottom: 1rem;
-}
-
-.recommendation-target {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    font-size: 2rem;
-}
-
-#reco-list-container {
-    margin-left: 1rem;
-    margin-right: 1rem;
-    margin-bottom: 3rem;
-}
-
-#p-text {
-    font-size: 1rem;
-    text-align: center;
-}
-
-.login-message {
-    font-size: 1.8rem;
-    margin: 4rem 2rem;
-}
-
-#login-btn {
-    font-size: 1.5rem;
-}
-
-#analyst-carousel-title {
-    text-align: center;
-    font-size: 2rem;
-    color: navy;
-}
-
-#analyst-list-title {
-     font-size: 1rem;
-     color: navy;
-     text-align: center;
-
-}
-
-.analyst-item img {
-    height: 3rem;
-    width: 3rem;
-}
-
+/* FORMULAIRE DE RECOMMENDATION FORM */
 #recommendation-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    
+    max-width: 43.75rem;
+    margin: 2rem auto;
     padding: 1rem;
     text-align: center;
-    font-size: 1rem;
+    font-size: var(--de-fs-text);
 }
 
 #recommendation-form h2 {
-    font-size: 1.5rem;
+    font-size: var(--de-fs-h2);
 }
 
 #rec-form {
@@ -193,619 +264,120 @@
 #rec-form input {
     width: 100%;
     padding: 0.9rem 1rem;
-    font-size: 1rem;
+    font-size: var(--de-fs-text);
     font-family: inherit;
     border: 2px solid #1d3557;
-    border-radius: 5px;
-    background: #fff;
-    color: navy;
-    transition: all 0.25s ease;
+    border-radius: 0.5rem;
+    background: #ffffff;
+    color: #03034B;
     box-sizing: border-box;
+    transition: border-color 0.2s ease;
 }
 
 #rec-form textarea {
-    min-height: 140px;
+    min-height: 8.75rem;
     resize: vertical;
 }
 
 #rec-form button {
     align-self: center;
-    padding: 0.9rem 2rem;
-    font-size: 1rem;
-    font-weight: 600;
-    color: white;
-    background: navy;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.25s ease;
     width: 100%;
+    padding: 0.9rem 2rem;
+    font-size: var(--de-fs-text);
+    font-weight: 600;
+    color: #ffffff;
+    background: #03034B;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 #rec-form button:hover {
     background: orange;
-    transform: translateY(-2px);
+    color: #1a1a1a;
 }
 
 #rec-form button:active {
-    transform: translateY(0);
+    transform: translateY(1px);
 }
 
-.recommendation {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    align-content: flex-start;
-    justify-content: flex-start;
-    gap: 0.3rem 8px;
-    width: 100%;
-    max-width: 500px;
-    margin: 5px auto;
-    margin-left: 1rem;
-    font-size: 0.8rem;
-    box-sizing: border-box;
+.login-message {
+    font-size: var(--de-fs-text);
+    margin: 2rem auto;
+    text-align: center;
+}
+
+#login-btn {
+    font-size: var(--de-fs-text);
+    padding: 0.625rem 1.5rem;
+}
+
+/* CARROUSEL + ANALYSTS LISTS */
+#analyst-carousel-title {
+    text-align: center;
+    font-size: var(--de-fs-h2);
+    color: #03034B;
+    margin: 1rem 0;
+}
+
+.analyst-carousel {
     overflow: hidden;
-}
-
-.reco-image {
-    width: 1rem;
-    height: 1rem;
-    flex-shrink: 0;
-}
-
-.reco-analyst-picture {
-    width: 2.5rem;
-    height: 2.5rem;
-    flex-shrink: 0;
-}
-
-.reco-name,
-.reco-comment,
-.reco-publish {
-    font-size: 0.8rem;
-    margin: 0;
-}
-
-.reco-comment,
-.reco-publish {
-    flex-basis: 100%;
+    width: 100%;
     max-width: 100%;
 }
 
-/* Centre les cartes de recommandation horizontalement dans leur conteneur */
-#reco-list-container {
+.analyst-carousel .carousel-track {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1rem;
+}
+
+.analyst-carousel .card {
+    flex: 0 0 var(--de-card);
+    max-width: var(--de-card);
+}
+
+#analyst-list-title {
+    font-size: var(--de-fs-h2);
+    color: #03034B;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+#analyst-list-container {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    gap: 0.25rem;
+}
+
+#analyst-list-container .analyst-item {
+    display: flex;
+    flex-direction: row;
     align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem 0;
+    border-bottom: 1px solid #e3e6ec;
 }
 
-
-@media (max-width: 430px) {
-
-    .asset-header {
-        margin: 0;
-        gap: 10px;
-    }
-
-    .asset-name {
-        margin: 0;
-        font-size: 1.5rem;
-        padding: 0 0.5rem;
-    }
-
-    .asset-info {
-        margin: 20px;
-    }
-
-    .login-message {
-        text-align: center;
-        font-size: 1rem;
-        margin: 20px;
-        text-decoration: underline;
-    }
-
-    #login-btn {
-        font-size: 0.6rem;
-    }
-
-    #reco-list-container {
-        font-size: 0.8rem;
-        min-height: 15rem;
-    }
-
-    .recommendation {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 1rem 5px;
-        width: 100%;
-    }
-
-    .reco-image {
-        width: 1rem;
-        height: 1rem;
-        flex-shrink: 0;
-    }
-
-    .reco-status {
-        font-size: 0.75rem;
-        flex-shrink: 0;
-    }
-
-    .reco-comment {
-        font-size: 0.5rem;
-        max-width: 35%;
-        margin-left: auto;
-        white-space: normal; 
-        word-break: break-word;
-    }
-
-    .analyst-picture {
-        width: 25px;
-        height: 25px;
-        margin-left: 1rem;
-        flex-shrink: 0;
-    }
-
-    .reco-name {
-        font-size: 0.5rem;
-        font-weight: bold;
-        max-width: 15%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        flex-shrink: 0;
-    }
-
-    .reco-publish {
-        font-size: 0.5rem;
-        text-align: left;
-        margin-right: 1rem;
-        flex-shrink: 0;
-    }
-
-    #reco-pagination {
-        display: flex;
-        gap: 10px;
-        margin-top: 10px;
-    }
-
-    .paginBtn {
-        font-size: 0.8rem;
-    }
-
-    #analyst-carousel-container {
-        text-align: center;
-        font-size: 0.8rem;
-    }
-
-    #analyst-list-global {
-        display: flex;
-        flex-direction: column;
-        margin: 10px;
-    }
-
-    #analyst-list-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        width: 100%;
-        height: 25rem;
-    }
-
-    .analyst-item {
-        display: flex;
-        flex-direction: row; 
-        justify-content: flex-start;
-        align-items: center;
-        text-align: center;
-        font-size: 0.8rem;
-        gap: 10px;   
-        margin: 1rem 0;       
-    }
-
-    #analyst-pagination {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.8rem;
-    }
-
-    .card {
-        flex: 0 0 150px;
-        max-width: 150px;
-    }
-
-    .carousel.analyst-carousel {
-        overflow: hidden;
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .carousel-track {
-        display: flex;
-        flex-wrap: nowrap;
-    }
+#analyst-list-container .analyst-item img,
+#analyst-list-container .analyst-item .analyst-picture {
+    width: var(--de-list-img);
+    height: var(--de-list-img);
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
 }
 
-/* ===== 600px - Mobile large ===== */
-@media (min-width: 431px) and (max-width: 600px) {
-
-    .asset-header {
-        margin: 0;
-        gap: 15px;
-    }
-
-    .asset-name {
-        margin: 0;
-        font-size: 1.8rem;
-        padding: 0 0.5rem;
-    }
-
-    .asset-info {
-        margin: 25px;
-    }
-
-    .login-message {
-        text-align: center;
-        font-size: 1.3rem;
-        margin: 25px;
-        text-decoration: underline;
-    }
-
-    #login-btn {
-        font-size: 0.9rem;
-    }
-
-    #reco-list-container {
-        font-size: 0.7rem;
-        min-height: 250px;
-    }
-
-    .recommendation {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 5px;
-        width: 100%;
-    }
-
-    .reco-image {
-        width: 2rem;
-        height: 2rem;
-        flex-shrink: 0;
-    }
-
-    .reco-status {
-        font-size: 0.9rem;
-        flex-shrink: 0;
-    }
-
-    .reco-comment {
-        font-size: 0.7rem;
-        max-width: 35%;
-        margin-left: auto;
-        white-space: normal;
-        word-break: break-word;
-    }
-
-    .analyst-picture {
-        width: 32px;
-        height: 32px;
-        margin-left: auto;
-        flex-shrink: 0;
-    }
-
-    .reco-name {
-        font-size: 0.7rem;
-        font-weight: bold;
-        max-width: 18%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        flex-shrink: 0;
-    }
-
-    .reco-publish {
-        font-size: 0.7rem;
-        text-align: right;
-        margin-right: 10px;
-        flex-shrink: 0;
-    }
-
-    #reco-pagination {
-        display: flex;
-        gap: 10px;
-        margin-top: 10px;
-    }
-
-    .paginBtn {
-        font-size: 0.9rem;
-    }
-
-    #analyst-carousel-container {
-        text-align: center;
-        font-size: 0.9rem;
-    }
-
-    h2 {
-        text-align: center;
-        /*text-decoration: underline;*/
-        font-size: 1rem;
-    }
-
-    #analyst-list-global {
-        display: flex;
-        flex-direction: column;
-        margin: 15px;
-    }
-
-    #analyst-list-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        width: 100%;
-        height: 25rem;
-    }
-
-    .analyst-item {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: center;
-        text-align: center;
-        font-size: 0.8rem;
-        gap: 10px;
-        margin: 1rem 0;
-    }
-
-    #analyst-pagination {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.9rem;
-    }
-
-    .card {
-        flex: 0 0 180px;
-        max-width: 180px;
-    }
-
-    .carousel.analyst-carousel {
-        overflow: hidden;
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .carousel-track {
-        display: flex;
-        flex-wrap: nowrap;
-    }
+#analyst-list-container .analyst-item p {
+    margin: 0;
+    font-size: var(--de-fs-list);
+    color: #1a1a1a;
 }
 
-/* ===== 768px - Tablette ===== */
-@media (min-width: 601px) and (max-width: 768px) {
-
-    .asset-header {
-        gap: 25px;
-    }
-
-    .asset-name {
-        font-size: 2.1rem;
-    }
-
-    .asset-info {
-        margin: 1.5rem;
-    }
-
-    .login-message {
-        font-size: 1.6rem;
-    }
-
-    #reco-list-container {
-        font-size: 0.85rem;
-        min-height: 280px;
-        margin-bottom: 3rem;
-    }
-
-    .recommendation {
-        gap: 15px;
-        justify-content: space-around;
-    }
-
-    .reco-image {
-        width: 2rem;
-        height: 2rem;
-        flex-shrink: 0;
-    }
-
-    .reco-status {
-        font-size: 0.9rem;
-        flex-shrink: 0;
-    }
-
-    .reco-comment {
-        font-size: 0.7rem;
-        max-width: 35%;
-        margin-left: auto;
-        white-space: normal;
-        word-break: break-word;
-    }
-
-    .analyst-picture {
-        width: 32px;
-        height: 32px;
-        margin-left: auto;
-        flex-shrink: 0;
-    }
-
-    .reco-name {
-        font-size: 0.7rem;
-        font-weight: bold;
-        max-width: 18%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        flex-shrink: 0;
-    }
-
-    .reco-publish {
-        font-size: 0.7rem;
-        text-align: right;
-        margin-right: 10px;
-        flex-shrink: 0;
-    }
-
-
-    #analyst-carousel-container {
-        font-size: 1rem;
-    }
-
-    #analyst-list-global {
-        display: flex;
-        flex-direction: column;
-        margin: 15px;
-    }
-
-    #analyst-list-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        gap: 1.5rem;
-        width: 100%;
-        height: 25rem;
-    }
-
-    .analyst-item {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: center;
-        text-align: center;
-        font-size: 0.8rem;
-        gap: 10px;
-        margin: 1rem 0;
-    }
-
-    #analyst-pagination {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.9rem;
-    }
-
-    .card {
-        flex: 0 0 200px;
-        max-width: 200px;
-    }
-}
-
-/* ===== 1024px+ - Desktop ===== */
-@media (min-width: 769px) {
-
-    .asset-header {
-        gap: 30px;
-    }
-
-    #reco-list-container {
-        min-height: 320px;
-        margin-bottom: 5rem;
-    }
-
-    .reco-status {
-        font-size: 2rem;
-        flex-shrink: 0;
-    }
-
-    .reco-comment {
-        font-size: 2rem;
-        max-width: 50%;
-        margin-left: auto;
-        white-space: normal;
-    }
-
-    .analyst-picture {
-        width: 64px;
-        height: 64px;
-        margin-left: auto;
-        flex-shrink: 0;
-    }
-
-    .reco-name {
-        font-size: 2rem;
-        font-weight: bold;
-        max-width: 50%;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-
-    .reco-publish {
-        font-size: 1.5rem;
-        text-align: left;
-        margin-right: 10px;
-        flex-shrink: 0;
-    }
-
-    .reco-image {
-        width: 3rem;
-        height: 3rem;
-        flex-shrink: 0;
-    }
-
-    .login-message p {
-        font-size: 3rem;
-    }
-
-    #login-btn {
-        padding: 15px 32px;
-    }
-
-    #analyst-list-global {
-        display: flex;
-        flex-direction: column;
-        margin: 15px;
-    }
-
-    #analyst-list-title {
-        font-size: 2rem;
-    }
-
-    #analyst-list-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        margin: 32px;
-        gap: 5px;
-        width: 100%;
-        height: 25rem;
-    }
-
-    .analyst-item {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: center;
-        text-align: center;
-        font-size: 1rem;
-        gap: 10px;
-        margin: 1rem 0;
-    }
-
-    #analyst-pagination {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.9rem;
-    }
-
-    .card {
-        flex: 0 0 220px;
-        max-width: 220px;
-    }  
+#analyst-pagination {
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
 }

@@ -1,15 +1,11 @@
+/* TYPOGRAPHIC SCALE */
 :root {
-   
     --u-fs-name: 1.5rem;
     --u-fs-text: 1rem;
     --u-fs-small: 0.85rem;
     --u-fs-list: 0.95rem;
-
-
     --u-fs-h1: 1.875rem;
     --u-fs-h2: 1.25rem;
-
-   
     --u-pic: 6.5rem;
     --u-list-img: 3rem;
 }
@@ -21,10 +17,8 @@
         --u-fs-text: 1.0625rem;
         --u-fs-small: 0.9rem;
         --u-fs-list: 1.05rem;
-
         --u-fs-h1: 2.25rem;
         --u-fs-h2: 1.5rem;
-
         --u-pic: 7.5rem;
         --u-list-img: 3.5rem;
     }
@@ -37,10 +31,8 @@
         --u-fs-text: 1.125rem;
         --u-fs-small: 0.95rem;
         --u-fs-list: 1.15rem;
-
         --u-fs-h1: 2.75rem;
         --u-fs-h2: 1.75rem;
-
         --u-pic: 8.5rem;
         --u-list-img: 4rem;
     }

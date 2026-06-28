@@ -4,7 +4,7 @@ import http from "../../../config/instanceHttp.js"
 // HTML TEMPLATE 
 // =====================
 const analystRegister = `
-    <h1>Register as Analyst</h1>
+    <h1 class="form-title">Register as Analyst</h1>
     <form method="post" id="analyst-form" enctype="multipart/form-data">
         
         <input type="text" id="name" name="name" placeholder="enter your name..." required minlength="2" maxlength="50" autocomplete="on">

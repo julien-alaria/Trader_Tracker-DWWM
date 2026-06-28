@@ -1,6 +1,5 @@
-
+/* TYPOGRAPHIC SCALE */
 :root {
-    /* font sizes (rem) */
     --an-fs-h1: 1.875rem;
     --an-fs-h2: 1.25rem;
     --an-fs-name: 1.5rem;
@@ -8,7 +7,6 @@
     --an-fs-small: 0.85rem;
     --an-fs-list: 0.95rem;
 
-    /* images sizes (rem) */
     --an-pic: 6.5rem;
     --an-list-img: 3rem;
 }

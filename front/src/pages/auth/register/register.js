@@ -4,7 +4,7 @@ import http from "../../../config/instanceHttp.js"
 // HTML TEMPLATE 
 // =====================
 const register = ` 
-    <h1>Register</h1>
+    <h1 class="form-title">Register</h1>
     <form id="register-form">
         <input type="text" id="name" name="name" placeholder="enter your name..." minlength="2" maxlength="50" required autocomplete="on">
 
