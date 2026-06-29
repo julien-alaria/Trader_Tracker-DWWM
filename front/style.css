@@ -15,6 +15,23 @@
   box-sizing: border-box;
 }
 
+/*ACCESSIBILITY: visible focus indicator for keyboard navigation.
+Applies to every interactive element (links, buttons, inputs,
+clickable cards) so a keyboard user can always see where they are.
+Uses :focus-visible so the outline only appears for keyboard focus,
+not for mouse clicks. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible,
+[data-js-clickable]:focus-visible {
+    outline: 3px solid #F80505;
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
 html, body {
     height: 100%;
     margin: 0;

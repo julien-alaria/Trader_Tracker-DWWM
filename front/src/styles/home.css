@@ -183,6 +183,12 @@ main {
     border-color: var(--color-navy-400, #03034B);
 }
 
+/* ACCESSIBILITY: restore a visible outline for keyboard navigation */
+.search-input:focus-visible {
+    outline: 3px solid #F80505;
+    outline-offset: 2px;
+}
+
 @media (min-width: 48rem) {
     #home-search-bar {
         flex-direction: row;

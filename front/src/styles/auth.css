@@ -94,6 +94,15 @@
     border-color: #03034B;
 }
 
+/* ACCESSIBILITY: restore a visible outline for keyboard navigation */
+#login-form input:focus-visible,
+#register-form input:focus-visible,
+#analyst-form input:focus-visible,
+#analyst-form textarea:focus-visible {
+    outline: 3px solid #F80505;
+    outline-offset: 2px;
+}
+
 /* Submit Button */
 #login-form input[type="submit"],
 #register-form input[type="submit"],

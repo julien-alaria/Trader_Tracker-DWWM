@@ -202,6 +202,13 @@
     outline: none;
 }
 
+/* ACCESSIBILITY: let the global red focus-visible outline (style.css)
+   take over for keyboard navigation, instead of staying outline:none */
+.update-form input:focus-visible {
+    outline: 3px solid #F80505;
+    outline-offset: 2px;
+}
+
 .update-form input[type="text"]:focus,
 .update-form input[type="email"]:focus,
 .update-form input[type="password"]:focus {
