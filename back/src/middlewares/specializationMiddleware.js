@@ -15,7 +15,7 @@ export default function SpecializationMiddleware() {
                 }
                 return next()
             }
-            return res.status(403).json({ error: "Access denied: Role not authorized." });
+            return res.status(403).json({ error: "Access denied: Role not authorized." })
 
         } catch (error) {
             console.error("SpecializationMiddleware Error:", error)

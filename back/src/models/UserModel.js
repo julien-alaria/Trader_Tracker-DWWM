@@ -21,7 +21,7 @@ async function getUsersPaginated(limit, offset) {
         FROM users 
         ORDER BY id DESC 
         LIMIT ? OFFSET ?
-    `;
+    `
     
     const [rows] = await db.query(sql, [l, o]);
     return rows;

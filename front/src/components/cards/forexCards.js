@@ -20,6 +20,5 @@ export default function forexCard({ ticker, name, high, low, close, image } = {}
       <p class="card-forex-low">Low: ${low}</p>
 
     </div>
-
   `
 }

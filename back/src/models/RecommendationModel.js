@@ -181,7 +181,7 @@ async function getRecommendationsByAssetIdPaginated(assetId, limit, offset) {
         WHERE r.asset_id = ?
         ORDER BY r.created_at DESC
         LIMIT ? OFFSET ?
-    `;
+    `
     // Incompatible binary protocol in method .execute() on Windows OS, resolved by switching to textual protocol via .query()
     const [rows] = await db.query(sql, [assetId, Number(limit), Number(offset)]);
     return rows;
@@ -268,7 +268,7 @@ async function getByAnalystId(analystId, limit, offset) {
         WHERE r.user_id = ?
         ORDER BY r.created_at DESC
         LIMIT ? OFFSET ?
-    `;
+    `
     const [rows] = await db.query(sql, [analystId, limit, offset]);
     return rows;
 }

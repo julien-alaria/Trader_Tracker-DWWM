@@ -95,14 +95,14 @@ async function downloadLogos() {
             }
         }
 
-        console.log(`\n[DONE] Logo upload complete!`);
+        console.log(`\n[DONE] Logo upload complete!`)
         console.log(`New files saved in the Front : 
-        ${downloaded}`);
-        console.log(`Files already present (ignored): ${skipped}`);
+        ${downloaded}`)
+        console.log(`Files already present (ignored): ${skipped}`)
 
     } catch (globalErr) {
-        console.error("CRITICAL SCRIPT ERROR:", globalErr.message);
+        console.error("CRITICAL SCRIPT ERROR:", globalErr.message)
     }
 }
 
-downloadLogos();
+downloadLogos()

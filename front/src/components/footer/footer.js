@@ -27,8 +27,7 @@ export default function footer() {
                 <div class="footer-btn">
                     ${user ? "" : navLink("/register", "CREATE FREE ACCOUNT", "nav-register")}
                 </div>
-
-                
+   
             </div>
 
             <div class="footer-bottom">
