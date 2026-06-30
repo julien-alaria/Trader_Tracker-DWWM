@@ -122,7 +122,7 @@ async function updateUser(req, res, next) {
         const id = Number(req.params.id)
 
         if (!Number.isInteger(id) || id <= 0) {
-            return res.status(400).json({ error: "ID invalide" })
+            return res.status(400).json({ error: "Invalid ID" })
         }
 
         // clean standard data (name, email, bio...) w/ basic sanitizer
