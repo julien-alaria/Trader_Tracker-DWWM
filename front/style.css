@@ -116,12 +116,14 @@ section {
     --color-border: #cccccc;
     --color-border-light: #e3e6ec;
     --color-border-soft: #e9ecef;
+    --pagin-button-hover: #b8daff;
 
     /* ---- States / actions ---- */
     --color-danger: #ff0000;      /* delete button */
     --color-success: #dbe02c;     /* edit/confirm button */
     --color-success-border: #a3a815;
     --color-info: #1a73e8;        /* links/info */
+    --focus-visib: #F80505;
 
     /* ---- Overlays (light text on navy background, separators, shadows) ---- */
     --color-overlay-light: rgba(255, 255, 255, 0.85);
