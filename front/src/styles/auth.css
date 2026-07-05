@@ -163,11 +163,6 @@
 }
 
 /* COMMON ELEMENTS (forgot, séparateur, footer, lien analyst) */
-.forgot-password {
-    color: #03034B;
-    font-size: var(--au-text);
-}
-
 .separator {
     display: flex;
     justify-content: center;

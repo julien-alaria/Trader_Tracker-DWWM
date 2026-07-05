@@ -15,7 +15,9 @@ const PORT = process.env.APP_PORT || 3000
 // SECURITY: protective HTTP headers (homemade, see securityHeadersMiddleware.js)
 app.use(securityHeaders)
 
-app.use(cors())
+app.use(cors({
+    origin: process.env.FRONTEND_URL
+}))
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))

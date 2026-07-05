@@ -16,8 +16,6 @@ const login = `
             <input type="password" id="password" name="password" placeholder="enter your password..." required autocomplete="off">
         </div>
 
-        <a href="#/forgot" class="forgot-password">Forgot Password?</a>
-
         <input type="submit" value="SIGN IN">
         
         <div id="message"></div>
