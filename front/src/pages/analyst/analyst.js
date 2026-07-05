@@ -140,7 +140,7 @@ export async function initAnalyst() {
 
         return `
           <div class="watchlist-item" data-js-clickable data-ticker="${item.ticker}" data-type="${item.asset_type_id}">
-              <img src="${logoUrl}" alt="${item.ticker}onerror="this.src='${defaultLogo}'" />
+              <img src="${logoUrl}" alt="${item.ticker}" onerror="this.src='${defaultLogo}'" />
               <span><strong>${item.ticker}</strong></span>
               <span>${item.name}</span>
           </div>
@@ -198,7 +198,7 @@ export async function initAnalyst() {
 
         return `
           <div class="follow-item" data-js-clickable data-id="${a.id}">
-               <img src="${avatarUrl}" alt="${a.name}"onerror="this.src='${defaultAvatar}'" />
+               <img src="${avatarUrl}" alt="${a.name}" onerror="this.src='${defaultAvatar}'" />
                <p><strong>${escapeHtml(a.name)}</strong> - ${escapeHtml(a.company ?? "Unknown")}</p>
           </div>
         `

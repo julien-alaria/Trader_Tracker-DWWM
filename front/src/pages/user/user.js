@@ -106,7 +106,7 @@ export async function initUser() {
                 buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`,
                 onActionClick: async (ticker) => {
                     try {
-                        await http.delete(`/me/follows/${ticker}`)
+                        await http.delete(`/users/me/follows/${ticker}`)
                         const index = watchlist.findIndex(a => a.ticker === ticker)
                         if (index !== -1) {
                             watchlist.splice(index, 1);
