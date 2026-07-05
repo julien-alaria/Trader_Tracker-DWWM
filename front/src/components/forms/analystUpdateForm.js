@@ -14,10 +14,10 @@ export default function analystUpdateForm() {
             <input type="password" id="password" name="password" placeholder="new password..." minlength="6" maxlength="20" autocomplete="on">
 
             <label for="company">Analyst Company:</label>
-            <input type="text" id="analyst-company" name="company" maxlength="1000" autocomplete="on">
+            <input type="text" id="analyst-company" name="company" maxlength="100" autocomplete="on">
 
             <label for="bio">Analyst Biography:</label>
-            <textarea id="analyst-bio" name="bio" rows="5" cols="33" maxlength="100"></textarea>
+            <textarea id="analyst-bio" name="bio" rows="5" cols="33" maxlength="1000"></textarea>
 
             <label for="picture">Profile Picture (Image):</label>
             <input type="file" id="picture" name="picture" accept="image/*" />

@@ -128,6 +128,17 @@ async function updateUser(req, res, next) {
         // clean standard data (name, email, bio...) w/ basic sanitizer
         const sanitizedData = sanitizeUserUpdate(req.body)
 
+        // FILE UPLOADS: this route uses upload.fields([...]), so multer
+        // exposes files under req.files.<fieldname>[0], NOT req.file
+        // (that property only exists with upload.single()).
+        if (req.files?.picture?.[0]) {
+            sanitizedData.picture = req.files.picture[0].filename
+        }
+ 
+        if (req.files?.document?.[0]) {
+            sanitizedData.document = req.files.document[0].filename
+        }
+
         // SECURITY: this route is only accessible by the admin,
         // manually extract 'analyst_verified' from req.body and add it directly after the sanitizer
         if (req.body.analyst_verified !== undefined) {
@@ -137,7 +148,7 @@ async function updateUser(req, res, next) {
         // double-check if we have any data to update
         if (Object.keys(sanitizedData).length === 0) {
             return res.status(400).json({
-                error: "Aucune donnée valide"
+                error: "No valid Data"
             })
         }
 

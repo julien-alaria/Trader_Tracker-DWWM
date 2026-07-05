@@ -13,9 +13,9 @@ const analystRegister = `
 
         <input type="password" id="password" name="password" placeholder="enter your password..." minlength="6" maxlength="20" required autocomplete="on">
 
-        <input type="text" id="company" name="company" placeholder="your Company / Organization" maxlength="1000" autocomplete="on">
+        <input type="text" id="company" name="company" placeholder="your Company / Organization" maxlength="100" autocomplete="on">
 
-        <textarea id="bio" name="bio" rows="5" cols="33" maxlength="100" placeholder="Tell us about your background..."></textarea>
+        <textarea id="bio" name="bio" rows="5" cols="33" maxlength="1000" placeholder="Tell us about your background..."></textarea>
 
         <input type="hidden" id="role" name="role" value="analyst" />
 

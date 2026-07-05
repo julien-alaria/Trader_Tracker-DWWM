@@ -190,9 +190,9 @@ async function loadPendingAnalysts() {
                 <tbody>
                     ${pendingAnalysts.map(analyst => `
                         <tr>
-                            <td><strong>${analyst.name}</strong></td>
+                            <td><strong>${escapeHtml(analyst.name)}</strong></td>
                             <td>${analyst.email}</td>
-                            <td>${analyst.company || "N/A"}</td>
+                            <td>${escapeHtml(analyst.company) || "N/A"}</td>
                             <td>
                                 <button class="approve-btn" data-id="${analyst.id}">
                                     Approve
@@ -231,7 +231,7 @@ async function loadPendingAnalysts() {
 // =====================
 // EVENTS ON RECOMMENDATIONS
 // =====================
-function bindRecommendationEvents() {
+/*function bindRecommendationEvents() {
     const container = document.getElementById("recommendations-list-target")
     if (!container) return
 
@@ -264,6 +264,7 @@ function bindRecommendationEvents() {
         }
     })
 }
+    */
 
 // =====================
 // USER CLICK MANAGEMENT
@@ -306,6 +307,7 @@ function bindUserListEvents() {
     })
 }
 
+
 // =====================
 // INIT FORM PROFILE
 // =====================
@@ -316,24 +318,37 @@ function initForm(user) {
     form.addEventListener("submit", async (e) => {
         e.preventDefault()
 
-        const data = new FormData(form)
-        const targetId = data.get("target_user_id")
+        const formData = new FormData(form)
+        const targetId = formData.get("target_user_id")
+        const url = targetId ? `/users/${targetId}` : "/users/me"
 
-        const payload = {
-            name: data.get("name"),
-            email: data.get("email"),
-            company: data.get("company"),
-            bio: data.get("bio")
+        const payload = new FormData()
+        payload.append("name", formData.get("name"))
+        payload.append("email", formData.get("email"))
+        payload.append("company", formData.get("company") ?? "")
+        payload.append("bio", formData.get("bio") ?? "")
+
+        const password = formData.get("password")
+        if (password) {
+            payload.append("password", password)
         }
 
-        const url = targetId ? `/users/${targetId}` : "/users/me"
+        const picture = formData.get("picture")
+        if (picture && picture.size > 0) {
+            payload.append("picture", picture)
+        }
 
         try {
             await http.put(url, payload)
             alert("Profile updated")
+
+            const passwordField = form.querySelector('[name="password"]')
+            if (passwordField) passwordField.value = ""
+
             initAdmin()
         } catch (err) {
             console.error("UPDATE ERROR:", err)
+            alert(err.response?.data?.message || "Update failed.")
         }
     })
 }

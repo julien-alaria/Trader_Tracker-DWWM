@@ -169,13 +169,14 @@ async function updateUsers(id, data) {
         values.push(data.bio)
     }
 
-    if (fields.length === 0) {
-        throw new AppError("No fields to update")
-    }
-
     if (data.picture !== undefined) {
         fields.push("picture = ?")
         values.push(data.picture)
+    }
+
+    if (data.document !== undefined) {
+        fields.push("document = ?")
+        values.push(data.document)
     }
 
     if (fields.length === 0) {
