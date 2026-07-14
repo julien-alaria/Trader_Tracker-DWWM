@@ -10,6 +10,7 @@
 @import "./src/styles/auth.css";
 @import "./src/styles/navbar.css";
 @import "./src/utils/pagination.js";
+@import "./src/styles/about.css";
 
 * {
   box-sizing: border-box;
