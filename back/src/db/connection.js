@@ -1,12 +1,12 @@
-import mysql from 'mysql2/promise';
+import mysql from 'mysql2/promise'
 import dotenv from 'dotenv'
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+dotenv.config({ path: path.resolve(__dirname, '../../.env') })
 
-let pool;
+let pool
 
 function getConnection() {
   if (!pool) {
@@ -24,10 +24,10 @@ function getConnection() {
         keepAliveInitialDelay: 0,
     });
   }
-  return pool;
+  return pool
 }
 
-export default getConnection;
+export default getConnection
 
 
 
