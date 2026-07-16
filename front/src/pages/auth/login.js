@@ -86,8 +86,6 @@ export function initLogin() {
                     default:
                         window.location.hash = "/user"
                 }
-
-                window.dispatchEvent(new Event("hashchange"))
             }, 1000)
             
         } catch (error) {

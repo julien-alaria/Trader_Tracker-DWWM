@@ -81,7 +81,7 @@ export async function initAnalystRegister() {
                 }
                 
             } catch (error) {
-                messageDiv.innerText = error.message || error.response?.data?.message || "An error occurred during analyst registration."
+                messageDiv.innerText = error.response?.data?.message || error.message || "An error occurred during registration."
                 console.error("Register failed:", error)
             }
         })
