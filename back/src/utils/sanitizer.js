@@ -74,10 +74,11 @@ export function sanitizeLogin(data) {
     }
 
     const cleanEmail = validateEmail(email)
+    const cleanPassword = password.trim()
 
     return {
         email: cleanEmail,
-        password
+        password: cleanPassword
     }
 }
 
