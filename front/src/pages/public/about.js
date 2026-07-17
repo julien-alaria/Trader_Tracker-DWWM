@@ -55,6 +55,16 @@ const about = `
         </ul>
     </section>
 
+    <section id="about-privacy">
+        <h2 id="about-privacy-title">DATA & PRIVACY</h2>
+        <p id="about-privacy-text">
+            We collect only the data necessary to operate your account: name, email,
+            and password for every user, plus company, bio, and certification documents
+            for users applying as analysts. Your data is never sold or shared with third parties.
+            You can update or delete your account at any time from your profile settings.
+        </p>
+    </section>
+
     <section id="about-credits">
         <h2 id="about-credits-title">ABOUT THIS PROJECT</h2>
         <p id="about-credits-text">

@@ -95,8 +95,8 @@ export function validateAnalystType(role, analyst_type_id) {
 export function validateComment(comment) {
     const clean = comment ? comment.trim() : null
 
-    if (clean && clean.length > 1000) {
-        throw new AppError("Comment too long")
+    if (clean && clean.length > 280) {
+        throw new AppError("A recommendation must not exceed 280 characters")
     }
 
     return clean

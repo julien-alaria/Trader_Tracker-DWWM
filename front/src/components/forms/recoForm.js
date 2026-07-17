@@ -8,7 +8,7 @@ export default function recoForm() {
                     <option value="HOLD">HOLD</option>
                 </select>
 
-                <textarea name="comment" placeholder="Comment"></textarea>
+                <textarea name="comment" maxlength="280" placeholder="Comment"></textarea>
 
                 <button type="submit">Submit</button>
                 <div id="message"></div>
