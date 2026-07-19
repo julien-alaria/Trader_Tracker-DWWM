@@ -28,7 +28,7 @@ const authLimiter = rateLimit({
     max: 20, // max 20 attempts per IP per window
     standardHeaders: true,
     legacyHeaders: false,
-    message: { error: "Too many attempts, please try again later." }
+    message: { message: "Too many attempts, please try again later." }
 })
 app.use("/auth", authLimiter)
 
