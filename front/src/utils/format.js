@@ -23,18 +23,6 @@ export function formatMarketCap(marketCap) {
   }).format(marketCap)
 }
 
-export function formatValues(value) {
-  if (value >= 1_000_000_000) {
-    return (value / 1_000_000_000).toFixed(2) + " B"
-  }
-
-  if (value >= 1_000_000) {
-    return (value / 1_000_000).toFixed(2) + " M"
-  }
-
-  return value.toString()
-}
-
 export function formatTicker(ticker) {
   return ticker.replace(/[^a-zA-Z0-9]/g, "_")
 }

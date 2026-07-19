@@ -2,7 +2,6 @@ import {
   escapeHtml,
   formatForexName,
   formatMarketCap,
-  formatValues,
   formatTicker,
   formatChartId,
   formatDate
@@ -48,20 +47,6 @@ describe("formatMarketCap", () => {
 
   test("leave the small values ​​as they are", () => {
     expect(formatMarketCap(500)).toBe("500")
-  })
-})
-
-describe("formatValues", () => {
-  test("leave values ​​under 1 million as they are.", () => {
-    expect(formatValues(500)).toBe("500")
-  })
-
-  test("format in millions (M)", () => {
-    expect(formatValues(1500000)).toBe("1.50 M")
-  })
-
-  test("format in milliards (B)", () => {
-    expect(formatValues(2500000000)).toBe("2.50 B")
   })
 })
 

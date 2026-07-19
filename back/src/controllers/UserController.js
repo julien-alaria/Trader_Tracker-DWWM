@@ -155,10 +155,9 @@ async function updateMe(req, res, next) {
             sanitizedData.picture = req.file.filename
         }
 
-        // security : avoid role
-        if (sanitizedData.role !== undefined) {
-            delete sanitizedData.role
-        }
+        // security: only admins can change role or specialization
+        if (sanitizedData.role !== undefined) delete sanitizedData.role
+        if (sanitizedData.analyst_type_id !== undefined) delete sanitizedData.analyst_type_id
 
         if (Object.keys(sanitizedData).length === 0) {
             return res.status(400).json({

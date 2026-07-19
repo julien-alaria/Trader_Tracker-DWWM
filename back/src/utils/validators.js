@@ -5,6 +5,7 @@ export function validateName(name) {
 
     const clean = name.trim()
     
+    //validates that a string is between 2 and 50 characters long and that each character is either a letter (with or without an accent), a digit, or a space, underscore, apostrophe, or hyphen— nothing else (no symbols like @, #, %, no emojis...).
     const reg = /^[a-zA-ZÀ-ÿ0-9 _'-]{2,50}$/
     if (!reg.test(clean)) {
         throw new AppError("Invalid name")
@@ -18,6 +19,7 @@ export function validateEmail(email) {
 
     const clean = email.trim().toLowerCase()
 
+    //validates that a string has the general shape of an email (text@text.text) — one or more characters, an @, one or more characters, a dot, one or more characters — with no spaces or extra @ allowed.
     const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!reg.test(clean)) {
         throw new AppError("Invalid email")
@@ -31,6 +33,7 @@ export function validatePassword(password) {
 
     const clean = password.trim()
 
+    //validates that a string is 6 to 20 characters long, contains no whitespace, and includes at least one digit, one lowercase letter, one uppercase letter, and one non-alphanumeric character — all four required, in any order or position.
     const reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^\da-zA-Z])\S{6,20}$/
 
     if (!reg.test(clean)) {

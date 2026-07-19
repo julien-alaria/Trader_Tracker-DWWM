@@ -36,7 +36,7 @@ app.use("/", routes)
 app.use('/uploads', express.static('uploads'))
 
 app.get('/', (req, res) => {
-    res.send('Welcome to DWWM Project!')
+    res.send('Welcome to Trader Tracker Project!')
 })
 
 app.use(errorHandler)

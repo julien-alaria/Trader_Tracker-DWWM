@@ -1,4 +1,5 @@
 import UserModel from "../models/UserModel.js"
+import AppError from "../utils/AppError.js"
 import jwt from "jsonwebtoken"
 
 export default function AuthMiddleware(roles = []) {
@@ -9,28 +10,33 @@ export default function AuthMiddleware(roles = []) {
         const [prefix, token] = authHeader?.split(" ") || [null, undefined]
 
         if (prefix !== "Bearer") {
-            return res.status(401).json({ error : "No Bearer token" })
+            throw new AppError("No Bearer token", 401)
         }
 
         if (!token) {
-            return res.status(401).json({ error: "You must be authenticated to access this resource"})
+            throw new AppError("You must be authenticated to access this resource", 401)
         }
 
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET)
-
+            let decoded
+            try {
+                decoded = jwt.verify(token, process.env.JWT_SECRET)
+            } catch {
+                throw new AppError("Invalid or expired token", 401)
+            }
+            
             if (!decoded?.id) {
-                return res.status(401).json({ error: "Invalid Payload" })
+                throw new AppError("Invalid Payload", 401)
             }
 
             const user = await UserModel.getUsersById(decoded.id)
 
             if (!user) {
-                return res.status(401).json({ error: "User not found" })
+                throw new AppError("User not found", 401)
             }
 
             if (roles.length && !roles.includes(user.role)) {
-                return res.status(403).json({ error: "Permission denied, you are not authorized to access this resource" })
+                throw new AppError("Permission denied, you are not authorized to access this resource", 403)
             }
 
             req.user = user
@@ -38,7 +44,7 @@ export default function AuthMiddleware(roles = []) {
             return next()
 
         } catch (error) {
-            return res.status(401).json({ error: error.message })
+            next(error)
         }
     } 
 }

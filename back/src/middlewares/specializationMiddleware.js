@@ -1,25 +1,25 @@
+import AppError from "../utils/AppError.js"
+
 export default function SpecializationMiddleware() {
-    
+
     return async function (req, res, next) {
         try {
             const { role, analyst_type_id } = req.user //authMiddleware
-            const { asset_type_id } = req.asset // assetMiddlewrare
+            const { asset_type_id } = req.asset // assetMiddleware
 
             if (role === "admin") return next()
 
             if (role === "analyst") {
                 if (analyst_type_id !== asset_type_id) {
-                    return res.status(403).json({ error: "Access denied: You can only recommend assets that match your specialization."
-
-                    })
+                    throw new AppError("Access denied: You can only recommend assets that match your specialization.", 403)
                 }
                 return next()
             }
-            return res.status(403).json({ error: "Access denied: Role not authorized." })
+
+            throw new AppError("Access denied: Role not authorized.", 403)
 
         } catch (error) {
-            console.error("SpecializationMiddleware Error:", error)
-            return res.status(500).json({ error: "Authorization check failed." })
+            next(error)
         }
     }
 }
