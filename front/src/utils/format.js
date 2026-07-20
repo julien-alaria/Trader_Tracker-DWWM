@@ -17,6 +17,8 @@ export function formatForexName(ticker) {
 }
 
 export function formatMarketCap(marketCap) {
+  if (marketCap === null || marketCap === undefined) return "N/A"
+
   return new Intl.NumberFormat('en-US', {
     notation: 'compact',
     maximumFractionDigits: 2

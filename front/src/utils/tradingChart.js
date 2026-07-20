@@ -16,9 +16,28 @@
   })
 }*/
 
+// For use of trading view charts widget
+
+/*export function loadTradingViewChart(ticker) {
+  new TradingView.widget({
+    container_id: `tv-${ticker}`,
+    symbol: ticker,
+    interval: "W",
+    autosize: true,
+    theme: "light",
+    style: "1",
+    locale: "en",
+    hide_top_toolbar: true,
+    hide_legend: true,
+    allow_symbol_change: false
+  })
+}*/
+
 // For use of ApexCharts
-export function loadTradingViewChart(ticker, historyData = [], isMini = false) {
- 
+import { registerChart, destroyChart } from "./chartManager.js"
+
+export function loadTradingViewChart(ticker, historyData = []) {
+
   const container = document.getElementById(`tv-${ticker}`)
   if (!container || !historyData.length) return
 
@@ -31,19 +50,19 @@ export function loadTradingViewChart(ticker, historyData = [], isMini = false) {
   const options = {
     chart: {
       type: "candlestick",
-      height: isMini ? 80 : 350,
+      height: 350,
       sparkline: {
-        enabled: isMini
+        enabled: false
       },
       toolbar: {
         show: false
       },
       zoom: {
-        enabled: !isMini
+        enabled: true
       },
       background: "transparent",
       animations: {
-        enabled: !isMini 
+        enabled: true
       }
     },
 
@@ -67,14 +86,14 @@ export function loadTradingViewChart(ticker, historyData = [], isMini = false) {
     xaxis: {
       type: "datetime",
       labels: {
-        show: !isMini
+        show: true
       }
     },
 
     yaxis: {
-      show: !isMini,
+      show: true,
       tooltip: {
-        enabled: !isMini
+        enabled: true
       }
     },
 
@@ -84,14 +103,16 @@ export function loadTradingViewChart(ticker, historyData = [], isMini = false) {
     },
 
     tooltip: {
-      enabled: !isMini,
+      enabled: true,
       theme: "dark"
     }
   }
 
+  destroyChart(ticker)
   container.innerHTML = ''
   const chart = new ApexCharts(container, options)
   chart.render()
+  registerChart(ticker, chart)
 }
 
 //Mini Sparkline Chart for cards
@@ -164,7 +185,9 @@ export function loadMiniChart(ticker, historyData = []) {
     }
   }
 
+  destroyChart(ticker)
   container.innerHTML = ''
   const chart = new ApexCharts(container, options)
   chart.render()
+  registerChart(ticker, chart)
 }

@@ -1,5 +1,5 @@
 import http from "../config/instanceHttp.js"
-import { formatMarketCap } from "./format.js"
+import { formatMarketCap, formatForexName } from "./format.js"
 
 // ==========================================
 // Functions for external API
@@ -23,16 +23,12 @@ async function getStock() {
       history: stock.history
     }))
   } catch (error) {
-    console.error(error.message)
+    console.error(error.response?.data?.message || error.message)
     return []
   }
 }
 
 async function getForex() {
-  function formatForexName(ticker) {
-    return ticker.replace("C:", "").replace(/(.{3})(.{3})/, "$1 / $2")
-  }
-
   try {
     const data = await http.get("/assets/forex")
 
@@ -45,7 +41,7 @@ async function getForex() {
       history: forex.history
     }))
   } catch (error) {
-    console.error(error.message)
+    console.error(error.response?.data?.message || error.message)
     return []
   }
 }
@@ -64,7 +60,7 @@ async function getCommodities() {
       history: commodity.history
     }))
   } catch (error) {
-    console.error(error.message)
+    console.error(error.response?.data?.message || error.message)
     return []
   }
 }
@@ -87,16 +83,12 @@ async function getStockLight() {
       history: stock.history // Contains 15 points for light chart
     }))
   } catch (error) {
-    console.error(error.message)
+    console.error(error.response?.data?.message || error.message)
     return []
   }
 }
 
 async function getForexLight() {
-  function formatForexName(ticker) {
-    return ticker.replace("C:", "").replace(/(.{3})(.{3})/, "$1 / $2")
-  }
-
   try {
     const data = await http.get("/assets/home/forex")
 
@@ -109,7 +101,7 @@ async function getForexLight() {
       history: forex.history
     }))
   } catch (error) {
-    console.error(error.message)
+    console.error(error.response?.data?.message || error.message)
     return []
   }
 }
@@ -128,7 +120,7 @@ async function getCommoditiesLight() {
       history: commodity.history
     }))
   } catch (error) {
-    console.error(error.message)
+    console.error(error.response?.data?.message || error.message)
     return []
   }
 }
@@ -136,12 +128,14 @@ async function getCommoditiesLight() {
 // ==========================================
 // FUNCTIONS WITH SUPER LIGHT DATA FOR LIST ON list.js
 // ==========================================
+
+// ONLY getBriefsAssets function is used for now (endpoints are also not implemented)
 async function getBriefStocks() {
   try {
     const data = await http.get("/assets/brief/stocks");
     return data.message || [];
   } catch (error) {
-    console.error(error.message);
+    console.error(error.response?.data?.message || error.message);
     return [];
   }
 }
@@ -151,7 +145,7 @@ async function getBriefForex() {
     const data = await http.get("/assets/brief/forex");
     return data.message || [];
   } catch (error) {
-    console.error(error.message);
+    console.error(error.response?.data?.message || error.message);
     return [];
   }
 }
@@ -161,7 +155,7 @@ async function getBriefCommodities() {
     const data = await http.get("/assets/brief/commodities");
     return data.message || [];
   } catch (error) {
-    console.error(error.message);
+    console.error(error.response?.data?.message || error.message);
     return [];
   }
 }
@@ -171,7 +165,7 @@ async function getBriefAssets() {
     const data = await http.get("/assets/brief/all")
     return data.message || []
   } catch (error) {
-    console.error(error.message)
+    console.error(error.response?.data?.message || error.message)
     return []
   }
 }

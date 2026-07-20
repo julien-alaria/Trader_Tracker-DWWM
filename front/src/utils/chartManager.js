@@ -6,7 +6,7 @@ export function registerChart(ticker, instance) {
 
 export function destroyChart(ticker) {
   const chart = chartInstances.get(ticker)
-  if (chart?.remove) chart.remove()
+  if (chart?.destroy) chart.destroy()
   chartInstances.delete(ticker)
 }
 
