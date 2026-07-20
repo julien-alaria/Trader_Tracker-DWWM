@@ -1,3 +1,9 @@
+function base64UrlDecode(str) {
+    const base64 = str.replace(/-/g, "+").replace(/_/g, "/")
+    return atob(base64)
+}
+
+
 export function decodeToken(token) {
   try {
 
@@ -5,7 +11,7 @@ export function decodeToken(token) {
       return null
     }
     
-    return JSON.parse(atob(token.split(".")[1]))
+    return JSON.parse(base64UrlDecode(token.split(".")[1])) 
   } catch (e) {
     console.error("Invalid token :", e)
     return null
@@ -44,16 +50,13 @@ export function getAuthenticatedUser() {
   const token = localStorage.getItem("token")
   if (!token) return null
 
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1]))
+  const payload = decodeToken(token)
+  if (!payload) return null
 
-    if (payload.exp * 1000 < Date.now()) {
-      localStorage.removeItem("token")
-      return null
-    }
-
-    return payload
-  } catch {
+  if (payload.exp * 1000 < Date.now()) {
+    localStorage.removeItem("token")
     return null
   }
+
+  return payload
 }

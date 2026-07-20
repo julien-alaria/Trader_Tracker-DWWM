@@ -31,8 +31,6 @@ export function formatAssetImage(ticker) {
         fileName = fileName.replace("c:", "")
     }
 
-    
-
     if (fileName.length === 6) {
         const base = fileName.substring(0, 3)
         const quote = fileName.substring(3, 6)

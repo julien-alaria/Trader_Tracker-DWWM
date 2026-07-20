@@ -91,10 +91,10 @@ async function router() {
 
   if (init) {
     try {
-      // synchronous waiting for smooth rendering
+      // asynchronous waiting for smooth rendering
       await init()
     } catch (err) {
-      console.error("Error during initialization :", err);
+      console.error("Error during initialization :", err)
     }
   }
   // from renderApp
