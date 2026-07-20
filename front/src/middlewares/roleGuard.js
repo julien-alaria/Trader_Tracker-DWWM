@@ -3,10 +3,9 @@ function base64UrlDecode(str) {
     return atob(base64)
 }
 
-
 export function decodeToken(token) {
   try {
-
+    
     if (!token) {
       return null
     }

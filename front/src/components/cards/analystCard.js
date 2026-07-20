@@ -14,7 +14,7 @@ export default function analystCard({ id, name, company, bio, picture } = {}) {
     return `
         <div class="card analyst" data-id="${id ?? ''}">
 
-            <img class="card-analyst-image" src="${imageUrl}" alt="${displayName}">
+            <img class="card-analyst-image" src="${imageUrl}" alt="${displayName}" onerror="this.onerror=null; this.src='/assets/analyst/default_analyst.png'">
 
             <h2 class="card-analyst-title">${displayName}</h2>
 

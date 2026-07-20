@@ -6,7 +6,8 @@ export function createPaginationList({
   endpoint, 
   itemTemplate, 
   buildUrl,
-  limit = 5 }) {
+  limit = 5,
+  emptyMessage = "No results recommendations yet" }) {
 
     const target = document.querySelector(targetSelector)
     if (!target) return null
@@ -32,7 +33,7 @@ export function createPaginationList({
           if (!container) return
           
           if (results.length === 0) {
-            container.innerHTML = '<p id="p-text">No recommendations yet</p>'
+            container.innerHTML = `<p id="p-text">${emptyMessage}</p>`
             return
           }
           container.innerHTML = results.map(item => itemTemplate(item)).join("")
@@ -43,7 +44,7 @@ export function createPaginationList({
 
         const globalContainer = document.getElementById(`${prefix}-list-global`);
         
-        const show = (res.results.length >= 5 || currentOffset > 0 || res.hasNext);
+        const show = (res.results.length >= limit || currentOffset > 0 || res.hasNext);
 
         wrapper.style.display = show ? "flex" : "none";
 
