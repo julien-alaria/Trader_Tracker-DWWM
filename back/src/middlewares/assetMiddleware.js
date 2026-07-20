@@ -18,7 +18,6 @@ export default function AssetMiddleware() {
             }
 
             req.asset = asset
-            req.asset_id = asset.id
         
             next()
 

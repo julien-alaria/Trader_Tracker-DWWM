@@ -257,7 +257,7 @@ async function getPendingAnalyst(req, res, next) {
 async function followAsset(req, res, next) {
     try {
         const user_id = req.user.id
-        const asset_id = req.asset_id
+        const asset_id = req.asset.id
 
         await UserModel.userFollowAsset(user_id, asset_id)
 
@@ -279,7 +279,7 @@ async function followAsset(req, res, next) {
 async function unfollowAsset(req, res, next) {
     try {
         const user_id = req.user.id
-        const asset_id = req.asset_id
+        const asset_id = req.asset.id
 
         const result = await UserModel.userUnfollowAsset(user_id, asset_id)
 
