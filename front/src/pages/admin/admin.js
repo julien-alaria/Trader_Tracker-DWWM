@@ -229,44 +229,6 @@ async function loadPendingAnalysts() {
 }
 
 // =====================
-// EVENTS ON RECOMMENDATIONS
-// =====================
-/*function bindRecommendationEvents() {
-    const container = document.getElementById("recommendations-list-target")
-    if (!container) return
-
-    container.addEventListener("click", async (e) => {
-        if (!e.target.classList.contains("delete-btn")) return
-
-        try {
-            await http.delete(`/recommendations/${e.target.dataset.id}`)
-            await recommendationsPaginator.load()
-        } catch (err) {
-            console.error("DELETE ERROR:", err)
-        }
-    })
-
-    container.addEventListener("submit", async (e) => {
-        if (!e.target.classList.contains("edit-form")) return
-        e.preventDefault()
-
-        const id = e.target.dataset.id
-        const data = new FormData(e.target)
-
-        try {
-            await http.put(`/recommendations/${id}`, {
-                status: data.get("status"),
-                comment: data.get("comment")
-            });
-            await recommendationsPaginator.load()
-        } catch (err) {
-            console.error("UPDATE ERROR:", err)
-        }
-    })
-}
-    */
-
-// =====================
 // USER CLICK MANAGEMENT
 // =====================
 function bindUserListEvents() {
@@ -306,7 +268,6 @@ function bindUserListEvents() {
         }
     })
 }
-
 
 // =====================
 // INIT FORM PROFILE
