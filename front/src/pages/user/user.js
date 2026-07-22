@@ -101,22 +101,9 @@ export async function initUser() {
             createCarousel({
                 targetSelector: "#watchlist-carousel-target",
                 carouselId: "watchlist-carousel",
-                data: currentData,
+                data: watchlist,
                 cardComponent: stockCard,
-                buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`,
-                onActionClick: async (ticker) => {
-                    try {
-                        await http.delete(`/users/me/follows/${ticker}`)
-                        const index = watchlist.findIndex(a => a.ticker === ticker)
-                        if (index !== -1) {
-                            watchlist.splice(index, 1);
-                            renderWatchlistCarousel(watchlist)
-                            await watchlistPaginator.load()
-                        }
-                    } catch (err) { 
-                      console.error("UNFOLLOW ERROR:", err) 
-                    }
-                }
+                buildUrl: (dataset) => `#/details?type=${dataset.type}&ticker=${dataset.ticker}`
             })
         }
         renderWatchlistCarousel(watchlist)

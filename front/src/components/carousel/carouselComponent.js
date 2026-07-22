@@ -1,6 +1,6 @@
 import { enableCarouselWindow } from "../../utils/lazyloading.js"
 
-export function createCarousel({ targetSelector, carouselId, data, cardComponent, buildUrl, onActionClick }) {
+export function createCarousel({ targetSelector, carouselId, data, cardComponent, buildUrl }) {
     const target = document.querySelector(targetSelector)
     if (!target) return
 
@@ -19,20 +19,13 @@ export function createCarousel({ targetSelector, carouselId, data, cardComponent
 
     enableCarouselWindow({
         selector: `#${carouselId}`,
-        batchSize: 5,
         getData: () => data,
         cardComponent: cardComponent
     })
 
     carouselEl.addEventListener("click", (e) => {
-        const actionBtn = e.target.closest(".watch-btn") || e.target.closest(".unfollow-btn")
-        if (actionBtn && onActionClick) {
-            const card = actionBtn.closest(".stock-card") || actionBtn.closest(".card")
-            if (card) onActionClick(card.dataset.ticker)
-            return
-        }
 
-        const card = e.target.closest(".stock-card") || e.target.closest(".card")
+        const card = e.target.closest(".card")
         if (!card) return
 
         window.location.hash = buildUrl(card.dataset)
