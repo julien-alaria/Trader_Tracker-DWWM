@@ -28,13 +28,13 @@ async function getMe(req, res, next) {
         const user_id = req.user.id
 
         if (!user_id) {
-            return res.status(401).json({ error: "Unauthorized" })
+            return res.status(401).json({ message: "Unauthorized" })
         }
 
         const result = await UserModel.getUsersById(user_id)
 
         if (!result) {
-            return res.status(404).json({ error: "User not found" })
+            return res.status(404).json({ message: "User not found" })
         }
 
         return res.status(200).json({ result })
@@ -49,13 +49,13 @@ async function getUserById(req, res, next) {
         const id = Number(req.params.id)
 
         if (!Number.isInteger(id) || id <= 0) {
-            return res.status(400).json({ error : "ID invalide" })
+            return res.status(400).json({ message : "Invalid ID" })
         }
 
         const result = await UserModel.getUsersById(id)
 
         if (!result) {
-            return res.status(404).json({ error: "User not found" })
+            return res.status(404).json({ message: "User not found" })
         }
 
         res.status(200).json({ result })
@@ -105,7 +105,7 @@ async function updateUser(req, res, next) {
         const id = Number(req.params.id)
 
         if (!Number.isInteger(id) || id <= 0) {
-            return res.status(400).json({ error: "Invalid ID" })
+            return res.status(400).json({ message: "Invalid ID" })
         }
 
         // clean standard data (name, email, bio...) w/ basic sanitizer
@@ -131,7 +131,7 @@ async function updateUser(req, res, next) {
         // double-check if we have any data to update
         if (Object.keys(sanitizedData).length === 0) {
             return res.status(400).json({
-                error: "No valid Data"
+                message: "No valid data"
             })
         }
 
@@ -161,7 +161,7 @@ async function updateMe(req, res, next) {
 
         if (Object.keys(sanitizedData).length === 0) {
             return res.status(400).json({
-                error: "Aucune donnée valide"
+                message: "No valid data"
             })
         }
 
@@ -179,14 +179,14 @@ async function deleteUser(req, res, next) {
         const id = Number(req.params.id)
 
         if (!Number.isInteger(id) || id <= 0) {
-            return res.status(400).json({ error: "unvalid ID" })
+            return res.status(400).json({ message: "Invalid ID" })
         }
 
         if (req.user.role !== "admin") {
-            return res.status(403).json({ error: "Forbidden" })
+            return res.status(403).json({ message: "Forbidden" })
         }
 
-        const result = await UserModel.deleteUsers(id)
+        await UserModel.deleteUsers(id)
 
         res.status(200).json({ message : "delete ok" })
 
@@ -269,7 +269,7 @@ async function followAsset(req, res, next) {
 
         if (error.code === "ER_DUP_ENTRY") {
             return res.status(409).json({
-                error: "Asset already followed"
+                message: "Asset already followed"
             })
         } 
         next(error)
@@ -281,7 +281,7 @@ async function unfollowAsset(req, res, next) {
         const user_id = req.user.id
         const asset_id = req.asset.id
 
-        const result = await UserModel.userUnfollowAsset(user_id, asset_id)
+        await UserModel.userUnfollowAsset(user_id, asset_id)
 
         return res.status(200).json({
             message: "asset removed from favorites (or was not followed)"
@@ -316,18 +316,18 @@ async function followUser(req, res, next) {
         const followUser_id = Number(req.params.id)
 
         if (req.user.id === Number(req.params.id)) {
-            return res.status(400).json({ error: "Cannot follow yourself" });
+            return res.status(400).json({ message: "Cannot follow yourself" });
         }
 
         await UserModel.userFollowUser(user_id, followUser_id)
 
-        return res.status(201).json({message: "user followed successfully"})
+        return res.status(201).json({ message: "user followed successfully" })
 
     } catch (error) {
 
         if (error.code === "ER_DUP_ENTRY") {
         return res.status(409).json({
-            error: "User already followed"
+            message: "User already followed"
             })
         } 
         next(error)
