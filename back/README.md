@@ -123,4 +123,66 @@ Asset
  ├── name
  └── asset_type_id
 ```
+# 5 — AppError: Error-Propagation Flow
 
+## Why this class exists
+
+A native `Error` object only carries a message and a stack trace — it has no notion of an HTTP status code, since `Error` exists independently of any web context. `AppError` extends it with exactly one extra property:
+
+```javascript
+export default class AppError extends Error {
+    constructor(message, statusCode = 400) {
+        super(message)
+        this.statusCode = statusCode
+        this.name = "AppError"
+    }
+}
+```
+
+Without it, `errorHandler.js` has no way to know which HTTP status to send back — `err.statusCode || 500` would always fall back to 500, even for a routine, expected case like "email already used".
+
+## Where it is used, and why the reason differs by layer
+
+**Models** — `AppError` is used here because models never receive `res` (their functions only take business parameters, e.g. `createUsers(data)`, `deleteUsers(id)`). `throw` is their only way to signal a problem upward; without a `statusCode` attached, that `throw` would always resolve to 500, regardless of the actual cause (e.g. `createUsers` throwing `AppError("Email already used", 409)` on a duplicate email).
+
+**Middlewares** — used here for a different reason: middlewares are chained (`authMiddleware → assetMiddleware → specializationMiddleware`). Building a response directly with `res.status().json()` inside a middleware carries a real risk: forgetting the `return` before it wouldn't just crash — since `next()` further down would still execute, the request would silently continue toward the controller despite an error response already having been sent to the client. `throw` removes this risk structurally, since it halts execution immediately, with no `next()` to accidentally still call.
+
+**Controllers** — not yet migrated to `AppError`; they still build error responses directly with `res.status().json()`. This is a known, time-constrained gap rather than an oversight: controllers still benefit from the mechanism indirectly, since any `AppError` thrown by a model they call is caught by their existing `catch (error) { next(error) }` block and routed through the same path below.
+
+## Full propagation path
+
+```
+throw new AppError(message, statusCode)     [model or middleware]
+    — a throw inside an async function does not crash on the spot;
+      it rejects the promise that function returns
+    ↓
+await ... inside a try block                [controller]
+    — the rejection surfaces at the await, caught by the surrounding try
+    ↓
+catch (error) { next(error) }
+    — hands the error object to Express
+    ↓
+Express
+    — recognizes errorHandler.js purely by its arity (4 declared
+      parameters: err, req, res, next — vs. the usual 3) and jumps
+      directly to it, skipping any normal middleware in between
+    ↓
+errorHandler.js
+    — reads err.statusCode (falls back to 500 if absent — the case
+      for any plain Error not wrapped in AppError, e.g. a raw driver
+      error surfacing from mysql2)
+    — for 500 only: logs the full error server-side (console.error),
+      never exposes it to the client
+    — builds the one and only error response shape used across the
+      whole back-end: { message: ... }
+    ↓
+Front-end (instanceHttp.js)
+    — receives this as an ordinary HTTP response via fetch(); no
+      special channel exists between errorHandler.js and the front —
+      response.status and response.json() are the exact same
+      mechanism used for a success response
+```
+
+## Note on unexpected errors
+
+Not every error caught by a controller or middleware originates from `AppError`. A genuine driver-level failure (e.g. a lost MySQL connection inside `mysql2`) is a plain `Error`, with no `statusCode` — and correctly falls back to 500, since that case is an actual unexpected server fault, not a client-facing business rule violation.

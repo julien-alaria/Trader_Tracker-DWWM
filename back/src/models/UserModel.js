@@ -82,7 +82,7 @@ async function createUsers(data) {
 
     const [existingEmail] = await db.execute("SELECT id FROM users WHERE email = ?",[email])
 
-    if (existingEmail.length > 0) {throw new AppError("Email already used")}
+    if (existingEmail.length > 0) {throw new AppError("Email already used", 409)}
 
     const hashedPassword = await hashPassword(password)
 
