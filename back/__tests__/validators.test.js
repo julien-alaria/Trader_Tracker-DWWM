@@ -133,7 +133,7 @@ describe("validateComment", () => {
   })
 
   test("rejects a comment longer than 1,000 characters", () => {
-    expect(() => validateComment("a".repeat(1001))).toThrow("Comment too long")
+    expect(() => validateComment("a".repeat(1001))).toThrow("A recommendation must not exceed 280 characters")
   })
 })
 
