@@ -39,11 +39,13 @@ The application follows the MVC pattern by separating:
 ![presentation](img/trader_tracker-stack.png)
 
 
-# Alternative Backend: PHP
+# Alternative Backend: PHP (with AI Assistant)
 
 A native PHP reimplementation of the backend is available in a separate repository: 
 
 [trader_tracker-back-php](https://github.com/julien-alaria/trader_tracker-back-php). 
+
+![presentation](img/trader_tracker-ai_assitant.png)
 
 It exposes the same routes and uses the same MySQL database — a drop-in replacement for the Node.js backend.
 
