@@ -43,6 +43,7 @@ async function router() {
     case "/about":
       const about = await import("./src/pages/public/about.js")
       content = about.default
+      init = about.initAbout
       break
 
     case "/register":
