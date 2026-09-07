@@ -1,6 +1,8 @@
 import { roleGuard } from "./src/middlewares/roleGuard.js"
 import { renderApp } from "./src/utils/layoutManager.js"
+import { initAssistantWidget } from "./src/components/assistant/assistantWidget.js"
 
+initAssistantWidget()
 
 async function router() {
   // return to the top of page

@@ -13,6 +13,7 @@
 @import "./src/styles/about.css";
 @import "./src/styles/forms.css";
 @import "./src/styles/modal.css";
+@import "./src/styles/assistant.css";
 
 :root {
     --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
